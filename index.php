@@ -1,6 +1,6 @@
 <?php
 
-require("res/includes.php");
+require("res/include.php");
 
 ?>
 <!DOCTYPE html>
@@ -14,10 +14,15 @@ require("res/includes.php");
 
 <div class="container">
     <div class="col-md-8">
-        <h1>News</h1>
+            <h1>Games!</h1>
+	    <div>
+		    <div class="gamecard panel">
+			    
+		    </div>
+	    </div>
     </div>
-    <div class="col-md4">
-        <h1>Some games</h1>
+    <div class="col-md-4" class="panel">
+            <h3>News feed</h3>
     </div>
 
 </div>
