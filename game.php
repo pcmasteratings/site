@@ -1,11 +1,19 @@
+<?php
+
+require("res/include.php");
+
+?>
 <!DOCTYPE html>
 <html>
 	<head>
+		<?php include("res/head.php"); ?>
 		<link href="/css/bootstrap.min.css" rel="stylesheet" />
 		<meta charset="UTF-8" />
 	</head>
 	<body>
+		<?php include("res/nav.php"); ?>
 		<div class="container">
+			
 			<h1>GAME TITLE</h1>
 			<div class="col-md-4">
 				<table class="table">
@@ -27,6 +35,7 @@
 				<p>GAME description goes here Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac nulla at arcu egestas convallis eget id odio. Curabitur magna felis, congue quis pretium id, pulvinar sed turpis. Praesent ac tortor tortor. In hac habitasse platea dictumst. Morbi fringilla sapien in lectus ultrices, quis varius sapien condimentum. Vivamus fringilla condimentum risus, nec egestas libero sagittis nec. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla facilisi. </p>
 			</div>
 		</div>
+		<?php include("res/footer.php"); ?>
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="/js/bootstrap.js"></script>
 	</body>
