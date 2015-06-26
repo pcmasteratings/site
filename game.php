@@ -33,6 +33,11 @@ require("res/include.php");
 			</div>
 			<div class="col-md-8">
 				<p>GAME description goes here Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac nulla at arcu egestas convallis eget id odio. Curabitur magna felis, congue quis pretium id, pulvinar sed turpis. Praesent ac tortor tortor. In hac habitasse platea dictumst. Morbi fringilla sapien in lectus ultrices, quis varius sapien condimentum. Vivamus fringilla condimentum risus, nec egestas libero sagittis nec. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla facilisi. </p>
+			<br/>	
+			<table class="table">
+				<th>*</th><th>Individual reviews</th>
+				<tr><td style="width: 25px"><img src="img/badges/r_tiny.jpg" alt="R" height="20"></td><td>review by /u/pedro19</td></tr>
+			</table>
 			</div>
 		</div>
 		<?php include("res/footer.php"); ?>
