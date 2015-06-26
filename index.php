@@ -64,9 +64,6 @@ require("res/include.php");
     </div>
     <div class="col-md-4">
         <h1>Other stuff</h1>
-
-        
-
     </div>
 
 </div>
