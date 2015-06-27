@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="default" defaultIdMethod="native" defaultPhpNamingMethod="underscore">
+  <table name="companies" idMethod="native" phpName="Companies">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="name" phpName="Name" type="LONGVARCHAR" required="true"/>
+    <column name="description" phpName="Description" type="CLOB" required="true"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="game_link_types" idMethod="native" phpName="GameLinkTypes">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="title" phpName="Title" type="LONGVARCHAR" required="true"/>
+    <column name="description" phpName="Description" type="CLOB" required="true"/>
+    <column name="url" phpName="Url" type="LONGVARCHAR" required="true"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="game_links" idMethod="native" phpName="GameLinks">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="game_id" phpName="GameId" type="BIGINT" required="true"/>
+    <column name="game_link_type_id" phpName="GameLinkTypeId" type="BIGINT" required="true"/>
+    <column name="value" phpName="Value" type="LONGVARCHAR" required="true"/>
+    <foreign-key foreignTable="game_link_types" name="game_links_ibfk_2">
+      <reference local="game_link_type_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="games" name="game_links_ibfk_1" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="game_id" foreign="id"/>
+    </foreign-key>
+    <index name="game_id">
+      <index-column name="game_id"/>
+    </index>
+    <index name="game_link_type_id">
+      <index-column name="game_link_type_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="games" idMethod="native" phpName="Games">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="title" phpName="Title" type="CLOB" required="true"/>
+    <column name="description" phpName="Description" type="CLOB" required="true"/>
+    <column name="publisher_id" phpName="PublisherId" type="BIGINT"/>
+    <column name="developer_id" phpName="DeveloperId" type="BIGINT"/>
+    <column name="port" phpName="Port" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
+    <foreign-key foreignTable="companies" name="games_ibfk_2">
+      <reference local="developer_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="companies" name="games_ibfk_1">
+      <reference local="publisher_id" foreign="id"/>
+    </foreign-key>
+    <index name="publisher_id">
+      <index-column name="publisher_id"/>
+    </index>
+    <index name="developer_id">
+      <index-column name="developer_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="news" idMethod="native" phpName="News">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="title" phpName="Title" type="LONGVARCHAR" required="true"/>
+    <column name="datetime" phpName="Datetime" type="TIMESTAMP" required="true"/>
+    <column name="user_id" phpName="UserId" type="BIGINT" required="true"/>
+    <column name="text" phpName="Text" type="LONGVARCHAR" required="true"/>
+    <column name="tags" phpName="Tags" type="LONGVARCHAR" required="true"/>
+    <foreign-key foreignTable="user" name="news_ibfk_1">
+      <reference local="user_id" foreign="id"/>
+    </foreign-key>
+    <index name="user_id">
+      <index-column name="user_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="rating_categories" idMethod="native" phpName="RatingCategories">
+    <column name="ID" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="name" phpName="Name" type="LONGVARCHAR" required="true"/>
+    <column name="description" phpName="Description" type="CLOB" required="true"/>
+    <column name="weight" phpName="Weight" type="INTEGER" required="true"/>
+    <column name="sequence" phpName="Sequence" type="INTEGER" required="true"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="rating_category_options" idMethod="native" phpName="RatingCategoryOptions">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="rating_category_id" phpName="RatingCategoryId" type="BIGINT" required="true"/>
+    <column name="description" phpName="Description" type="CLOB" required="true"/>
+    <column name="value" phpName="Value" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="rating_categories" name="rating_category_options_ibfk_1">
+      <reference local="rating_category_id" foreign="ID"/>
+    </foreign-key>
+    <index name="rating_category_id">
+      <index-column name="rating_category_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="rating_category_values" idMethod="native" phpName="RatingCategoryValues">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="rating_header_id" phpName="RatingHeaderId" type="BIGINT" required="true"/>
+    <column name="rating_category_id" phpName="RatingCategoryId" type="BIGINT" required="true"/>
+    <column name="value" phpName="Value" type="INTEGER" required="true"/>
+    <column name="sequence" phpName="Sequence" type="INTEGER" required="true"/>
+    <column name="review" phpName="Review" type="LONGVARCHAR" required="true"/>
+    <foreign-key foreignTable="rating_headers" name="rating_category_values_ibfk_1" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="rating_header_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="rating_categories" name="rating_category_values_ibfk_2" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="rating_category_id" foreign="ID"/>
+    </foreign-key>
+    <index name="ratings_header_id">
+      <index-column name="rating_header_id"/>
+    </index>
+    <index name="rating_category_id">
+      <index-column name="rating_category_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="rating_headers" idMethod="native" phpName="RatingHeaders">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="game_id" phpName="GameId" type="BIGINT" required="true"/>
+    <column name="user_id" phpName="UserId" type="BIGINT" required="true"/>
+    <column name="rig_id" phpName="RigId" type="BIGINT" required="true"/>
+    <column name="upvotes" phpName="Upvotes" type="BIGINT" required="true"/>
+    <column name="downvotes" phpName="Downvotes" type="BIGINT" required="true"/>
+    <foreign-key foreignTable="rigs" name="rating_headers_ibfk_3">
+      <reference local="rig_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="games" name="rating_headers_ibfk_1">
+      <reference local="game_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="user" name="rating_headers_ibfk_2">
+      <reference local="user_id" foreign="id"/>
+    </foreign-key>
+    <index name="game_id">
+      <index-column name="game_id"/>
+    </index>
+    <index name="user_id">
+      <index-column name="user_id"/>
+    </index>
+    <index name="rig_id">
+      <index-column name="rig_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="rig_attribute_values" idMethod="native" phpName="RigAttributeValues">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="rig_id" phpName="RigId" type="BIGINT" required="true"/>
+    <column name="rig_attribute_id" phpName="RigAttributeId" type="BIGINT" required="true"/>
+    <column name="value" phpName="Value" type="LONGVARCHAR" required="true"/>
+    <foreign-key foreignTable="rig_attributes" name="rig_attribute_values_ibfk_2">
+      <reference local="rig_attribute_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="rigs" name="rig_attribute_values_ibfk_1" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="rig_id" foreign="id"/>
+    </foreign-key>
+    <index name="rig_id">
+      <index-column name="rig_id"/>
+    </index>
+    <index name="rig_attribute_id">
+      <index-column name="rig_attribute_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="rig_attributes" idMethod="native" phpName="RigAttributes">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="name" phpName="Name" type="BIGINT" required="true"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="rigs" idMethod="native" phpName="Rigs">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="user_id" phpName="UserId" type="BIGINT" required="true"/>
+    <column name="name" phpName="Name" type="LONGVARCHAR" required="true"/>
+    <foreign-key foreignTable="user" name="rigs_ibfk_1">
+      <reference local="user_id" foreign="id"/>
+    </foreign-key>
+    <index name="user_id">
+      <index-column name="user_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="user" idMethod="native" phpName="User">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="username" phpName="Username" type="LONGVARCHAR" required="true"/>
+    <column name="password" phpName="Password" type="LONGVARCHAR" required="true"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="user_attribute_values" idMethod="native" phpName="UserAttributeValues">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="user_attribute_id" phpName="UserAttributeId" type="BIGINT" required="true"/>
+    <column name="user_id" phpName="UserId" type="BIGINT" required="true"/>
+    <column name="value" phpName="Value" type="LONGVARCHAR" required="true"/>
+    <foreign-key foreignTable="user" name="user_attribute_values_ibfk_2">
+      <reference local="user_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="user_attributes" name="user_attribute_values_ibfk_1">
+      <reference local="user_attribute_id" foreign="id"/>
+    </foreign-key>
+    <index name="user_attribute_id">
+      <index-column name="user_attribute_id"/>
+    </index>
+    <index name="user_id">
+      <index-column name="user_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="user_attributes" idMethod="native" phpName="UserAttributes">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="name" phpName="Name" type="LONGVARCHAR" required="true"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="user_weights" idMethod="native" phpName="UserWeights">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="rating_category_id" phpName="RatingCategoryId" type="BIGINT" required="true"/>
+    <column name="user_id" phpName="UserId" type="BIGINT" required="true"/>
+    <column name="weight" phpName="Weight" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="user" name="user_weights_ibfk_2">
+      <reference local="user_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="rating_categories" name="user_weights_ibfk_1">
+      <reference local="rating_category_id" foreign="ID"/>
+    </foreign-key>
+    <index name="categories_id">
+      <index-column name="rating_category_id"/>
+    </index>
+    <index name="user_id">
+      <index-column name="user_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+</database>
