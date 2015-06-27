@@ -1,0 +1,14 @@
+* TODO Rollout plan [1/5]
+ - [X] Get under construction page up.
+ - [ ] Collect some ratings via Google Forms.
+ - [ ] Set up read-only site to show what it looks like, showing aggregate ratings per-game.
+ - [ ] Set up rating contribution in-site.
+ - [ ] Add viewing of individual ratings.
+
+* Details [0/1]
+ - [ ] Use Reddit for authentication.
+ - Maybe filter to PCMR redditors?
+* Database Schema [0/3]
+ - [ ] Games Table
+ - [ ] Ratings Table
+ - [ ] User Table (future)

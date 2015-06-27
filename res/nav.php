@@ -10,7 +10,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">PC Masterratings</a>
+      <a class="navbar-brand" href="#">     <img src="/img/logo.png" height="40" style="margin-top:-10px;" alt="PCMRatings Glorious!" /></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
