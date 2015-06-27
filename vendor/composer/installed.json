@@ -445,12 +445,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/propelorm/Propel2.git",
-            "reference": "75f775cf6de41595d1240885eea5fa5d475d228d"
+            "reference": "455c8fe21fc32142e30e4dba44a1d5e3123da163"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/propelorm/Propel2/zipball/75f775cf6de41595d1240885eea5fa5d475d228d",
-            "reference": "75f775cf6de41595d1240885eea5fa5d475d228d",
+            "url": "https://api.github.com/repos/propelorm/Propel2/zipball/455c8fe21fc32142e30e4dba44a1d5e3123da163",
+            "reference": "455c8fe21fc32142e30e4dba44a1d5e3123da163",
             "shasum": ""
         },
         "require": {
@@ -471,7 +471,7 @@
         "suggest": {
             "monolog/monolog": "The recommended logging library to use with Propel."
         },
-        "time": "2015-06-27 11:58:48",
+        "time": "2015-06-27 18:56:28",
         "bin": [
             "bin/propel"
         ],
