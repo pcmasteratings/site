@@ -1,0 +1,15 @@
+/* index page styling
+ * For the badges in the thumbnails
+*/
+
+.rating-badge {
+/*	position: absolute;
+	left: 5px;
+	top: 5px;
+*/
+	margin-left: 0 !important;
+	margin-top: -50px;
+	position: relative;
+
+
+}
