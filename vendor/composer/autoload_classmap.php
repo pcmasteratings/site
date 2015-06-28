@@ -6,6 +6,12 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'AAuth' => $baseDir . '/lib/auth/AAuthProvider.php',
+    'Auth' => $baseDir . '/lib/auth/Auth.php',
+    'AuthRequests' => $baseDir . '/lib/model/AuthRequests.php',
+    'AuthRequestsQuery' => $baseDir . '/lib/model/AuthRequestsQuery.php',
+    'Base\\AuthRequests' => $baseDir . '/lib/model/Base/AuthRequests.php',
+    'Base\\AuthRequestsQuery' => $baseDir . '/lib/model/Base/AuthRequestsQuery.php',
     'Base\\Companies' => $baseDir . '/lib/model/Base/Companies.php',
     'Base\\CompaniesQuery' => $baseDir . '/lib/model/Base/CompaniesQuery.php',
     'Base\\GameLinkTypes' => $baseDir . '/lib/model/Base/GameLinkTypes.php',
@@ -46,6 +52,7 @@ return array(
     'GameLinksQuery' => $baseDir . '/lib/model/GameLinksQuery.php',
     'Games' => $baseDir . '/lib/model/Games.php',
     'GamesQuery' => $baseDir . '/lib/model/GamesQuery.php',
+    'Map\\AuthRequestsTableMap' => $baseDir . '/lib/model/Map/AuthRequestsTableMap.php',
     'Map\\CompaniesTableMap' => $baseDir . '/lib/model/Map/CompaniesTableMap.php',
     'Map\\GameLinkTypesTableMap' => $baseDir . '/lib/model/Map/GameLinkTypesTableMap.php',
     'Map\\GameLinksTableMap' => $baseDir . '/lib/model/Map/GameLinksTableMap.php',
@@ -72,6 +79,7 @@ return array(
     'RatingCategoryValuesQuery' => $baseDir . '/lib/model/RatingCategoryValuesQuery.php',
     'RatingHeaders' => $baseDir . '/lib/model/RatingHeaders.php',
     'RatingHeadersQuery' => $baseDir . '/lib/model/RatingHeadersQuery.php',
+    'RedditAuth' => $baseDir . '/lib/auth/RedditAuth.php',
     'RigAttributeValues' => $baseDir . '/lib/model/RigAttributeValues.php',
     'RigAttributeValuesQuery' => $baseDir . '/lib/model/RigAttributeValuesQuery.php',
     'RigAttributes' => $baseDir . '/lib/model/RigAttributes.php',

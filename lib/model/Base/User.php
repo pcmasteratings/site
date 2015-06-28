@@ -90,6 +90,12 @@ abstract class User implements ActiveRecordInterface
     protected $password;
 
     /**
+     * The value for the reddit_id field.
+     * @var        string
+     */
+    protected $reddit_id;
+
+    /**
      * @var        ObjectCollection|ChildNews[] Collection to store aggregation of ChildNews objects.
      */
     protected $collNews;
@@ -405,6 +411,16 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
+     * Get the [reddit_id] column value.
+     * 
+     * @return string
+     */
+    public function getRedditID()
+    {
+        return $this->reddit_id;
+    }
+
+    /**
      * Set the value of [id] column.
      * 
      * @param string $v new value
@@ -465,6 +481,26 @@ abstract class User implements ActiveRecordInterface
     } // setPassword()
 
     /**
+     * Set the value of [reddit_id] column.
+     * 
+     * @param string $v new value
+     * @return $this|\User The current object (for fluent API support)
+     */
+    public function setRedditID($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->reddit_id !== $v) {
+            $this->reddit_id = $v;
+            $this->modifiedColumns[UserTableMap::COL_REDDIT_ID] = true;
+        }
+
+        return $this;
+    } // setRedditID()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -508,6 +544,9 @@ abstract class User implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : UserTableMap::translateFieldName('Password', TableMap::TYPE_PHPNAME, $indexType)];
             $this->password = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : UserTableMap::translateFieldName('RedditID', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->reddit_id = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -516,7 +555,7 @@ abstract class User implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 3; // 3 = UserTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = UserTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\User'), 0, $e);
@@ -817,6 +856,9 @@ abstract class User implements ActiveRecordInterface
         if ($this->isColumnModified(UserTableMap::COL_PASSWORD)) {
             $modifiedColumns[':p' . $index++]  = 'password';
         }
+        if ($this->isColumnModified(UserTableMap::COL_REDDIT_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'reddit_id';
+        }
 
         $sql = sprintf(
             'INSERT INTO user (%s) VALUES (%s)',
@@ -836,6 +878,9 @@ abstract class User implements ActiveRecordInterface
                         break;
                     case 'password':                        
                         $stmt->bindValue($identifier, $this->password, PDO::PARAM_STR);
+                        break;
+                    case 'reddit_id':                        
+                        $stmt->bindValue($identifier, $this->reddit_id, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -908,6 +953,9 @@ abstract class User implements ActiveRecordInterface
             case 2:
                 return $this->getPassword();
                 break;
+            case 3:
+                return $this->getRedditID();
+                break;
             default:
                 return null;
                 break;
@@ -941,6 +989,7 @@ abstract class User implements ActiveRecordInterface
             $keys[0] => $this->getId(),
             $keys[1] => $this->getUsername(),
             $keys[2] => $this->getPassword(),
+            $keys[3] => $this->getRedditID(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1066,6 +1115,9 @@ abstract class User implements ActiveRecordInterface
             case 2:
                 $this->setPassword($value);
                 break;
+            case 3:
+                $this->setRedditID($value);
+                break;
         } // switch()
 
         return $this;
@@ -1100,6 +1152,9 @@ abstract class User implements ActiveRecordInterface
         }
         if (array_key_exists($keys[2], $arr)) {
             $this->setPassword($arr[$keys[2]]);
+        }
+        if (array_key_exists($keys[3], $arr)) {
+            $this->setRedditID($arr[$keys[3]]);
         }
     }
 
@@ -1150,6 +1205,9 @@ abstract class User implements ActiveRecordInterface
         }
         if ($this->isColumnModified(UserTableMap::COL_PASSWORD)) {
             $criteria->add(UserTableMap::COL_PASSWORD, $this->password);
+        }
+        if ($this->isColumnModified(UserTableMap::COL_REDDIT_ID)) {
+            $criteria->add(UserTableMap::COL_REDDIT_ID, $this->reddit_id);
         }
 
         return $criteria;
@@ -1239,6 +1297,7 @@ abstract class User implements ActiveRecordInterface
     {
         $copyObj->setUsername($this->getUsername());
         $copyObj->setPassword($this->getPassword());
+        $copyObj->setRedditID($this->getRedditID());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1786,10 +1845,10 @@ abstract class User implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
      */
-    public function getRatingHeaderssJoinRigs(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getRatingHeaderssJoinGames(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRatingHeadersQuery::create(null, $criteria);
-        $query->joinWith('Rigs', $joinBehavior);
+        $query->joinWith('Games', $joinBehavior);
 
         return $this->getRatingHeaderss($query, $con);
     }
@@ -1811,10 +1870,10 @@ abstract class User implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
      */
-    public function getRatingHeaderssJoinGames(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getRatingHeaderssJoinRigs(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRatingHeadersQuery::create(null, $criteria);
-        $query->joinWith('Games', $joinBehavior);
+        $query->joinWith('Rigs', $joinBehavior);
 
         return $this->getRatingHeaderss($query, $con);
     }
@@ -2533,6 +2592,7 @@ abstract class User implements ActiveRecordInterface
         $this->id = null;
         $this->username = null;
         $this->password = null;
+        $this->reddit_id = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

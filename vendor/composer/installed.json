@@ -504,5 +504,47 @@
             "orm",
             "persistence"
         ]
+    },
+    {
+        "name": "adoy/oauth2",
+        "version": "1.2.0",
+        "version_normalized": "1.2.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/adoy/PHP-OAuth2.git",
+            "reference": "f7ea5b302fbd51fcefa1db91e458c7c05b6a83d1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/adoy/PHP-OAuth2/zipball/f7ea5b302fbd51fcefa1db91e458c7c05b6a83d1",
+            "reference": "f7ea5b302fbd51fcefa1db91e458c7c05b6a83d1",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2015-05-20 15:29:30",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "OAuth2": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-2.1"
+        ],
+        "authors": [
+            {
+                "name": "Berejeb Anis",
+                "email": "anis.berejeb@gmail.com"
+            },
+            {
+                "name": "Charron Pierrick",
+                "email": "pierrick@webstart.fr"
+            }
+        ],
+        "description": "Light PHP wrapper for the OAuth 2.0 protocol (based on OAuth 2.0 Authorization Protocol draft-ietf-oauth-v2-15)"
     }
 ]

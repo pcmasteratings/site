@@ -2032,10 +2032,10 @@ abstract class Games implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
      */
-    public function getRatingHeaderssJoinRigs(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getRatingHeaderssJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRatingHeadersQuery::create(null, $criteria);
-        $query->joinWith('Rigs', $joinBehavior);
+        $query->joinWith('User', $joinBehavior);
 
         return $this->getRatingHeaderss($query, $con);
     }
@@ -2057,10 +2057,10 @@ abstract class Games implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
      */
-    public function getRatingHeaderssJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getRatingHeaderssJoinRigs(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRatingHeadersQuery::create(null, $criteria);
-        $query->joinWith('User', $joinBehavior);
+        $query->joinWith('Rigs', $joinBehavior);
 
         return $this->getRatingHeaderss($query, $con);
     }

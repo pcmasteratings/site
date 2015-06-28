@@ -1,8 +1,10 @@
 {
+    "name": "PCMRatings",
     "require": {
-        "propel/propel": "~2.0@dev"
+        "propel/propel": "~2.0@dev",
+        "adoy/oauth2": "~1.2.0"
     },
     "autoload": {
-      "classmap": ["lib/model/"]
+      "classmap": ["lib/model/","lib/auth/"]
     }
 }
