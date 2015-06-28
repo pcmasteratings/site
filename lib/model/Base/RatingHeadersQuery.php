@@ -24,6 +24,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeadersQuery orderByGameId($order = Criteria::ASC) Order by the game_id column
  * @method     ChildRatingHeadersQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
  * @method     ChildRatingHeadersQuery orderByRigId($order = Criteria::ASC) Order by the rig_id column
+ * @method     ChildRatingHeadersQuery orderByDatetime($order = Criteria::ASC) Order by the datetime column
  * @method     ChildRatingHeadersQuery orderByUpvotes($order = Criteria::ASC) Order by the upvotes column
  * @method     ChildRatingHeadersQuery orderByDownvotes($order = Criteria::ASC) Order by the downvotes column
  *
@@ -31,16 +32,13 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeadersQuery groupByGameId() Group by the game_id column
  * @method     ChildRatingHeadersQuery groupByUserId() Group by the user_id column
  * @method     ChildRatingHeadersQuery groupByRigId() Group by the rig_id column
+ * @method     ChildRatingHeadersQuery groupByDatetime() Group by the datetime column
  * @method     ChildRatingHeadersQuery groupByUpvotes() Group by the upvotes column
  * @method     ChildRatingHeadersQuery groupByDownvotes() Group by the downvotes column
  *
  * @method     ChildRatingHeadersQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildRatingHeadersQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     ChildRatingHeadersQuery innerJoin($relation) Adds a INNER JOIN clause to the query
- *
- * @method     ChildRatingHeadersQuery leftJoinRigs($relationAlias = null) Adds a LEFT JOIN clause to the query using the Rigs relation
- * @method     ChildRatingHeadersQuery rightJoinRigs($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Rigs relation
- * @method     ChildRatingHeadersQuery innerJoinRigs($relationAlias = null) Adds a INNER JOIN clause to the query using the Rigs relation
  *
  * @method     ChildRatingHeadersQuery leftJoinGames($relationAlias = null) Adds a LEFT JOIN clause to the query using the Games relation
  * @method     ChildRatingHeadersQuery rightJoinGames($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Games relation
@@ -50,11 +48,15 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeadersQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
  * @method     ChildRatingHeadersQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
  *
+ * @method     ChildRatingHeadersQuery leftJoinRigs($relationAlias = null) Adds a LEFT JOIN clause to the query using the Rigs relation
+ * @method     ChildRatingHeadersQuery rightJoinRigs($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Rigs relation
+ * @method     ChildRatingHeadersQuery innerJoinRigs($relationAlias = null) Adds a INNER JOIN clause to the query using the Rigs relation
+ *
  * @method     ChildRatingHeadersQuery leftJoinRatingCategoryValues($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingCategoryValues relation
  * @method     ChildRatingHeadersQuery rightJoinRatingCategoryValues($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingCategoryValues relation
  * @method     ChildRatingHeadersQuery innerJoinRatingCategoryValues($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingCategoryValues relation
  *
- * @method     \RigsQuery|\GamesQuery|\UserQuery|\RatingCategoryValuesQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \GamesQuery|\UserQuery|\RigsQuery|\RatingCategoryValuesQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildRatingHeaders findOne(ConnectionInterface $con = null) Return the first ChildRatingHeaders matching the query
  * @method     ChildRatingHeaders findOneOrCreate(ConnectionInterface $con = null) Return the first ChildRatingHeaders matching the query, or a new ChildRatingHeaders object populated from the query conditions when no match is found
@@ -63,6 +65,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeaders findOneByGameId(string $game_id) Return the first ChildRatingHeaders filtered by the game_id column
  * @method     ChildRatingHeaders findOneByUserId(string $user_id) Return the first ChildRatingHeaders filtered by the user_id column
  * @method     ChildRatingHeaders findOneByRigId(string $rig_id) Return the first ChildRatingHeaders filtered by the rig_id column
+ * @method     ChildRatingHeaders findOneByDatetime(string $datetime) Return the first ChildRatingHeaders filtered by the datetime column
  * @method     ChildRatingHeaders findOneByUpvotes(string $upvotes) Return the first ChildRatingHeaders filtered by the upvotes column
  * @method     ChildRatingHeaders findOneByDownvotes(string $downvotes) Return the first ChildRatingHeaders filtered by the downvotes column *
 
@@ -73,6 +76,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeaders requireOneByGameId(string $game_id) Return the first ChildRatingHeaders filtered by the game_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByUserId(string $user_id) Return the first ChildRatingHeaders filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByRigId(string $rig_id) Return the first ChildRatingHeaders filtered by the rig_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRatingHeaders requireOneByDatetime(string $datetime) Return the first ChildRatingHeaders filtered by the datetime column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByUpvotes(string $upvotes) Return the first ChildRatingHeaders filtered by the upvotes column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByDownvotes(string $downvotes) Return the first ChildRatingHeaders filtered by the downvotes column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -81,6 +85,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeaders[]|ObjectCollection findByGameId(string $game_id) Return ChildRatingHeaders objects filtered by the game_id column
  * @method     ChildRatingHeaders[]|ObjectCollection findByUserId(string $user_id) Return ChildRatingHeaders objects filtered by the user_id column
  * @method     ChildRatingHeaders[]|ObjectCollection findByRigId(string $rig_id) Return ChildRatingHeaders objects filtered by the rig_id column
+ * @method     ChildRatingHeaders[]|ObjectCollection findByDatetime(string $datetime) Return ChildRatingHeaders objects filtered by the datetime column
  * @method     ChildRatingHeaders[]|ObjectCollection findByUpvotes(string $upvotes) Return ChildRatingHeaders objects filtered by the upvotes column
  * @method     ChildRatingHeaders[]|ObjectCollection findByDownvotes(string $downvotes) Return ChildRatingHeaders objects filtered by the downvotes column
  * @method     ChildRatingHeaders[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -175,7 +180,7 @@ abstract class RatingHeadersQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, game_id, user_id, rig_id, upvotes, downvotes FROM rating_headers WHERE id = :p0';
+        $sql = 'SELECT id, game_id, user_id, rig_id, datetime, upvotes, downvotes FROM rating_headers WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -436,6 +441,49 @@ abstract class RatingHeadersQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the datetime column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDatetime('2011-03-14'); // WHERE datetime = '2011-03-14'
+     * $query->filterByDatetime('now'); // WHERE datetime = '2011-03-14'
+     * $query->filterByDatetime(array('max' => 'yesterday')); // WHERE datetime > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $datetime The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildRatingHeadersQuery The current query, for fluid interface
+     */
+    public function filterByDatetime($datetime = null, $comparison = null)
+    {
+        if (is_array($datetime)) {
+            $useMinMax = false;
+            if (isset($datetime['min'])) {
+                $this->addUsingAlias(RatingHeadersTableMap::COL_DATETIME, $datetime['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($datetime['max'])) {
+                $this->addUsingAlias(RatingHeadersTableMap::COL_DATETIME, $datetime['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RatingHeadersTableMap::COL_DATETIME, $datetime, $comparison);
+    }
+
+    /**
      * Filter the query on the upvotes column
      *
      * Example usage:
@@ -515,83 +563,6 @@ abstract class RatingHeadersQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RatingHeadersTableMap::COL_DOWNVOTES, $downvotes, $comparison);
-    }
-
-    /**
-     * Filter the query by a related \Rigs object
-     *
-     * @param \Rigs|ObjectCollection $rigs The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return ChildRatingHeadersQuery The current query, for fluid interface
-     */
-    public function filterByRigs($rigs, $comparison = null)
-    {
-        if ($rigs instanceof \Rigs) {
-            return $this
-                ->addUsingAlias(RatingHeadersTableMap::COL_RIG_ID, $rigs->getId(), $comparison);
-        } elseif ($rigs instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(RatingHeadersTableMap::COL_RIG_ID, $rigs->toKeyValue('PrimaryKey', 'Id'), $comparison);
-        } else {
-            throw new PropelException('filterByRigs() only accepts arguments of type \Rigs or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Rigs relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildRatingHeadersQuery The current query, for fluid interface
-     */
-    public function joinRigs($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Rigs');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Rigs');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Rigs relation Rigs object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \RigsQuery A secondary query class using the current class as primary query
-     */
-    public function useRigsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinRigs($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Rigs', '\RigsQuery');
     }
 
     /**
@@ -746,6 +717,83 @@ abstract class RatingHeadersQuery extends ModelCriteria
         return $this
             ->joinUser($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'User', '\UserQuery');
+    }
+
+    /**
+     * Filter the query by a related \Rigs object
+     *
+     * @param \Rigs|ObjectCollection $rigs The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildRatingHeadersQuery The current query, for fluid interface
+     */
+    public function filterByRigs($rigs, $comparison = null)
+    {
+        if ($rigs instanceof \Rigs) {
+            return $this
+                ->addUsingAlias(RatingHeadersTableMap::COL_RIG_ID, $rigs->getId(), $comparison);
+        } elseif ($rigs instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(RatingHeadersTableMap::COL_RIG_ID, $rigs->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByRigs() only accepts arguments of type \Rigs or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Rigs relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildRatingHeadersQuery The current query, for fluid interface
+     */
+    public function joinRigs($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Rigs');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Rigs');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Rigs relation Rigs object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \RigsQuery A secondary query class using the current class as primary query
+     */
+    public function useRigsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinRigs($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Rigs', '\RigsQuery');
     }
 
     /**

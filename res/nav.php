@@ -17,7 +17,15 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Home</a></li>
+          <li><a href="#">Home</a></li>
+          <?php
+            if(Auth::checkIfAuthenticated()) {
+                $user = Auth::getCurrentUser();
+                echo '<li><b>'.$user->getUsername().'</b></li>';
+            } else {
+                echo '<li><a href="auth.php">Login</a></li>';
+            }
+          ?>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

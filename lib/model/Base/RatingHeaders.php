@@ -12,6 +12,7 @@ use \Rigs as ChildRigs;
 use \RigsQuery as ChildRigsQuery;
 use \User as ChildUser;
 use \UserQuery as ChildUserQuery;
+use \DateTime;
 use \Exception;
 use \PDO;
 use Map\RatingHeadersTableMap;
@@ -27,6 +28,7 @@ use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
+use Propel\Runtime\Util\PropelDateTime;
 
 /**
  * Base class that represents a row from the 'rating_headers' table.
@@ -94,6 +96,12 @@ abstract class RatingHeaders implements ActiveRecordInterface
     protected $rig_id;
 
     /**
+     * The value for the datetime field.
+     * @var        \DateTime
+     */
+    protected $datetime;
+
+    /**
      * The value for the upvotes field.
      * @var        string
      */
@@ -106,11 +114,6 @@ abstract class RatingHeaders implements ActiveRecordInterface
     protected $downvotes;
 
     /**
-     * @var        ChildRigs
-     */
-    protected $aRigs;
-
-    /**
      * @var        ChildGames
      */
     protected $aGames;
@@ -119,6 +122,11 @@ abstract class RatingHeaders implements ActiveRecordInterface
      * @var        ChildUser
      */
     protected $aUser;
+
+    /**
+     * @var        ChildRigs
+     */
+    protected $aRigs;
 
     /**
      * @var        ObjectCollection|ChildRatingCategoryValues[] Collection to store aggregation of ChildRatingCategoryValues objects.
@@ -398,6 +406,26 @@ abstract class RatingHeaders implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [datetime] column value.
+     * 
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getDatetime($format = NULL)
+    {
+        if ($format === null) {
+            return $this->datetime;
+        } else {
+            return $this->datetime instanceof \DateTime ? $this->datetime->format($format) : null;
+        }
+    }
+
+    /**
      * Get the [upvotes] column value.
      * 
      * @return string
@@ -510,6 +538,26 @@ abstract class RatingHeaders implements ActiveRecordInterface
     } // setRigId()
 
     /**
+     * Sets the value of [datetime] column to a normalized version of the date/time value specified.
+     * 
+     * @param  mixed $v string, integer (timestamp), or \DateTime value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\RatingHeaders The current object (for fluent API support)
+     */
+    public function setDatetime($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->datetime !== null || $dt !== null) {
+            if ($this->datetime === null || $dt === null || $dt->format("Y-m-d H:i:s") !== $this->datetime->format("Y-m-d H:i:s")) {
+                $this->datetime = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[RatingHeadersTableMap::COL_DATETIME] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setDatetime()
+
+    /**
      * Set the value of [upvotes] column.
      * 
      * @param string $v new value
@@ -597,10 +645,16 @@ abstract class RatingHeaders implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : RatingHeadersTableMap::translateFieldName('RigId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->rig_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : RatingHeadersTableMap::translateFieldName('Upvotes', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : RatingHeadersTableMap::translateFieldName('Datetime', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->datetime = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : RatingHeadersTableMap::translateFieldName('Upvotes', TableMap::TYPE_PHPNAME, $indexType)];
             $this->upvotes = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : RatingHeadersTableMap::translateFieldName('Downvotes', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : RatingHeadersTableMap::translateFieldName('Downvotes', TableMap::TYPE_PHPNAME, $indexType)];
             $this->downvotes = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
@@ -610,7 +664,7 @@ abstract class RatingHeaders implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 6; // 6 = RatingHeadersTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = RatingHeadersTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\RatingHeaders'), 0, $e);
@@ -680,9 +734,9 @@ abstract class RatingHeaders implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aRigs = null;
             $this->aGames = null;
             $this->aUser = null;
+            $this->aRigs = null;
             $this->collRatingCategoryValuess = null;
 
         } // if (deep)
@@ -789,13 +843,6 @@ abstract class RatingHeaders implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aRigs !== null) {
-                if ($this->aRigs->isModified() || $this->aRigs->isNew()) {
-                    $affectedRows += $this->aRigs->save($con);
-                }
-                $this->setRigs($this->aRigs);
-            }
-
             if ($this->aGames !== null) {
                 if ($this->aGames->isModified() || $this->aGames->isNew()) {
                     $affectedRows += $this->aGames->save($con);
@@ -808,6 +855,13 @@ abstract class RatingHeaders implements ActiveRecordInterface
                     $affectedRows += $this->aUser->save($con);
                 }
                 $this->setUser($this->aUser);
+            }
+
+            if ($this->aRigs !== null) {
+                if ($this->aRigs->isModified() || $this->aRigs->isNew()) {
+                    $affectedRows += $this->aRigs->save($con);
+                }
+                $this->setRigs($this->aRigs);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -876,6 +930,9 @@ abstract class RatingHeaders implements ActiveRecordInterface
         if ($this->isColumnModified(RatingHeadersTableMap::COL_RIG_ID)) {
             $modifiedColumns[':p' . $index++]  = 'rig_id';
         }
+        if ($this->isColumnModified(RatingHeadersTableMap::COL_DATETIME)) {
+            $modifiedColumns[':p' . $index++]  = 'datetime';
+        }
         if ($this->isColumnModified(RatingHeadersTableMap::COL_UPVOTES)) {
             $modifiedColumns[':p' . $index++]  = 'upvotes';
         }
@@ -904,6 +961,9 @@ abstract class RatingHeaders implements ActiveRecordInterface
                         break;
                     case 'rig_id':                        
                         $stmt->bindValue($identifier, $this->rig_id, PDO::PARAM_INT);
+                        break;
+                    case 'datetime':                        
+                        $stmt->bindValue($identifier, $this->datetime ? $this->datetime->format("Y-m-d H:i:s") : null, PDO::PARAM_STR);
                         break;
                     case 'upvotes':                        
                         $stmt->bindValue($identifier, $this->upvotes, PDO::PARAM_INT);
@@ -986,9 +1046,12 @@ abstract class RatingHeaders implements ActiveRecordInterface
                 return $this->getRigId();
                 break;
             case 4:
-                return $this->getUpvotes();
+                return $this->getDatetime();
                 break;
             case 5:
+                return $this->getUpvotes();
+                break;
+            case 6:
                 return $this->getDownvotes();
                 break;
             default:
@@ -1025,30 +1088,24 @@ abstract class RatingHeaders implements ActiveRecordInterface
             $keys[1] => $this->getGameId(),
             $keys[2] => $this->getUserId(),
             $keys[3] => $this->getRigId(),
-            $keys[4] => $this->getUpvotes(),
-            $keys[5] => $this->getDownvotes(),
+            $keys[4] => $this->getDatetime(),
+            $keys[5] => $this->getUpvotes(),
+            $keys[6] => $this->getDownvotes(),
         );
+
+        $utc = new \DateTimeZone('utc');
+        if ($result[$keys[4]] instanceof \DateTime) {
+            // When changing timezone we don't want to change existing instances
+            $dateTime = clone $result[$keys[4]];
+            $result[$keys[4]] = $dateTime->setTimezone($utc)->format('Y-m-d\TH:i:s\Z');
+        }
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
         
         if ($includeForeignObjects) {
-            if (null !== $this->aRigs) {
-                
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'rigs';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'rigs';
-                        break;
-                    default:
-                        $key = 'Rigs';
-                }
-        
-                $result[$key] = $this->aRigs->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
             if (null !== $this->aGames) {
                 
                 switch ($keyType) {
@@ -1078,6 +1135,21 @@ abstract class RatingHeaders implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aRigs) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'rigs';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'rigs';
+                        break;
+                    default:
+                        $key = 'Rigs';
+                }
+        
+                $result[$key] = $this->aRigs->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collRatingCategoryValuess) {
                 
@@ -1141,9 +1213,12 @@ abstract class RatingHeaders implements ActiveRecordInterface
                 $this->setRigId($value);
                 break;
             case 4:
-                $this->setUpvotes($value);
+                $this->setDatetime($value);
                 break;
             case 5:
+                $this->setUpvotes($value);
+                break;
+            case 6:
                 $this->setDownvotes($value);
                 break;
         } // switch()
@@ -1185,10 +1260,13 @@ abstract class RatingHeaders implements ActiveRecordInterface
             $this->setRigId($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setUpvotes($arr[$keys[4]]);
+            $this->setDatetime($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setDownvotes($arr[$keys[5]]);
+            $this->setUpvotes($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setDownvotes($arr[$keys[6]]);
         }
     }
 
@@ -1242,6 +1320,9 @@ abstract class RatingHeaders implements ActiveRecordInterface
         }
         if ($this->isColumnModified(RatingHeadersTableMap::COL_RIG_ID)) {
             $criteria->add(RatingHeadersTableMap::COL_RIG_ID, $this->rig_id);
+        }
+        if ($this->isColumnModified(RatingHeadersTableMap::COL_DATETIME)) {
+            $criteria->add(RatingHeadersTableMap::COL_DATETIME, $this->datetime);
         }
         if ($this->isColumnModified(RatingHeadersTableMap::COL_UPVOTES)) {
             $criteria->add(RatingHeadersTableMap::COL_UPVOTES, $this->upvotes);
@@ -1338,6 +1419,7 @@ abstract class RatingHeaders implements ActiveRecordInterface
         $copyObj->setGameId($this->getGameId());
         $copyObj->setUserId($this->getUserId());
         $copyObj->setRigId($this->getRigId());
+        $copyObj->setDatetime($this->getDatetime());
         $copyObj->setUpvotes($this->getUpvotes());
         $copyObj->setDownvotes($this->getDownvotes());
 
@@ -1380,57 +1462,6 @@ abstract class RatingHeaders implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
-    }
-
-    /**
-     * Declares an association between this object and a ChildRigs object.
-     *
-     * @param  ChildRigs $v
-     * @return $this|\RatingHeaders The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setRigs(ChildRigs $v = null)
-    {
-        if ($v === null) {
-            $this->setRigId(NULL);
-        } else {
-            $this->setRigId($v->getId());
-        }
-
-        $this->aRigs = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildRigs object, it will not be re-added.
-        if ($v !== null) {
-            $v->addRatingHeaders($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildRigs object
-     *
-     * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildRigs The associated ChildRigs object.
-     * @throws PropelException
-     */
-    public function getRigs(ConnectionInterface $con = null)
-    {
-        if ($this->aRigs === null && (($this->rig_id !== "" && $this->rig_id !== null))) {
-            $this->aRigs = ChildRigsQuery::create()->findPk($this->rig_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aRigs->addRatingHeaderss($this);
-             */
-        }
-
-        return $this->aRigs;
     }
 
     /**
@@ -1533,6 +1564,57 @@ abstract class RatingHeaders implements ActiveRecordInterface
         }
 
         return $this->aUser;
+    }
+
+    /**
+     * Declares an association between this object and a ChildRigs object.
+     *
+     * @param  ChildRigs $v
+     * @return $this|\RatingHeaders The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setRigs(ChildRigs $v = null)
+    {
+        if ($v === null) {
+            $this->setRigId(NULL);
+        } else {
+            $this->setRigId($v->getId());
+        }
+
+        $this->aRigs = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildRigs object, it will not be re-added.
+        if ($v !== null) {
+            $v->addRatingHeaders($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildRigs object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildRigs The associated ChildRigs object.
+     * @throws PropelException
+     */
+    public function getRigs(ConnectionInterface $con = null)
+    {
+        if ($this->aRigs === null && (($this->rig_id !== "" && $this->rig_id !== null))) {
+            $this->aRigs = ChildRigsQuery::create()->findPk($this->rig_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aRigs->addRatingHeaderss($this);
+             */
+        }
+
+        return $this->aRigs;
     }
 
 
@@ -1801,19 +1883,20 @@ abstract class RatingHeaders implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aRigs) {
-            $this->aRigs->removeRatingHeaders($this);
-        }
         if (null !== $this->aGames) {
             $this->aGames->removeRatingHeaders($this);
         }
         if (null !== $this->aUser) {
             $this->aUser->removeRatingHeaders($this);
         }
+        if (null !== $this->aRigs) {
+            $this->aRigs->removeRatingHeaders($this);
+        }
         $this->id = null;
         $this->game_id = null;
         $this->user_id = null;
         $this->rig_id = null;
+        $this->datetime = null;
         $this->upvotes = null;
         $this->downvotes = null;
         $this->alreadyInSave = false;
@@ -1842,9 +1925,9 @@ abstract class RatingHeaders implements ActiveRecordInterface
         } // if ($deep)
 
         $this->collRatingCategoryValuess = null;
-        $this->aRigs = null;
         $this->aGames = null;
         $this->aUser = null;
+        $this->aRigs = null;
     }
 
     /**
