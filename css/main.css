@@ -1,0 +1,53 @@
+body {
+    background: #fffffa;
+}
+
+input[type=radio] {
+    display: none;
+}
+
+.score {
+    vertical-align: top;
+}
+
+.score.category {
+    font-weight: bold;
+}
+
+.score.description {
+    font-size: 0.8em;
+}
+
+.score.description:hover,
+.score.description.checked {
+    transition: 250ms;
+    background: #b3e7f7;
+}
+
+.absolute {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -308px;
+    margin-left: -222px;
+}
+
+.hoverbox {
+    line-height: 1em;
+    overflow-x: visible;
+}
+
+.hoverbox.child {
+    display: none;
+}
+
+.hoverbox.parent:hover > .hoverbox.child {
+    display: block;
+    position: absolute;
+    width: 200px;
+    background: #fff;
+}
+
+
+
+
