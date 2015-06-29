@@ -48,6 +48,24 @@ input[type=radio] {
     background: #fff;
 }
 
+.fixed {
+    position: fixed;
+    top:0; left:0;
+    width: 100%; }
 
+#box {
+  /* Position absolutely, 30px down from the top */
+  position: absolute;
+  top: 30px;
 
+  /* In my case I'm centering it in the window; do what you like */
+  margin-left: 150px;
+  left: 50%;
+  width: 0px;
+
+  /* These are just for my example 
+  height: 1.25em;
+  border: 1px solid #bbb;
+  text-align: center;*/
+}
 

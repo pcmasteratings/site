@@ -7,6 +7,8 @@ require("res/include.php");
 <!-- saved from url=(0026)http://alessandro.pw/pcmr/ -->
 <html>
 	<head>
+		
+		
 		<?php include("res/head.php"); ?>
 		
 		<meta charset="UTF-8" />
@@ -24,16 +26,18 @@ require("res/include.php");
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="http://alessandro.pw/pcmr/css/normalize.css">
-  <link rel="stylesheet" href="http://alessandro.pw/pcmr/css/skeleton.css">
-  <link rel="stylesheet" href="http://alessandro.pw/pcmr/css/main.css">
+  <link rel="stylesheet" href="http://localhost/css/normalize.css">
+  <link rel="stylesheet" href="http://localhost/css/skeleton.css">
+  <link rel="stylesheet" href="http://localhost/css/main.css">
 	</head>
 	<body>
+	
 		<?php include("res/nav.php"); ?>
 		<div class="container">
 			
 			<h4>Select all that apply</h4>
 			
+			<div id='box'>
 			<div class="col-md-4">
 				<table class="table">
 					<tr><td colspan="2" style="text-align:center; border-top: none;"> <img src="./img/NaN.jpg" alt="" height="150" class="u-max-full-width rating"></td></tr>    
@@ -52,8 +56,12 @@ require("res/include.php");
 					
 				</table>
 			</div>
+			</div>
+			
 			<div class="col-md-8">
-				<p>GAME description goes here Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac nulla at arcu egestas convallis eget id odio. Curabitur magna felis, congue quis pretium id, pulvinar sed turpis. Praesent ac tortor tortor. In hac habitasse platea dictumst. Morbi fringilla sapien in lectus ultrices, quis varius sapien condimentum. Vivamus fringilla condimentum risus, nec egestas libero sagittis nec. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla facilisi. </p>
+				<img src="http://static.giantbomb.com/uploads/scale_medium/0/3699/2698809-the+witcher+3+-+wild+hunt+v7.jpg" style='float: left;' alt="R" height="300">
+				<p>GAME description goes here Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac nulla at arcu egestas convallis eget id odio. Curabitur magna felis, congue quis pretium id, pulvinar sed turpis. Praesent ac tortor tortor. In hac habitasse platea dictumst. Morbi fringilla sapien in lectus ultrices, quis varius sapien condimentum. Vivamus fringilla condimentum risus, nec egestas libero sagittis nec. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac nulla at arcu egestas convallis eget id odio. Curabitur magna felis, congue quis pretium id, pulvinar sed turpis. Praesent ac tortor tortor. In hac habitasse platea dictumst. Morbi fringilla sapien in lectus ultrices, quis varius sapien condimentum. Vivamus fringilla condimentum risus, nec egestas libero sagittis nec. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla facilisi.</p>
+			
 			<br/>	
 			 <!-- Score table
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -495,25 +503,25 @@ require("res/include.php");
       <div class="u-full-width" style="margin-top: 0%">
         <footer>
           <p>
-            Based on <a href="http://www.reddit.com/r/pcmasterrace">/r/PCMR</a> user ratings.
+            <!-- Based on <a href="http://www.reddit.com/r/pcmasterrace">/r/PCMR</a> user ratings.
             Credits go to <a href="http://www.reddit.com/user/BallisticGE0RGE">/u/BallisticGE0RGE</a> for the images.
-            Original thread <a href="http://redd.it/3b6eic">here</a>
+            Original thread <a href="http://redd.it/3b6eic">here</a> -->
           </p>
         </footer>
       </div>
     </div>
-
+<!--
   </div>
 
-  <!-- End Document
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+   End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– 
 
 			<table class="table">
 				<th>*</th><th>Individual reviews</th>
 				<tr><td style="width: 25px"><img src="img/badges/r_tiny.jpg" alt="R" height="20"></td><td>review by /u/pedro19</td></tr>
 			</table>
 			</div>
-		</div>
+		</div>-->
 		<?php include("res/footer.php"); ?>
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="/js/bootstrap.js"></script>
@@ -521,5 +529,7 @@ require("res/include.php");
         <script src="./PCMR Rating System calculator_files/main.js"></script>
 		<script src="js/main.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="Jquery-1.4.2-min.js"></script>
+		<script src="FloatingHeader.js"></script>
 	</body>
 </html>
