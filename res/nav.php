@@ -21,7 +21,7 @@
           <?php
             if(Auth::checkIfAuthenticated()) {
                 $user = Auth::getCurrentUser();
-                echo '<li><b>'.$user->getUsername().'</b></li>';
+                echo '<li><a href="#"><b>'.$user->getUsername().'</b></a></li>';
             } else {
                 echo '<li><a href="auth.php">Login</a></li>';
             }
