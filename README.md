@@ -3,9 +3,10 @@
 *Before running the site, you will need to install composer and our various other plugins for it*
 
 
-####Mac/Linux INSTRUCTIONS
+####Mac/Linux Instructions
 
 note to linux users: you may first need to install php. Please follow [this guide](http://php.net/manual/en/install.unix.debian.php)
+
 1. 	Open terminal, then navigate to the pcmratings project directory e.g. `cd home/me/docs/pcmratings`
 2.	Type `php bin/composer.phar install`
 3.	Wait while the necessary files are downloaded. You can verify this by looking for a /vendor/ folder in the site's root directory.
@@ -35,4 +36,5 @@ note to linux users: you may first need to install php. Please follow [this guid
 
 
 To regenerate autoload files: `php bin/composer.phar dump-autoload`
+
 To rebuild model objects ased on schema: `php vendor/propel/propel/bin/propel.php build`
