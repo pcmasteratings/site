@@ -6,8 +6,10 @@ require("res/include.php");
 <!DOCTYPE html>
 <html>
 <head>
-    <?php include("res/head.php"); ?>
+    <link rel="stylesheet" href="/css/index.css">
+    <?php include("res/head.php"); require_once("res/include.php"); ?>
     <title>PC Masterratings</title>
+
 </head>
 <body>
 <?php include("res/nav.php"); ?>
@@ -18,7 +20,9 @@ require("res/include.php");
         <div class="row">
             <div class="col-sm-6 col-md-4">
                 <div class="thumbnail">
+
                     <img src="/tmp/thumbnail.svg" alt="thumbnail">
+                    <img class="rating-badge" src="/img/badges/r_tiny.jpg" alt="R">
                     <div class="caption">
                         <h3>Some game</h3>
                         <p> ...... </p>
