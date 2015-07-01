@@ -23,6 +23,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeadersQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildRatingHeadersQuery orderByGameId($order = Criteria::ASC) Order by the game_id column
  * @method     ChildRatingHeadersQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
+ * @method     ChildRatingHeadersQuery orderByGamePlatformId($order = Criteria::ASC) Order by the game_platform_id column
  * @method     ChildRatingHeadersQuery orderByRigId($order = Criteria::ASC) Order by the rig_id column
  * @method     ChildRatingHeadersQuery orderByDatetime($order = Criteria::ASC) Order by the datetime column
  * @method     ChildRatingHeadersQuery orderByUpvotes($order = Criteria::ASC) Order by the upvotes column
@@ -31,6 +32,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeadersQuery groupById() Group by the id column
  * @method     ChildRatingHeadersQuery groupByGameId() Group by the game_id column
  * @method     ChildRatingHeadersQuery groupByUserId() Group by the user_id column
+ * @method     ChildRatingHeadersQuery groupByGamePlatformId() Group by the game_platform_id column
  * @method     ChildRatingHeadersQuery groupByRigId() Group by the rig_id column
  * @method     ChildRatingHeadersQuery groupByDatetime() Group by the datetime column
  * @method     ChildRatingHeadersQuery groupByUpvotes() Group by the upvotes column
@@ -39,6 +41,10 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeadersQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildRatingHeadersQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     ChildRatingHeadersQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ *
+ * @method     ChildRatingHeadersQuery leftJoinGamePlatforms($relationAlias = null) Adds a LEFT JOIN clause to the query using the GamePlatforms relation
+ * @method     ChildRatingHeadersQuery rightJoinGamePlatforms($relationAlias = null) Adds a RIGHT JOIN clause to the query using the GamePlatforms relation
+ * @method     ChildRatingHeadersQuery innerJoinGamePlatforms($relationAlias = null) Adds a INNER JOIN clause to the query using the GamePlatforms relation
  *
  * @method     ChildRatingHeadersQuery leftJoinGames($relationAlias = null) Adds a LEFT JOIN clause to the query using the Games relation
  * @method     ChildRatingHeadersQuery rightJoinGames($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Games relation
@@ -56,7 +62,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeadersQuery rightJoinRatingCategoryValues($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingCategoryValues relation
  * @method     ChildRatingHeadersQuery innerJoinRatingCategoryValues($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingCategoryValues relation
  *
- * @method     \GamesQuery|\UserQuery|\RigsQuery|\RatingCategoryValuesQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \GamePlatformsQuery|\GamesQuery|\UserQuery|\RigsQuery|\RatingCategoryValuesQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildRatingHeaders findOne(ConnectionInterface $con = null) Return the first ChildRatingHeaders matching the query
  * @method     ChildRatingHeaders findOneOrCreate(ConnectionInterface $con = null) Return the first ChildRatingHeaders matching the query, or a new ChildRatingHeaders object populated from the query conditions when no match is found
@@ -64,6 +70,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeaders findOneById(string $id) Return the first ChildRatingHeaders filtered by the id column
  * @method     ChildRatingHeaders findOneByGameId(string $game_id) Return the first ChildRatingHeaders filtered by the game_id column
  * @method     ChildRatingHeaders findOneByUserId(string $user_id) Return the first ChildRatingHeaders filtered by the user_id column
+ * @method     ChildRatingHeaders findOneByGamePlatformId(string $game_platform_id) Return the first ChildRatingHeaders filtered by the game_platform_id column
  * @method     ChildRatingHeaders findOneByRigId(string $rig_id) Return the first ChildRatingHeaders filtered by the rig_id column
  * @method     ChildRatingHeaders findOneByDatetime(string $datetime) Return the first ChildRatingHeaders filtered by the datetime column
  * @method     ChildRatingHeaders findOneByUpvotes(string $upvotes) Return the first ChildRatingHeaders filtered by the upvotes column
@@ -75,6 +82,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeaders requireOneById(string $id) Return the first ChildRatingHeaders filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByGameId(string $game_id) Return the first ChildRatingHeaders filtered by the game_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByUserId(string $user_id) Return the first ChildRatingHeaders filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRatingHeaders requireOneByGamePlatformId(string $game_platform_id) Return the first ChildRatingHeaders filtered by the game_platform_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByRigId(string $rig_id) Return the first ChildRatingHeaders filtered by the rig_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByDatetime(string $datetime) Return the first ChildRatingHeaders filtered by the datetime column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByUpvotes(string $upvotes) Return the first ChildRatingHeaders filtered by the upvotes column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -84,6 +92,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeaders[]|ObjectCollection findById(string $id) Return ChildRatingHeaders objects filtered by the id column
  * @method     ChildRatingHeaders[]|ObjectCollection findByGameId(string $game_id) Return ChildRatingHeaders objects filtered by the game_id column
  * @method     ChildRatingHeaders[]|ObjectCollection findByUserId(string $user_id) Return ChildRatingHeaders objects filtered by the user_id column
+ * @method     ChildRatingHeaders[]|ObjectCollection findByGamePlatformId(string $game_platform_id) Return ChildRatingHeaders objects filtered by the game_platform_id column
  * @method     ChildRatingHeaders[]|ObjectCollection findByRigId(string $rig_id) Return ChildRatingHeaders objects filtered by the rig_id column
  * @method     ChildRatingHeaders[]|ObjectCollection findByDatetime(string $datetime) Return ChildRatingHeaders objects filtered by the datetime column
  * @method     ChildRatingHeaders[]|ObjectCollection findByUpvotes(string $upvotes) Return ChildRatingHeaders objects filtered by the upvotes column
@@ -180,7 +189,7 @@ abstract class RatingHeadersQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, game_id, user_id, rig_id, datetime, upvotes, downvotes FROM rating_headers WHERE id = :p0';
+        $sql = 'SELECT id, game_id, user_id, game_platform_id, rig_id, datetime, upvotes, downvotes FROM rating_headers WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -398,6 +407,49 @@ abstract class RatingHeadersQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the game_platform_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByGamePlatformId(1234); // WHERE game_platform_id = 1234
+     * $query->filterByGamePlatformId(array(12, 34)); // WHERE game_platform_id IN (12, 34)
+     * $query->filterByGamePlatformId(array('min' => 12)); // WHERE game_platform_id > 12
+     * </code>
+     *
+     * @see       filterByGamePlatforms()
+     *
+     * @param     mixed $gamePlatformId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildRatingHeadersQuery The current query, for fluid interface
+     */
+    public function filterByGamePlatformId($gamePlatformId = null, $comparison = null)
+    {
+        if (is_array($gamePlatformId)) {
+            $useMinMax = false;
+            if (isset($gamePlatformId['min'])) {
+                $this->addUsingAlias(RatingHeadersTableMap::COL_GAME_PLATFORM_ID, $gamePlatformId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($gamePlatformId['max'])) {
+                $this->addUsingAlias(RatingHeadersTableMap::COL_GAME_PLATFORM_ID, $gamePlatformId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RatingHeadersTableMap::COL_GAME_PLATFORM_ID, $gamePlatformId, $comparison);
+    }
+
+    /**
      * Filter the query on the rig_id column
      *
      * Example usage:
@@ -563,6 +615,83 @@ abstract class RatingHeadersQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RatingHeadersTableMap::COL_DOWNVOTES, $downvotes, $comparison);
+    }
+
+    /**
+     * Filter the query by a related \GamePlatforms object
+     *
+     * @param \GamePlatforms|ObjectCollection $gamePlatforms The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildRatingHeadersQuery The current query, for fluid interface
+     */
+    public function filterByGamePlatforms($gamePlatforms, $comparison = null)
+    {
+        if ($gamePlatforms instanceof \GamePlatforms) {
+            return $this
+                ->addUsingAlias(RatingHeadersTableMap::COL_GAME_PLATFORM_ID, $gamePlatforms->getId(), $comparison);
+        } elseif ($gamePlatforms instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(RatingHeadersTableMap::COL_GAME_PLATFORM_ID, $gamePlatforms->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByGamePlatforms() only accepts arguments of type \GamePlatforms or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the GamePlatforms relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildRatingHeadersQuery The current query, for fluid interface
+     */
+    public function joinGamePlatforms($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('GamePlatforms');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'GamePlatforms');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the GamePlatforms relation GamePlatforms object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \GamePlatformsQuery A secondary query class using the current class as primary query
+     */
+    public function useGamePlatformsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinGamePlatforms($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'GamePlatforms', '\GamePlatformsQuery');
     }
 
     /**

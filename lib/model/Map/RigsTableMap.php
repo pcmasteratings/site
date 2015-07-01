@@ -82,9 +82,9 @@ class RigsTableMap extends TableMap
     const COL_USER_ID = 'rigs.user_id';
 
     /**
-     * the column name for the name field
+     * the column name for the title field
      */
-    const COL_NAME = 'rigs.name';
+    const COL_TITLE = 'rigs.title';
 
     /**
      * The default string format for model objects of the related table
@@ -98,10 +98,10 @@ class RigsTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'UserId', 'Name', ),
-        self::TYPE_CAMELNAME     => array('id', 'userId', 'name', ),
-        self::TYPE_COLNAME       => array(RigsTableMap::COL_ID, RigsTableMap::COL_USER_ID, RigsTableMap::COL_NAME, ),
-        self::TYPE_FIELDNAME     => array('id', 'user_id', 'name', ),
+        self::TYPE_PHPNAME       => array('Id', 'UserId', 'Title', ),
+        self::TYPE_CAMELNAME     => array('id', 'userId', 'title', ),
+        self::TYPE_COLNAME       => array(RigsTableMap::COL_ID, RigsTableMap::COL_USER_ID, RigsTableMap::COL_TITLE, ),
+        self::TYPE_FIELDNAME     => array('id', 'user_id', 'title', ),
         self::TYPE_NUM           => array(0, 1, 2, )
     );
 
@@ -112,10 +112,10 @@ class RigsTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'Name' => 2, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'name' => 2, ),
-        self::TYPE_COLNAME       => array(RigsTableMap::COL_ID => 0, RigsTableMap::COL_USER_ID => 1, RigsTableMap::COL_NAME => 2, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'user_id' => 1, 'name' => 2, ),
+        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'Title' => 2, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'title' => 2, ),
+        self::TYPE_COLNAME       => array(RigsTableMap::COL_ID => 0, RigsTableMap::COL_USER_ID => 1, RigsTableMap::COL_TITLE => 2, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'user_id' => 1, 'title' => 2, ),
         self::TYPE_NUM           => array(0, 1, 2, )
     );
 
@@ -138,7 +138,7 @@ class RigsTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
         $this->addForeignKey('user_id', 'UserId', 'BIGINT', 'user', 'id', true, null, null);
-        $this->addColumn('name', 'Name', 'LONGVARCHAR', true, null, null);
+        $this->addColumn('title', 'Title', 'LONGVARCHAR', true, null, null);
     } // initialize()
 
     /**
@@ -321,11 +321,11 @@ class RigsTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(RigsTableMap::COL_ID);
             $criteria->addSelectColumn(RigsTableMap::COL_USER_ID);
-            $criteria->addSelectColumn(RigsTableMap::COL_NAME);
+            $criteria->addSelectColumn(RigsTableMap::COL_TITLE);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.user_id');
-            $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.title');
         }
     }
 

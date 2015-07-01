@@ -59,7 +59,7 @@ class CompaniesTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 4;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class CompaniesTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 3;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /**
      * the column name for the id field
@@ -80,6 +80,11 @@ class CompaniesTableMap extends TableMap
      * the column name for the name field
      */
     const COL_NAME = 'companies.name';
+
+    /**
+     * the column name for the title field
+     */
+    const COL_TITLE = 'companies.title';
 
     /**
      * the column name for the description field
@@ -98,11 +103,11 @@ class CompaniesTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'Description', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'description', ),
-        self::TYPE_COLNAME       => array(CompaniesTableMap::COL_ID, CompaniesTableMap::COL_NAME, CompaniesTableMap::COL_DESCRIPTION, ),
-        self::TYPE_FIELDNAME     => array('id', 'name', 'description', ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Id', 'Name', 'Title', 'Description', ),
+        self::TYPE_CAMELNAME     => array('id', 'name', 'title', 'description', ),
+        self::TYPE_COLNAME       => array(CompaniesTableMap::COL_ID, CompaniesTableMap::COL_NAME, CompaniesTableMap::COL_TITLE, CompaniesTableMap::COL_DESCRIPTION, ),
+        self::TYPE_FIELDNAME     => array('id', 'name', 'title', 'description', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -112,11 +117,11 @@ class CompaniesTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Description' => 2, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'description' => 2, ),
-        self::TYPE_COLNAME       => array(CompaniesTableMap::COL_ID => 0, CompaniesTableMap::COL_NAME => 1, CompaniesTableMap::COL_DESCRIPTION => 2, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'description' => 2, ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Title' => 2, 'Description' => 3, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, ),
+        self::TYPE_COLNAME       => array(CompaniesTableMap::COL_ID => 0, CompaniesTableMap::COL_NAME => 1, CompaniesTableMap::COL_TITLE => 2, CompaniesTableMap::COL_DESCRIPTION => 3, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -137,7 +142,8 @@ class CompaniesTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
-        $this->addColumn('name', 'Name', 'LONGVARCHAR', true, null, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 255, null);
+        $this->addColumn('title', 'Title', 'LONGVARCHAR', true, null, null);
         $this->addColumn('description', 'Description', 'CLOB', true, null, null);
     } // initialize()
 
@@ -146,13 +152,6 @@ class CompaniesTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('GamesRelatedByDeveloperId', '\\Games', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':developer_id',
-    1 => ':id',
-  ),
-), null, null, 'GamessRelatedByDeveloperId', false);
         $this->addRelation('GamesRelatedByPublisherId', '\\Games', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -160,6 +159,13 @@ class CompaniesTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'GamessRelatedByPublisherId', false);
+        $this->addRelation('GamesRelatedByDeveloperId', '\\Games', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':developer_id',
+    1 => ':id',
+  ),
+), null, null, 'GamessRelatedByDeveloperId', false);
     } // buildRelations()
 
     /**
@@ -305,10 +311,12 @@ class CompaniesTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(CompaniesTableMap::COL_ID);
             $criteria->addSelectColumn(CompaniesTableMap::COL_NAME);
+            $criteria->addSelectColumn(CompaniesTableMap::COL_TITLE);
             $criteria->addSelectColumn(CompaniesTableMap::COL_DESCRIPTION);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.title');
             $criteria->addSelectColumn($alias . '.description');
         }
     }

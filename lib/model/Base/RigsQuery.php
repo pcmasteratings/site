@@ -22,11 +22,11 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRigsQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildRigsQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
- * @method     ChildRigsQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method     ChildRigsQuery orderByTitle($order = Criteria::ASC) Order by the title column
  *
  * @method     ChildRigsQuery groupById() Group by the id column
  * @method     ChildRigsQuery groupByUserId() Group by the user_id column
- * @method     ChildRigsQuery groupByName() Group by the name column
+ * @method     ChildRigsQuery groupByTitle() Group by the title column
  *
  * @method     ChildRigsQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildRigsQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -51,19 +51,19 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRigs findOneById(string $id) Return the first ChildRigs filtered by the id column
  * @method     ChildRigs findOneByUserId(string $user_id) Return the first ChildRigs filtered by the user_id column
- * @method     ChildRigs findOneByName(string $name) Return the first ChildRigs filtered by the name column *
+ * @method     ChildRigs findOneByTitle(string $title) Return the first ChildRigs filtered by the title column *
 
  * @method     ChildRigs requirePk($key, ConnectionInterface $con = null) Return the ChildRigs by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRigs requireOne(ConnectionInterface $con = null) Return the first ChildRigs matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRigs requireOneById(string $id) Return the first ChildRigs filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRigs requireOneByUserId(string $user_id) Return the first ChildRigs filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRigs requireOneByName(string $name) Return the first ChildRigs filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRigs requireOneByTitle(string $title) Return the first ChildRigs filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRigs[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildRigs objects based on current ModelCriteria
  * @method     ChildRigs[]|ObjectCollection findById(string $id) Return ChildRigs objects filtered by the id column
  * @method     ChildRigs[]|ObjectCollection findByUserId(string $user_id) Return ChildRigs objects filtered by the user_id column
- * @method     ChildRigs[]|ObjectCollection findByName(string $name) Return ChildRigs objects filtered by the name column
+ * @method     ChildRigs[]|ObjectCollection findByTitle(string $title) Return ChildRigs objects filtered by the title column
  * @method     ChildRigs[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -156,7 +156,7 @@ abstract class RigsQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, user_id, name FROM rigs WHERE id = :p0';
+        $sql = 'SELECT id, user_id, title FROM rigs WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -331,32 +331,32 @@ abstract class RigsQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the name column
+     * Filter the query on the title column
      *
      * Example usage:
      * <code>
-     * $query->filterByName('fooValue');   // WHERE name = 'fooValue'
-     * $query->filterByName('%fooValue%'); // WHERE name LIKE '%fooValue%'
+     * $query->filterByTitle('fooValue');   // WHERE title = 'fooValue'
+     * $query->filterByTitle('%fooValue%'); // WHERE title LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $name The value to use as filter.
+     * @param     string $title The value to use as filter.
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildRigsQuery The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByTitle($title = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($name)) {
+            if (is_array($title)) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $name)) {
-                $name = str_replace('*', '%', $name);
+            } elseif (preg_match('/[\%\*]/', $title)) {
+                $title = str_replace('*', '%', $title);
                 $comparison = Criteria::LIKE;
             }
         }
 
-        return $this->addUsingAlias(RigsTableMap::COL_NAME, $name, $comparison);
+        return $this->addUsingAlias(RigsTableMap::COL_TITLE, $title, $comparison);
     }
 
     /**

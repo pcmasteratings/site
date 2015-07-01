@@ -23,12 +23,12 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildUserQuery orderByUsername($order = Criteria::ASC) Order by the username column
  * @method     ChildUserQuery orderByPassword($order = Criteria::ASC) Order by the password column
- * @method     ChildUserQuery orderByRedditID($order = Criteria::ASC) Order by the reddit_id column
+ * @method     ChildUserQuery orderByRedditId($order = Criteria::ASC) Order by the reddit_id column
  *
  * @method     ChildUserQuery groupById() Group by the id column
  * @method     ChildUserQuery groupByUsername() Group by the username column
  * @method     ChildUserQuery groupByPassword() Group by the password column
- * @method     ChildUserQuery groupByRedditID() Group by the reddit_id column
+ * @method     ChildUserQuery groupByRedditId() Group by the reddit_id column
  *
  * @method     ChildUserQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildUserQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -62,7 +62,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser findOneById(string $id) Return the first ChildUser filtered by the id column
  * @method     ChildUser findOneByUsername(string $username) Return the first ChildUser filtered by the username column
  * @method     ChildUser findOneByPassword(string $password) Return the first ChildUser filtered by the password column
- * @method     ChildUser findOneByRedditID(string $reddit_id) Return the first ChildUser filtered by the reddit_id column *
+ * @method     ChildUser findOneByRedditId(string $reddit_id) Return the first ChildUser filtered by the reddit_id column *
 
  * @method     ChildUser requirePk($key, ConnectionInterface $con = null) Return the ChildUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOne(ConnectionInterface $con = null) Return the first ChildUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -70,13 +70,13 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser requireOneById(string $id) Return the first ChildUser filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByUsername(string $username) Return the first ChildUser filtered by the username column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByPassword(string $password) Return the first ChildUser filtered by the password column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByRedditID(string $reddit_id) Return the first ChildUser filtered by the reddit_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildUser requireOneByRedditId(string $reddit_id) Return the first ChildUser filtered by the reddit_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildUser[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
  * @method     ChildUser[]|ObjectCollection findById(string $id) Return ChildUser objects filtered by the id column
  * @method     ChildUser[]|ObjectCollection findByUsername(string $username) Return ChildUser objects filtered by the username column
  * @method     ChildUser[]|ObjectCollection findByPassword(string $password) Return ChildUser objects filtered by the password column
- * @method     ChildUser[]|ObjectCollection findByRedditID(string $reddit_id) Return ChildUser objects filtered by the reddit_id column
+ * @method     ChildUser[]|ObjectCollection findByRedditId(string $reddit_id) Return ChildUser objects filtered by the reddit_id column
  * @method     ChildUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -363,28 +363,28 @@ abstract class UserQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByRedditID('fooValue');   // WHERE reddit_id = 'fooValue'
-     * $query->filterByRedditID('%fooValue%'); // WHERE reddit_id LIKE '%fooValue%'
+     * $query->filterByRedditId('fooValue');   // WHERE reddit_id = 'fooValue'
+     * $query->filterByRedditId('%fooValue%'); // WHERE reddit_id LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $redditID The value to use as filter.
+     * @param     string $redditId The value to use as filter.
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
-    public function filterByRedditID($redditID = null, $comparison = null)
+    public function filterByRedditId($redditId = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($redditID)) {
+            if (is_array($redditId)) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $redditID)) {
-                $redditID = str_replace('*', '%', $redditID);
+            } elseif (preg_match('/[\%\*]/', $redditId)) {
+                $redditId = str_replace('*', '%', $redditId);
                 $comparison = Criteria::LIKE;
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_REDDIT_ID, $redditID, $comparison);
+        return $this->addUsingAlias(UserTableMap::COL_REDDIT_ID, $redditId, $comparison);
     }
 
     /**
