@@ -49,14 +49,14 @@ class Games extends BaseGames
         'ъ' => '', 'Ъ' => '', 'ы' => 'y', 'Ы' => 'y', 'ь' => '', 'Ь' => '', 'э' => 'e', 'Э' => 'e', 'ю' => 'ju', 
         'Ю' => 'ju', 'я' => 'ja', 'Я' => 'ja');
         
-    public static function generateUniqueName(string $title, string $year) {
-        $name = str_replace(array_keys(Game::$TRANSLITERATABLE_CHARACTERS), 
-                                array_values(Game::$TRANSLITERATABLE_CHARACTERS), $title);
+    public static function generateUniqueName($title, $year) {
+        $name = str_replace(array_keys(Games::$TRANSLITERATABLE_CHARACTERS), 
+                                array_values(Games::$TRANSLITERATABLE_CHARACTERS), $title);
         $name = strtolower($name);
-        
         $name = preg_replace("/[^a-z0-9]/", '_', $name);
-        $name = preg_replace('/_+/', ' ',$name);
-        
+
+        $name = preg_replace('/_+/', '_',$name);
+
         $approved = false;    
         $try = 0;
         $query = new GamesQuery();

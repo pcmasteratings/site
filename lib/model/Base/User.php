@@ -415,7 +415,7 @@ abstract class User implements ActiveRecordInterface
      * 
      * @return string
      */
-    public function getRedditID()
+    public function getRedditId()
     {
         return $this->reddit_id;
     }
@@ -486,7 +486,7 @@ abstract class User implements ActiveRecordInterface
      * @param string $v new value
      * @return $this|\User The current object (for fluent API support)
      */
-    public function setRedditID($v)
+    public function setRedditId($v)
     {
         if ($v !== null) {
             $v = (string) $v;
@@ -498,7 +498,7 @@ abstract class User implements ActiveRecordInterface
         }
 
         return $this;
-    } // setRedditID()
+    } // setRedditId()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -545,7 +545,7 @@ abstract class User implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : UserTableMap::translateFieldName('Password', TableMap::TYPE_PHPNAME, $indexType)];
             $this->password = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : UserTableMap::translateFieldName('RedditID', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : UserTableMap::translateFieldName('RedditId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->reddit_id = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
@@ -954,7 +954,7 @@ abstract class User implements ActiveRecordInterface
                 return $this->getPassword();
                 break;
             case 3:
-                return $this->getRedditID();
+                return $this->getRedditId();
                 break;
             default:
                 return null;
@@ -989,7 +989,7 @@ abstract class User implements ActiveRecordInterface
             $keys[0] => $this->getId(),
             $keys[1] => $this->getUsername(),
             $keys[2] => $this->getPassword(),
-            $keys[3] => $this->getRedditID(),
+            $keys[3] => $this->getRedditId(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1116,7 +1116,7 @@ abstract class User implements ActiveRecordInterface
                 $this->setPassword($value);
                 break;
             case 3:
-                $this->setRedditID($value);
+                $this->setRedditId($value);
                 break;
         } // switch()
 
@@ -1154,7 +1154,7 @@ abstract class User implements ActiveRecordInterface
             $this->setPassword($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setRedditID($arr[$keys[3]]);
+            $this->setRedditId($arr[$keys[3]]);
         }
     }
 
@@ -1297,7 +1297,7 @@ abstract class User implements ActiveRecordInterface
     {
         $copyObj->setUsername($this->getUsername());
         $copyObj->setPassword($this->getPassword());
-        $copyObj->setRedditID($this->getRedditID());
+        $copyObj->setRedditId($this->getRedditId());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1826,6 +1826,31 @@ abstract class User implements ActiveRecordInterface
         }
 
         return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related RatingHeaderss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
+     */
+    public function getRatingHeaderssJoinGamePlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildRatingHeadersQuery::create(null, $criteria);
+        $query->joinWith('GamePlatforms', $joinBehavior);
+
+        return $this->getRatingHeaderss($query, $con);
     }
 
 

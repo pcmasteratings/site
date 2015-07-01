@@ -103,8 +103,8 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Username', 'Password', 'RedditID', ),
-        self::TYPE_CAMELNAME     => array('id', 'username', 'password', 'redditID', ),
+        self::TYPE_PHPNAME       => array('Id', 'Username', 'Password', 'RedditId', ),
+        self::TYPE_CAMELNAME     => array('id', 'username', 'password', 'redditId', ),
         self::TYPE_COLNAME       => array(UserTableMap::COL_ID, UserTableMap::COL_USERNAME, UserTableMap::COL_PASSWORD, UserTableMap::COL_REDDIT_ID, ),
         self::TYPE_FIELDNAME     => array('id', 'username', 'password', 'reddit_id', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, )
@@ -117,8 +117,8 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Username' => 1, 'Password' => 2, 'RedditID' => 3, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'username' => 1, 'password' => 2, 'redditID' => 3, ),
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Username' => 1, 'Password' => 2, 'RedditId' => 3, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'username' => 1, 'password' => 2, 'redditId' => 3, ),
         self::TYPE_COLNAME       => array(UserTableMap::COL_ID => 0, UserTableMap::COL_USERNAME => 1, UserTableMap::COL_PASSWORD => 2, UserTableMap::COL_REDDIT_ID => 3, ),
         self::TYPE_FIELDNAME     => array('id' => 0, 'username' => 1, 'password' => 2, 'reddit_id' => 3, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, )
@@ -144,7 +144,7 @@ class UserTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
         $this->addColumn('username', 'Username', 'LONGVARCHAR', true, null, null);
         $this->addColumn('password', 'Password', 'LONGVARCHAR', true, null, null);
-        $this->addColumn('reddit_id', 'RedditID', 'VARCHAR', true, 255, null);
+        $this->addColumn('reddit_id', 'RedditId', 'VARCHAR', true, 32, null);
     } // initialize()
 
     /**

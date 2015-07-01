@@ -80,10 +80,10 @@ abstract class Rigs implements ActiveRecordInterface
     protected $user_id;
 
     /**
-     * The value for the name field.
+     * The value for the title field.
      * @var        string
      */
-    protected $name;
+    protected $title;
 
     /**
      * @var        ChildUser
@@ -360,13 +360,13 @@ abstract class Rigs implements ActiveRecordInterface
     }
 
     /**
-     * Get the [name] column value.
+     * Get the [title] column value.
      * 
      * @return string
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
+        return $this->title;
     }
 
     /**
@@ -414,24 +414,24 @@ abstract class Rigs implements ActiveRecordInterface
     } // setUserId()
 
     /**
-     * Set the value of [name] column.
+     * Set the value of [title] column.
      * 
      * @param string $v new value
      * @return $this|\Rigs The current object (for fluent API support)
      */
-    public function setName($v)
+    public function setTitle($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->name !== $v) {
-            $this->name = $v;
-            $this->modifiedColumns[RigsTableMap::COL_NAME] = true;
+        if ($this->title !== $v) {
+            $this->title = $v;
+            $this->modifiedColumns[RigsTableMap::COL_TITLE] = true;
         }
 
         return $this;
-    } // setName()
+    } // setTitle()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -475,8 +475,8 @@ abstract class Rigs implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : RigsTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RigsTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->name = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RigsTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->title = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -742,8 +742,8 @@ abstract class Rigs implements ActiveRecordInterface
         if ($this->isColumnModified(RigsTableMap::COL_USER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'user_id';
         }
-        if ($this->isColumnModified(RigsTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+        if ($this->isColumnModified(RigsTableMap::COL_TITLE)) {
+            $modifiedColumns[':p' . $index++]  = 'title';
         }
 
         $sql = sprintf(
@@ -762,8 +762,8 @@ abstract class Rigs implements ActiveRecordInterface
                     case 'user_id':                        
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
                         break;
-                    case 'name':                        
-                        $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+                    case 'title':                        
+                        $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -834,7 +834,7 @@ abstract class Rigs implements ActiveRecordInterface
                 return $this->getUserId();
                 break;
             case 2:
-                return $this->getName();
+                return $this->getTitle();
                 break;
             default:
                 return null;
@@ -868,7 +868,7 @@ abstract class Rigs implements ActiveRecordInterface
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getUserId(),
-            $keys[2] => $this->getName(),
+            $keys[2] => $this->getTitle(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -962,7 +962,7 @@ abstract class Rigs implements ActiveRecordInterface
                 $this->setUserId($value);
                 break;
             case 2:
-                $this->setName($value);
+                $this->setTitle($value);
                 break;
         } // switch()
 
@@ -997,7 +997,7 @@ abstract class Rigs implements ActiveRecordInterface
             $this->setUserId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setName($arr[$keys[2]]);
+            $this->setTitle($arr[$keys[2]]);
         }
     }
 
@@ -1046,8 +1046,8 @@ abstract class Rigs implements ActiveRecordInterface
         if ($this->isColumnModified(RigsTableMap::COL_USER_ID)) {
             $criteria->add(RigsTableMap::COL_USER_ID, $this->user_id);
         }
-        if ($this->isColumnModified(RigsTableMap::COL_NAME)) {
-            $criteria->add(RigsTableMap::COL_NAME, $this->name);
+        if ($this->isColumnModified(RigsTableMap::COL_TITLE)) {
+            $criteria->add(RigsTableMap::COL_TITLE, $this->title);
         }
 
         return $criteria;
@@ -1136,7 +1136,7 @@ abstract class Rigs implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setUserId($this->getUserId());
-        $copyObj->setName($this->getName());
+        $copyObj->setTitle($this->getTitle());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1490,6 +1490,31 @@ abstract class Rigs implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
      */
+    public function getRatingHeaderssJoinGamePlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildRatingHeadersQuery::create(null, $criteria);
+        $query->joinWith('GamePlatforms', $joinBehavior);
+
+        return $this->getRatingHeaderss($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Rigs is new, it will return
+     * an empty collection; or if this Rigs has previously
+     * been saved, it will retrieve related RatingHeaderss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Rigs.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
+     */
     public function getRatingHeaderssJoinGames(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRatingHeadersQuery::create(null, $criteria);
@@ -1778,7 +1803,7 @@ abstract class Rigs implements ActiveRecordInterface
         }
         $this->id = null;
         $this->user_id = null;
-        $this->name = null;
+        $this->title = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

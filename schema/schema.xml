@@ -2,8 +2,12 @@
 <database name="default" defaultIdMethod="native" defaultPhpNamingMethod="underscore">
   <table name="companies" idMethod="native" phpName="Companies">
     <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="name" phpName="Name" type="LONGVARCHAR" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="255" required="true"/>
+    <column name="title" phpName="Title" type="LONGVARCHAR" required="true"/>
     <column name="description" phpName="Description" type="CLOB" required="true"/>
+    <unique name="name">
+      <unique-column name="name"/>
+    </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
@@ -38,18 +42,26 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+  <table name="game_platforms" idMethod="native" phpName="GamePlatforms">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="name" phpName="Name" type="LONGVARCHAR" required="true"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
   <table name="games" idMethod="native" phpName="Games">
     <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="255" required="true"/>
     <column name="title" phpName="Title" type="CLOB" required="true"/>
     <column name="description" phpName="Description" type="CLOB" required="true"/>
     <column name="publisher_id" phpName="PublisherId" type="BIGINT"/>
     <column name="developer_id" phpName="DeveloperId" type="BIGINT"/>
     <column name="port" phpName="Port" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
-    <foreign-key foreignTable="companies" name="games_ibfk_2">
-      <reference local="developer_id" foreign="id"/>
-    </foreign-key>
     <foreign-key foreignTable="companies" name="games_ibfk_1">
       <reference local="publisher_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="companies" name="games_ibfk_2">
+      <reference local="developer_id" foreign="id"/>
     </foreign-key>
     <index name="publisher_id">
       <index-column name="publisher_id"/>
@@ -57,6 +69,9 @@
     <index name="developer_id">
       <index-column name="developer_id"/>
     </index>
+    <unique name="name">
+      <unique-column name="name"/>
+    </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
@@ -74,6 +89,22 @@
     <index name="user_id">
       <index-column name="user_id"/>
     </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="platforms" idMethod="native" phpName="Platforms">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="255" required="true"/>
+    <column name="title" phpName="Title" type="LONGVARCHAR" required="true"/>
+    <column name="description" phpName="Description" type="CLOB" required="true"/>
+    <column name="gb_id" phpName="GbId" type="BIGINT"/>
+    <unique name="name">
+      <unique-column name="name"/>
+    </unique>
+    <unique name="gb_id">
+      <unique-column name="gb_id"/>
+    </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
@@ -130,10 +161,14 @@
     <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="game_id" phpName="GameId" type="BIGINT" required="true"/>
     <column name="user_id" phpName="UserId" type="BIGINT" required="true"/>
+    <column name="game_platform_id" phpName="GamePlatformId" type="BIGINT" required="true"/>
     <column name="rig_id" phpName="RigId" type="BIGINT" required="true"/>
     <column name="datetime" phpName="Datetime" type="TIMESTAMP" required="true"/>
     <column name="upvotes" phpName="Upvotes" type="BIGINT" required="true"/>
     <column name="downvotes" phpName="Downvotes" type="BIGINT" required="true"/>
+    <foreign-key foreignTable="game_platforms" name="rating_headers_ibfk_4">
+      <reference local="game_platform_id" foreign="id"/>
+    </foreign-key>
     <foreign-key foreignTable="games" name="rating_headers_ibfk_1">
       <reference local="game_id" foreign="id"/>
     </foreign-key>
@@ -151,6 +186,9 @@
     </index>
     <index name="rig_id">
       <index-column name="rig_id"/>
+    </index>
+    <index name="game_platform_id">
+      <index-column name="game_platform_id"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -187,7 +225,7 @@
   <table name="rigs" idMethod="native" phpName="Rigs">
     <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="user_id" phpName="UserId" type="BIGINT" required="true"/>
-    <column name="name" phpName="Name" type="LONGVARCHAR" required="true"/>
+    <column name="title" phpName="Title" type="LONGVARCHAR" required="true"/>
     <foreign-key foreignTable="user" name="rigs_ibfk_1">
       <reference local="user_id" foreign="id"/>
     </foreign-key>
@@ -201,8 +239,11 @@
   <table name="user" idMethod="native" phpName="User">
     <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="username" phpName="Username" type="LONGVARCHAR" required="true"/>
-      <column name="password" phpName="Password" type="LONGVARCHAR" required="true"/>
-      <column name="reddit_id" phpName="RedditID" type="VARCHAR" required="true"/>
+    <column name="password" phpName="Password" type="LONGVARCHAR" required="true"/>
+    <column name="reddit_id" phpName="RedditId" type="VARCHAR" size="32" required="true"/>
+    <unique name="reddit_id">
+      <unique-column name="reddit_id"/>
+    </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
@@ -256,11 +297,4 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-    <table name="auth_requests" idMethod="native" phpName="AuthRequests">
-        <column name="id" phpName="Id" type="VARCHAR" primaryKey="true" required="true"/>
-        <column name="created" phpName="Created" type="TIMESTAMP" required="true"/>
-        <vendor type="mysql">
-            <parameter name="Engine" value="InnoDB"/>
-        </vendor>
-    </table>
 </database>
