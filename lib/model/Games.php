@@ -50,39 +50,39 @@ class Games extends BaseGames
         'Ю' => 'ju', 'я' => 'ja', 'Я' => 'ja');
         
     public static function generateUniqueName($title, $year) {
-        $name = str_replace(array_keys(Games::$TRANSLITERATABLE_CHARACTERS), 
+        $name_base = str_replace(array_keys(Games::$TRANSLITERATABLE_CHARACTERS), 
                                 array_values(Games::$TRANSLITERATABLE_CHARACTERS), $title);
-        $name = strtolower($name);
-        $name = preg_replace("/[^a-z0-9]/", '_', $name);
+        $name_base = strtolower($name_base);
+        $name_base = preg_replace("/[^a-z0-9]/", '_', $name_base);
 
-        $name = preg_replace('/_+/', '_',$name);
+        $name_base = preg_replace('/_+/', '_',$name_base);
 
         $approved = false;    
         $try = 0;
-        $query = new GamesQuery();
         while(!$approved) {
             $number_length = 0;
             if($try>0) {
                 $number_length = strlen($try) + 1;
             }
             
-            $name = substr($name,0, 254 - strlen($year) - $number_length);
+            $name = substr($name_base,0, 254 - strlen($year) - $number_length);
             
             $name .= '_' .$year;
             if($try > 0) {
                 $name .= '_' .$try;
             }
-            
+           
+		$result = null;
+ $query = new GamesQuery();
+
             $result = $query->findOneByName($name);
-            
             if($result!=null) {
                 $try++;
             } else {
-                $approved = true;
+                return $name;
             }
         }
 
-        return $name;
     }
     
     
