@@ -7,7 +7,7 @@ require("res/include.php");
 <html>
 <head>
     <link rel="stylesheet" href="/css/index.css">
-    <?php include("res/head.php"); require_once("res/include.php"); ?>
+    <?php include("res/head.php"); ?>
     <title>PC Masterratings</title>
 
 </head>

@@ -5,6 +5,6 @@
         "adoy/oauth2": "~1.2.0"
     },
     "autoload": {
-      "classmap": ["lib/model/","lib/auth/"]
+      "classmap": ["lib/"]
     }
 }
