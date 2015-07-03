@@ -59,7 +59,7 @@ class GamesTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class GamesTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the id field
@@ -102,9 +102,14 @@ class GamesTableMap extends TableMap
     const COL_DEVELOPER_ID = 'games.developer_id';
 
     /**
-     * the column name for the port field
+     * the column name for the gb_id field
      */
-    const COL_PORT = 'games.port';
+    const COL_GB_ID = 'games.gb_id';
+
+    /**
+     * the column name for the gb_url field
+     */
+    const COL_GB_URL = 'games.gb_url';
 
     /**
      * The default string format for model objects of the related table
@@ -118,11 +123,11 @@ class GamesTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'Title', 'Description', 'PublisherId', 'DeveloperId', 'Port', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'title', 'description', 'publisherId', 'developerId', 'port', ),
-        self::TYPE_COLNAME       => array(GamesTableMap::COL_ID, GamesTableMap::COL_NAME, GamesTableMap::COL_TITLE, GamesTableMap::COL_DESCRIPTION, GamesTableMap::COL_PUBLISHER_ID, GamesTableMap::COL_DEVELOPER_ID, GamesTableMap::COL_PORT, ),
-        self::TYPE_FIELDNAME     => array('id', 'name', 'title', 'description', 'publisher_id', 'developer_id', 'port', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id', 'Name', 'Title', 'Description', 'PublisherId', 'DeveloperId', 'GbId', 'GbUrl', ),
+        self::TYPE_CAMELNAME     => array('id', 'name', 'title', 'description', 'publisherId', 'developerId', 'gbId', 'gbUrl', ),
+        self::TYPE_COLNAME       => array(GamesTableMap::COL_ID, GamesTableMap::COL_NAME, GamesTableMap::COL_TITLE, GamesTableMap::COL_DESCRIPTION, GamesTableMap::COL_PUBLISHER_ID, GamesTableMap::COL_DEVELOPER_ID, GamesTableMap::COL_GB_ID, GamesTableMap::COL_GB_URL, ),
+        self::TYPE_FIELDNAME     => array('id', 'name', 'title', 'description', 'publisher_id', 'developer_id', 'gb_id', 'gb_url', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -132,11 +137,11 @@ class GamesTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Title' => 2, 'Description' => 3, 'PublisherId' => 4, 'DeveloperId' => 5, 'Port' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, 'publisherId' => 4, 'developerId' => 5, 'port' => 6, ),
-        self::TYPE_COLNAME       => array(GamesTableMap::COL_ID => 0, GamesTableMap::COL_NAME => 1, GamesTableMap::COL_TITLE => 2, GamesTableMap::COL_DESCRIPTION => 3, GamesTableMap::COL_PUBLISHER_ID => 4, GamesTableMap::COL_DEVELOPER_ID => 5, GamesTableMap::COL_PORT => 6, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, 'publisher_id' => 4, 'developer_id' => 5, 'port' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Title' => 2, 'Description' => 3, 'PublisherId' => 4, 'DeveloperId' => 5, 'GbId' => 6, 'GbUrl' => 7, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, 'publisherId' => 4, 'developerId' => 5, 'gbId' => 6, 'gbUrl' => 7, ),
+        self::TYPE_COLNAME       => array(GamesTableMap::COL_ID => 0, GamesTableMap::COL_NAME => 1, GamesTableMap::COL_TITLE => 2, GamesTableMap::COL_DESCRIPTION => 3, GamesTableMap::COL_PUBLISHER_ID => 4, GamesTableMap::COL_DEVELOPER_ID => 5, GamesTableMap::COL_GB_ID => 6, GamesTableMap::COL_GB_URL => 7, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, 'publisher_id' => 4, 'developer_id' => 5, 'gb_id' => 6, 'gb_url' => 7, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -162,7 +167,8 @@ class GamesTableMap extends TableMap
         $this->addColumn('description', 'Description', 'CLOB', true, null, null);
         $this->addForeignKey('publisher_id', 'PublisherId', 'BIGINT', 'companies', 'id', false, null, null);
         $this->addForeignKey('developer_id', 'DeveloperId', 'BIGINT', 'companies', 'id', false, null, null);
-        $this->addColumn('port', 'Port', 'BOOLEAN', true, 1, false);
+        $this->addColumn('gb_id', 'GbId', 'BIGINT', true, null, null);
+        $this->addColumn('gb_url', 'GbUrl', 'LONGVARCHAR', true, null, null);
     } // initialize()
 
     /**
@@ -356,7 +362,8 @@ class GamesTableMap extends TableMap
             $criteria->addSelectColumn(GamesTableMap::COL_DESCRIPTION);
             $criteria->addSelectColumn(GamesTableMap::COL_PUBLISHER_ID);
             $criteria->addSelectColumn(GamesTableMap::COL_DEVELOPER_ID);
-            $criteria->addSelectColumn(GamesTableMap::COL_PORT);
+            $criteria->addSelectColumn(GamesTableMap::COL_GB_ID);
+            $criteria->addSelectColumn(GamesTableMap::COL_GB_URL);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.name');
@@ -364,7 +371,8 @@ class GamesTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.description');
             $criteria->addSelectColumn($alias . '.publisher_id');
             $criteria->addSelectColumn($alias . '.developer_id');
-            $criteria->addSelectColumn($alias . '.port');
+            $criteria->addSelectColumn($alias . '.gb_id');
+            $criteria->addSelectColumn($alias . '.gb_url');
         }
     }
 

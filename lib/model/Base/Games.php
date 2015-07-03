@@ -104,11 +104,16 @@ abstract class Games implements ActiveRecordInterface
     protected $developer_id;
 
     /**
-     * The value for the port field.
-     * Note: this column has a database default value of: false
-     * @var        boolean
+     * The value for the gb_id field.
+     * @var        string
      */
-    protected $port;
+    protected $gb_id;
+
+    /**
+     * The value for the gb_url field.
+     * @var        string
+     */
+    protected $gb_url;
 
     /**
      * @var        ChildCompanies
@@ -153,23 +158,10 @@ abstract class Games implements ActiveRecordInterface
     protected $ratingHeaderssScheduledForDeletion = null;
 
     /**
-     * Applies default values to this object.
-     * This method should be called from the object's constructor (or
-     * equivalent initialization method).
-     * @see __construct()
-     */
-    public function applyDefaultValues()
-    {
-        $this->port = false;
-    }
-
-    /**
      * Initializes internal state of Base\Games object.
-     * @see applyDefaults()
      */
     public function __construct()
     {
-        $this->applyDefaultValues();
     }
 
     /**
@@ -443,23 +435,23 @@ abstract class Games implements ActiveRecordInterface
     }
 
     /**
-     * Get the [port] column value.
+     * Get the [gb_id] column value.
      * 
-     * @return boolean
+     * @return string
      */
-    public function getPort()
+    public function getGbId()
     {
-        return $this->port;
+        return $this->gb_id;
     }
 
     /**
-     * Get the [port] column value.
+     * Get the [gb_url] column value.
      * 
-     * @return boolean
+     * @return string
      */
-    public function isPort()
+    public function getGbUrl()
     {
-        return $this->getPort();
+        return $this->gb_url;
     }
 
     /**
@@ -591,32 +583,44 @@ abstract class Games implements ActiveRecordInterface
     } // setDeveloperId()
 
     /**
-     * Sets the value of the [port] column.
-     * Non-boolean arguments are converted using the following rules:
-     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * Set the value of [gb_id] column.
      * 
-     * @param  boolean|integer|string $v The new value
+     * @param string $v new value
      * @return $this|\Games The current object (for fluent API support)
      */
-    public function setPort($v)
+    public function setGbId($v)
     {
         if ($v !== null) {
-            if (is_string($v)) {
-                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-            } else {
-                $v = (boolean) $v;
-            }
+            $v = (string) $v;
         }
 
-        if ($this->port !== $v) {
-            $this->port = $v;
-            $this->modifiedColumns[GamesTableMap::COL_PORT] = true;
+        if ($this->gb_id !== $v) {
+            $this->gb_id = $v;
+            $this->modifiedColumns[GamesTableMap::COL_GB_ID] = true;
         }
 
         return $this;
-    } // setPort()
+    } // setGbId()
+
+    /**
+     * Set the value of [gb_url] column.
+     * 
+     * @param string $v new value
+     * @return $this|\Games The current object (for fluent API support)
+     */
+    public function setGbUrl($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->gb_url !== $v) {
+            $this->gb_url = $v;
+            $this->modifiedColumns[GamesTableMap::COL_GB_URL] = true;
+        }
+
+        return $this;
+    } // setGbUrl()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -628,10 +632,6 @@ abstract class Games implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->port !== false) {
-                return false;
-            }
-
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -676,8 +676,11 @@ abstract class Games implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : GamesTableMap::translateFieldName('DeveloperId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->developer_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : GamesTableMap::translateFieldName('Port', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->port = (null !== $col) ? (boolean) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : GamesTableMap::translateFieldName('GbId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->gb_id = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : GamesTableMap::translateFieldName('GbUrl', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->gb_url = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -686,7 +689,7 @@ abstract class Games implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = GamesTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = GamesTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Games'), 0, $e);
@@ -966,8 +969,11 @@ abstract class Games implements ActiveRecordInterface
         if ($this->isColumnModified(GamesTableMap::COL_DEVELOPER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'developer_id';
         }
-        if ($this->isColumnModified(GamesTableMap::COL_PORT)) {
-            $modifiedColumns[':p' . $index++]  = 'port';
+        if ($this->isColumnModified(GamesTableMap::COL_GB_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'gb_id';
+        }
+        if ($this->isColumnModified(GamesTableMap::COL_GB_URL)) {
+            $modifiedColumns[':p' . $index++]  = 'gb_url';
         }
 
         $sql = sprintf(
@@ -998,8 +1004,11 @@ abstract class Games implements ActiveRecordInterface
                     case 'developer_id':                        
                         $stmt->bindValue($identifier, $this->developer_id, PDO::PARAM_INT);
                         break;
-                    case 'port':
-                        $stmt->bindValue($identifier, (int) $this->port, PDO::PARAM_INT);
+                    case 'gb_id':                        
+                        $stmt->bindValue($identifier, $this->gb_id, PDO::PARAM_INT);
+                        break;
+                    case 'gb_url':                        
+                        $stmt->bindValue($identifier, $this->gb_url, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1082,7 +1091,10 @@ abstract class Games implements ActiveRecordInterface
                 return $this->getDeveloperId();
                 break;
             case 6:
-                return $this->getPort();
+                return $this->getGbId();
+                break;
+            case 7:
+                return $this->getGbUrl();
                 break;
             default:
                 return null;
@@ -1120,7 +1132,8 @@ abstract class Games implements ActiveRecordInterface
             $keys[3] => $this->getDescription(),
             $keys[4] => $this->getPublisherId(),
             $keys[5] => $this->getDeveloperId(),
-            $keys[6] => $this->getPort(),
+            $keys[6] => $this->getGbId(),
+            $keys[7] => $this->getGbUrl(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1241,7 +1254,10 @@ abstract class Games implements ActiveRecordInterface
                 $this->setDeveloperId($value);
                 break;
             case 6:
-                $this->setPort($value);
+                $this->setGbId($value);
+                break;
+            case 7:
+                $this->setGbUrl($value);
                 break;
         } // switch()
 
@@ -1288,7 +1304,10 @@ abstract class Games implements ActiveRecordInterface
             $this->setDeveloperId($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setPort($arr[$keys[6]]);
+            $this->setGbId($arr[$keys[6]]);
+        }
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setGbUrl($arr[$keys[7]]);
         }
     }
 
@@ -1349,8 +1368,11 @@ abstract class Games implements ActiveRecordInterface
         if ($this->isColumnModified(GamesTableMap::COL_DEVELOPER_ID)) {
             $criteria->add(GamesTableMap::COL_DEVELOPER_ID, $this->developer_id);
         }
-        if ($this->isColumnModified(GamesTableMap::COL_PORT)) {
-            $criteria->add(GamesTableMap::COL_PORT, $this->port);
+        if ($this->isColumnModified(GamesTableMap::COL_GB_ID)) {
+            $criteria->add(GamesTableMap::COL_GB_ID, $this->gb_id);
+        }
+        if ($this->isColumnModified(GamesTableMap::COL_GB_URL)) {
+            $criteria->add(GamesTableMap::COL_GB_URL, $this->gb_url);
         }
 
         return $criteria;
@@ -1443,7 +1465,8 @@ abstract class Games implements ActiveRecordInterface
         $copyObj->setDescription($this->getDescription());
         $copyObj->setPublisherId($this->getPublisherId());
         $copyObj->setDeveloperId($this->getDeveloperId());
-        $copyObj->setPort($this->getPort());
+        $copyObj->setGbId($this->getGbId());
+        $copyObj->setGbUrl($this->getGbUrl());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2168,10 +2191,10 @@ abstract class Games implements ActiveRecordInterface
         $this->description = null;
         $this->publisher_id = null;
         $this->developer_id = null;
-        $this->port = null;
+        $this->gb_id = null;
+        $this->gb_url = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
-        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

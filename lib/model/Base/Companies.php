@@ -88,6 +88,12 @@ abstract class Companies implements ActiveRecordInterface
     protected $description;
 
     /**
+     * The value for the bg_id field.
+     * @var        string
+     */
+    protected $bg_id;
+
+    /**
      * @var        ObjectCollection|ChildGames[] Collection to store aggregation of ChildGames objects.
      */
     protected $collGamessRelatedByPublisherId;
@@ -377,6 +383,16 @@ abstract class Companies implements ActiveRecordInterface
     }
 
     /**
+     * Get the [bg_id] column value.
+     * 
+     * @return string
+     */
+    public function getBgId()
+    {
+        return $this->bg_id;
+    }
+
+    /**
      * Set the value of [id] column.
      * 
      * @param string $v new value
@@ -457,6 +473,26 @@ abstract class Companies implements ActiveRecordInterface
     } // setDescription()
 
     /**
+     * Set the value of [bg_id] column.
+     * 
+     * @param string $v new value
+     * @return $this|\Companies The current object (for fluent API support)
+     */
+    public function setBgId($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->bg_id !== $v) {
+            $this->bg_id = $v;
+            $this->modifiedColumns[CompaniesTableMap::COL_BG_ID] = true;
+        }
+
+        return $this;
+    } // setBgId()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -503,6 +539,9 @@ abstract class Companies implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : CompaniesTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
             $this->description = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : CompaniesTableMap::translateFieldName('BgId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->bg_id = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -511,7 +550,7 @@ abstract class Companies implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 4; // 4 = CompaniesTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = CompaniesTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Companies'), 0, $e);
@@ -760,6 +799,9 @@ abstract class Companies implements ActiveRecordInterface
         if ($this->isColumnModified(CompaniesTableMap::COL_DESCRIPTION)) {
             $modifiedColumns[':p' . $index++]  = 'description';
         }
+        if ($this->isColumnModified(CompaniesTableMap::COL_BG_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'bg_id';
+        }
 
         $sql = sprintf(
             'INSERT INTO companies (%s) VALUES (%s)',
@@ -782,6 +824,9 @@ abstract class Companies implements ActiveRecordInterface
                         break;
                     case 'description':                        
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
+                        break;
+                    case 'bg_id':                        
+                        $stmt->bindValue($identifier, $this->bg_id, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -857,6 +902,9 @@ abstract class Companies implements ActiveRecordInterface
             case 3:
                 return $this->getDescription();
                 break;
+            case 4:
+                return $this->getBgId();
+                break;
             default:
                 return null;
                 break;
@@ -891,6 +939,7 @@ abstract class Companies implements ActiveRecordInterface
             $keys[1] => $this->getName(),
             $keys[2] => $this->getTitle(),
             $keys[3] => $this->getDescription(),
+            $keys[4] => $this->getBgId(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -974,6 +1023,9 @@ abstract class Companies implements ActiveRecordInterface
             case 3:
                 $this->setDescription($value);
                 break;
+            case 4:
+                $this->setBgId($value);
+                break;
         } // switch()
 
         return $this;
@@ -1011,6 +1063,9 @@ abstract class Companies implements ActiveRecordInterface
         }
         if (array_key_exists($keys[3], $arr)) {
             $this->setDescription($arr[$keys[3]]);
+        }
+        if (array_key_exists($keys[4], $arr)) {
+            $this->setBgId($arr[$keys[4]]);
         }
     }
 
@@ -1064,6 +1119,9 @@ abstract class Companies implements ActiveRecordInterface
         }
         if ($this->isColumnModified(CompaniesTableMap::COL_DESCRIPTION)) {
             $criteria->add(CompaniesTableMap::COL_DESCRIPTION, $this->description);
+        }
+        if ($this->isColumnModified(CompaniesTableMap::COL_BG_ID)) {
+            $criteria->add(CompaniesTableMap::COL_BG_ID, $this->bg_id);
         }
 
         return $criteria;
@@ -1154,6 +1212,7 @@ abstract class Companies implements ActiveRecordInterface
         $copyObj->setName($this->getName());
         $copyObj->setTitle($this->getTitle());
         $copyObj->setDescription($this->getDescription());
+        $copyObj->setBgId($this->getBgId());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1668,6 +1727,7 @@ abstract class Companies implements ActiveRecordInterface
         $this->name = null;
         $this->title = null;
         $this->description = null;
+        $this->bg_id = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

@@ -5,8 +5,12 @@
     <column name="name" phpName="Name" type="VARCHAR" size="255" required="true"/>
     <column name="title" phpName="Title" type="LONGVARCHAR" required="true"/>
     <column name="description" phpName="Description" type="CLOB" required="true"/>
+    <column name="bg_id" phpName="BgId" type="BIGINT" required="true"/>
     <unique name="name">
       <unique-column name="name"/>
+    </unique>
+    <unique name="bg_id">
+      <unique-column name="bg_id"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -65,7 +69,8 @@
     <column name="description" phpName="Description" type="CLOB" required="true"/>
     <column name="publisher_id" phpName="PublisherId" type="BIGINT"/>
     <column name="developer_id" phpName="DeveloperId" type="BIGINT"/>
-    <column name="port" phpName="Port" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
+    <column name="gb_id" phpName="GbId" type="BIGINT" required="true"/>
+    <column name="gb_url" phpName="GbUrl" type="LONGVARCHAR" required="true"/>
     <foreign-key foreignTable="companies" name="games_ibfk_1">
       <reference local="publisher_id" foreign="id"/>
     </foreign-key>
@@ -80,6 +85,9 @@
     </index>
     <unique name="name">
       <unique-column name="name"/>
+    </unique>
+    <unique name="bg_id">
+      <unique-column name="gb_id"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
