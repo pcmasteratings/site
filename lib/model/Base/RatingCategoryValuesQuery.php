@@ -23,15 +23,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingCategoryValuesQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildRatingCategoryValuesQuery orderByRatingHeaderId($order = Criteria::ASC) Order by the rating_header_id column
  * @method     ChildRatingCategoryValuesQuery orderByRatingCategoryId($order = Criteria::ASC) Order by the rating_category_id column
- * @method     ChildRatingCategoryValuesQuery orderByRatingCatgoryOptionId($order = Criteria::ASC) Order by the rating_catgory_option_id column
+ * @method     ChildRatingCategoryValuesQuery orderByRatingCategoryOptionId($order = Criteria::ASC) Order by the rating_category_option_id column
  * @method     ChildRatingCategoryValuesQuery orderByOriginalValue($order = Criteria::ASC) Order by the original_value column
+ * @method     ChildRatingCategoryValuesQuery orderByOriginalWeightedValue($order = Criteria::ASC) Order by the original_weighted_value column
  * @method     ChildRatingCategoryValuesQuery orderByComments($order = Criteria::ASC) Order by the comments column
  *
  * @method     ChildRatingCategoryValuesQuery groupById() Group by the id column
  * @method     ChildRatingCategoryValuesQuery groupByRatingHeaderId() Group by the rating_header_id column
  * @method     ChildRatingCategoryValuesQuery groupByRatingCategoryId() Group by the rating_category_id column
- * @method     ChildRatingCategoryValuesQuery groupByRatingCatgoryOptionId() Group by the rating_catgory_option_id column
+ * @method     ChildRatingCategoryValuesQuery groupByRatingCategoryOptionId() Group by the rating_category_option_id column
  * @method     ChildRatingCategoryValuesQuery groupByOriginalValue() Group by the original_value column
+ * @method     ChildRatingCategoryValuesQuery groupByOriginalWeightedValue() Group by the original_weighted_value column
  * @method     ChildRatingCategoryValuesQuery groupByComments() Group by the comments column
  *
  * @method     ChildRatingCategoryValuesQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -58,8 +60,9 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingCategoryValues findOneById(string $id) Return the first ChildRatingCategoryValues filtered by the id column
  * @method     ChildRatingCategoryValues findOneByRatingHeaderId(string $rating_header_id) Return the first ChildRatingCategoryValues filtered by the rating_header_id column
  * @method     ChildRatingCategoryValues findOneByRatingCategoryId(string $rating_category_id) Return the first ChildRatingCategoryValues filtered by the rating_category_id column
- * @method     ChildRatingCategoryValues findOneByRatingCatgoryOptionId(string $rating_catgory_option_id) Return the first ChildRatingCategoryValues filtered by the rating_catgory_option_id column
+ * @method     ChildRatingCategoryValues findOneByRatingCategoryOptionId(string $rating_category_option_id) Return the first ChildRatingCategoryValues filtered by the rating_category_option_id column
  * @method     ChildRatingCategoryValues findOneByOriginalValue(int $original_value) Return the first ChildRatingCategoryValues filtered by the original_value column
+ * @method     ChildRatingCategoryValues findOneByOriginalWeightedValue(int $original_weighted_value) Return the first ChildRatingCategoryValues filtered by the original_weighted_value column
  * @method     ChildRatingCategoryValues findOneByComments(string $comments) Return the first ChildRatingCategoryValues filtered by the comments column *
 
  * @method     ChildRatingCategoryValues requirePk($key, ConnectionInterface $con = null) Return the ChildRatingCategoryValues by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -68,16 +71,18 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingCategoryValues requireOneById(string $id) Return the first ChildRatingCategoryValues filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingCategoryValues requireOneByRatingHeaderId(string $rating_header_id) Return the first ChildRatingCategoryValues filtered by the rating_header_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingCategoryValues requireOneByRatingCategoryId(string $rating_category_id) Return the first ChildRatingCategoryValues filtered by the rating_category_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRatingCategoryValues requireOneByRatingCatgoryOptionId(string $rating_catgory_option_id) Return the first ChildRatingCategoryValues filtered by the rating_catgory_option_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRatingCategoryValues requireOneByRatingCategoryOptionId(string $rating_category_option_id) Return the first ChildRatingCategoryValues filtered by the rating_category_option_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingCategoryValues requireOneByOriginalValue(int $original_value) Return the first ChildRatingCategoryValues filtered by the original_value column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRatingCategoryValues requireOneByOriginalWeightedValue(int $original_weighted_value) Return the first ChildRatingCategoryValues filtered by the original_weighted_value column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingCategoryValues requireOneByComments(string $comments) Return the first ChildRatingCategoryValues filtered by the comments column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRatingCategoryValues[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildRatingCategoryValues objects based on current ModelCriteria
  * @method     ChildRatingCategoryValues[]|ObjectCollection findById(string $id) Return ChildRatingCategoryValues objects filtered by the id column
  * @method     ChildRatingCategoryValues[]|ObjectCollection findByRatingHeaderId(string $rating_header_id) Return ChildRatingCategoryValues objects filtered by the rating_header_id column
  * @method     ChildRatingCategoryValues[]|ObjectCollection findByRatingCategoryId(string $rating_category_id) Return ChildRatingCategoryValues objects filtered by the rating_category_id column
- * @method     ChildRatingCategoryValues[]|ObjectCollection findByRatingCatgoryOptionId(string $rating_catgory_option_id) Return ChildRatingCategoryValues objects filtered by the rating_catgory_option_id column
+ * @method     ChildRatingCategoryValues[]|ObjectCollection findByRatingCategoryOptionId(string $rating_category_option_id) Return ChildRatingCategoryValues objects filtered by the rating_category_option_id column
  * @method     ChildRatingCategoryValues[]|ObjectCollection findByOriginalValue(int $original_value) Return ChildRatingCategoryValues objects filtered by the original_value column
+ * @method     ChildRatingCategoryValues[]|ObjectCollection findByOriginalWeightedValue(int $original_weighted_value) Return ChildRatingCategoryValues objects filtered by the original_weighted_value column
  * @method     ChildRatingCategoryValues[]|ObjectCollection findByComments(string $comments) Return ChildRatingCategoryValues objects filtered by the comments column
  * @method     ChildRatingCategoryValues[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -171,7 +176,7 @@ abstract class RatingCategoryValuesQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, rating_header_id, rating_category_id, rating_catgory_option_id, original_value, comments FROM rating_category_values WHERE id = :p0';
+        $sql = 'SELECT id, rating_header_id, rating_category_id, rating_category_option_id, original_value, original_weighted_value, comments FROM rating_category_values WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -389,18 +394,18 @@ abstract class RatingCategoryValuesQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the rating_catgory_option_id column
+     * Filter the query on the rating_category_option_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByRatingCatgoryOptionId(1234); // WHERE rating_catgory_option_id = 1234
-     * $query->filterByRatingCatgoryOptionId(array(12, 34)); // WHERE rating_catgory_option_id IN (12, 34)
-     * $query->filterByRatingCatgoryOptionId(array('min' => 12)); // WHERE rating_catgory_option_id > 12
+     * $query->filterByRatingCategoryOptionId(1234); // WHERE rating_category_option_id = 1234
+     * $query->filterByRatingCategoryOptionId(array(12, 34)); // WHERE rating_category_option_id IN (12, 34)
+     * $query->filterByRatingCategoryOptionId(array('min' => 12)); // WHERE rating_category_option_id > 12
      * </code>
      *
      * @see       filterByRatingCategoryOptions()
      *
-     * @param     mixed $ratingCatgoryOptionId The value to use as filter.
+     * @param     mixed $ratingCategoryOptionId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -408,16 +413,16 @@ abstract class RatingCategoryValuesQuery extends ModelCriteria
      *
      * @return $this|ChildRatingCategoryValuesQuery The current query, for fluid interface
      */
-    public function filterByRatingCatgoryOptionId($ratingCatgoryOptionId = null, $comparison = null)
+    public function filterByRatingCategoryOptionId($ratingCategoryOptionId = null, $comparison = null)
     {
-        if (is_array($ratingCatgoryOptionId)) {
+        if (is_array($ratingCategoryOptionId)) {
             $useMinMax = false;
-            if (isset($ratingCatgoryOptionId['min'])) {
-                $this->addUsingAlias(RatingCategoryValuesTableMap::COL_RATING_CATGORY_OPTION_ID, $ratingCatgoryOptionId['min'], Criteria::GREATER_EQUAL);
+            if (isset($ratingCategoryOptionId['min'])) {
+                $this->addUsingAlias(RatingCategoryValuesTableMap::COL_RATING_CATEGORY_OPTION_ID, $ratingCategoryOptionId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($ratingCatgoryOptionId['max'])) {
-                $this->addUsingAlias(RatingCategoryValuesTableMap::COL_RATING_CATGORY_OPTION_ID, $ratingCatgoryOptionId['max'], Criteria::LESS_EQUAL);
+            if (isset($ratingCategoryOptionId['max'])) {
+                $this->addUsingAlias(RatingCategoryValuesTableMap::COL_RATING_CATEGORY_OPTION_ID, $ratingCategoryOptionId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -428,7 +433,7 @@ abstract class RatingCategoryValuesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RatingCategoryValuesTableMap::COL_RATING_CATGORY_OPTION_ID, $ratingCatgoryOptionId, $comparison);
+        return $this->addUsingAlias(RatingCategoryValuesTableMap::COL_RATING_CATEGORY_OPTION_ID, $ratingCategoryOptionId, $comparison);
     }
 
     /**
@@ -470,6 +475,47 @@ abstract class RatingCategoryValuesQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RatingCategoryValuesTableMap::COL_ORIGINAL_VALUE, $originalValue, $comparison);
+    }
+
+    /**
+     * Filter the query on the original_weighted_value column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOriginalWeightedValue(1234); // WHERE original_weighted_value = 1234
+     * $query->filterByOriginalWeightedValue(array(12, 34)); // WHERE original_weighted_value IN (12, 34)
+     * $query->filterByOriginalWeightedValue(array('min' => 12)); // WHERE original_weighted_value > 12
+     * </code>
+     *
+     * @param     mixed $originalWeightedValue The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildRatingCategoryValuesQuery The current query, for fluid interface
+     */
+    public function filterByOriginalWeightedValue($originalWeightedValue = null, $comparison = null)
+    {
+        if (is_array($originalWeightedValue)) {
+            $useMinMax = false;
+            if (isset($originalWeightedValue['min'])) {
+                $this->addUsingAlias(RatingCategoryValuesTableMap::COL_ORIGINAL_WEIGHTED_VALUE, $originalWeightedValue['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($originalWeightedValue['max'])) {
+                $this->addUsingAlias(RatingCategoryValuesTableMap::COL_ORIGINAL_WEIGHTED_VALUE, $originalWeightedValue['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RatingCategoryValuesTableMap::COL_ORIGINAL_WEIGHTED_VALUE, $originalWeightedValue, $comparison);
     }
 
     /**
@@ -669,14 +715,14 @@ abstract class RatingCategoryValuesQuery extends ModelCriteria
     {
         if ($ratingCategoryOptions instanceof \RatingCategoryOptions) {
             return $this
-                ->addUsingAlias(RatingCategoryValuesTableMap::COL_RATING_CATGORY_OPTION_ID, $ratingCategoryOptions->getId(), $comparison);
+                ->addUsingAlias(RatingCategoryValuesTableMap::COL_RATING_CATEGORY_OPTION_ID, $ratingCategoryOptions->getId(), $comparison);
         } elseif ($ratingCategoryOptions instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(RatingCategoryValuesTableMap::COL_RATING_CATGORY_OPTION_ID, $ratingCategoryOptions->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(RatingCategoryValuesTableMap::COL_RATING_CATEGORY_OPTION_ID, $ratingCategoryOptions->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
             throw new PropelException('filterByRatingCategoryOptions() only accepts arguments of type \RatingCategoryOptions or Collection');
         }

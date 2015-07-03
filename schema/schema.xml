@@ -139,8 +139,9 @@
     <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="rating_header_id" phpName="RatingHeaderId" type="BIGINT" required="true"/>
     <column name="rating_category_id" phpName="RatingCategoryId" type="BIGINT" required="true"/>
-    <column name="rating_catgory_option_id" phpName="RatingCatgoryOptionId" type="BIGINT" required="true"/>
+    <column name="rating_category_option_id" phpName="RatingCategoryOptionId" type="BIGINT" required="true"/>
     <column name="original_value" phpName="OriginalValue" type="INTEGER" required="true"/>
+    <column name="original_weighted_value" phpName="OriginalWeightedValue" type="INTEGER" required="true"/>
     <column name="comments" phpName="Comments" type="LONGVARCHAR" required="true"/>
     <foreign-key foreignTable="rating_headers" name="rating_category_values_ibfk_1" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="rating_header_id" foreign="id"/>
@@ -148,8 +149,8 @@
     <foreign-key foreignTable="rating_categories" name="rating_category_values_ibfk_2" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="rating_category_id" foreign="ID"/>
     </foreign-key>
-    <foreign-key foreignTable="rating_category_options" name="rating_category_values_ibfk_3">
-      <reference local="rating_catgory_option_id" foreign="id"/>
+    <foreign-key foreignTable="rating_category_options" name="rating_category_values_ibfk_4">
+      <reference local="rating_category_option_id" foreign="id"/>
     </foreign-key>
     <index name="ratings_header_id">
       <index-column name="rating_header_id"/>
@@ -157,8 +158,8 @@
     <index name="rating_category_id">
       <index-column name="rating_category_id"/>
     </index>
-    <index name="rating_catgory_option_id">
-      <index-column name="rating_catgory_option_id"/>
+    <index name="rating_category_option_id">
+      <index-column name="rating_category_option_id"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -170,10 +171,11 @@
     <column name="user_id" phpName="UserId" type="BIGINT" required="true"/>
     <column name="game_platform_id" phpName="GamePlatformId" type="BIGINT" required="true"/>
     <column name="rig_id" phpName="RigId" type="BIGINT" required="true"/>
-    <column name="datetime" phpName="Datetime" type="TIMESTAMP" required="true"/>
+    <column name="created" phpName="Created" type="TIMESTAMP" required="true"/>
     <column name="upvotes" phpName="Upvotes" type="BIGINT" required="true"/>
     <column name="downvotes" phpName="Downvotes" type="BIGINT" required="true"/>
     <column name="comments" phpName="Comments" type="CLOB" required="true"/>
+    <column name="score" phpName="Score" type="INTEGER" required="true"/>
     <foreign-key foreignTable="games" name="rating_headers_ibfk_1">
       <reference local="game_id" foreign="id"/>
     </foreign-key>

@@ -490,7 +490,7 @@ abstract class RatingCategoryOptionsQuery extends ModelCriteria
     {
         if ($ratingCategoryValues instanceof \RatingCategoryValues) {
             return $this
-                ->addUsingAlias(RatingCategoryOptionsTableMap::COL_ID, $ratingCategoryValues->getRatingCatgoryOptionId(), $comparison);
+                ->addUsingAlias(RatingCategoryOptionsTableMap::COL_ID, $ratingCategoryValues->getRatingCategoryOptionId(), $comparison);
         } elseif ($ratingCategoryValues instanceof ObjectCollection) {
             return $this
                 ->useRatingCategoryValuesQuery()

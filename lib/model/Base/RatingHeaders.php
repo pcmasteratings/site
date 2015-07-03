@@ -104,10 +104,10 @@ abstract class RatingHeaders implements ActiveRecordInterface
     protected $rig_id;
 
     /**
-     * The value for the datetime field.
+     * The value for the created field.
      * @var        \DateTime
      */
-    protected $datetime;
+    protected $created;
 
     /**
      * The value for the upvotes field.
@@ -126,6 +126,12 @@ abstract class RatingHeaders implements ActiveRecordInterface
      * @var        string
      */
     protected $comments;
+
+    /**
+     * The value for the score field.
+     * @var        int
+     */
+    protected $score;
 
     /**
      * @var        ChildGames
@@ -435,7 +441,7 @@ abstract class RatingHeaders implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [datetime] column value.
+     * Get the [optionally formatted] temporal [created] column value.
      * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
@@ -445,12 +451,12 @@ abstract class RatingHeaders implements ActiveRecordInterface
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getDatetime($format = NULL)
+    public function getCreated($format = NULL)
     {
         if ($format === null) {
-            return $this->datetime;
+            return $this->created;
         } else {
-            return $this->datetime instanceof \DateTime ? $this->datetime->format($format) : null;
+            return $this->created instanceof \DateTime ? $this->created->format($format) : null;
         }
     }
 
@@ -482,6 +488,16 @@ abstract class RatingHeaders implements ActiveRecordInterface
     public function getComments()
     {
         return $this->comments;
+    }
+
+    /**
+     * Get the [score] column value.
+     * 
+     * @return int
+     */
+    public function getScore()
+    {
+        return $this->score;
     }
 
     /**
@@ -601,24 +617,24 @@ abstract class RatingHeaders implements ActiveRecordInterface
     } // setRigId()
 
     /**
-     * Sets the value of [datetime] column to a normalized version of the date/time value specified.
+     * Sets the value of [created] column to a normalized version of the date/time value specified.
      * 
      * @param  mixed $v string, integer (timestamp), or \DateTime value.
      *               Empty strings are treated as NULL.
      * @return $this|\RatingHeaders The current object (for fluent API support)
      */
-    public function setDatetime($v)
+    public function setCreated($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->datetime !== null || $dt !== null) {
-            if ($this->datetime === null || $dt === null || $dt->format("Y-m-d H:i:s") !== $this->datetime->format("Y-m-d H:i:s")) {
-                $this->datetime = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[RatingHeadersTableMap::COL_DATETIME] = true;
+        if ($this->created !== null || $dt !== null) {
+            if ($this->created === null || $dt === null || $dt->format("Y-m-d H:i:s") !== $this->created->format("Y-m-d H:i:s")) {
+                $this->created = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[RatingHeadersTableMap::COL_CREATED] = true;
             }
         } // if either are not null
 
         return $this;
-    } // setDatetime()
+    } // setCreated()
 
     /**
      * Set the value of [upvotes] column.
@@ -681,6 +697,26 @@ abstract class RatingHeaders implements ActiveRecordInterface
     } // setComments()
 
     /**
+     * Set the value of [score] column.
+     * 
+     * @param int $v new value
+     * @return $this|\RatingHeaders The current object (for fluent API support)
+     */
+    public function setScore($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->score !== $v) {
+            $this->score = $v;
+            $this->modifiedColumns[RatingHeadersTableMap::COL_SCORE] = true;
+        }
+
+        return $this;
+    } // setScore()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -731,11 +767,11 @@ abstract class RatingHeaders implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : RatingHeadersTableMap::translateFieldName('RigId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->rig_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : RatingHeadersTableMap::translateFieldName('Datetime', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : RatingHeadersTableMap::translateFieldName('Created', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->datetime = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : RatingHeadersTableMap::translateFieldName('Upvotes', TableMap::TYPE_PHPNAME, $indexType)];
             $this->upvotes = (null !== $col) ? (string) $col : null;
@@ -745,6 +781,9 @@ abstract class RatingHeaders implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : RatingHeadersTableMap::translateFieldName('Comments', TableMap::TYPE_PHPNAME, $indexType)];
             $this->comments = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : RatingHeadersTableMap::translateFieldName('Score', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->score = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -753,7 +792,7 @@ abstract class RatingHeaders implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 9; // 9 = RatingHeadersTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = RatingHeadersTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\RatingHeaders'), 0, $e);
@@ -1033,8 +1072,8 @@ abstract class RatingHeaders implements ActiveRecordInterface
         if ($this->isColumnModified(RatingHeadersTableMap::COL_RIG_ID)) {
             $modifiedColumns[':p' . $index++]  = 'rig_id';
         }
-        if ($this->isColumnModified(RatingHeadersTableMap::COL_DATETIME)) {
-            $modifiedColumns[':p' . $index++]  = 'datetime';
+        if ($this->isColumnModified(RatingHeadersTableMap::COL_CREATED)) {
+            $modifiedColumns[':p' . $index++]  = 'created';
         }
         if ($this->isColumnModified(RatingHeadersTableMap::COL_UPVOTES)) {
             $modifiedColumns[':p' . $index++]  = 'upvotes';
@@ -1044,6 +1083,9 @@ abstract class RatingHeaders implements ActiveRecordInterface
         }
         if ($this->isColumnModified(RatingHeadersTableMap::COL_COMMENTS)) {
             $modifiedColumns[':p' . $index++]  = 'comments';
+        }
+        if ($this->isColumnModified(RatingHeadersTableMap::COL_SCORE)) {
+            $modifiedColumns[':p' . $index++]  = 'score';
         }
 
         $sql = sprintf(
@@ -1071,8 +1113,8 @@ abstract class RatingHeaders implements ActiveRecordInterface
                     case 'rig_id':                        
                         $stmt->bindValue($identifier, $this->rig_id, PDO::PARAM_INT);
                         break;
-                    case 'datetime':                        
-                        $stmt->bindValue($identifier, $this->datetime ? $this->datetime->format("Y-m-d H:i:s") : null, PDO::PARAM_STR);
+                    case 'created':                        
+                        $stmt->bindValue($identifier, $this->created ? $this->created->format("Y-m-d H:i:s") : null, PDO::PARAM_STR);
                         break;
                     case 'upvotes':                        
                         $stmt->bindValue($identifier, $this->upvotes, PDO::PARAM_INT);
@@ -1082,6 +1124,9 @@ abstract class RatingHeaders implements ActiveRecordInterface
                         break;
                     case 'comments':                        
                         $stmt->bindValue($identifier, $this->comments, PDO::PARAM_STR);
+                        break;
+                    case 'score':                        
+                        $stmt->bindValue($identifier, $this->score, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1161,7 +1206,7 @@ abstract class RatingHeaders implements ActiveRecordInterface
                 return $this->getRigId();
                 break;
             case 5:
-                return $this->getDatetime();
+                return $this->getCreated();
                 break;
             case 6:
                 return $this->getUpvotes();
@@ -1171,6 +1216,9 @@ abstract class RatingHeaders implements ActiveRecordInterface
                 break;
             case 8:
                 return $this->getComments();
+                break;
+            case 9:
+                return $this->getScore();
                 break;
             default:
                 return null;
@@ -1207,10 +1255,11 @@ abstract class RatingHeaders implements ActiveRecordInterface
             $keys[2] => $this->getUserId(),
             $keys[3] => $this->getGamePlatformId(),
             $keys[4] => $this->getRigId(),
-            $keys[5] => $this->getDatetime(),
+            $keys[5] => $this->getCreated(),
             $keys[6] => $this->getUpvotes(),
             $keys[7] => $this->getDownvotes(),
             $keys[8] => $this->getComments(),
+            $keys[9] => $this->getScore(),
         );
 
         $utc = new \DateTimeZone('utc');
@@ -1351,7 +1400,7 @@ abstract class RatingHeaders implements ActiveRecordInterface
                 $this->setRigId($value);
                 break;
             case 5:
-                $this->setDatetime($value);
+                $this->setCreated($value);
                 break;
             case 6:
                 $this->setUpvotes($value);
@@ -1361,6 +1410,9 @@ abstract class RatingHeaders implements ActiveRecordInterface
                 break;
             case 8:
                 $this->setComments($value);
+                break;
+            case 9:
+                $this->setScore($value);
                 break;
         } // switch()
 
@@ -1404,7 +1456,7 @@ abstract class RatingHeaders implements ActiveRecordInterface
             $this->setRigId($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setDatetime($arr[$keys[5]]);
+            $this->setCreated($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
             $this->setUpvotes($arr[$keys[6]]);
@@ -1414,6 +1466,9 @@ abstract class RatingHeaders implements ActiveRecordInterface
         }
         if (array_key_exists($keys[8], $arr)) {
             $this->setComments($arr[$keys[8]]);
+        }
+        if (array_key_exists($keys[9], $arr)) {
+            $this->setScore($arr[$keys[9]]);
         }
     }
 
@@ -1471,8 +1526,8 @@ abstract class RatingHeaders implements ActiveRecordInterface
         if ($this->isColumnModified(RatingHeadersTableMap::COL_RIG_ID)) {
             $criteria->add(RatingHeadersTableMap::COL_RIG_ID, $this->rig_id);
         }
-        if ($this->isColumnModified(RatingHeadersTableMap::COL_DATETIME)) {
-            $criteria->add(RatingHeadersTableMap::COL_DATETIME, $this->datetime);
+        if ($this->isColumnModified(RatingHeadersTableMap::COL_CREATED)) {
+            $criteria->add(RatingHeadersTableMap::COL_CREATED, $this->created);
         }
         if ($this->isColumnModified(RatingHeadersTableMap::COL_UPVOTES)) {
             $criteria->add(RatingHeadersTableMap::COL_UPVOTES, $this->upvotes);
@@ -1482,6 +1537,9 @@ abstract class RatingHeaders implements ActiveRecordInterface
         }
         if ($this->isColumnModified(RatingHeadersTableMap::COL_COMMENTS)) {
             $criteria->add(RatingHeadersTableMap::COL_COMMENTS, $this->comments);
+        }
+        if ($this->isColumnModified(RatingHeadersTableMap::COL_SCORE)) {
+            $criteria->add(RatingHeadersTableMap::COL_SCORE, $this->score);
         }
 
         return $criteria;
@@ -1573,10 +1631,11 @@ abstract class RatingHeaders implements ActiveRecordInterface
         $copyObj->setUserId($this->getUserId());
         $copyObj->setGamePlatformId($this->getGamePlatformId());
         $copyObj->setRigId($this->getRigId());
-        $copyObj->setDatetime($this->getDatetime());
+        $copyObj->setCreated($this->getCreated());
         $copyObj->setUpvotes($this->getUpvotes());
         $copyObj->setDownvotes($this->getDownvotes());
         $copyObj->setComments($this->getComments());
+        $copyObj->setScore($this->getScore());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2131,10 +2190,11 @@ abstract class RatingHeaders implements ActiveRecordInterface
         $this->user_id = null;
         $this->game_platform_id = null;
         $this->rig_id = null;
-        $this->datetime = null;
+        $this->created = null;
         $this->upvotes = null;
         $this->downvotes = null;
         $this->comments = null;
+        $this->score = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

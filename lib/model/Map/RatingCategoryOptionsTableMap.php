@@ -162,7 +162,7 @@ class RatingCategoryOptionsTableMap extends TableMap
         $this->addRelation('RatingCategoryValues', '\\RatingCategoryValues', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':rating_catgory_option_id',
+    0 => ':rating_category_option_id',
     1 => ':id',
   ),
 ), null, null, 'RatingCategoryValuess', false);

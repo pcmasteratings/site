@@ -7,7 +7,7 @@ error_reporting(-1);
 session_start();
 
 require_once 'vendor/autoload.php';
-require_once 'generated-conf/config.php';
+require_once 'config.php';
 
 // In case the site has an auth response
 Auth::processAuth();

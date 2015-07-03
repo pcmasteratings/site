@@ -1,16 +1,86 @@
 <?php
-
 require("res/include.php");
+if(!array_key_exists("game",$_GET)) {
+    //header("Location: /"); /* Redirect browser */
+    echo 'NO GAME';
+    exit();
+} else {
+    $query = new GamesQuery();
+    $game = $query->findOneByName($_GET["game"]);
+    if($game==null) {
+        echo 'GAME NOT FOUND';
+        exit();
+    }
+}
+if(array_key_exists("category_options_1",$_POST)) {
+    $con = \Propel\Runtime\Propel::getConnection();
+    $con->beginTransaction();
+    try {
+        if(!Auth::checkIfAuthenticated()) {
+            throw new Exception("User not authenticated");
+        }
+
+        $user = Auth::getCurrentUser();
+
+        if(!array_key_exists("platform",$_POST)) {
+            throw new Exception("Platform not specified");
+        }
+        $platform = $_POST["platform"];
+
+        $header = new RatingHeaders();
+        $header->setUserId($user->getId());
+        $header->setGameId($game->getId());
+        $header->setCreated(new DateTime());
+        $header->setGamePlatformId($platform);
+        $header->save($con);
+
+        $score = 0;
+
+        $query = new RatingCategoriesQuery();
+        $categories = $query->find();
+
+        foreach($categories as $category) {
+            if(!array_key_exists('category_options_'.$category->getId(),$_POST)) {
+                throw new Exception("No value found for category #".$category->getId());
+            }
+            $selected = $_POST['category_options_'.$category->getId()];
+
+            $query = new RatingCategoryOptionsQuery();
+            $option = $query->findOneById($selected);
+            if($option==null) {
+                throw new Exception("Could not find option #".$selected);
+            }
+
+            $val = new RatingCategoryValues();
+            $val->setRatingHeaders($header);
+            $val->setRatingCategories($category);
+            $val->setRatingCategoryOptions($option);
+            $val->setOriginalValue($option->getValue());
+            $val->setOriginalWeightedValue($option->getValue() * $category->getWeight());
+            $val->save();
+
+            $score += ($option->getValue() * $category->getWeight());
+        }
+        $header->setScore($score);
+        $header->save();
+
+        $con->commit();
+        echo "Save successful!";
+    } catch (Exception $e) {
+        $con->rollback();
+        echo $e->getMessage();
+    }
+}
 
 ?>
 <!DOCTYPE html>
 <!-- saved from url=(0026)http://alessandro.pw/pcmr/ -->
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 	<head>
-		
-		
+
+
 		<?php include("res/head.php"); ?>
-		
+
 		<meta charset="UTF-8" />
 		<meta name="description" content="this site may come in handy to compute PCMRatings">
 		<meta name="author" content="/u/eur0pa">
@@ -32,42 +102,15 @@ require("res/include.php");
   <link rel="stylesheet" href="http://localhost/css/main.css">
 	</head>
 	<body>
-	
+
 		<?php include("res/nav.php"); ?>
 		<div class="container">
-			
+
 			<h4>Select all that apply</h4>
-			
-			<div id='box'>
-			<div class="col-md-4">
-				<table class="table">
-					<tr><td colspan="2" style="text-align:center; border-top: none;"> <img src="./img/NaN.jpg" alt="" height="150" class="u-max-full-width rating"></td></tr>    
-					<th>Item</th><th>Score</th>
-					<tr><td>Frame rate</td><td>-</td></tr>
-					<tr><td>Resolution</td><td>-</td></tr>
-					<tr><td>Optimization</td><td>-</td></tr>
-					<tr><td>Mod support</td><td>-</td></tr>
-					<tr><td>Servers</td><td>-</td></tr>
-					<tr><td>DLC</td><td>-</td></tr>
-					<tr><td>Glitches</td><td>-</td></tr>
-					<tr><td>Settings</td><td>-</td></tr>
-					<tr><td>Controls</td><td>-</td></tr>
-					<tr><td>DRM</td><td>-</td></tr>
-					<tr><td>Current rating: <span class="rating">?</span></td><td>Current score: <span class="score">0</span></td></tr>
-					
-				</table>
-			</div>
-			</div>
-			
-			<div class="col-md-8">
-				<img src="http://static.giantbomb.com/uploads/scale_medium/0/3699/2698809-the+witcher+3+-+wild+hunt+v7.jpg" style='float: left;' alt="R" height="300">
-				<p>GAME description goes here Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac nulla at arcu egestas convallis eget id odio. Curabitur magna felis, congue quis pretium id, pulvinar sed turpis. Praesent ac tortor tortor. In hac habitasse platea dictumst. Morbi fringilla sapien in lectus ultrices, quis varius sapien condimentum. Vivamus fringilla condimentum risus, nec egestas libero sagittis nec. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac nulla at arcu egestas convallis eget id odio. Curabitur magna felis, congue quis pretium id, pulvinar sed turpis. Praesent ac tortor tortor. In hac habitasse platea dictumst. Morbi fringilla sapien in lectus ultrices, quis varius sapien condimentum. Vivamus fringilla condimentum risus, nec egestas libero sagittis nec. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla facilisi.</p>
-			
-			<br/>	
-			<tr><td colspan="2" style="text-align:center; border-top: none;"> <img src="./img/scores.png" style="float: right;" alt="" height="190" class="u-max-full-width rating"></td></tr>
-			 <!-- Score table
-    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+
     <div class="row">
+        <form action="" method="POST">
       <table class="u-full-width">
         <thead>
           <tr>
@@ -80,423 +123,44 @@ require("res/include.php");
             <th></th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
+        <tbody><tr>
+            <td class="score category">Platform</td>
+        <?php
+        $query = new GamePlatformsQuery();
+        $query->orderByTitle();
+        $results = $query->find();
+        foreach($results as $platform) {
+            echo '<td class="score description"><label>';
+            echo '<input name="platform" type="radio" value="'.$platform->getId().'">';
+            echo '<span class="label-body">'.$platform->getTitle().'</span>';
+            echo '</label></td>';
+        }
+        ?>
+        </tr>
+        <?php
 
+        $query = new RatingCategoriesQuery();
+            $query->orderBySequence();
 
-            <td class="score category">Frame rate</td>
-            <td class="score description">
-              <label for="fps:7.2">
-                <input name="fps" type="radio" id="fps:7.2">
-                <span class="label-body">N/A</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="fps:7.0">
-                <input name="fps" type="radio" id="fps:7.0">
-                <span class="label-body">May be capped at 30fps</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="fps:7.1">
-                <input name="fps" type="radio" id="fps:7.1">
-                <span class="label-body">May be capped at 60fps</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="fps:7.2">
-                <input name="fps" type="radio" id="fps:7.2">
-                <span class="label-body">Capped at 60fps</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="fps:7.3">
-                <input name="fps" type="radio" id="fps:7.3">
-                <span class="label-body">Capped at 60fps, potentially limitless</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="fps:7.4">
-                <input name="fps" type="radio" id="fps:7.4">
-                <span class="label-body">Limitless</span>
-              </label>
-            </td>
-          </tr>
+            $results = $query->find();
 
-
-          <tr>
-            <td class="score category">Resolution</td>
-            <td class="score description">
-              <label for="res:7.2">
-                <input name="res" type="radio" id="res:7.2">
-                <span class="label-body">N/A</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="res:7.0">
-                <input name="res" type="radio" id="res:7.0">
-                <span class="label-body">Does not support 1080p or higher</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="res:7.1">
-                <input name="res" type="radio" id="res:7.1">
-                <span class="label-body">May support up to 1080p</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="res:7.2">
-                <input name="res" type="radio" id="res:7.2">
-                <span class="label-body">Supports 1080p. No multi-monitor support</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="res:7.3">
-                <input name="res" type="radio" id="res:7.3">
-                <span class="label-body">Supports 1080p, may include multi-monitor support</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="res:7.4">
-                <input name="res" type="radio" id="res:7.4">
-                <span class="label-body">4K or beyond, may include multi-monitor support</span>
-              </label>
-            </td>
-          </tr>
-
-
-          <tr>
-            <td class="score category">Optimized</td>
-            <td class="score description">
-              <label for="opt:8.2">
-                <input name="opt" type="radio" id="opt:8.2">
-                <span class="label-body">N/A</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="opt:8.0">
-                <input name="opt" type="radio" id="opt:8.0">
-                <span class="label-body">Poorly</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="opt:8.1">
-                <input name="opt" type="radio" id="opt:8.1">
-                <span class="label-body">Passable</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="opt:8.2">
-                <input name="opt" type="radio" id="opt:8.2">
-                <span class="label-body">Good</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="opt:8.3">
-                <input name="opt" type="radio" id="opt:8.3">
-                <span class="label-body">Great</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="opt:8.4">
-                <input name="opt" type="radio" id="opt:8.4">
-                <span class="label-body">Glorious!</span>
-              </label>
-            </td>
-          </tr>
-
-
-          <tr>
-            <td class="score category">Mod support</td>
-            <td class="score description">
-              <label for="mod:3.2">
-                <input name="mod" type="radio" id="mod:3.2">
-                <span class="label-body">N/A</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="mod:3.0">
-                <input name="mod" type="radio" id="mod:3.0">
-                <span class="label-body">No support, mods may result in online bans</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="mod:3.1">
-                <input name="mod" type="radio" id="mod:3.1">
-                <span class="label-body">Possible unofficial support, may be heavily restricted</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="mod:3.2">
-                <input name="mod" type="radio" id="mod:3.2">
-                <span class="label-body">May not have official support, possibly restricted to cosmetic changes</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="mod:3.3">
-                <input name="mod" type="radio" id="mod:3.3">
-                <span class="label-body">Some support, possibly restricted to cosmetic changes</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="mod:3.4">
-                <input name="mod" type="radio" id="mod:3.4">
-                <span class="label-body">Complete support</span>
-              </label>
-            </td>
-          </tr>
-
-
-          <tr>
-            <td class="score category">Servers</td>
-            <td class="score description">
-              <label for="srv:5.2">
-                <input name="srv" type="radio" id="srv:5.2">
-                <span class="label-body">N/A</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="srv:5.0">
-                <input name="srv" type="radio" id="srv:5.0">
-                <span class="label-body">Possibly weak, unreliable servers</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="srv:5.1">
-                <input name="srv" type="radio" id="srv:5.1">
-                <span class="label-body">Possibly weak servers, but occasionally reliable</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="srv:5.2">
-                <input name="srv" type="radio" id="srv:5.2">
-                <span class="label-body">Possibly some server issues at high volume, but no options available</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="srv:5.3">
-                <input name="srv" type="radio" id="srv:5.3">
-                <span class="label-body">Acceptable servers with dedicated or custom servers optional</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="srv:5.4">
-                <input name="srv" type="radio" id="srv:5.4">
-                <span class="label-body">Strong servers with dedicated or custom servers optional</span>
-              </label>
-            </td>
-          </tr>
-
-
-          <tr>
-            <td class="score category">DLC</td>
-            <td class="score description">
-              <label for="dlc:4.2">
-                <input name="dlc" type="radio" id="dlc:4.2">
-                <span class="label-body">N/A</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="dlc:4.0">
-                <input name="dlc" type="radio" id="dlc:4.0">
-                <span class="label-body">Possible “Day 1 DLC”, affects entire game balance</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="dlc:4.1">
-                <input name="dlc" type="radio" id="dlc:4.1">
-                <span class="label-body">Possible “Day 1 DLC”, affects game balance online</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="dlc:4.2">
-                <input name="dlc" type="radio" id="dlc:4.2">
-                <span class="label-body">Possible “Day 1 DLC”, does not affect game balance online</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="dlc:4.3">
-                <input name="dlc" type="radio" id="dlc:4.3">
-                <span class="label-body">No “Day 1 DLC”, or DLC is purely cosmetic</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="dlc:4.4">
-                <input name="dlc" type="radio" id="dlc:4.4">
-                <span class="label-body">No “Day 1 DLC”, or DLC is free</span>
-              </label>
-            </td>
-          </tr>
-
-
-          <tr>
-            <td class="score category">Glitches</td>
-            <td class="score description">
-              <label for="gli:6.2">
-                <input name="gli" type="radio" id="gli:6.2">
-                <span class="label-body">N/A</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="gli:6.0">
-                <input name="gli" type="radio" id="gli:6.0">
-                <span class="label-body">Possible excess of glitches, likely game-breaking</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="gli:6.1">
-                <input name="gli" type="radio" id="gli:6.1">
-                <span class="label-body">Possible excess of glitches, but not game-breaking</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="gli:6.2">
-                <input name="gli" type="radio" id="gli:6.2">
-                <span class="label-body">Some glitches, but usually not game-breaking</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="gli:6.3">
-                <input name="gli" type="radio" id="gli:6.3">
-                <span class="label-body">Few glitches, but rarely do they affect enjoyment</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="gli:6.4">
-                <input name="gli" type="radio" id="gli:6.4">
-                <span class="label-body">Nearly none, or to a limited and rare amount</span>
-              </label>
-            </td>
-          </tr>
-
-
-          <tr>
-            <td class="score category">Settings</td>
-            <td class="score description">
-              <label for="set:4.2">
-                <input name="set" type="radio" id="set:4.2">
-                <span class="label-body">N/A</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="set:4.0">
-                <input name="set" type="radio" id="set:4.0">
-                <span class="label-body">None, or very limited settings</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="set:4.1">
-                <input name="set" type="radio" id="set:4.1">
-                <span class="label-body">Limited settings</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="set:4.2">
-                <input name="set" type="radio" id="set:4.2">
-                <span class="label-body">Limited settings, short range on video settings</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="set:4.3">
-                <input name="set" type="radio" id="set:4.3">
-                <span class="label-body">Acceptable settings, medium range on video settings</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="set:4.4">
-                <input name="set" type="radio" id="set:4.4">
-                <span class="label-body">Full settings, wide range on video settings</span>
-              </label>
-            </td>
-          </tr>
-
-
-          <tr>
-            <td class="score category">Controls</td>
-            <td class="score description">
-              <label for="ctl:3.2">
-                <input name="ctl" type="radio" id="ctl:3.2">
-                <span class="label-body">N/A</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="ctl:3.0">
-                <input name="ctl" type="radio" id="ctl:3.0">
-                <span class="label-body">Un-configurable controls, no gamepad support</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="ctl:3.1">
-                <input name="ctl" type="radio" id="ctl:3.1">
-                <span class="label-body">Sensitivity options, no control mapping, no gamepad support</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="ctl:3.2">
-                <input name="ctl" type="radio" id="ctl:3.2">
-                <span class="label-body">Keyboard remap-able, gamepad support, sensitivity options</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="ctl:3.3">
-                <input name="ctl" type="radio" id="ctl:3.3">
-                <span class="label-body">All devices remap-able, gamepad support, sensitivity options</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="ctl:3.4">
-                <input name="ctl" type="radio" id="ctl:3.4">
-                <span class="label-body">All devices remap-able, alternate controls, gamepad support, sensitivity options, automatic input detectoin</span>
-              </label>
-            </td>
-          </tr>
-
-
-          <tr>
-            <td class="score category">DRM</td>
-            <td class="score description">
-              <label for="drm:3.2">
-                <input name="drm" type="radio" id="drm:3.2">
-                <span class="label-body">N/A</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="drm:3.0">
-                <input name="drm" type="radio" id="drm:3.0">
-                <span class="label-body">Limited installs, constant online connection required
-                  <sup class="hoverbox parent">★
-                    <span class="hoverbox child">does not apply to online multiplayer games for obvious reasons</span>
-                  </sup>
-                </span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="drm:3.1">
-                <input name="drm" type="radio" id="drm:3.1">
-                <span class="label-body">Limited installs, online check-ins</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="drm:3.2">
-                <input name="drm" type="radio" id="drm:3.2">
-                <span class="label-body">Online check-ins</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="drm:3.3">
-                <input name="drm" type="radio" id="drm:3.3">
-                <span class="label-body">Unlimited installs, available offline</span>
-              </label>
-            </td>
-            <td class="score description">
-              <label for="drm:3.4">
-                <input name="drm" type="radio" id="drm:3.4">
-                <span class="label-body">No DRM</span>
-              </label>
-            </td>
-          </tr>
+            foreach($results as $cat) {
+                echo "<tr>";
+                echo '<td class="score category">'. $cat->getTitle() .'</td>';
+                $options = $cat->getRatingCategoryOptionss();
+                foreach($options as $option) {
+                    echo '<td class="score description"><label>';
+                    echo '<input name="category_options_'.$cat->getId().'" type="radio" value="'.$option->getId().'">';
+                    echo '<span class="label-body">'.$option->getDescription().'</span>';
+                    echo '</label></td>';
+                }
+                echo "</tr>";
+            }
+        ?>
         </tbody>
       </table>
+            <input type="submit" value="Submit" />
+        </form>
     </div>
 
     <!-- Footer
@@ -516,7 +180,7 @@ require("res/include.php");
   </div>
 
    End Document
-  –––––––––––––––––––––––––––––––––––––––––––––––––– 
+  ––––––––––––––––––––––––––––––––––––––––––––––––––
 
 			<table class="table">
 				<th>*</th><th>Individual reviews</th>

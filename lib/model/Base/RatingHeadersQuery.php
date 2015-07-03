@@ -25,20 +25,22 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeadersQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
  * @method     ChildRatingHeadersQuery orderByGamePlatformId($order = Criteria::ASC) Order by the game_platform_id column
  * @method     ChildRatingHeadersQuery orderByRigId($order = Criteria::ASC) Order by the rig_id column
- * @method     ChildRatingHeadersQuery orderByDatetime($order = Criteria::ASC) Order by the datetime column
+ * @method     ChildRatingHeadersQuery orderByCreated($order = Criteria::ASC) Order by the created column
  * @method     ChildRatingHeadersQuery orderByUpvotes($order = Criteria::ASC) Order by the upvotes column
  * @method     ChildRatingHeadersQuery orderByDownvotes($order = Criteria::ASC) Order by the downvotes column
  * @method     ChildRatingHeadersQuery orderByComments($order = Criteria::ASC) Order by the comments column
+ * @method     ChildRatingHeadersQuery orderByScore($order = Criteria::ASC) Order by the score column
  *
  * @method     ChildRatingHeadersQuery groupById() Group by the id column
  * @method     ChildRatingHeadersQuery groupByGameId() Group by the game_id column
  * @method     ChildRatingHeadersQuery groupByUserId() Group by the user_id column
  * @method     ChildRatingHeadersQuery groupByGamePlatformId() Group by the game_platform_id column
  * @method     ChildRatingHeadersQuery groupByRigId() Group by the rig_id column
- * @method     ChildRatingHeadersQuery groupByDatetime() Group by the datetime column
+ * @method     ChildRatingHeadersQuery groupByCreated() Group by the created column
  * @method     ChildRatingHeadersQuery groupByUpvotes() Group by the upvotes column
  * @method     ChildRatingHeadersQuery groupByDownvotes() Group by the downvotes column
  * @method     ChildRatingHeadersQuery groupByComments() Group by the comments column
+ * @method     ChildRatingHeadersQuery groupByScore() Group by the score column
  *
  * @method     ChildRatingHeadersQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildRatingHeadersQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -74,10 +76,11 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeaders findOneByUserId(string $user_id) Return the first ChildRatingHeaders filtered by the user_id column
  * @method     ChildRatingHeaders findOneByGamePlatformId(string $game_platform_id) Return the first ChildRatingHeaders filtered by the game_platform_id column
  * @method     ChildRatingHeaders findOneByRigId(string $rig_id) Return the first ChildRatingHeaders filtered by the rig_id column
- * @method     ChildRatingHeaders findOneByDatetime(string $datetime) Return the first ChildRatingHeaders filtered by the datetime column
+ * @method     ChildRatingHeaders findOneByCreated(string $created) Return the first ChildRatingHeaders filtered by the created column
  * @method     ChildRatingHeaders findOneByUpvotes(string $upvotes) Return the first ChildRatingHeaders filtered by the upvotes column
  * @method     ChildRatingHeaders findOneByDownvotes(string $downvotes) Return the first ChildRatingHeaders filtered by the downvotes column
- * @method     ChildRatingHeaders findOneByComments(string $comments) Return the first ChildRatingHeaders filtered by the comments column *
+ * @method     ChildRatingHeaders findOneByComments(string $comments) Return the first ChildRatingHeaders filtered by the comments column
+ * @method     ChildRatingHeaders findOneByScore(int $score) Return the first ChildRatingHeaders filtered by the score column *
 
  * @method     ChildRatingHeaders requirePk($key, ConnectionInterface $con = null) Return the ChildRatingHeaders by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOne(ConnectionInterface $con = null) Return the first ChildRatingHeaders matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -87,10 +90,11 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeaders requireOneByUserId(string $user_id) Return the first ChildRatingHeaders filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByGamePlatformId(string $game_platform_id) Return the first ChildRatingHeaders filtered by the game_platform_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByRigId(string $rig_id) Return the first ChildRatingHeaders filtered by the rig_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRatingHeaders requireOneByDatetime(string $datetime) Return the first ChildRatingHeaders filtered by the datetime column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRatingHeaders requireOneByCreated(string $created) Return the first ChildRatingHeaders filtered by the created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByUpvotes(string $upvotes) Return the first ChildRatingHeaders filtered by the upvotes column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByDownvotes(string $downvotes) Return the first ChildRatingHeaders filtered by the downvotes column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByComments(string $comments) Return the first ChildRatingHeaders filtered by the comments column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRatingHeaders requireOneByScore(int $score) Return the first ChildRatingHeaders filtered by the score column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRatingHeaders[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildRatingHeaders objects based on current ModelCriteria
  * @method     ChildRatingHeaders[]|ObjectCollection findById(string $id) Return ChildRatingHeaders objects filtered by the id column
@@ -98,10 +102,11 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeaders[]|ObjectCollection findByUserId(string $user_id) Return ChildRatingHeaders objects filtered by the user_id column
  * @method     ChildRatingHeaders[]|ObjectCollection findByGamePlatformId(string $game_platform_id) Return ChildRatingHeaders objects filtered by the game_platform_id column
  * @method     ChildRatingHeaders[]|ObjectCollection findByRigId(string $rig_id) Return ChildRatingHeaders objects filtered by the rig_id column
- * @method     ChildRatingHeaders[]|ObjectCollection findByDatetime(string $datetime) Return ChildRatingHeaders objects filtered by the datetime column
+ * @method     ChildRatingHeaders[]|ObjectCollection findByCreated(string $created) Return ChildRatingHeaders objects filtered by the created column
  * @method     ChildRatingHeaders[]|ObjectCollection findByUpvotes(string $upvotes) Return ChildRatingHeaders objects filtered by the upvotes column
  * @method     ChildRatingHeaders[]|ObjectCollection findByDownvotes(string $downvotes) Return ChildRatingHeaders objects filtered by the downvotes column
  * @method     ChildRatingHeaders[]|ObjectCollection findByComments(string $comments) Return ChildRatingHeaders objects filtered by the comments column
+ * @method     ChildRatingHeaders[]|ObjectCollection findByScore(int $score) Return ChildRatingHeaders objects filtered by the score column
  * @method     ChildRatingHeaders[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -194,7 +199,7 @@ abstract class RatingHeadersQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, game_id, user_id, game_platform_id, rig_id, datetime, upvotes, downvotes, comments FROM rating_headers WHERE id = :p0';
+        $sql = 'SELECT id, game_id, user_id, game_platform_id, rig_id, created, upvotes, downvotes, comments, score FROM rating_headers WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -498,16 +503,16 @@ abstract class RatingHeadersQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the datetime column
+     * Filter the query on the created column
      *
      * Example usage:
      * <code>
-     * $query->filterByDatetime('2011-03-14'); // WHERE datetime = '2011-03-14'
-     * $query->filterByDatetime('now'); // WHERE datetime = '2011-03-14'
-     * $query->filterByDatetime(array('max' => 'yesterday')); // WHERE datetime > '2011-03-13'
+     * $query->filterByCreated('2011-03-14'); // WHERE created = '2011-03-14'
+     * $query->filterByCreated('now'); // WHERE created = '2011-03-14'
+     * $query->filterByCreated(array('max' => 'yesterday')); // WHERE created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $datetime The value to use as filter.
+     * @param     mixed $created The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
@@ -517,16 +522,16 @@ abstract class RatingHeadersQuery extends ModelCriteria
      *
      * @return $this|ChildRatingHeadersQuery The current query, for fluid interface
      */
-    public function filterByDatetime($datetime = null, $comparison = null)
+    public function filterByCreated($created = null, $comparison = null)
     {
-        if (is_array($datetime)) {
+        if (is_array($created)) {
             $useMinMax = false;
-            if (isset($datetime['min'])) {
-                $this->addUsingAlias(RatingHeadersTableMap::COL_DATETIME, $datetime['min'], Criteria::GREATER_EQUAL);
+            if (isset($created['min'])) {
+                $this->addUsingAlias(RatingHeadersTableMap::COL_CREATED, $created['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($datetime['max'])) {
-                $this->addUsingAlias(RatingHeadersTableMap::COL_DATETIME, $datetime['max'], Criteria::LESS_EQUAL);
+            if (isset($created['max'])) {
+                $this->addUsingAlias(RatingHeadersTableMap::COL_CREATED, $created['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -537,7 +542,7 @@ abstract class RatingHeadersQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RatingHeadersTableMap::COL_DATETIME, $datetime, $comparison);
+        return $this->addUsingAlias(RatingHeadersTableMap::COL_CREATED, $created, $comparison);
     }
 
     /**
@@ -649,6 +654,47 @@ abstract class RatingHeadersQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RatingHeadersTableMap::COL_COMMENTS, $comments, $comparison);
+    }
+
+    /**
+     * Filter the query on the score column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByScore(1234); // WHERE score = 1234
+     * $query->filterByScore(array(12, 34)); // WHERE score IN (12, 34)
+     * $query->filterByScore(array('min' => 12)); // WHERE score > 12
+     * </code>
+     *
+     * @param     mixed $score The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildRatingHeadersQuery The current query, for fluid interface
+     */
+    public function filterByScore($score = null, $comparison = null)
+    {
+        if (is_array($score)) {
+            $useMinMax = false;
+            if (isset($score['min'])) {
+                $this->addUsingAlias(RatingHeadersTableMap::COL_SCORE, $score['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($score['max'])) {
+                $this->addUsingAlias(RatingHeadersTableMap::COL_SCORE, $score['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RatingHeadersTableMap::COL_SCORE, $score, $comparison);
     }
 
     /**
