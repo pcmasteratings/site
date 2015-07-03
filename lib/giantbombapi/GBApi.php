@@ -9,12 +9,6 @@ class GBApi
   private static $apikey;
   private static $gb = 'http://www.giantbomb.com/api/';
 
-  public static function __callStatic($name, $arguments)
-  {
-    // Note: value of $name is case sensitive.
-    echo "Calling static method '$name' "
-    . implode(', ', $arguments). "\n";
-  }
   //Can only be set once. Configure this in config.php.
   public static function setApiKey($key)
   {
@@ -33,10 +27,12 @@ class GBApi
       throw new GBApiException('Invalid Search Type: '.$srchtype);
     }
   //generate url
-  $url = self::$gb.'search?api_key='.self::$apikey.'&format=json&query='.$query.'&resources='.$srchtype;
+  $url = self::$gb.'search?api_key='.self::$apikey.'&format=json&query='
+  .$query.'&resources='
+  .$srchtype.'&field_list=id,name,original_release_date,image,api_detail_url';
 
   self::makeApiCall($url);
-  echo $url;
+
   return '';
 }
 
@@ -55,7 +51,7 @@ $context = stream_context_create($options);
   $response = file_get_contents($url, false, $context);
 
   //dbg - temporary...
-  var_dump(json_decode($response));
+  echo $response;
 }
 
 //This method is called whenever an api call is made.
