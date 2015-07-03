@@ -59,7 +59,7 @@ class RatingHeadersTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 9;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class RatingHeadersTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 9;
 
     /**
      * the column name for the id field
@@ -112,6 +112,11 @@ class RatingHeadersTableMap extends TableMap
     const COL_DOWNVOTES = 'rating_headers.downvotes';
 
     /**
+     * the column name for the comments field
+     */
+    const COL_COMMENTS = 'rating_headers.comments';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -123,11 +128,11 @@ class RatingHeadersTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'GameId', 'UserId', 'GamePlatformId', 'RigId', 'Datetime', 'Upvotes', 'Downvotes', ),
-        self::TYPE_CAMELNAME     => array('id', 'gameId', 'userId', 'gamePlatformId', 'rigId', 'datetime', 'upvotes', 'downvotes', ),
-        self::TYPE_COLNAME       => array(RatingHeadersTableMap::COL_ID, RatingHeadersTableMap::COL_GAME_ID, RatingHeadersTableMap::COL_USER_ID, RatingHeadersTableMap::COL_GAME_PLATFORM_ID, RatingHeadersTableMap::COL_RIG_ID, RatingHeadersTableMap::COL_DATETIME, RatingHeadersTableMap::COL_UPVOTES, RatingHeadersTableMap::COL_DOWNVOTES, ),
-        self::TYPE_FIELDNAME     => array('id', 'game_id', 'user_id', 'game_platform_id', 'rig_id', 'datetime', 'upvotes', 'downvotes', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id', 'GameId', 'UserId', 'GamePlatformId', 'RigId', 'Datetime', 'Upvotes', 'Downvotes', 'Comments', ),
+        self::TYPE_CAMELNAME     => array('id', 'gameId', 'userId', 'gamePlatformId', 'rigId', 'datetime', 'upvotes', 'downvotes', 'comments', ),
+        self::TYPE_COLNAME       => array(RatingHeadersTableMap::COL_ID, RatingHeadersTableMap::COL_GAME_ID, RatingHeadersTableMap::COL_USER_ID, RatingHeadersTableMap::COL_GAME_PLATFORM_ID, RatingHeadersTableMap::COL_RIG_ID, RatingHeadersTableMap::COL_DATETIME, RatingHeadersTableMap::COL_UPVOTES, RatingHeadersTableMap::COL_DOWNVOTES, RatingHeadersTableMap::COL_COMMENTS, ),
+        self::TYPE_FIELDNAME     => array('id', 'game_id', 'user_id', 'game_platform_id', 'rig_id', 'datetime', 'upvotes', 'downvotes', 'comments', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -137,11 +142,11 @@ class RatingHeadersTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'GameId' => 1, 'UserId' => 2, 'GamePlatformId' => 3, 'RigId' => 4, 'Datetime' => 5, 'Upvotes' => 6, 'Downvotes' => 7, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'gameId' => 1, 'userId' => 2, 'gamePlatformId' => 3, 'rigId' => 4, 'datetime' => 5, 'upvotes' => 6, 'downvotes' => 7, ),
-        self::TYPE_COLNAME       => array(RatingHeadersTableMap::COL_ID => 0, RatingHeadersTableMap::COL_GAME_ID => 1, RatingHeadersTableMap::COL_USER_ID => 2, RatingHeadersTableMap::COL_GAME_PLATFORM_ID => 3, RatingHeadersTableMap::COL_RIG_ID => 4, RatingHeadersTableMap::COL_DATETIME => 5, RatingHeadersTableMap::COL_UPVOTES => 6, RatingHeadersTableMap::COL_DOWNVOTES => 7, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'game_id' => 1, 'user_id' => 2, 'game_platform_id' => 3, 'rig_id' => 4, 'datetime' => 5, 'upvotes' => 6, 'downvotes' => 7, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'GameId' => 1, 'UserId' => 2, 'GamePlatformId' => 3, 'RigId' => 4, 'Datetime' => 5, 'Upvotes' => 6, 'Downvotes' => 7, 'Comments' => 8, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'gameId' => 1, 'userId' => 2, 'gamePlatformId' => 3, 'rigId' => 4, 'datetime' => 5, 'upvotes' => 6, 'downvotes' => 7, 'comments' => 8, ),
+        self::TYPE_COLNAME       => array(RatingHeadersTableMap::COL_ID => 0, RatingHeadersTableMap::COL_GAME_ID => 1, RatingHeadersTableMap::COL_USER_ID => 2, RatingHeadersTableMap::COL_GAME_PLATFORM_ID => 3, RatingHeadersTableMap::COL_RIG_ID => 4, RatingHeadersTableMap::COL_DATETIME => 5, RatingHeadersTableMap::COL_UPVOTES => 6, RatingHeadersTableMap::COL_DOWNVOTES => 7, RatingHeadersTableMap::COL_COMMENTS => 8, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'game_id' => 1, 'user_id' => 2, 'game_platform_id' => 3, 'rig_id' => 4, 'datetime' => 5, 'upvotes' => 6, 'downvotes' => 7, 'comments' => 8, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -169,6 +174,7 @@ class RatingHeadersTableMap extends TableMap
         $this->addColumn('datetime', 'Datetime', 'TIMESTAMP', true, null, null);
         $this->addColumn('upvotes', 'Upvotes', 'BIGINT', true, null, null);
         $this->addColumn('downvotes', 'Downvotes', 'BIGINT', true, null, null);
+        $this->addColumn('comments', 'Comments', 'CLOB', true, null, null);
     } // initialize()
 
     /**
@@ -176,13 +182,6 @@ class RatingHeadersTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('GamePlatforms', '\\GamePlatforms', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':game_platform_id',
-    1 => ':id',
-  ),
-), null, null, null, false);
         $this->addRelation('Games', '\\Games', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
@@ -201,6 +200,13 @@ class RatingHeadersTableMap extends TableMap
   0 =>
   array (
     0 => ':rig_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('GamePlatforms', '\\GamePlatforms', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':game_platform_id',
     1 => ':id',
   ),
 ), null, null, null, false);
@@ -371,6 +377,7 @@ class RatingHeadersTableMap extends TableMap
             $criteria->addSelectColumn(RatingHeadersTableMap::COL_DATETIME);
             $criteria->addSelectColumn(RatingHeadersTableMap::COL_UPVOTES);
             $criteria->addSelectColumn(RatingHeadersTableMap::COL_DOWNVOTES);
+            $criteria->addSelectColumn(RatingHeadersTableMap::COL_COMMENTS);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.game_id');
@@ -380,6 +387,7 @@ class RatingHeadersTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.datetime');
             $criteria->addSelectColumn($alias . '.upvotes');
             $criteria->addSelectColumn($alias . '.downvotes');
+            $criteria->addSelectColumn($alias . '.comments');
         }
     }
 

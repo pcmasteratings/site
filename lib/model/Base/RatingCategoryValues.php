@@ -4,6 +4,8 @@ namespace Base;
 
 use \RatingCategories as ChildRatingCategories;
 use \RatingCategoriesQuery as ChildRatingCategoriesQuery;
+use \RatingCategoryOptions as ChildRatingCategoryOptions;
+use \RatingCategoryOptionsQuery as ChildRatingCategoryOptionsQuery;
 use \RatingCategoryValuesQuery as ChildRatingCategoryValuesQuery;
 use \RatingHeaders as ChildRatingHeaders;
 use \RatingHeadersQuery as ChildRatingHeadersQuery;
@@ -82,22 +84,22 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
     protected $rating_category_id;
 
     /**
-     * The value for the value field.
-     * @var        int
-     */
-    protected $value;
-
-    /**
-     * The value for the sequence field.
-     * @var        int
-     */
-    protected $sequence;
-
-    /**
-     * The value for the review field.
+     * The value for the rating_catgory_option_id field.
      * @var        string
      */
-    protected $review;
+    protected $rating_catgory_option_id;
+
+    /**
+     * The value for the original_value field.
+     * @var        int
+     */
+    protected $original_value;
+
+    /**
+     * The value for the comments field.
+     * @var        string
+     */
+    protected $comments;
 
     /**
      * @var        ChildRatingHeaders
@@ -108,6 +110,11 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
      * @var        ChildRatingCategories
      */
     protected $aRatingCategories;
+
+    /**
+     * @var        ChildRatingCategoryOptions
+     */
+    protected $aRatingCategoryOptions;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -365,33 +372,33 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
     }
 
     /**
-     * Get the [value] column value.
-     * 
-     * @return int
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * Get the [sequence] column value.
-     * 
-     * @return int
-     */
-    public function getSequence()
-    {
-        return $this->sequence;
-    }
-
-    /**
-     * Get the [review] column value.
+     * Get the [rating_catgory_option_id] column value.
      * 
      * @return string
      */
-    public function getReview()
+    public function getRatingCatgoryOptionId()
     {
-        return $this->review;
+        return $this->rating_catgory_option_id;
+    }
+
+    /**
+     * Get the [original_value] column value.
+     * 
+     * @return int
+     */
+    public function getOriginalValue()
+    {
+        return $this->original_value;
+    }
+
+    /**
+     * Get the [comments] column value.
+     * 
+     * @return string
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 
     /**
@@ -463,64 +470,68 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
     } // setRatingCategoryId()
 
     /**
-     * Set the value of [value] column.
-     * 
-     * @param int $v new value
-     * @return $this|\RatingCategoryValues The current object (for fluent API support)
-     */
-    public function setValue($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->value !== $v) {
-            $this->value = $v;
-            $this->modifiedColumns[RatingCategoryValuesTableMap::COL_VALUE] = true;
-        }
-
-        return $this;
-    } // setValue()
-
-    /**
-     * Set the value of [sequence] column.
-     * 
-     * @param int $v new value
-     * @return $this|\RatingCategoryValues The current object (for fluent API support)
-     */
-    public function setSequence($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->sequence !== $v) {
-            $this->sequence = $v;
-            $this->modifiedColumns[RatingCategoryValuesTableMap::COL_SEQUENCE] = true;
-        }
-
-        return $this;
-    } // setSequence()
-
-    /**
-     * Set the value of [review] column.
+     * Set the value of [rating_catgory_option_id] column.
      * 
      * @param string $v new value
      * @return $this|\RatingCategoryValues The current object (for fluent API support)
      */
-    public function setReview($v)
+    public function setRatingCatgoryOptionId($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->review !== $v) {
-            $this->review = $v;
-            $this->modifiedColumns[RatingCategoryValuesTableMap::COL_REVIEW] = true;
+        if ($this->rating_catgory_option_id !== $v) {
+            $this->rating_catgory_option_id = $v;
+            $this->modifiedColumns[RatingCategoryValuesTableMap::COL_RATING_CATGORY_OPTION_ID] = true;
+        }
+
+        if ($this->aRatingCategoryOptions !== null && $this->aRatingCategoryOptions->getId() !== $v) {
+            $this->aRatingCategoryOptions = null;
         }
 
         return $this;
-    } // setReview()
+    } // setRatingCatgoryOptionId()
+
+    /**
+     * Set the value of [original_value] column.
+     * 
+     * @param int $v new value
+     * @return $this|\RatingCategoryValues The current object (for fluent API support)
+     */
+    public function setOriginalValue($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->original_value !== $v) {
+            $this->original_value = $v;
+            $this->modifiedColumns[RatingCategoryValuesTableMap::COL_ORIGINAL_VALUE] = true;
+        }
+
+        return $this;
+    } // setOriginalValue()
+
+    /**
+     * Set the value of [comments] column.
+     * 
+     * @param string $v new value
+     * @return $this|\RatingCategoryValues The current object (for fluent API support)
+     */
+    public function setComments($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->comments !== $v) {
+            $this->comments = $v;
+            $this->modifiedColumns[RatingCategoryValuesTableMap::COL_COMMENTS] = true;
+        }
+
+        return $this;
+    } // setComments()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -567,14 +578,14 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RatingCategoryValuesTableMap::translateFieldName('RatingCategoryId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->rating_category_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : RatingCategoryValuesTableMap::translateFieldName('Value', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->value = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : RatingCategoryValuesTableMap::translateFieldName('RatingCatgoryOptionId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->rating_catgory_option_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : RatingCategoryValuesTableMap::translateFieldName('Sequence', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->sequence = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : RatingCategoryValuesTableMap::translateFieldName('OriginalValue', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->original_value = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : RatingCategoryValuesTableMap::translateFieldName('Review', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->review = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : RatingCategoryValuesTableMap::translateFieldName('Comments', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->comments = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -610,6 +621,9 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
         }
         if ($this->aRatingCategories !== null && $this->rating_category_id !== $this->aRatingCategories->getId()) {
             $this->aRatingCategories = null;
+        }
+        if ($this->aRatingCategoryOptions !== null && $this->rating_catgory_option_id !== $this->aRatingCategoryOptions->getId()) {
+            $this->aRatingCategoryOptions = null;
         }
     } // ensureConsistency
 
@@ -652,6 +666,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
 
             $this->aRatingHeaders = null;
             $this->aRatingCategories = null;
+            $this->aRatingCategoryOptions = null;
         } // if (deep)
     }
 
@@ -770,6 +785,13 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
                 $this->setRatingCategories($this->aRatingCategories);
             }
 
+            if ($this->aRatingCategoryOptions !== null) {
+                if ($this->aRatingCategoryOptions->isModified() || $this->aRatingCategoryOptions->isNew()) {
+                    $affectedRows += $this->aRatingCategoryOptions->save($con);
+                }
+                $this->setRatingCategoryOptions($this->aRatingCategoryOptions);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -816,14 +838,14 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
         if ($this->isColumnModified(RatingCategoryValuesTableMap::COL_RATING_CATEGORY_ID)) {
             $modifiedColumns[':p' . $index++]  = 'rating_category_id';
         }
-        if ($this->isColumnModified(RatingCategoryValuesTableMap::COL_VALUE)) {
-            $modifiedColumns[':p' . $index++]  = 'value';
+        if ($this->isColumnModified(RatingCategoryValuesTableMap::COL_RATING_CATGORY_OPTION_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'rating_catgory_option_id';
         }
-        if ($this->isColumnModified(RatingCategoryValuesTableMap::COL_SEQUENCE)) {
-            $modifiedColumns[':p' . $index++]  = 'sequence';
+        if ($this->isColumnModified(RatingCategoryValuesTableMap::COL_ORIGINAL_VALUE)) {
+            $modifiedColumns[':p' . $index++]  = 'original_value';
         }
-        if ($this->isColumnModified(RatingCategoryValuesTableMap::COL_REVIEW)) {
-            $modifiedColumns[':p' . $index++]  = 'review';
+        if ($this->isColumnModified(RatingCategoryValuesTableMap::COL_COMMENTS)) {
+            $modifiedColumns[':p' . $index++]  = 'comments';
         }
 
         $sql = sprintf(
@@ -845,14 +867,14 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
                     case 'rating_category_id':                        
                         $stmt->bindValue($identifier, $this->rating_category_id, PDO::PARAM_INT);
                         break;
-                    case 'value':                        
-                        $stmt->bindValue($identifier, $this->value, PDO::PARAM_INT);
+                    case 'rating_catgory_option_id':                        
+                        $stmt->bindValue($identifier, $this->rating_catgory_option_id, PDO::PARAM_INT);
                         break;
-                    case 'sequence':                        
-                        $stmt->bindValue($identifier, $this->sequence, PDO::PARAM_INT);
+                    case 'original_value':                        
+                        $stmt->bindValue($identifier, $this->original_value, PDO::PARAM_INT);
                         break;
-                    case 'review':                        
-                        $stmt->bindValue($identifier, $this->review, PDO::PARAM_STR);
+                    case 'comments':                        
+                        $stmt->bindValue($identifier, $this->comments, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -926,13 +948,13 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
                 return $this->getRatingCategoryId();
                 break;
             case 3:
-                return $this->getValue();
+                return $this->getRatingCatgoryOptionId();
                 break;
             case 4:
-                return $this->getSequence();
+                return $this->getOriginalValue();
                 break;
             case 5:
-                return $this->getReview();
+                return $this->getComments();
                 break;
             default:
                 return null;
@@ -967,9 +989,9 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
             $keys[0] => $this->getId(),
             $keys[1] => $this->getRatingHeaderId(),
             $keys[2] => $this->getRatingCategoryId(),
-            $keys[3] => $this->getValue(),
-            $keys[4] => $this->getSequence(),
-            $keys[5] => $this->getReview(),
+            $keys[3] => $this->getRatingCatgoryOptionId(),
+            $keys[4] => $this->getOriginalValue(),
+            $keys[5] => $this->getComments(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1006,6 +1028,21 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->aRatingCategories->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aRatingCategoryOptions) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'ratingCategoryOptions';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'rating_category_options';
+                        break;
+                    default:
+                        $key = 'RatingCategoryOptions';
+                }
+        
+                $result[$key] = $this->aRatingCategoryOptions->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1051,13 +1088,13 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
                 $this->setRatingCategoryId($value);
                 break;
             case 3:
-                $this->setValue($value);
+                $this->setRatingCatgoryOptionId($value);
                 break;
             case 4:
-                $this->setSequence($value);
+                $this->setOriginalValue($value);
                 break;
             case 5:
-                $this->setReview($value);
+                $this->setComments($value);
                 break;
         } // switch()
 
@@ -1095,13 +1132,13 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
             $this->setRatingCategoryId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setValue($arr[$keys[3]]);
+            $this->setRatingCatgoryOptionId($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setSequence($arr[$keys[4]]);
+            $this->setOriginalValue($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setReview($arr[$keys[5]]);
+            $this->setComments($arr[$keys[5]]);
         }
     }
 
@@ -1153,14 +1190,14 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
         if ($this->isColumnModified(RatingCategoryValuesTableMap::COL_RATING_CATEGORY_ID)) {
             $criteria->add(RatingCategoryValuesTableMap::COL_RATING_CATEGORY_ID, $this->rating_category_id);
         }
-        if ($this->isColumnModified(RatingCategoryValuesTableMap::COL_VALUE)) {
-            $criteria->add(RatingCategoryValuesTableMap::COL_VALUE, $this->value);
+        if ($this->isColumnModified(RatingCategoryValuesTableMap::COL_RATING_CATGORY_OPTION_ID)) {
+            $criteria->add(RatingCategoryValuesTableMap::COL_RATING_CATGORY_OPTION_ID, $this->rating_catgory_option_id);
         }
-        if ($this->isColumnModified(RatingCategoryValuesTableMap::COL_SEQUENCE)) {
-            $criteria->add(RatingCategoryValuesTableMap::COL_SEQUENCE, $this->sequence);
+        if ($this->isColumnModified(RatingCategoryValuesTableMap::COL_ORIGINAL_VALUE)) {
+            $criteria->add(RatingCategoryValuesTableMap::COL_ORIGINAL_VALUE, $this->original_value);
         }
-        if ($this->isColumnModified(RatingCategoryValuesTableMap::COL_REVIEW)) {
-            $criteria->add(RatingCategoryValuesTableMap::COL_REVIEW, $this->review);
+        if ($this->isColumnModified(RatingCategoryValuesTableMap::COL_COMMENTS)) {
+            $criteria->add(RatingCategoryValuesTableMap::COL_COMMENTS, $this->comments);
         }
 
         return $criteria;
@@ -1250,9 +1287,9 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
     {
         $copyObj->setRatingHeaderId($this->getRatingHeaderId());
         $copyObj->setRatingCategoryId($this->getRatingCategoryId());
-        $copyObj->setValue($this->getValue());
-        $copyObj->setSequence($this->getSequence());
-        $copyObj->setReview($this->getReview());
+        $copyObj->setRatingCatgoryOptionId($this->getRatingCatgoryOptionId());
+        $copyObj->setOriginalValue($this->getOriginalValue());
+        $copyObj->setComments($this->getComments());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1384,6 +1421,57 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildRatingCategoryOptions object.
+     *
+     * @param  ChildRatingCategoryOptions $v
+     * @return $this|\RatingCategoryValues The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setRatingCategoryOptions(ChildRatingCategoryOptions $v = null)
+    {
+        if ($v === null) {
+            $this->setRatingCatgoryOptionId(NULL);
+        } else {
+            $this->setRatingCatgoryOptionId($v->getId());
+        }
+
+        $this->aRatingCategoryOptions = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildRatingCategoryOptions object, it will not be re-added.
+        if ($v !== null) {
+            $v->addRatingCategoryValues($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildRatingCategoryOptions object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildRatingCategoryOptions The associated ChildRatingCategoryOptions object.
+     * @throws PropelException
+     */
+    public function getRatingCategoryOptions(ConnectionInterface $con = null)
+    {
+        if ($this->aRatingCategoryOptions === null && (($this->rating_catgory_option_id !== "" && $this->rating_catgory_option_id !== null))) {
+            $this->aRatingCategoryOptions = ChildRatingCategoryOptionsQuery::create()->findPk($this->rating_catgory_option_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aRatingCategoryOptions->addRatingCategoryValuess($this);
+             */
+        }
+
+        return $this->aRatingCategoryOptions;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -1396,12 +1484,15 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
         if (null !== $this->aRatingCategories) {
             $this->aRatingCategories->removeRatingCategoryValues($this);
         }
+        if (null !== $this->aRatingCategoryOptions) {
+            $this->aRatingCategoryOptions->removeRatingCategoryValues($this);
+        }
         $this->id = null;
         $this->rating_header_id = null;
         $this->rating_category_id = null;
-        $this->value = null;
-        $this->sequence = null;
-        $this->review = null;
+        $this->rating_catgory_option_id = null;
+        $this->original_value = null;
+        $this->comments = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1424,6 +1515,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
 
         $this->aRatingHeaders = null;
         $this->aRatingCategories = null;
+        $this->aRatingCategoryOptions = null;
     }
 
     /**

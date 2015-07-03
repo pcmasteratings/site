@@ -24,11 +24,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery orderByUsername($order = Criteria::ASC) Order by the username column
  * @method     ChildUserQuery orderByPassword($order = Criteria::ASC) Order by the password column
  * @method     ChildUserQuery orderByRedditId($order = Criteria::ASC) Order by the reddit_id column
+ * @method     ChildUserQuery orderByTrusted($order = Criteria::ASC) Order by the trusted column
+ * @method     ChildUserQuery orderByAdmin($order = Criteria::ASC) Order by the admin column
+ * @method     ChildUserQuery orderByBanned($order = Criteria::ASC) Order by the banned column
  *
  * @method     ChildUserQuery groupById() Group by the id column
  * @method     ChildUserQuery groupByUsername() Group by the username column
  * @method     ChildUserQuery groupByPassword() Group by the password column
  * @method     ChildUserQuery groupByRedditId() Group by the reddit_id column
+ * @method     ChildUserQuery groupByTrusted() Group by the trusted column
+ * @method     ChildUserQuery groupByAdmin() Group by the admin column
+ * @method     ChildUserQuery groupByBanned() Group by the banned column
  *
  * @method     ChildUserQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildUserQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -62,7 +68,10 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser findOneById(string $id) Return the first ChildUser filtered by the id column
  * @method     ChildUser findOneByUsername(string $username) Return the first ChildUser filtered by the username column
  * @method     ChildUser findOneByPassword(string $password) Return the first ChildUser filtered by the password column
- * @method     ChildUser findOneByRedditId(string $reddit_id) Return the first ChildUser filtered by the reddit_id column *
+ * @method     ChildUser findOneByRedditId(string $reddit_id) Return the first ChildUser filtered by the reddit_id column
+ * @method     ChildUser findOneByTrusted(boolean $trusted) Return the first ChildUser filtered by the trusted column
+ * @method     ChildUser findOneByAdmin(boolean $admin) Return the first ChildUser filtered by the admin column
+ * @method     ChildUser findOneByBanned(boolean $banned) Return the first ChildUser filtered by the banned column *
 
  * @method     ChildUser requirePk($key, ConnectionInterface $con = null) Return the ChildUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOne(ConnectionInterface $con = null) Return the first ChildUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -71,12 +80,18 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser requireOneByUsername(string $username) Return the first ChildUser filtered by the username column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByPassword(string $password) Return the first ChildUser filtered by the password column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByRedditId(string $reddit_id) Return the first ChildUser filtered by the reddit_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildUser requireOneByTrusted(boolean $trusted) Return the first ChildUser filtered by the trusted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildUser requireOneByAdmin(boolean $admin) Return the first ChildUser filtered by the admin column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildUser requireOneByBanned(boolean $banned) Return the first ChildUser filtered by the banned column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildUser[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
  * @method     ChildUser[]|ObjectCollection findById(string $id) Return ChildUser objects filtered by the id column
  * @method     ChildUser[]|ObjectCollection findByUsername(string $username) Return ChildUser objects filtered by the username column
  * @method     ChildUser[]|ObjectCollection findByPassword(string $password) Return ChildUser objects filtered by the password column
  * @method     ChildUser[]|ObjectCollection findByRedditId(string $reddit_id) Return ChildUser objects filtered by the reddit_id column
+ * @method     ChildUser[]|ObjectCollection findByTrusted(boolean $trusted) Return ChildUser objects filtered by the trusted column
+ * @method     ChildUser[]|ObjectCollection findByAdmin(boolean $admin) Return ChildUser objects filtered by the admin column
+ * @method     ChildUser[]|ObjectCollection findByBanned(boolean $banned) Return ChildUser objects filtered by the banned column
  * @method     ChildUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -169,7 +184,7 @@ abstract class UserQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, username, password, reddit_id FROM user WHERE id = :p0';
+        $sql = 'SELECT id, username, password, reddit_id, trusted, admin, banned FROM user WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -385,6 +400,87 @@ abstract class UserQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(UserTableMap::COL_REDDIT_ID, $redditId, $comparison);
+    }
+
+    /**
+     * Filter the query on the trusted column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByTrusted(true); // WHERE trusted = true
+     * $query->filterByTrusted('yes'); // WHERE trusted = true
+     * </code>
+     *
+     * @param     boolean|string $trusted The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildUserQuery The current query, for fluid interface
+     */
+    public function filterByTrusted($trusted = null, $comparison = null)
+    {
+        if (is_string($trusted)) {
+            $trusted = in_array(strtolower($trusted), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(UserTableMap::COL_TRUSTED, $trusted, $comparison);
+    }
+
+    /**
+     * Filter the query on the admin column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByAdmin(true); // WHERE admin = true
+     * $query->filterByAdmin('yes'); // WHERE admin = true
+     * </code>
+     *
+     * @param     boolean|string $admin The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildUserQuery The current query, for fluid interface
+     */
+    public function filterByAdmin($admin = null, $comparison = null)
+    {
+        if (is_string($admin)) {
+            $admin = in_array(strtolower($admin), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(UserTableMap::COL_ADMIN, $admin, $comparison);
+    }
+
+    /**
+     * Filter the query on the banned column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByBanned(true); // WHERE banned = true
+     * $query->filterByBanned('yes'); // WHERE banned = true
+     * </code>
+     *
+     * @param     boolean|string $banned The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildUserQuery The current query, for fluid interface
+     */
+    public function filterByBanned($banned = null, $comparison = null)
+    {
+        if (is_string($banned)) {
+            $banned = in_array(strtolower($banned), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(UserTableMap::COL_BANNED, $banned, $comparison);
     }
 
     /**

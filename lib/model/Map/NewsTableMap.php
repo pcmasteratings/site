@@ -92,9 +92,9 @@ class NewsTableMap extends TableMap
     const COL_USER_ID = 'news.user_id';
 
     /**
-     * the column name for the text field
+     * the column name for the content field
      */
-    const COL_TEXT = 'news.text';
+    const COL_CONTENT = 'news.content';
 
     /**
      * the column name for the tags field
@@ -113,10 +113,10 @@ class NewsTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Title', 'Datetime', 'UserId', 'Text', 'Tags', ),
-        self::TYPE_CAMELNAME     => array('id', 'title', 'datetime', 'userId', 'text', 'tags', ),
-        self::TYPE_COLNAME       => array(NewsTableMap::COL_ID, NewsTableMap::COL_TITLE, NewsTableMap::COL_DATETIME, NewsTableMap::COL_USER_ID, NewsTableMap::COL_TEXT, NewsTableMap::COL_TAGS, ),
-        self::TYPE_FIELDNAME     => array('id', 'title', 'datetime', 'user_id', 'text', 'tags', ),
+        self::TYPE_PHPNAME       => array('Id', 'Title', 'Datetime', 'UserId', 'Content', 'Tags', ),
+        self::TYPE_CAMELNAME     => array('id', 'title', 'datetime', 'userId', 'content', 'tags', ),
+        self::TYPE_COLNAME       => array(NewsTableMap::COL_ID, NewsTableMap::COL_TITLE, NewsTableMap::COL_DATETIME, NewsTableMap::COL_USER_ID, NewsTableMap::COL_CONTENT, NewsTableMap::COL_TAGS, ),
+        self::TYPE_FIELDNAME     => array('id', 'title', 'datetime', 'user_id', 'content', 'tags', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
@@ -127,10 +127,10 @@ class NewsTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'Datetime' => 2, 'UserId' => 3, 'Text' => 4, 'Tags' => 5, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'datetime' => 2, 'userId' => 3, 'text' => 4, 'tags' => 5, ),
-        self::TYPE_COLNAME       => array(NewsTableMap::COL_ID => 0, NewsTableMap::COL_TITLE => 1, NewsTableMap::COL_DATETIME => 2, NewsTableMap::COL_USER_ID => 3, NewsTableMap::COL_TEXT => 4, NewsTableMap::COL_TAGS => 5, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'datetime' => 2, 'user_id' => 3, 'text' => 4, 'tags' => 5, ),
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'Datetime' => 2, 'UserId' => 3, 'Content' => 4, 'Tags' => 5, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'datetime' => 2, 'userId' => 3, 'content' => 4, 'tags' => 5, ),
+        self::TYPE_COLNAME       => array(NewsTableMap::COL_ID => 0, NewsTableMap::COL_TITLE => 1, NewsTableMap::COL_DATETIME => 2, NewsTableMap::COL_USER_ID => 3, NewsTableMap::COL_CONTENT => 4, NewsTableMap::COL_TAGS => 5, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'datetime' => 2, 'user_id' => 3, 'content' => 4, 'tags' => 5, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
@@ -155,7 +155,7 @@ class NewsTableMap extends TableMap
         $this->addColumn('title', 'Title', 'LONGVARCHAR', true, null, null);
         $this->addColumn('datetime', 'Datetime', 'TIMESTAMP', true, null, null);
         $this->addForeignKey('user_id', 'UserId', 'BIGINT', 'user', 'id', true, null, null);
-        $this->addColumn('text', 'Text', 'LONGVARCHAR', true, null, null);
+        $this->addColumn('content', 'Content', 'LONGVARCHAR', true, null, null);
         $this->addColumn('tags', 'Tags', 'LONGVARCHAR', true, null, null);
     } // initialize()
 
@@ -318,14 +318,14 @@ class NewsTableMap extends TableMap
             $criteria->addSelectColumn(NewsTableMap::COL_TITLE);
             $criteria->addSelectColumn(NewsTableMap::COL_DATETIME);
             $criteria->addSelectColumn(NewsTableMap::COL_USER_ID);
-            $criteria->addSelectColumn(NewsTableMap::COL_TEXT);
+            $criteria->addSelectColumn(NewsTableMap::COL_CONTENT);
             $criteria->addSelectColumn(NewsTableMap::COL_TAGS);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.title');
             $criteria->addSelectColumn($alias . '.datetime');
             $criteria->addSelectColumn($alias . '.user_id');
-            $criteria->addSelectColumn($alias . '.text');
+            $criteria->addSelectColumn($alias . '.content');
             $criteria->addSelectColumn($alias . '.tags');
         }
     }

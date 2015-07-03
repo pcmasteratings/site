@@ -21,13 +21,13 @@ use Propel\Runtime\Exception\PropelException;
  * 
  *
  * @method     ChildRatingCategoriesQuery orderById($order = Criteria::ASC) Order by the ID column
- * @method     ChildRatingCategoriesQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method     ChildRatingCategoriesQuery orderByTitle($order = Criteria::ASC) Order by the title column
  * @method     ChildRatingCategoriesQuery orderByDescription($order = Criteria::ASC) Order by the description column
  * @method     ChildRatingCategoriesQuery orderByWeight($order = Criteria::ASC) Order by the weight column
  * @method     ChildRatingCategoriesQuery orderBySequence($order = Criteria::ASC) Order by the sequence column
  *
  * @method     ChildRatingCategoriesQuery groupById() Group by the ID column
- * @method     ChildRatingCategoriesQuery groupByName() Group by the name column
+ * @method     ChildRatingCategoriesQuery groupByTitle() Group by the title column
  * @method     ChildRatingCategoriesQuery groupByDescription() Group by the description column
  * @method     ChildRatingCategoriesQuery groupByWeight() Group by the weight column
  * @method     ChildRatingCategoriesQuery groupBySequence() Group by the sequence column
@@ -54,7 +54,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingCategories findOneOrCreate(ConnectionInterface $con = null) Return the first ChildRatingCategories matching the query, or a new ChildRatingCategories object populated from the query conditions when no match is found
  *
  * @method     ChildRatingCategories findOneById(string $ID) Return the first ChildRatingCategories filtered by the ID column
- * @method     ChildRatingCategories findOneByName(string $name) Return the first ChildRatingCategories filtered by the name column
+ * @method     ChildRatingCategories findOneByTitle(string $title) Return the first ChildRatingCategories filtered by the title column
  * @method     ChildRatingCategories findOneByDescription(string $description) Return the first ChildRatingCategories filtered by the description column
  * @method     ChildRatingCategories findOneByWeight(int $weight) Return the first ChildRatingCategories filtered by the weight column
  * @method     ChildRatingCategories findOneBySequence(int $sequence) Return the first ChildRatingCategories filtered by the sequence column *
@@ -63,14 +63,14 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingCategories requireOne(ConnectionInterface $con = null) Return the first ChildRatingCategories matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRatingCategories requireOneById(string $ID) Return the first ChildRatingCategories filtered by the ID column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRatingCategories requireOneByName(string $name) Return the first ChildRatingCategories filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRatingCategories requireOneByTitle(string $title) Return the first ChildRatingCategories filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingCategories requireOneByDescription(string $description) Return the first ChildRatingCategories filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingCategories requireOneByWeight(int $weight) Return the first ChildRatingCategories filtered by the weight column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingCategories requireOneBySequence(int $sequence) Return the first ChildRatingCategories filtered by the sequence column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRatingCategories[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildRatingCategories objects based on current ModelCriteria
  * @method     ChildRatingCategories[]|ObjectCollection findById(string $ID) Return ChildRatingCategories objects filtered by the ID column
- * @method     ChildRatingCategories[]|ObjectCollection findByName(string $name) Return ChildRatingCategories objects filtered by the name column
+ * @method     ChildRatingCategories[]|ObjectCollection findByTitle(string $title) Return ChildRatingCategories objects filtered by the title column
  * @method     ChildRatingCategories[]|ObjectCollection findByDescription(string $description) Return ChildRatingCategories objects filtered by the description column
  * @method     ChildRatingCategories[]|ObjectCollection findByWeight(int $weight) Return ChildRatingCategories objects filtered by the weight column
  * @method     ChildRatingCategories[]|ObjectCollection findBySequence(int $sequence) Return ChildRatingCategories objects filtered by the sequence column
@@ -166,7 +166,7 @@ abstract class RatingCategoriesQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT ID, name, description, weight, sequence FROM rating_categories WHERE ID = :p0';
+        $sql = 'SELECT ID, title, description, weight, sequence FROM rating_categories WHERE ID = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -298,32 +298,32 @@ abstract class RatingCategoriesQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the name column
+     * Filter the query on the title column
      *
      * Example usage:
      * <code>
-     * $query->filterByName('fooValue');   // WHERE name = 'fooValue'
-     * $query->filterByName('%fooValue%'); // WHERE name LIKE '%fooValue%'
+     * $query->filterByTitle('fooValue');   // WHERE title = 'fooValue'
+     * $query->filterByTitle('%fooValue%'); // WHERE title LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $name The value to use as filter.
+     * @param     string $title The value to use as filter.
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildRatingCategoriesQuery The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByTitle($title = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($name)) {
+            if (is_array($title)) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $name)) {
-                $name = str_replace('*', '%', $name);
+            } elseif (preg_match('/[\%\*]/', $title)) {
+                $title = str_replace('*', '%', $title);
                 $comparison = Criteria::LIKE;
             }
         }
 
-        return $this->addUsingAlias(RatingCategoriesTableMap::COL_NAME, $name, $comparison);
+        return $this->addUsingAlias(RatingCategoriesTableMap::COL_TITLE, $title, $comparison);
     }
 
     /**

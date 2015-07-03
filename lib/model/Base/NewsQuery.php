@@ -24,14 +24,14 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNewsQuery orderByTitle($order = Criteria::ASC) Order by the title column
  * @method     ChildNewsQuery orderByDatetime($order = Criteria::ASC) Order by the datetime column
  * @method     ChildNewsQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
- * @method     ChildNewsQuery orderByText($order = Criteria::ASC) Order by the text column
+ * @method     ChildNewsQuery orderByContent($order = Criteria::ASC) Order by the content column
  * @method     ChildNewsQuery orderByTags($order = Criteria::ASC) Order by the tags column
  *
  * @method     ChildNewsQuery groupById() Group by the id column
  * @method     ChildNewsQuery groupByTitle() Group by the title column
  * @method     ChildNewsQuery groupByDatetime() Group by the datetime column
  * @method     ChildNewsQuery groupByUserId() Group by the user_id column
- * @method     ChildNewsQuery groupByText() Group by the text column
+ * @method     ChildNewsQuery groupByContent() Group by the content column
  * @method     ChildNewsQuery groupByTags() Group by the tags column
  *
  * @method     ChildNewsQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -51,7 +51,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNews findOneByTitle(string $title) Return the first ChildNews filtered by the title column
  * @method     ChildNews findOneByDatetime(string $datetime) Return the first ChildNews filtered by the datetime column
  * @method     ChildNews findOneByUserId(string $user_id) Return the first ChildNews filtered by the user_id column
- * @method     ChildNews findOneByText(string $text) Return the first ChildNews filtered by the text column
+ * @method     ChildNews findOneByContent(string $content) Return the first ChildNews filtered by the content column
  * @method     ChildNews findOneByTags(string $tags) Return the first ChildNews filtered by the tags column *
 
  * @method     ChildNews requirePk($key, ConnectionInterface $con = null) Return the ChildNews by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -61,7 +61,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNews requireOneByTitle(string $title) Return the first ChildNews filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildNews requireOneByDatetime(string $datetime) Return the first ChildNews filtered by the datetime column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildNews requireOneByUserId(string $user_id) Return the first ChildNews filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildNews requireOneByText(string $text) Return the first ChildNews filtered by the text column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildNews requireOneByContent(string $content) Return the first ChildNews filtered by the content column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildNews requireOneByTags(string $tags) Return the first ChildNews filtered by the tags column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildNews[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildNews objects based on current ModelCriteria
@@ -69,7 +69,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildNews[]|ObjectCollection findByTitle(string $title) Return ChildNews objects filtered by the title column
  * @method     ChildNews[]|ObjectCollection findByDatetime(string $datetime) Return ChildNews objects filtered by the datetime column
  * @method     ChildNews[]|ObjectCollection findByUserId(string $user_id) Return ChildNews objects filtered by the user_id column
- * @method     ChildNews[]|ObjectCollection findByText(string $text) Return ChildNews objects filtered by the text column
+ * @method     ChildNews[]|ObjectCollection findByContent(string $content) Return ChildNews objects filtered by the content column
  * @method     ChildNews[]|ObjectCollection findByTags(string $tags) Return ChildNews objects filtered by the tags column
  * @method     ChildNews[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -163,7 +163,7 @@ abstract class NewsQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, title, datetime, user_id, text, tags FROM news WHERE id = :p0';
+        $sql = 'SELECT id, title, datetime, user_id, content, tags FROM news WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -410,32 +410,32 @@ abstract class NewsQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the text column
+     * Filter the query on the content column
      *
      * Example usage:
      * <code>
-     * $query->filterByText('fooValue');   // WHERE text = 'fooValue'
-     * $query->filterByText('%fooValue%'); // WHERE text LIKE '%fooValue%'
+     * $query->filterByContent('fooValue');   // WHERE content = 'fooValue'
+     * $query->filterByContent('%fooValue%'); // WHERE content LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $text The value to use as filter.
+     * @param     string $content The value to use as filter.
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildNewsQuery The current query, for fluid interface
      */
-    public function filterByText($text = null, $comparison = null)
+    public function filterByContent($content = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($text)) {
+            if (is_array($content)) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $text)) {
-                $text = str_replace('*', '%', $text);
+            } elseif (preg_match('/[\%\*]/', $content)) {
+                $content = str_replace('*', '%', $content);
                 $comparison = Criteria::LIKE;
             }
         }
 
-        return $this->addUsingAlias(NewsTableMap::COL_TEXT, $text, $comparison);
+        return $this->addUsingAlias(NewsTableMap::COL_CONTENT, $content, $comparison);
     }
 
     /**

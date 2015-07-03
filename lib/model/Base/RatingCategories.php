@@ -74,10 +74,10 @@ abstract class RatingCategories implements ActiveRecordInterface
     protected $id;
 
     /**
-     * The value for the name field.
+     * The value for the title field.
      * @var        string
      */
-    protected $name;
+    protected $title;
 
     /**
      * The value for the description field.
@@ -369,13 +369,13 @@ abstract class RatingCategories implements ActiveRecordInterface
     }
 
     /**
-     * Get the [name] column value.
+     * Get the [title] column value.
      * 
      * @return string
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
+        return $this->title;
     }
 
     /**
@@ -429,24 +429,24 @@ abstract class RatingCategories implements ActiveRecordInterface
     } // setId()
 
     /**
-     * Set the value of [name] column.
+     * Set the value of [title] column.
      * 
      * @param string $v new value
      * @return $this|\RatingCategories The current object (for fluent API support)
      */
-    public function setName($v)
+    public function setTitle($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->name !== $v) {
-            $this->name = $v;
-            $this->modifiedColumns[RatingCategoriesTableMap::COL_NAME] = true;
+        if ($this->title !== $v) {
+            $this->title = $v;
+            $this->modifiedColumns[RatingCategoriesTableMap::COL_TITLE] = true;
         }
 
         return $this;
-    } // setName()
+    } // setTitle()
 
     /**
      * Set the value of [description] column.
@@ -547,8 +547,8 @@ abstract class RatingCategories implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : RatingCategoriesTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : RatingCategoriesTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->name = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : RatingCategoriesTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->title = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RatingCategoriesTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
             $this->description = (null !== $col) ? (string) $col : null;
@@ -823,8 +823,8 @@ abstract class RatingCategories implements ActiveRecordInterface
         if ($this->isColumnModified(RatingCategoriesTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'ID';
         }
-        if ($this->isColumnModified(RatingCategoriesTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+        if ($this->isColumnModified(RatingCategoriesTableMap::COL_TITLE)) {
+            $modifiedColumns[':p' . $index++]  = 'title';
         }
         if ($this->isColumnModified(RatingCategoriesTableMap::COL_DESCRIPTION)) {
             $modifiedColumns[':p' . $index++]  = 'description';
@@ -849,8 +849,8 @@ abstract class RatingCategories implements ActiveRecordInterface
                     case 'ID':                        
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'name':                        
-                        $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+                    case 'title':                        
+                        $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
                         break;
                     case 'description':                        
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
@@ -927,7 +927,7 @@ abstract class RatingCategories implements ActiveRecordInterface
                 return $this->getId();
                 break;
             case 1:
-                return $this->getName();
+                return $this->getTitle();
                 break;
             case 2:
                 return $this->getDescription();
@@ -969,7 +969,7 @@ abstract class RatingCategories implements ActiveRecordInterface
         $keys = RatingCategoriesTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getName(),
+            $keys[1] => $this->getTitle(),
             $keys[2] => $this->getDescription(),
             $keys[3] => $this->getWeight(),
             $keys[4] => $this->getSequence(),
@@ -1063,7 +1063,7 @@ abstract class RatingCategories implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setName($value);
+                $this->setTitle($value);
                 break;
             case 2:
                 $this->setDescription($value);
@@ -1104,7 +1104,7 @@ abstract class RatingCategories implements ActiveRecordInterface
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setName($arr[$keys[1]]);
+            $this->setTitle($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
             $this->setDescription($arr[$keys[2]]);
@@ -1159,8 +1159,8 @@ abstract class RatingCategories implements ActiveRecordInterface
         if ($this->isColumnModified(RatingCategoriesTableMap::COL_ID)) {
             $criteria->add(RatingCategoriesTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(RatingCategoriesTableMap::COL_NAME)) {
-            $criteria->add(RatingCategoriesTableMap::COL_NAME, $this->name);
+        if ($this->isColumnModified(RatingCategoriesTableMap::COL_TITLE)) {
+            $criteria->add(RatingCategoriesTableMap::COL_TITLE, $this->title);
         }
         if ($this->isColumnModified(RatingCategoriesTableMap::COL_DESCRIPTION)) {
             $criteria->add(RatingCategoriesTableMap::COL_DESCRIPTION, $this->description);
@@ -1257,7 +1257,7 @@ abstract class RatingCategories implements ActiveRecordInterface
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setName($this->getName());
+        $copyObj->setTitle($this->getTitle());
         $copyObj->setDescription($this->getDescription());
         $copyObj->setWeight($this->getWeight());
         $copyObj->setSequence($this->getSequence());
@@ -1798,6 +1798,31 @@ abstract class RatingCategories implements ActiveRecordInterface
         return $this->getRatingCategoryValuess($query, $con);
     }
 
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this RatingCategories is new, it will return
+     * an empty collection; or if this RatingCategories has previously
+     * been saved, it will retrieve related RatingCategoryValuess from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in RatingCategories.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildRatingCategoryValues[] List of ChildRatingCategoryValues objects
+     */
+    public function getRatingCategoryValuessJoinRatingCategoryOptions(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildRatingCategoryValuesQuery::create(null, $criteria);
+        $query->joinWith('RatingCategoryOptions', $joinBehavior);
+
+        return $this->getRatingCategoryValuess($query, $con);
+    }
+
     /**
      * Clears out the collUserWeightss collection
      *
@@ -2049,7 +2074,7 @@ abstract class RatingCategories implements ActiveRecordInterface
     public function clear()
     {
         $this->id = null;
-        $this->name = null;
+        $this->title = null;
         $this->description = null;
         $this->weight = null;
         $this->sequence = null;

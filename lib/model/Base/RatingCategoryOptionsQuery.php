@@ -38,7 +38,11 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingCategoryOptionsQuery rightJoinRatingCategories($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingCategories relation
  * @method     ChildRatingCategoryOptionsQuery innerJoinRatingCategories($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingCategories relation
  *
- * @method     \RatingCategoriesQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildRatingCategoryOptionsQuery leftJoinRatingCategoryValues($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingCategoryValues relation
+ * @method     ChildRatingCategoryOptionsQuery rightJoinRatingCategoryValues($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingCategoryValues relation
+ * @method     ChildRatingCategoryOptionsQuery innerJoinRatingCategoryValues($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingCategoryValues relation
+ *
+ * @method     \RatingCategoriesQuery|\RatingCategoryValuesQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildRatingCategoryOptions findOne(ConnectionInterface $con = null) Return the first ChildRatingCategoryOptions matching the query
  * @method     ChildRatingCategoryOptions findOneOrCreate(ConnectionInterface $con = null) Return the first ChildRatingCategoryOptions matching the query, or a new ChildRatingCategoryOptions object populated from the query conditions when no match is found
@@ -472,6 +476,79 @@ abstract class RatingCategoryOptionsQuery extends ModelCriteria
         return $this
             ->joinRatingCategories($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'RatingCategories', '\RatingCategoriesQuery');
+    }
+
+    /**
+     * Filter the query by a related \RatingCategoryValues object
+     *
+     * @param \RatingCategoryValues|ObjectCollection $ratingCategoryValues the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildRatingCategoryOptionsQuery The current query, for fluid interface
+     */
+    public function filterByRatingCategoryValues($ratingCategoryValues, $comparison = null)
+    {
+        if ($ratingCategoryValues instanceof \RatingCategoryValues) {
+            return $this
+                ->addUsingAlias(RatingCategoryOptionsTableMap::COL_ID, $ratingCategoryValues->getRatingCatgoryOptionId(), $comparison);
+        } elseif ($ratingCategoryValues instanceof ObjectCollection) {
+            return $this
+                ->useRatingCategoryValuesQuery()
+                ->filterByPrimaryKeys($ratingCategoryValues->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByRatingCategoryValues() only accepts arguments of type \RatingCategoryValues or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the RatingCategoryValues relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildRatingCategoryOptionsQuery The current query, for fluid interface
+     */
+    public function joinRatingCategoryValues($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('RatingCategoryValues');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'RatingCategoryValues');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the RatingCategoryValues relation RatingCategoryValues object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \RatingCategoryValuesQuery A secondary query class using the current class as primary query
+     */
+    public function useRatingCategoryValuesQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinRatingCategoryValues($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'RatingCategoryValues', '\RatingCategoryValuesQuery');
     }
 
     /**

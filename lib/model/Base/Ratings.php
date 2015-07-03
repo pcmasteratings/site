@@ -2,13 +2,10 @@
 
 namespace Base;
 
-use \NewsQuery as ChildNewsQuery;
-use \User as ChildUser;
-use \UserQuery as ChildUserQuery;
-use \DateTime;
+use \RatingsQuery as ChildRatingsQuery;
 use \Exception;
 use \PDO;
-use Map\NewsTableMap;
+use Map\RatingsTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -20,21 +17,20 @@ use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
-use Propel\Runtime\Util\PropelDateTime;
 
 /**
- * Base class that represents a row from the 'news' table.
+ * Base class that represents a row from the 'ratings' table.
  *
  * 
  *
 * @package    propel.generator..Base
 */
-abstract class News implements ActiveRecordInterface 
+abstract class Ratings implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Map\\NewsTableMap';
+    const TABLE_MAP = '\\Map\\RatingsTableMap';
 
 
     /**
@@ -70,39 +66,28 @@ abstract class News implements ActiveRecordInterface
     protected $id;
 
     /**
+     * The value for the initial field.
+     * @var        string
+     */
+    protected $initial;
+
+    /**
      * The value for the title field.
      * @var        string
      */
     protected $title;
 
     /**
-     * The value for the datetime field.
-     * @var        \DateTime
-     */
-    protected $datetime;
-
-    /**
-     * The value for the user_id field.
+     * The value for the description field.
      * @var        string
      */
-    protected $user_id;
+    protected $description;
 
     /**
-     * The value for the content field.
-     * @var        string
+     * The value for the threshold field.
+     * @var        int
      */
-    protected $content;
-
-    /**
-     * The value for the tags field.
-     * @var        string
-     */
-    protected $tags;
-
-    /**
-     * @var        ChildUser
-     */
-    protected $aUser;
+    protected $threshold;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -113,7 +98,7 @@ abstract class News implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * Initializes internal state of Base\News object.
+     * Initializes internal state of Base\Ratings object.
      */
     public function __construct()
     {
@@ -208,9 +193,9 @@ abstract class News implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>News</code> instance.  If
-     * <code>obj</code> is an instance of <code>News</code>, delegates to
-     * <code>equals(News)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>Ratings</code> instance.  If
+     * <code>obj</code> is an instance of <code>Ratings</code>, delegates to
+     * <code>equals(Ratings)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -276,7 +261,7 @@ abstract class News implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|News The current object, for fluid interface
+     * @return $this|Ratings The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -340,6 +325,16 @@ abstract class News implements ActiveRecordInterface
     }
 
     /**
+     * Get the [initial] column value.
+     * 
+     * @return string
+     */
+    public function getInitial()
+    {
+        return $this->initial;
+    }
+
+    /**
      * Get the [title] column value.
      * 
      * @return string
@@ -350,60 +345,30 @@ abstract class News implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [datetime] column value.
-     * 
-     *
-     * @param      string $format The date/time format string (either date()-style or strftime()-style).
-     *                            If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     */
-    public function getDatetime($format = NULL)
-    {
-        if ($format === null) {
-            return $this->datetime;
-        } else {
-            return $this->datetime instanceof \DateTime ? $this->datetime->format($format) : null;
-        }
-    }
-
-    /**
-     * Get the [user_id] column value.
+     * Get the [description] column value.
      * 
      * @return string
      */
-    public function getUserId()
+    public function getDescription()
     {
-        return $this->user_id;
+        return $this->description;
     }
 
     /**
-     * Get the [content] column value.
+     * Get the [threshold] column value.
      * 
-     * @return string
+     * @return int
      */
-    public function getContent()
+    public function getThreshold()
     {
-        return $this->content;
-    }
-
-    /**
-     * Get the [tags] column value.
-     * 
-     * @return string
-     */
-    public function getTags()
-    {
-        return $this->tags;
+        return $this->threshold;
     }
 
     /**
      * Set the value of [id] column.
      * 
      * @param string $v new value
-     * @return $this|\News The current object (for fluent API support)
+     * @return $this|\Ratings The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -413,17 +378,37 @@ abstract class News implements ActiveRecordInterface
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[NewsTableMap::COL_ID] = true;
+            $this->modifiedColumns[RatingsTableMap::COL_ID] = true;
         }
 
         return $this;
     } // setId()
 
     /**
+     * Set the value of [initial] column.
+     * 
+     * @param string $v new value
+     * @return $this|\Ratings The current object (for fluent API support)
+     */
+    public function setInitial($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->initial !== $v) {
+            $this->initial = $v;
+            $this->modifiedColumns[RatingsTableMap::COL_INITIAL] = true;
+        }
+
+        return $this;
+    } // setInitial()
+
+    /**
      * Set the value of [title] column.
      * 
      * @param string $v new value
-     * @return $this|\News The current object (for fluent API support)
+     * @return $this|\Ratings The current object (for fluent API support)
      */
     public function setTitle($v)
     {
@@ -433,95 +418,51 @@ abstract class News implements ActiveRecordInterface
 
         if ($this->title !== $v) {
             $this->title = $v;
-            $this->modifiedColumns[NewsTableMap::COL_TITLE] = true;
+            $this->modifiedColumns[RatingsTableMap::COL_TITLE] = true;
         }
 
         return $this;
     } // setTitle()
 
     /**
-     * Sets the value of [datetime] column to a normalized version of the date/time value specified.
-     * 
-     * @param  mixed $v string, integer (timestamp), or \DateTime value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\News The current object (for fluent API support)
-     */
-    public function setDatetime($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->datetime !== null || $dt !== null) {
-            if ($this->datetime === null || $dt === null || $dt->format("Y-m-d H:i:s") !== $this->datetime->format("Y-m-d H:i:s")) {
-                $this->datetime = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[NewsTableMap::COL_DATETIME] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDatetime()
-
-    /**
-     * Set the value of [user_id] column.
+     * Set the value of [description] column.
      * 
      * @param string $v new value
-     * @return $this|\News The current object (for fluent API support)
+     * @return $this|\Ratings The current object (for fluent API support)
      */
-    public function setUserId($v)
+    public function setDescription($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->user_id !== $v) {
-            $this->user_id = $v;
-            $this->modifiedColumns[NewsTableMap::COL_USER_ID] = true;
-        }
-
-        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
-            $this->aUser = null;
+        if ($this->description !== $v) {
+            $this->description = $v;
+            $this->modifiedColumns[RatingsTableMap::COL_DESCRIPTION] = true;
         }
 
         return $this;
-    } // setUserId()
+    } // setDescription()
 
     /**
-     * Set the value of [content] column.
+     * Set the value of [threshold] column.
      * 
-     * @param string $v new value
-     * @return $this|\News The current object (for fluent API support)
+     * @param int $v new value
+     * @return $this|\Ratings The current object (for fluent API support)
      */
-    public function setContent($v)
+    public function setThreshold($v)
     {
         if ($v !== null) {
-            $v = (string) $v;
+            $v = (int) $v;
         }
 
-        if ($this->content !== $v) {
-            $this->content = $v;
-            $this->modifiedColumns[NewsTableMap::COL_CONTENT] = true;
+        if ($this->threshold !== $v) {
+            $this->threshold = $v;
+            $this->modifiedColumns[RatingsTableMap::COL_THRESHOLD] = true;
         }
 
         return $this;
-    } // setContent()
-
-    /**
-     * Set the value of [tags] column.
-     * 
-     * @param string $v new value
-     * @return $this|\News The current object (for fluent API support)
-     */
-    public function setTags($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->tags !== $v) {
-            $this->tags = $v;
-            $this->modifiedColumns[NewsTableMap::COL_TAGS] = true;
-        }
-
-        return $this;
-    } // setTags()
+    } // setThreshold()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -559,26 +500,20 @@ abstract class News implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : NewsTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : RatingsTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : NewsTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : RatingsTableMap::translateFieldName('Initial', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->initial = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RatingsTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
             $this->title = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : NewsTableMap::translateFieldName('Datetime', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->datetime = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : RatingsTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->description = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : NewsTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_id = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : NewsTableMap::translateFieldName('Content', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->content = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : NewsTableMap::translateFieldName('Tags', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->tags = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : RatingsTableMap::translateFieldName('Threshold', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->threshold = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -587,10 +522,10 @@ abstract class News implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 6; // 6 = NewsTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = RatingsTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\News'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\Ratings'), 0, $e);
         }
     }
 
@@ -609,9 +544,6 @@ abstract class News implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
-        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
-            $this->aUser = null;
-        }
     } // ensureConsistency
 
     /**
@@ -635,13 +567,13 @@ abstract class News implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(NewsTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(RatingsTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildNewsQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildRatingsQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -651,7 +583,6 @@ abstract class News implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aUser = null;
         } // if (deep)
     }
 
@@ -661,8 +592,8 @@ abstract class News implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see News::setDeleted()
-     * @see News::isDeleted()
+     * @see Ratings::setDeleted()
+     * @see Ratings::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -671,11 +602,11 @@ abstract class News implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(NewsTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(RatingsTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildNewsQuery::create()
+            $deleteQuery = ChildRatingsQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -706,7 +637,7 @@ abstract class News implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(NewsTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(RatingsTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -725,7 +656,7 @@ abstract class News implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                NewsTableMap::addInstanceToPool($this);
+                RatingsTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -750,18 +681,6 @@ abstract class News implements ActiveRecordInterface
         $affectedRows = 0; // initialize var to track total num of affected rows
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
-
-            // We call the save method on the following object(s) if they
-            // were passed to this object by their corresponding set
-            // method.  This object relates to these object(s) by a
-            // foreign key reference.
-
-            if ($this->aUser !== null) {
-                if ($this->aUser->isModified() || $this->aUser->isNew()) {
-                    $affectedRows += $this->aUser->save($con);
-                }
-                $this->setUser($this->aUser);
-            }
 
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
@@ -794,33 +713,30 @@ abstract class News implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[NewsTableMap::COL_ID] = true;
+        $this->modifiedColumns[RatingsTableMap::COL_ID] = true;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . NewsTableMap::COL_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . RatingsTableMap::COL_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(NewsTableMap::COL_ID)) {
+        if ($this->isColumnModified(RatingsTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(NewsTableMap::COL_TITLE)) {
+        if ($this->isColumnModified(RatingsTableMap::COL_INITIAL)) {
+            $modifiedColumns[':p' . $index++]  = 'initial';
+        }
+        if ($this->isColumnModified(RatingsTableMap::COL_TITLE)) {
             $modifiedColumns[':p' . $index++]  = 'title';
         }
-        if ($this->isColumnModified(NewsTableMap::COL_DATETIME)) {
-            $modifiedColumns[':p' . $index++]  = 'datetime';
+        if ($this->isColumnModified(RatingsTableMap::COL_DESCRIPTION)) {
+            $modifiedColumns[':p' . $index++]  = 'description';
         }
-        if ($this->isColumnModified(NewsTableMap::COL_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'user_id';
-        }
-        if ($this->isColumnModified(NewsTableMap::COL_CONTENT)) {
-            $modifiedColumns[':p' . $index++]  = 'content';
-        }
-        if ($this->isColumnModified(NewsTableMap::COL_TAGS)) {
-            $modifiedColumns[':p' . $index++]  = 'tags';
+        if ($this->isColumnModified(RatingsTableMap::COL_THRESHOLD)) {
+            $modifiedColumns[':p' . $index++]  = 'threshold';
         }
 
         $sql = sprintf(
-            'INSERT INTO news (%s) VALUES (%s)',
+            'INSERT INTO ratings (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -832,20 +748,17 @@ abstract class News implements ActiveRecordInterface
                     case 'id':                        
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
+                    case 'initial':                        
+                        $stmt->bindValue($identifier, $this->initial, PDO::PARAM_STR);
+                        break;
                     case 'title':                        
                         $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
                         break;
-                    case 'datetime':                        
-                        $stmt->bindValue($identifier, $this->datetime ? $this->datetime->format("Y-m-d H:i:s") : null, PDO::PARAM_STR);
+                    case 'description':                        
+                        $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
                         break;
-                    case 'user_id':                        
-                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
-                        break;
-                    case 'content':                        
-                        $stmt->bindValue($identifier, $this->content, PDO::PARAM_STR);
-                        break;
-                    case 'tags':                        
-                        $stmt->bindValue($identifier, $this->tags, PDO::PARAM_STR);
+                    case 'threshold':                        
+                        $stmt->bindValue($identifier, $this->threshold, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -893,7 +806,7 @@ abstract class News implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = NewsTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = RatingsTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -913,19 +826,16 @@ abstract class News implements ActiveRecordInterface
                 return $this->getId();
                 break;
             case 1:
-                return $this->getTitle();
+                return $this->getInitial();
                 break;
             case 2:
-                return $this->getDatetime();
+                return $this->getTitle();
                 break;
             case 3:
-                return $this->getUserId();
+                return $this->getDescription();
                 break;
             case 4:
-                return $this->getContent();
-                break;
-            case 5:
-                return $this->getTags();
+                return $this->getThreshold();
                 break;
             default:
                 return null;
@@ -944,56 +854,29 @@ abstract class News implements ActiveRecordInterface
      *                    Defaults to TableMap::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
-     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
+    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
     {
 
-        if (isset($alreadyDumpedObjects['News'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['Ratings'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['News'][$this->hashCode()] = true;
-        $keys = NewsTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['Ratings'][$this->hashCode()] = true;
+        $keys = RatingsTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getTitle(),
-            $keys[2] => $this->getDatetime(),
-            $keys[3] => $this->getUserId(),
-            $keys[4] => $this->getContent(),
-            $keys[5] => $this->getTags(),
+            $keys[1] => $this->getInitial(),
+            $keys[2] => $this->getTitle(),
+            $keys[3] => $this->getDescription(),
+            $keys[4] => $this->getThreshold(),
         );
-
-        $utc = new \DateTimeZone('utc');
-        if ($result[$keys[2]] instanceof \DateTime) {
-            // When changing timezone we don't want to change existing instances
-            $dateTime = clone $result[$keys[2]];
-            $result[$keys[2]] = $dateTime->setTimezone($utc)->format('Y-m-d\TH:i:s\Z');
-        }
-        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
         
-        if ($includeForeignObjects) {
-            if (null !== $this->aUser) {
-                
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'user';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'user';
-                        break;
-                    default:
-                        $key = 'User';
-                }
-        
-                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-        }
 
         return $result;
     }
@@ -1007,11 +890,11 @@ abstract class News implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\News
+     * @return $this|\Ratings
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = NewsTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = RatingsTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -1022,7 +905,7 @@ abstract class News implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\News
+     * @return $this|\Ratings
      */
     public function setByPosition($pos, $value)
     {
@@ -1031,19 +914,16 @@ abstract class News implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setTitle($value);
+                $this->setInitial($value);
                 break;
             case 2:
-                $this->setDatetime($value);
+                $this->setTitle($value);
                 break;
             case 3:
-                $this->setUserId($value);
+                $this->setDescription($value);
                 break;
             case 4:
-                $this->setContent($value);
-                break;
-            case 5:
-                $this->setTags($value);
+                $this->setThreshold($value);
                 break;
         } // switch()
 
@@ -1069,25 +949,22 @@ abstract class News implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = NewsTableMap::getFieldNames($keyType);
+        $keys = RatingsTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setTitle($arr[$keys[1]]);
+            $this->setInitial($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setDatetime($arr[$keys[2]]);
+            $this->setTitle($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setUserId($arr[$keys[3]]);
+            $this->setDescription($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setContent($arr[$keys[4]]);
-        }
-        if (array_key_exists($keys[5], $arr)) {
-            $this->setTags($arr[$keys[5]]);
+            $this->setThreshold($arr[$keys[4]]);
         }
     }
 
@@ -1108,7 +985,7 @@ abstract class News implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\News The current object, for fluid interface
+     * @return $this|\Ratings The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1128,25 +1005,22 @@ abstract class News implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(NewsTableMap::DATABASE_NAME);
+        $criteria = new Criteria(RatingsTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(NewsTableMap::COL_ID)) {
-            $criteria->add(NewsTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(RatingsTableMap::COL_ID)) {
+            $criteria->add(RatingsTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(NewsTableMap::COL_TITLE)) {
-            $criteria->add(NewsTableMap::COL_TITLE, $this->title);
+        if ($this->isColumnModified(RatingsTableMap::COL_INITIAL)) {
+            $criteria->add(RatingsTableMap::COL_INITIAL, $this->initial);
         }
-        if ($this->isColumnModified(NewsTableMap::COL_DATETIME)) {
-            $criteria->add(NewsTableMap::COL_DATETIME, $this->datetime);
+        if ($this->isColumnModified(RatingsTableMap::COL_TITLE)) {
+            $criteria->add(RatingsTableMap::COL_TITLE, $this->title);
         }
-        if ($this->isColumnModified(NewsTableMap::COL_USER_ID)) {
-            $criteria->add(NewsTableMap::COL_USER_ID, $this->user_id);
+        if ($this->isColumnModified(RatingsTableMap::COL_DESCRIPTION)) {
+            $criteria->add(RatingsTableMap::COL_DESCRIPTION, $this->description);
         }
-        if ($this->isColumnModified(NewsTableMap::COL_CONTENT)) {
-            $criteria->add(NewsTableMap::COL_CONTENT, $this->content);
-        }
-        if ($this->isColumnModified(NewsTableMap::COL_TAGS)) {
-            $criteria->add(NewsTableMap::COL_TAGS, $this->tags);
+        if ($this->isColumnModified(RatingsTableMap::COL_THRESHOLD)) {
+            $criteria->add(RatingsTableMap::COL_THRESHOLD, $this->threshold);
         }
 
         return $criteria;
@@ -1164,8 +1038,8 @@ abstract class News implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildNewsQuery::create();
-        $criteria->add(NewsTableMap::COL_ID, $this->id);
+        $criteria = ChildRatingsQuery::create();
+        $criteria->add(RatingsTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -1227,18 +1101,17 @@ abstract class News implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \News (or compatible) type.
+     * @param      object $copyObj An object of \Ratings (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setInitial($this->getInitial());
         $copyObj->setTitle($this->getTitle());
-        $copyObj->setDatetime($this->getDatetime());
-        $copyObj->setUserId($this->getUserId());
-        $copyObj->setContent($this->getContent());
-        $copyObj->setTags($this->getTags());
+        $copyObj->setDescription($this->getDescription());
+        $copyObj->setThreshold($this->getThreshold());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1254,7 +1127,7 @@ abstract class News implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \News Clone of current object.
+     * @return \Ratings Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1268,72 +1141,17 @@ abstract class News implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildUser object.
-     *
-     * @param  ChildUser $v
-     * @return $this|\News The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setUser(ChildUser $v = null)
-    {
-        if ($v === null) {
-            $this->setUserId(NULL);
-        } else {
-            $this->setUserId($v->getId());
-        }
-
-        $this->aUser = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildUser object, it will not be re-added.
-        if ($v !== null) {
-            $v->addNews($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildUser object
-     *
-     * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildUser The associated ChildUser object.
-     * @throws PropelException
-     */
-    public function getUser(ConnectionInterface $con = null)
-    {
-        if ($this->aUser === null && (($this->user_id !== "" && $this->user_id !== null))) {
-            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aUser->addNews($this);
-             */
-        }
-
-        return $this->aUser;
-    }
-
-    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
      */
     public function clear()
     {
-        if (null !== $this->aUser) {
-            $this->aUser->removeNews($this);
-        }
         $this->id = null;
+        $this->initial = null;
         $this->title = null;
-        $this->datetime = null;
-        $this->user_id = null;
-        $this->content = null;
-        $this->tags = null;
+        $this->description = null;
+        $this->threshold = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1354,7 +1172,6 @@ abstract class News implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aUser = null;
     }
 
     /**
@@ -1364,7 +1181,7 @@ abstract class News implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(NewsTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(RatingsTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**
