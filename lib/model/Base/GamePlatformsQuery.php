@@ -22,9 +22,15 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildGamePlatformsQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildGamePlatformsQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method     ChildGamePlatformsQuery orderByTitle($order = Criteria::ASC) Order by the title column
+ * @method     ChildGamePlatformsQuery orderByDescription($order = Criteria::ASC) Order by the description column
+ * @method     ChildGamePlatformsQuery orderByGbId($order = Criteria::ASC) Order by the gb_id column
  *
  * @method     ChildGamePlatformsQuery groupById() Group by the id column
  * @method     ChildGamePlatformsQuery groupByName() Group by the name column
+ * @method     ChildGamePlatformsQuery groupByTitle() Group by the title column
+ * @method     ChildGamePlatformsQuery groupByDescription() Group by the description column
+ * @method     ChildGamePlatformsQuery groupByGbId() Group by the gb_id column
  *
  * @method     ChildGamePlatformsQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildGamePlatformsQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -40,17 +46,26 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGamePlatforms findOneOrCreate(ConnectionInterface $con = null) Return the first ChildGamePlatforms matching the query, or a new ChildGamePlatforms object populated from the query conditions when no match is found
  *
  * @method     ChildGamePlatforms findOneById(string $id) Return the first ChildGamePlatforms filtered by the id column
- * @method     ChildGamePlatforms findOneByName(string $name) Return the first ChildGamePlatforms filtered by the name column *
+ * @method     ChildGamePlatforms findOneByName(string $name) Return the first ChildGamePlatforms filtered by the name column
+ * @method     ChildGamePlatforms findOneByTitle(string $title) Return the first ChildGamePlatforms filtered by the title column
+ * @method     ChildGamePlatforms findOneByDescription(string $description) Return the first ChildGamePlatforms filtered by the description column
+ * @method     ChildGamePlatforms findOneByGbId(string $gb_id) Return the first ChildGamePlatforms filtered by the gb_id column *
 
  * @method     ChildGamePlatforms requirePk($key, ConnectionInterface $con = null) Return the ChildGamePlatforms by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGamePlatforms requireOne(ConnectionInterface $con = null) Return the first ChildGamePlatforms matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildGamePlatforms requireOneById(string $id) Return the first ChildGamePlatforms filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGamePlatforms requireOneByName(string $name) Return the first ChildGamePlatforms filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGamePlatforms requireOneByTitle(string $title) Return the first ChildGamePlatforms filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGamePlatforms requireOneByDescription(string $description) Return the first ChildGamePlatforms filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGamePlatforms requireOneByGbId(string $gb_id) Return the first ChildGamePlatforms filtered by the gb_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildGamePlatforms[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildGamePlatforms objects based on current ModelCriteria
  * @method     ChildGamePlatforms[]|ObjectCollection findById(string $id) Return ChildGamePlatforms objects filtered by the id column
  * @method     ChildGamePlatforms[]|ObjectCollection findByName(string $name) Return ChildGamePlatforms objects filtered by the name column
+ * @method     ChildGamePlatforms[]|ObjectCollection findByTitle(string $title) Return ChildGamePlatforms objects filtered by the title column
+ * @method     ChildGamePlatforms[]|ObjectCollection findByDescription(string $description) Return ChildGamePlatforms objects filtered by the description column
+ * @method     ChildGamePlatforms[]|ObjectCollection findByGbId(string $gb_id) Return ChildGamePlatforms objects filtered by the gb_id column
  * @method     ChildGamePlatforms[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -143,7 +158,7 @@ abstract class GamePlatformsQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, name FROM game_platforms WHERE id = :p0';
+        $sql = 'SELECT id, name, title, description, gb_id FROM game_platforms WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -301,6 +316,105 @@ abstract class GamePlatformsQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(GamePlatformsTableMap::COL_NAME, $name, $comparison);
+    }
+
+    /**
+     * Filter the query on the title column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByTitle('fooValue');   // WHERE title = 'fooValue'
+     * $query->filterByTitle('%fooValue%'); // WHERE title LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $title The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildGamePlatformsQuery The current query, for fluid interface
+     */
+    public function filterByTitle($title = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($title)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $title)) {
+                $title = str_replace('*', '%', $title);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(GamePlatformsTableMap::COL_TITLE, $title, $comparison);
+    }
+
+    /**
+     * Filter the query on the description column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDescription('fooValue');   // WHERE description = 'fooValue'
+     * $query->filterByDescription('%fooValue%'); // WHERE description LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $description The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildGamePlatformsQuery The current query, for fluid interface
+     */
+    public function filterByDescription($description = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($description)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $description)) {
+                $description = str_replace('*', '%', $description);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(GamePlatformsTableMap::COL_DESCRIPTION, $description, $comparison);
+    }
+
+    /**
+     * Filter the query on the gb_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByGbId(1234); // WHERE gb_id = 1234
+     * $query->filterByGbId(array(12, 34)); // WHERE gb_id IN (12, 34)
+     * $query->filterByGbId(array('min' => 12)); // WHERE gb_id > 12
+     * </code>
+     *
+     * @param     mixed $gbId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildGamePlatformsQuery The current query, for fluid interface
+     */
+    public function filterByGbId($gbId = null, $comparison = null)
+    {
+        if (is_array($gbId)) {
+            $useMinMax = false;
+            if (isset($gbId['min'])) {
+                $this->addUsingAlias(GamePlatformsTableMap::COL_GB_ID, $gbId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($gbId['max'])) {
+                $this->addUsingAlias(GamePlatformsTableMap::COL_GB_ID, $gbId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(GamePlatformsTableMap::COL_GB_ID, $gbId, $comparison);
     }
 
     /**

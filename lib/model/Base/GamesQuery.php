@@ -26,7 +26,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGamesQuery orderByDescription($order = Criteria::ASC) Order by the description column
  * @method     ChildGamesQuery orderByPublisherId($order = Criteria::ASC) Order by the publisher_id column
  * @method     ChildGamesQuery orderByDeveloperId($order = Criteria::ASC) Order by the developer_id column
- * @method     ChildGamesQuery orderByPort($order = Criteria::ASC) Order by the port column
+ * @method     ChildGamesQuery orderByGbId($order = Criteria::ASC) Order by the gb_id column
+ * @method     ChildGamesQuery orderByGbUrl($order = Criteria::ASC) Order by the gb_url column
  *
  * @method     ChildGamesQuery groupById() Group by the id column
  * @method     ChildGamesQuery groupByName() Group by the name column
@@ -34,7 +35,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGamesQuery groupByDescription() Group by the description column
  * @method     ChildGamesQuery groupByPublisherId() Group by the publisher_id column
  * @method     ChildGamesQuery groupByDeveloperId() Group by the developer_id column
- * @method     ChildGamesQuery groupByPort() Group by the port column
+ * @method     ChildGamesQuery groupByGbId() Group by the gb_id column
+ * @method     ChildGamesQuery groupByGbUrl() Group by the gb_url column
  *
  * @method     ChildGamesQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildGamesQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -67,7 +69,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGames findOneByDescription(string $description) Return the first ChildGames filtered by the description column
  * @method     ChildGames findOneByPublisherId(string $publisher_id) Return the first ChildGames filtered by the publisher_id column
  * @method     ChildGames findOneByDeveloperId(string $developer_id) Return the first ChildGames filtered by the developer_id column
- * @method     ChildGames findOneByPort(boolean $port) Return the first ChildGames filtered by the port column *
+ * @method     ChildGames findOneByGbId(string $gb_id) Return the first ChildGames filtered by the gb_id column
+ * @method     ChildGames findOneByGbUrl(string $gb_url) Return the first ChildGames filtered by the gb_url column *
 
  * @method     ChildGames requirePk($key, ConnectionInterface $con = null) Return the ChildGames by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGames requireOne(ConnectionInterface $con = null) Return the first ChildGames matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -78,7 +81,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGames requireOneByDescription(string $description) Return the first ChildGames filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGames requireOneByPublisherId(string $publisher_id) Return the first ChildGames filtered by the publisher_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGames requireOneByDeveloperId(string $developer_id) Return the first ChildGames filtered by the developer_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGames requireOneByPort(boolean $port) Return the first ChildGames filtered by the port column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGames requireOneByGbId(string $gb_id) Return the first ChildGames filtered by the gb_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGames requireOneByGbUrl(string $gb_url) Return the first ChildGames filtered by the gb_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildGames[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildGames objects based on current ModelCriteria
  * @method     ChildGames[]|ObjectCollection findById(string $id) Return ChildGames objects filtered by the id column
@@ -87,7 +91,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGames[]|ObjectCollection findByDescription(string $description) Return ChildGames objects filtered by the description column
  * @method     ChildGames[]|ObjectCollection findByPublisherId(string $publisher_id) Return ChildGames objects filtered by the publisher_id column
  * @method     ChildGames[]|ObjectCollection findByDeveloperId(string $developer_id) Return ChildGames objects filtered by the developer_id column
- * @method     ChildGames[]|ObjectCollection findByPort(boolean $port) Return ChildGames objects filtered by the port column
+ * @method     ChildGames[]|ObjectCollection findByGbId(string $gb_id) Return ChildGames objects filtered by the gb_id column
+ * @method     ChildGames[]|ObjectCollection findByGbUrl(string $gb_url) Return ChildGames objects filtered by the gb_url column
  * @method     ChildGames[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -180,7 +185,7 @@ abstract class GamesQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, name, title, description, publisher_id, developer_id, port FROM games WHERE id = :p0';
+        $sql = 'SELECT id, name, title, description, publisher_id, developer_id, gb_id, gb_url FROM games WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -485,30 +490,73 @@ abstract class GamesQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the port column
+     * Filter the query on the gb_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByPort(true); // WHERE port = true
-     * $query->filterByPort('yes'); // WHERE port = true
+     * $query->filterByGbId(1234); // WHERE gb_id = 1234
+     * $query->filterByGbId(array(12, 34)); // WHERE gb_id IN (12, 34)
+     * $query->filterByGbId(array('min' => 12)); // WHERE gb_id > 12
      * </code>
      *
-     * @param     boolean|string $port The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     mixed $gbId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildGamesQuery The current query, for fluid interface
      */
-    public function filterByPort($port = null, $comparison = null)
+    public function filterByGbId($gbId = null, $comparison = null)
     {
-        if (is_string($port)) {
-            $port = in_array(strtolower($port), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        if (is_array($gbId)) {
+            $useMinMax = false;
+            if (isset($gbId['min'])) {
+                $this->addUsingAlias(GamesTableMap::COL_GB_ID, $gbId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($gbId['max'])) {
+                $this->addUsingAlias(GamesTableMap::COL_GB_ID, $gbId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
         }
 
-        return $this->addUsingAlias(GamesTableMap::COL_PORT, $port, $comparison);
+        return $this->addUsingAlias(GamesTableMap::COL_GB_ID, $gbId, $comparison);
+    }
+
+    /**
+     * Filter the query on the gb_url column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByGbUrl('fooValue');   // WHERE gb_url = 'fooValue'
+     * $query->filterByGbUrl('%fooValue%'); // WHERE gb_url LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $gbUrl The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildGamesQuery The current query, for fluid interface
+     */
+    public function filterByGbUrl($gbUrl = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($gbUrl)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $gbUrl)) {
+                $gbUrl = str_replace('*', '%', $gbUrl);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(GamesTableMap::COL_GB_URL, $gbUrl, $comparison);
     }
 
     /**

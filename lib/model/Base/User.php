@@ -96,6 +96,27 @@ abstract class User implements ActiveRecordInterface
     protected $reddit_id;
 
     /**
+     * The value for the trusted field.
+     * Note: this column has a database default value of: false
+     * @var        boolean
+     */
+    protected $trusted;
+
+    /**
+     * The value for the admin field.
+     * Note: this column has a database default value of: false
+     * @var        boolean
+     */
+    protected $admin;
+
+    /**
+     * The value for the banned field.
+     * Note: this column has a database default value of: false
+     * @var        boolean
+     */
+    protected $banned;
+
+    /**
      * @var        ObjectCollection|ChildNews[] Collection to store aggregation of ChildNews objects.
      */
     protected $collNews;
@@ -164,10 +185,25 @@ abstract class User implements ActiveRecordInterface
     protected $userWeightssScheduledForDeletion = null;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->trusted = false;
+        $this->admin = false;
+        $this->banned = false;
+    }
+
+    /**
      * Initializes internal state of Base\User object.
+     * @see applyDefaults()
      */
     public function __construct()
     {
+        $this->applyDefaultValues();
     }
 
     /**
@@ -421,6 +457,66 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
+     * Get the [trusted] column value.
+     * 
+     * @return boolean
+     */
+    public function getTrusted()
+    {
+        return $this->trusted;
+    }
+
+    /**
+     * Get the [trusted] column value.
+     * 
+     * @return boolean
+     */
+    public function isTrusted()
+    {
+        return $this->getTrusted();
+    }
+
+    /**
+     * Get the [admin] column value.
+     * 
+     * @return boolean
+     */
+    public function getAdmin()
+    {
+        return $this->admin;
+    }
+
+    /**
+     * Get the [admin] column value.
+     * 
+     * @return boolean
+     */
+    public function isAdmin()
+    {
+        return $this->getAdmin();
+    }
+
+    /**
+     * Get the [banned] column value.
+     * 
+     * @return boolean
+     */
+    public function getBanned()
+    {
+        return $this->banned;
+    }
+
+    /**
+     * Get the [banned] column value.
+     * 
+     * @return boolean
+     */
+    public function isBanned()
+    {
+        return $this->getBanned();
+    }
+
+    /**
      * Set the value of [id] column.
      * 
      * @param string $v new value
@@ -501,6 +597,90 @@ abstract class User implements ActiveRecordInterface
     } // setRedditId()
 
     /**
+     * Sets the value of the [trusted] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * 
+     * @param  boolean|integer|string $v The new value
+     * @return $this|\User The current object (for fluent API support)
+     */
+    public function setTrusted($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->trusted !== $v) {
+            $this->trusted = $v;
+            $this->modifiedColumns[UserTableMap::COL_TRUSTED] = true;
+        }
+
+        return $this;
+    } // setTrusted()
+
+    /**
+     * Sets the value of the [admin] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * 
+     * @param  boolean|integer|string $v The new value
+     * @return $this|\User The current object (for fluent API support)
+     */
+    public function setAdmin($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->admin !== $v) {
+            $this->admin = $v;
+            $this->modifiedColumns[UserTableMap::COL_ADMIN] = true;
+        }
+
+        return $this;
+    } // setAdmin()
+
+    /**
+     * Sets the value of the [banned] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * 
+     * @param  boolean|integer|string $v The new value
+     * @return $this|\User The current object (for fluent API support)
+     */
+    public function setBanned($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->banned !== $v) {
+            $this->banned = $v;
+            $this->modifiedColumns[UserTableMap::COL_BANNED] = true;
+        }
+
+        return $this;
+    } // setBanned()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -510,6 +690,18 @@ abstract class User implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->trusted !== false) {
+                return false;
+            }
+
+            if ($this->admin !== false) {
+                return false;
+            }
+
+            if ($this->banned !== false) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -547,6 +739,15 @@ abstract class User implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : UserTableMap::translateFieldName('RedditId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->reddit_id = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : UserTableMap::translateFieldName('Trusted', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->trusted = (null !== $col) ? (boolean) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : UserTableMap::translateFieldName('Admin', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->admin = (null !== $col) ? (boolean) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : UserTableMap::translateFieldName('Banned', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->banned = (null !== $col) ? (boolean) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -555,7 +756,7 @@ abstract class User implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 4; // 4 = UserTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = UserTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\User'), 0, $e);
@@ -859,6 +1060,15 @@ abstract class User implements ActiveRecordInterface
         if ($this->isColumnModified(UserTableMap::COL_REDDIT_ID)) {
             $modifiedColumns[':p' . $index++]  = 'reddit_id';
         }
+        if ($this->isColumnModified(UserTableMap::COL_TRUSTED)) {
+            $modifiedColumns[':p' . $index++]  = 'trusted';
+        }
+        if ($this->isColumnModified(UserTableMap::COL_ADMIN)) {
+            $modifiedColumns[':p' . $index++]  = 'admin';
+        }
+        if ($this->isColumnModified(UserTableMap::COL_BANNED)) {
+            $modifiedColumns[':p' . $index++]  = 'banned';
+        }
 
         $sql = sprintf(
             'INSERT INTO user (%s) VALUES (%s)',
@@ -881,6 +1091,15 @@ abstract class User implements ActiveRecordInterface
                         break;
                     case 'reddit_id':                        
                         $stmt->bindValue($identifier, $this->reddit_id, PDO::PARAM_STR);
+                        break;
+                    case 'trusted':
+                        $stmt->bindValue($identifier, (int) $this->trusted, PDO::PARAM_INT);
+                        break;
+                    case 'admin':
+                        $stmt->bindValue($identifier, (int) $this->admin, PDO::PARAM_INT);
+                        break;
+                    case 'banned':
+                        $stmt->bindValue($identifier, (int) $this->banned, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -956,6 +1175,15 @@ abstract class User implements ActiveRecordInterface
             case 3:
                 return $this->getRedditId();
                 break;
+            case 4:
+                return $this->getTrusted();
+                break;
+            case 5:
+                return $this->getAdmin();
+                break;
+            case 6:
+                return $this->getBanned();
+                break;
             default:
                 return null;
                 break;
@@ -990,6 +1218,9 @@ abstract class User implements ActiveRecordInterface
             $keys[1] => $this->getUsername(),
             $keys[2] => $this->getPassword(),
             $keys[3] => $this->getRedditId(),
+            $keys[4] => $this->getTrusted(),
+            $keys[5] => $this->getAdmin(),
+            $keys[6] => $this->getBanned(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1118,6 +1349,15 @@ abstract class User implements ActiveRecordInterface
             case 3:
                 $this->setRedditId($value);
                 break;
+            case 4:
+                $this->setTrusted($value);
+                break;
+            case 5:
+                $this->setAdmin($value);
+                break;
+            case 6:
+                $this->setBanned($value);
+                break;
         } // switch()
 
         return $this;
@@ -1155,6 +1395,15 @@ abstract class User implements ActiveRecordInterface
         }
         if (array_key_exists($keys[3], $arr)) {
             $this->setRedditId($arr[$keys[3]]);
+        }
+        if (array_key_exists($keys[4], $arr)) {
+            $this->setTrusted($arr[$keys[4]]);
+        }
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setAdmin($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setBanned($arr[$keys[6]]);
         }
     }
 
@@ -1208,6 +1457,15 @@ abstract class User implements ActiveRecordInterface
         }
         if ($this->isColumnModified(UserTableMap::COL_REDDIT_ID)) {
             $criteria->add(UserTableMap::COL_REDDIT_ID, $this->reddit_id);
+        }
+        if ($this->isColumnModified(UserTableMap::COL_TRUSTED)) {
+            $criteria->add(UserTableMap::COL_TRUSTED, $this->trusted);
+        }
+        if ($this->isColumnModified(UserTableMap::COL_ADMIN)) {
+            $criteria->add(UserTableMap::COL_ADMIN, $this->admin);
+        }
+        if ($this->isColumnModified(UserTableMap::COL_BANNED)) {
+            $criteria->add(UserTableMap::COL_BANNED, $this->banned);
         }
 
         return $criteria;
@@ -1298,6 +1556,9 @@ abstract class User implements ActiveRecordInterface
         $copyObj->setUsername($this->getUsername());
         $copyObj->setPassword($this->getPassword());
         $copyObj->setRedditId($this->getRedditId());
+        $copyObj->setTrusted($this->getTrusted());
+        $copyObj->setAdmin($this->getAdmin());
+        $copyObj->setBanned($this->getBanned());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1845,31 +2106,6 @@ abstract class User implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
      */
-    public function getRatingHeaderssJoinGamePlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildRatingHeadersQuery::create(null, $criteria);
-        $query->joinWith('GamePlatforms', $joinBehavior);
-
-        return $this->getRatingHeaderss($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this User is new, it will return
-     * an empty collection; or if this User has previously
-     * been saved, it will retrieve related RatingHeaderss from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in User.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
-     */
     public function getRatingHeaderssJoinGames(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRatingHeadersQuery::create(null, $criteria);
@@ -1899,6 +2135,31 @@ abstract class User implements ActiveRecordInterface
     {
         $query = ChildRatingHeadersQuery::create(null, $criteria);
         $query->joinWith('Rigs', $joinBehavior);
+
+        return $this->getRatingHeaderss($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related RatingHeaderss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
+     */
+    public function getRatingHeaderssJoinGamePlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildRatingHeadersQuery::create(null, $criteria);
+        $query->joinWith('GamePlatforms', $joinBehavior);
 
         return $this->getRatingHeaderss($query, $con);
     }
@@ -2618,8 +2879,12 @@ abstract class User implements ActiveRecordInterface
         $this->username = null;
         $this->password = null;
         $this->reddit_id = null;
+        $this->trusted = null;
+        $this->admin = null;
+        $this->banned = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

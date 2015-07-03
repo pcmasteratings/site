@@ -24,11 +24,13 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCompaniesQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method     ChildCompaniesQuery orderByTitle($order = Criteria::ASC) Order by the title column
  * @method     ChildCompaniesQuery orderByDescription($order = Criteria::ASC) Order by the description column
+ * @method     ChildCompaniesQuery orderByBgId($order = Criteria::ASC) Order by the bg_id column
  *
  * @method     ChildCompaniesQuery groupById() Group by the id column
  * @method     ChildCompaniesQuery groupByName() Group by the name column
  * @method     ChildCompaniesQuery groupByTitle() Group by the title column
  * @method     ChildCompaniesQuery groupByDescription() Group by the description column
+ * @method     ChildCompaniesQuery groupByBgId() Group by the bg_id column
  *
  * @method     ChildCompaniesQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildCompaniesQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -50,7 +52,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCompanies findOneById(string $id) Return the first ChildCompanies filtered by the id column
  * @method     ChildCompanies findOneByName(string $name) Return the first ChildCompanies filtered by the name column
  * @method     ChildCompanies findOneByTitle(string $title) Return the first ChildCompanies filtered by the title column
- * @method     ChildCompanies findOneByDescription(string $description) Return the first ChildCompanies filtered by the description column *
+ * @method     ChildCompanies findOneByDescription(string $description) Return the first ChildCompanies filtered by the description column
+ * @method     ChildCompanies findOneByBgId(string $bg_id) Return the first ChildCompanies filtered by the bg_id column *
 
  * @method     ChildCompanies requirePk($key, ConnectionInterface $con = null) Return the ChildCompanies by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCompanies requireOne(ConnectionInterface $con = null) Return the first ChildCompanies matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -59,12 +62,14 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCompanies requireOneByName(string $name) Return the first ChildCompanies filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCompanies requireOneByTitle(string $title) Return the first ChildCompanies filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCompanies requireOneByDescription(string $description) Return the first ChildCompanies filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCompanies requireOneByBgId(string $bg_id) Return the first ChildCompanies filtered by the bg_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCompanies[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCompanies objects based on current ModelCriteria
  * @method     ChildCompanies[]|ObjectCollection findById(string $id) Return ChildCompanies objects filtered by the id column
  * @method     ChildCompanies[]|ObjectCollection findByName(string $name) Return ChildCompanies objects filtered by the name column
  * @method     ChildCompanies[]|ObjectCollection findByTitle(string $title) Return ChildCompanies objects filtered by the title column
  * @method     ChildCompanies[]|ObjectCollection findByDescription(string $description) Return ChildCompanies objects filtered by the description column
+ * @method     ChildCompanies[]|ObjectCollection findByBgId(string $bg_id) Return ChildCompanies objects filtered by the bg_id column
  * @method     ChildCompanies[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -157,7 +162,7 @@ abstract class CompaniesQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, name, title, description FROM companies WHERE id = :p0';
+        $sql = 'SELECT id, name, title, description, bg_id FROM companies WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -373,6 +378,47 @@ abstract class CompaniesQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CompaniesTableMap::COL_DESCRIPTION, $description, $comparison);
+    }
+
+    /**
+     * Filter the query on the bg_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByBgId(1234); // WHERE bg_id = 1234
+     * $query->filterByBgId(array(12, 34)); // WHERE bg_id IN (12, 34)
+     * $query->filterByBgId(array('min' => 12)); // WHERE bg_id > 12
+     * </code>
+     *
+     * @param     mixed $bgId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildCompaniesQuery The current query, for fluid interface
+     */
+    public function filterByBgId($bgId = null, $comparison = null)
+    {
+        if (is_array($bgId)) {
+            $useMinMax = false;
+            if (isset($bgId['min'])) {
+                $this->addUsingAlias(CompaniesTableMap::COL_BG_ID, $bgId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($bgId['max'])) {
+                $this->addUsingAlias(CompaniesTableMap::COL_BG_ID, $bgId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CompaniesTableMap::COL_BG_ID, $bgId, $comparison);
     }
 
     /**

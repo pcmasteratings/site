@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \GamePlatforms;
-use \GamePlatformsQuery;
+use \Ratings;
+use \RatingsQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'game_platforms' table.
+ * This class defines the structure of the 'ratings' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class GamePlatformsTableMap extends TableMap
+class RatingsTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class GamePlatformsTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = '.Map.GamePlatformsTableMap';
+    const CLASS_NAME = '.Map.RatingsTableMap';
 
     /**
      * The default database name for this class
@@ -44,17 +44,17 @@ class GamePlatformsTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'game_platforms';
+    const TABLE_NAME = 'ratings';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\GamePlatforms';
+    const OM_CLASS = '\\Ratings';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'GamePlatforms';
+    const CLASS_DEFAULT = 'Ratings';
 
     /**
      * The total number of columns
@@ -74,27 +74,27 @@ class GamePlatformsTableMap extends TableMap
     /**
      * the column name for the id field
      */
-    const COL_ID = 'game_platforms.id';
+    const COL_ID = 'ratings.id';
 
     /**
-     * the column name for the name field
+     * the column name for the initial field
      */
-    const COL_NAME = 'game_platforms.name';
+    const COL_INITIAL = 'ratings.initial';
 
     /**
      * the column name for the title field
      */
-    const COL_TITLE = 'game_platforms.title';
+    const COL_TITLE = 'ratings.title';
 
     /**
      * the column name for the description field
      */
-    const COL_DESCRIPTION = 'game_platforms.description';
+    const COL_DESCRIPTION = 'ratings.description';
 
     /**
-     * the column name for the gb_id field
+     * the column name for the threshold field
      */
-    const COL_GB_ID = 'game_platforms.gb_id';
+    const COL_THRESHOLD = 'ratings.threshold';
 
     /**
      * The default string format for model objects of the related table
@@ -108,10 +108,10 @@ class GamePlatformsTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'Title', 'Description', 'GbId', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'title', 'description', 'gbId', ),
-        self::TYPE_COLNAME       => array(GamePlatformsTableMap::COL_ID, GamePlatformsTableMap::COL_NAME, GamePlatformsTableMap::COL_TITLE, GamePlatformsTableMap::COL_DESCRIPTION, GamePlatformsTableMap::COL_GB_ID, ),
-        self::TYPE_FIELDNAME     => array('id', 'name', 'title', 'description', 'gb_id', ),
+        self::TYPE_PHPNAME       => array('Id', 'Initial', 'Title', 'Description', 'Threshold', ),
+        self::TYPE_CAMELNAME     => array('id', 'initial', 'title', 'description', 'threshold', ),
+        self::TYPE_COLNAME       => array(RatingsTableMap::COL_ID, RatingsTableMap::COL_INITIAL, RatingsTableMap::COL_TITLE, RatingsTableMap::COL_DESCRIPTION, RatingsTableMap::COL_THRESHOLD, ),
+        self::TYPE_FIELDNAME     => array('id', 'initial', 'title', 'description', 'threshold', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
@@ -122,10 +122,10 @@ class GamePlatformsTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Title' => 2, 'Description' => 3, 'GbId' => 4, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, 'gbId' => 4, ),
-        self::TYPE_COLNAME       => array(GamePlatformsTableMap::COL_ID => 0, GamePlatformsTableMap::COL_NAME => 1, GamePlatformsTableMap::COL_TITLE => 2, GamePlatformsTableMap::COL_DESCRIPTION => 3, GamePlatformsTableMap::COL_GB_ID => 4, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, 'gb_id' => 4, ),
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Initial' => 1, 'Title' => 2, 'Description' => 3, 'Threshold' => 4, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'initial' => 1, 'title' => 2, 'description' => 3, 'threshold' => 4, ),
+        self::TYPE_COLNAME       => array(RatingsTableMap::COL_ID => 0, RatingsTableMap::COL_INITIAL => 1, RatingsTableMap::COL_TITLE => 2, RatingsTableMap::COL_DESCRIPTION => 3, RatingsTableMap::COL_THRESHOLD => 4, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'initial' => 1, 'title' => 2, 'description' => 3, 'threshold' => 4, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
@@ -139,18 +139,18 @@ class GamePlatformsTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('game_platforms');
-        $this->setPhpName('GamePlatforms');
+        $this->setName('ratings');
+        $this->setPhpName('Ratings');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\GamePlatforms');
+        $this->setClassName('\\Ratings');
         $this->setPackage('');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
-        $this->addColumn('name', 'Name', 'VARCHAR', true, 255, null);
+        $this->addColumn('initial', 'Initial', 'CHAR', true, null, null);
         $this->addColumn('title', 'Title', 'LONGVARCHAR', true, null, null);
-        $this->addColumn('description', 'Description', 'LONGVARCHAR', true, null, null);
-        $this->addColumn('gb_id', 'GbId', 'BIGINT', true, null, null);
+        $this->addColumn('description', 'Description', 'CLOB', true, null, null);
+        $this->addColumn('threshold', 'Threshold', 'INTEGER', true, null, null);
     } // initialize()
 
     /**
@@ -158,13 +158,6 @@ class GamePlatformsTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('RatingHeaders', '\\RatingHeaders', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':game_platform_id',
-    1 => ':id',
-  ),
-), null, null, 'RatingHeaderss', false);
     } // buildRelations()
 
     /**
@@ -224,7 +217,7 @@ class GamePlatformsTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? GamePlatformsTableMap::CLASS_DEFAULT : GamePlatformsTableMap::OM_CLASS;
+        return $withPrefix ? RatingsTableMap::CLASS_DEFAULT : RatingsTableMap::OM_CLASS;
     }
 
     /**
@@ -238,22 +231,22 @@ class GamePlatformsTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (GamePlatforms object, last column rank)
+     * @return array           (Ratings object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = GamePlatformsTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = GamePlatformsTableMap::getInstanceFromPool($key))) {
+        $key = RatingsTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = RatingsTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + GamePlatformsTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + RatingsTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = GamePlatformsTableMap::OM_CLASS;
-            /** @var GamePlatforms $obj */
+            $cls = RatingsTableMap::OM_CLASS;
+            /** @var Ratings $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            GamePlatformsTableMap::addInstanceToPool($obj, $key);
+            RatingsTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -276,18 +269,18 @@ class GamePlatformsTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = GamePlatformsTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = GamePlatformsTableMap::getInstanceFromPool($key))) {
+            $key = RatingsTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = RatingsTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var GamePlatforms $obj */
+                /** @var Ratings $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                GamePlatformsTableMap::addInstanceToPool($obj, $key);
+                RatingsTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -308,17 +301,17 @@ class GamePlatformsTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(GamePlatformsTableMap::COL_ID);
-            $criteria->addSelectColumn(GamePlatformsTableMap::COL_NAME);
-            $criteria->addSelectColumn(GamePlatformsTableMap::COL_TITLE);
-            $criteria->addSelectColumn(GamePlatformsTableMap::COL_DESCRIPTION);
-            $criteria->addSelectColumn(GamePlatformsTableMap::COL_GB_ID);
+            $criteria->addSelectColumn(RatingsTableMap::COL_ID);
+            $criteria->addSelectColumn(RatingsTableMap::COL_INITIAL);
+            $criteria->addSelectColumn(RatingsTableMap::COL_TITLE);
+            $criteria->addSelectColumn(RatingsTableMap::COL_DESCRIPTION);
+            $criteria->addSelectColumn(RatingsTableMap::COL_THRESHOLD);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.initial');
             $criteria->addSelectColumn($alias . '.title');
             $criteria->addSelectColumn($alias . '.description');
-            $criteria->addSelectColumn($alias . '.gb_id');
+            $criteria->addSelectColumn($alias . '.threshold');
         }
     }
 
@@ -331,7 +324,7 @@ class GamePlatformsTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(GamePlatformsTableMap::DATABASE_NAME)->getTable(GamePlatformsTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(RatingsTableMap::DATABASE_NAME)->getTable(RatingsTableMap::TABLE_NAME);
     }
 
     /**
@@ -339,16 +332,16 @@ class GamePlatformsTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(GamePlatformsTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(GamePlatformsTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new GamePlatformsTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(RatingsTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(RatingsTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new RatingsTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a GamePlatforms or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a Ratings or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or GamePlatforms object or primary key or array of primary keys
+     * @param mixed               $values Criteria or Ratings object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -359,27 +352,27 @@ class GamePlatformsTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(GamePlatformsTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(RatingsTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \GamePlatforms) { // it's a model object
+        } elseif ($values instanceof \Ratings) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(GamePlatformsTableMap::DATABASE_NAME);
-            $criteria->add(GamePlatformsTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(RatingsTableMap::DATABASE_NAME);
+            $criteria->add(RatingsTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = GamePlatformsQuery::create()->mergeWith($criteria);
+        $query = RatingsQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            GamePlatformsTableMap::clearInstancePool();
+            RatingsTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                GamePlatformsTableMap::removeInstanceFromPool($singleval);
+                RatingsTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -387,20 +380,20 @@ class GamePlatformsTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the game_platforms table.
+     * Deletes all rows from the ratings table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return GamePlatformsQuery::create()->doDeleteAll($con);
+        return RatingsQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a GamePlatforms or Criteria object.
+     * Performs an INSERT on the database, given a Ratings or Criteria object.
      *
-     * @param mixed               $criteria Criteria or GamePlatforms object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or Ratings object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -409,22 +402,22 @@ class GamePlatformsTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(GamePlatformsTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(RatingsTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from GamePlatforms object
+            $criteria = $criteria->buildCriteria(); // build Criteria from Ratings object
         }
 
-        if ($criteria->containsKey(GamePlatformsTableMap::COL_ID) && $criteria->keyContainsValue(GamePlatformsTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.GamePlatformsTableMap::COL_ID.')');
+        if ($criteria->containsKey(RatingsTableMap::COL_ID) && $criteria->keyContainsValue(RatingsTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.RatingsTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = GamePlatformsQuery::create()->mergeWith($criteria);
+        $query = RatingsQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -433,7 +426,7 @@ class GamePlatformsTableMap extends TableMap
         });
     }
 
-} // GamePlatformsTableMap
+} // RatingsTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-GamePlatformsTableMap::buildTableMap();
+RatingsTableMap::buildTableMap();

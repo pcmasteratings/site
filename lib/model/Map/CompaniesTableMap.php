@@ -59,7 +59,7 @@ class CompaniesTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 5;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class CompaniesTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 4;
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /**
      * the column name for the id field
@@ -92,6 +92,11 @@ class CompaniesTableMap extends TableMap
     const COL_DESCRIPTION = 'companies.description';
 
     /**
+     * the column name for the bg_id field
+     */
+    const COL_BG_ID = 'companies.bg_id';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -103,11 +108,11 @@ class CompaniesTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'Title', 'Description', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'title', 'description', ),
-        self::TYPE_COLNAME       => array(CompaniesTableMap::COL_ID, CompaniesTableMap::COL_NAME, CompaniesTableMap::COL_TITLE, CompaniesTableMap::COL_DESCRIPTION, ),
-        self::TYPE_FIELDNAME     => array('id', 'name', 'title', 'description', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('Id', 'Name', 'Title', 'Description', 'BgId', ),
+        self::TYPE_CAMELNAME     => array('id', 'name', 'title', 'description', 'bgId', ),
+        self::TYPE_COLNAME       => array(CompaniesTableMap::COL_ID, CompaniesTableMap::COL_NAME, CompaniesTableMap::COL_TITLE, CompaniesTableMap::COL_DESCRIPTION, CompaniesTableMap::COL_BG_ID, ),
+        self::TYPE_FIELDNAME     => array('id', 'name', 'title', 'description', 'bg_id', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -117,11 +122,11 @@ class CompaniesTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Title' => 2, 'Description' => 3, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, ),
-        self::TYPE_COLNAME       => array(CompaniesTableMap::COL_ID => 0, CompaniesTableMap::COL_NAME => 1, CompaniesTableMap::COL_TITLE => 2, CompaniesTableMap::COL_DESCRIPTION => 3, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Title' => 2, 'Description' => 3, 'BgId' => 4, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, 'bgId' => 4, ),
+        self::TYPE_COLNAME       => array(CompaniesTableMap::COL_ID => 0, CompaniesTableMap::COL_NAME => 1, CompaniesTableMap::COL_TITLE => 2, CompaniesTableMap::COL_DESCRIPTION => 3, CompaniesTableMap::COL_BG_ID => 4, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, 'bg_id' => 4, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -145,6 +150,7 @@ class CompaniesTableMap extends TableMap
         $this->addColumn('name', 'Name', 'VARCHAR', true, 255, null);
         $this->addColumn('title', 'Title', 'LONGVARCHAR', true, null, null);
         $this->addColumn('description', 'Description', 'CLOB', true, null, null);
+        $this->addColumn('bg_id', 'BgId', 'BIGINT', true, null, null);
     } // initialize()
 
     /**
@@ -313,11 +319,13 @@ class CompaniesTableMap extends TableMap
             $criteria->addSelectColumn(CompaniesTableMap::COL_NAME);
             $criteria->addSelectColumn(CompaniesTableMap::COL_TITLE);
             $criteria->addSelectColumn(CompaniesTableMap::COL_DESCRIPTION);
+            $criteria->addSelectColumn(CompaniesTableMap::COL_BG_ID);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.title');
             $criteria->addSelectColumn($alias . '.description');
+            $criteria->addSelectColumn($alias . '.bg_id');
         }
     }
 
