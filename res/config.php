@@ -19,3 +19,6 @@ $manager->setConfiguration(array (
 $manager->setName('default');
 $serviceContainer->setConnectionManager('default', $manager);
 $serviceContainer->setDefaultDatasource('default');
+
+//GB apikey - if you need one, ask or get your own from GB.
+GBApi::setApiKey('');
