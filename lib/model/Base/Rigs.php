@@ -678,9 +678,10 @@ abstract class Rigs implements ActiveRecordInterface
 
             if ($this->ratingHeaderssScheduledForDeletion !== null) {
                 if (!$this->ratingHeaderssScheduledForDeletion->isEmpty()) {
-                    \RatingHeadersQuery::create()
-                        ->filterByPrimaryKeys($this->ratingHeaderssScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
+                    foreach ($this->ratingHeaderssScheduledForDeletion as $ratingHeaders) {
+                        // need to save related object because we set the relation to null
+                        $ratingHeaders->save($con);
+                    }
                     $this->ratingHeaderssScheduledForDeletion = null;
                 }
             }
@@ -1466,7 +1467,7 @@ abstract class Rigs implements ActiveRecordInterface
                 $this->ratingHeaderssScheduledForDeletion = clone $this->collRatingHeaderss;
                 $this->ratingHeaderssScheduledForDeletion->clear();
             }
-            $this->ratingHeaderssScheduledForDeletion[]= clone $ratingHeaders;
+            $this->ratingHeaderssScheduledForDeletion[]= $ratingHeaders;
             $ratingHeaders->setRigs(null);
         }
 

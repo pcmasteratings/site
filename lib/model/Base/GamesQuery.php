@@ -28,6 +28,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGamesQuery orderByDeveloperId($order = Criteria::ASC) Order by the developer_id column
  * @method     ChildGamesQuery orderByGbId($order = Criteria::ASC) Order by the gb_id column
  * @method     ChildGamesQuery orderByGbUrl($order = Criteria::ASC) Order by the gb_url column
+ * @method     ChildGamesQuery orderByGbImage($order = Criteria::ASC) Order by the gb_image column
+ * @method     ChildGamesQuery orderByGbThumb($order = Criteria::ASC) Order by the gb_thumb column
  *
  * @method     ChildGamesQuery groupById() Group by the id column
  * @method     ChildGamesQuery groupByName() Group by the name column
@@ -37,6 +39,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGamesQuery groupByDeveloperId() Group by the developer_id column
  * @method     ChildGamesQuery groupByGbId() Group by the gb_id column
  * @method     ChildGamesQuery groupByGbUrl() Group by the gb_url column
+ * @method     ChildGamesQuery groupByGbImage() Group by the gb_image column
+ * @method     ChildGamesQuery groupByGbThumb() Group by the gb_thumb column
  *
  * @method     ChildGamesQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildGamesQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -70,7 +74,9 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGames findOneByPublisherId(string $publisher_id) Return the first ChildGames filtered by the publisher_id column
  * @method     ChildGames findOneByDeveloperId(string $developer_id) Return the first ChildGames filtered by the developer_id column
  * @method     ChildGames findOneByGbId(string $gb_id) Return the first ChildGames filtered by the gb_id column
- * @method     ChildGames findOneByGbUrl(string $gb_url) Return the first ChildGames filtered by the gb_url column *
+ * @method     ChildGames findOneByGbUrl(string $gb_url) Return the first ChildGames filtered by the gb_url column
+ * @method     ChildGames findOneByGbImage(string $gb_image) Return the first ChildGames filtered by the gb_image column
+ * @method     ChildGames findOneByGbThumb(string $gb_thumb) Return the first ChildGames filtered by the gb_thumb column *
 
  * @method     ChildGames requirePk($key, ConnectionInterface $con = null) Return the ChildGames by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGames requireOne(ConnectionInterface $con = null) Return the first ChildGames matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -83,6 +89,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGames requireOneByDeveloperId(string $developer_id) Return the first ChildGames filtered by the developer_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGames requireOneByGbId(string $gb_id) Return the first ChildGames filtered by the gb_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGames requireOneByGbUrl(string $gb_url) Return the first ChildGames filtered by the gb_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGames requireOneByGbImage(string $gb_image) Return the first ChildGames filtered by the gb_image column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGames requireOneByGbThumb(string $gb_thumb) Return the first ChildGames filtered by the gb_thumb column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildGames[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildGames objects based on current ModelCriteria
  * @method     ChildGames[]|ObjectCollection findById(string $id) Return ChildGames objects filtered by the id column
@@ -93,6 +101,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGames[]|ObjectCollection findByDeveloperId(string $developer_id) Return ChildGames objects filtered by the developer_id column
  * @method     ChildGames[]|ObjectCollection findByGbId(string $gb_id) Return ChildGames objects filtered by the gb_id column
  * @method     ChildGames[]|ObjectCollection findByGbUrl(string $gb_url) Return ChildGames objects filtered by the gb_url column
+ * @method     ChildGames[]|ObjectCollection findByGbImage(string $gb_image) Return ChildGames objects filtered by the gb_image column
+ * @method     ChildGames[]|ObjectCollection findByGbThumb(string $gb_thumb) Return ChildGames objects filtered by the gb_thumb column
  * @method     ChildGames[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -185,7 +195,7 @@ abstract class GamesQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, name, title, description, publisher_id, developer_id, gb_id, gb_url FROM games WHERE id = :p0';
+        $sql = 'SELECT id, name, title, description, publisher_id, developer_id, gb_id, gb_url, gb_image, gb_thumb FROM games WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -557,6 +567,64 @@ abstract class GamesQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(GamesTableMap::COL_GB_URL, $gbUrl, $comparison);
+    }
+
+    /**
+     * Filter the query on the gb_image column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByGbImage('fooValue');   // WHERE gb_image = 'fooValue'
+     * $query->filterByGbImage('%fooValue%'); // WHERE gb_image LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $gbImage The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildGamesQuery The current query, for fluid interface
+     */
+    public function filterByGbImage($gbImage = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($gbImage)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $gbImage)) {
+                $gbImage = str_replace('*', '%', $gbImage);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(GamesTableMap::COL_GB_IMAGE, $gbImage, $comparison);
+    }
+
+    /**
+     * Filter the query on the gb_thumb column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByGbThumb('fooValue');   // WHERE gb_thumb = 'fooValue'
+     * $query->filterByGbThumb('%fooValue%'); // WHERE gb_thumb LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $gbThumb The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildGamesQuery The current query, for fluid interface
+     */
+    public function filterByGbThumb($gbThumb = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($gbThumb)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $gbThumb)) {
+                $gbThumb = str_replace('*', '%', $gbThumb);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(GamesTableMap::COL_GB_THUMB, $gbThumb, $comparison);
     }
 
     /**

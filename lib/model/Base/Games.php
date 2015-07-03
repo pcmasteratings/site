@@ -116,6 +116,18 @@ abstract class Games implements ActiveRecordInterface
     protected $gb_url;
 
     /**
+     * The value for the gb_image field.
+     * @var        string
+     */
+    protected $gb_image;
+
+    /**
+     * The value for the gb_thumb field.
+     * @var        string
+     */
+    protected $gb_thumb;
+
+    /**
      * @var        ChildCompanies
      */
     protected $aCompaniesRelatedByPublisherId;
@@ -455,6 +467,26 @@ abstract class Games implements ActiveRecordInterface
     }
 
     /**
+     * Get the [gb_image] column value.
+     * 
+     * @return string
+     */
+    public function getGbImage()
+    {
+        return $this->gb_image;
+    }
+
+    /**
+     * Get the [gb_thumb] column value.
+     * 
+     * @return string
+     */
+    public function getGbThumb()
+    {
+        return $this->gb_thumb;
+    }
+
+    /**
      * Set the value of [id] column.
      * 
      * @param string $v new value
@@ -623,6 +655,46 @@ abstract class Games implements ActiveRecordInterface
     } // setGbUrl()
 
     /**
+     * Set the value of [gb_image] column.
+     * 
+     * @param string $v new value
+     * @return $this|\Games The current object (for fluent API support)
+     */
+    public function setGbImage($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->gb_image !== $v) {
+            $this->gb_image = $v;
+            $this->modifiedColumns[GamesTableMap::COL_GB_IMAGE] = true;
+        }
+
+        return $this;
+    } // setGbImage()
+
+    /**
+     * Set the value of [gb_thumb] column.
+     * 
+     * @param string $v new value
+     * @return $this|\Games The current object (for fluent API support)
+     */
+    public function setGbThumb($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->gb_thumb !== $v) {
+            $this->gb_thumb = $v;
+            $this->modifiedColumns[GamesTableMap::COL_GB_THUMB] = true;
+        }
+
+        return $this;
+    } // setGbThumb()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -681,6 +753,12 @@ abstract class Games implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : GamesTableMap::translateFieldName('GbUrl', TableMap::TYPE_PHPNAME, $indexType)];
             $this->gb_url = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : GamesTableMap::translateFieldName('GbImage', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->gb_image = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : GamesTableMap::translateFieldName('GbThumb', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->gb_thumb = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -689,7 +767,7 @@ abstract class Games implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 8; // 8 = GamesTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = GamesTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Games'), 0, $e);
@@ -975,6 +1053,12 @@ abstract class Games implements ActiveRecordInterface
         if ($this->isColumnModified(GamesTableMap::COL_GB_URL)) {
             $modifiedColumns[':p' . $index++]  = 'gb_url';
         }
+        if ($this->isColumnModified(GamesTableMap::COL_GB_IMAGE)) {
+            $modifiedColumns[':p' . $index++]  = 'gb_image';
+        }
+        if ($this->isColumnModified(GamesTableMap::COL_GB_THUMB)) {
+            $modifiedColumns[':p' . $index++]  = 'gb_thumb';
+        }
 
         $sql = sprintf(
             'INSERT INTO games (%s) VALUES (%s)',
@@ -1009,6 +1093,12 @@ abstract class Games implements ActiveRecordInterface
                         break;
                     case 'gb_url':                        
                         $stmt->bindValue($identifier, $this->gb_url, PDO::PARAM_STR);
+                        break;
+                    case 'gb_image':                        
+                        $stmt->bindValue($identifier, $this->gb_image, PDO::PARAM_STR);
+                        break;
+                    case 'gb_thumb':                        
+                        $stmt->bindValue($identifier, $this->gb_thumb, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1096,6 +1186,12 @@ abstract class Games implements ActiveRecordInterface
             case 7:
                 return $this->getGbUrl();
                 break;
+            case 8:
+                return $this->getGbImage();
+                break;
+            case 9:
+                return $this->getGbThumb();
+                break;
             default:
                 return null;
                 break;
@@ -1134,6 +1230,8 @@ abstract class Games implements ActiveRecordInterface
             $keys[5] => $this->getDeveloperId(),
             $keys[6] => $this->getGbId(),
             $keys[7] => $this->getGbUrl(),
+            $keys[8] => $this->getGbImage(),
+            $keys[9] => $this->getGbThumb(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1259,6 +1357,12 @@ abstract class Games implements ActiveRecordInterface
             case 7:
                 $this->setGbUrl($value);
                 break;
+            case 8:
+                $this->setGbImage($value);
+                break;
+            case 9:
+                $this->setGbThumb($value);
+                break;
         } // switch()
 
         return $this;
@@ -1308,6 +1412,12 @@ abstract class Games implements ActiveRecordInterface
         }
         if (array_key_exists($keys[7], $arr)) {
             $this->setGbUrl($arr[$keys[7]]);
+        }
+        if (array_key_exists($keys[8], $arr)) {
+            $this->setGbImage($arr[$keys[8]]);
+        }
+        if (array_key_exists($keys[9], $arr)) {
+            $this->setGbThumb($arr[$keys[9]]);
         }
     }
 
@@ -1373,6 +1483,12 @@ abstract class Games implements ActiveRecordInterface
         }
         if ($this->isColumnModified(GamesTableMap::COL_GB_URL)) {
             $criteria->add(GamesTableMap::COL_GB_URL, $this->gb_url);
+        }
+        if ($this->isColumnModified(GamesTableMap::COL_GB_IMAGE)) {
+            $criteria->add(GamesTableMap::COL_GB_IMAGE, $this->gb_image);
+        }
+        if ($this->isColumnModified(GamesTableMap::COL_GB_THUMB)) {
+            $criteria->add(GamesTableMap::COL_GB_THUMB, $this->gb_thumb);
         }
 
         return $criteria;
@@ -1467,6 +1583,8 @@ abstract class Games implements ActiveRecordInterface
         $copyObj->setDeveloperId($this->getDeveloperId());
         $copyObj->setGbId($this->getGbId());
         $copyObj->setGbUrl($this->getGbUrl());
+        $copyObj->setGbImage($this->getGbImage());
+        $copyObj->setGbThumb($this->getGbThumb());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2193,6 +2311,8 @@ abstract class Games implements ActiveRecordInterface
         $this->developer_id = null;
         $this->gb_id = null;
         $this->gb_url = null;
+        $this->gb_image = null;
+        $this->gb_thumb = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

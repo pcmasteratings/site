@@ -467,7 +467,7 @@ abstract class RigsQuery extends ModelCriteria
      *
      * @return $this|ChildRigsQuery The current query, for fluid interface
      */
-    public function joinRatingHeaders($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinRatingHeaders($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('RatingHeaders');
@@ -502,7 +502,7 @@ abstract class RigsQuery extends ModelCriteria
      *
      * @return \RatingHeadersQuery A secondary query class using the current class as primary query
      */
-    public function useRatingHeadersQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useRatingHeadersQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinRatingHeaders($relationAlias, $joinType)

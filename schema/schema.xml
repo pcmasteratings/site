@@ -71,6 +71,8 @@
     <column name="developer_id" phpName="DeveloperId" type="BIGINT"/>
     <column name="gb_id" phpName="GbId" type="BIGINT" required="true"/>
     <column name="gb_url" phpName="GbUrl" type="LONGVARCHAR" required="true"/>
+    <column name="gb_image" phpName="GbImage" type="LONGVARCHAR" required="true"/>
+    <column name="gb_thumb" phpName="GbThumb" type="LONGVARCHAR" required="true"/>
     <foreign-key foreignTable="companies" name="games_ibfk_1">
       <reference local="publisher_id" foreign="id"/>
     </foreign-key>
@@ -170,12 +172,12 @@
     <column name="game_id" phpName="GameId" type="BIGINT" required="true"/>
     <column name="user_id" phpName="UserId" type="BIGINT" required="true"/>
     <column name="game_platform_id" phpName="GamePlatformId" type="BIGINT" required="true"/>
-    <column name="rig_id" phpName="RigId" type="BIGINT" required="true"/>
+    <column name="rig_id" phpName="RigId" type="BIGINT"/>
     <column name="created" phpName="Created" type="TIMESTAMP" required="true"/>
-    <column name="upvotes" phpName="Upvotes" type="BIGINT" required="true"/>
-    <column name="downvotes" phpName="Downvotes" type="BIGINT" required="true"/>
+    <column name="upvotes" phpName="Upvotes" type="BIGINT" required="true" defaultValue="0"/>
+    <column name="downvotes" phpName="Downvotes" type="BIGINT" required="true" defaultValue="0"/>
     <column name="comments" phpName="Comments" type="CLOB" required="true"/>
-    <column name="score" phpName="Score" type="INTEGER" required="true"/>
+    <column name="score" phpName="Score" type="INTEGER"/>
     <foreign-key foreignTable="games" name="rating_headers_ibfk_1">
       <reference local="game_id" foreign="id"/>
     </foreign-key>

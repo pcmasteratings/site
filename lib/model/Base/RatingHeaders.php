@@ -111,12 +111,14 @@ abstract class RatingHeaders implements ActiveRecordInterface
 
     /**
      * The value for the upvotes field.
+     * Note: this column has a database default value of: '0'
      * @var        string
      */
     protected $upvotes;
 
     /**
      * The value for the downvotes field.
+     * Note: this column has a database default value of: '0'
      * @var        string
      */
     protected $downvotes;
@@ -174,10 +176,24 @@ abstract class RatingHeaders implements ActiveRecordInterface
     protected $ratingCategoryValuessScheduledForDeletion = null;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->upvotes = '0';
+        $this->downvotes = '0';
+    }
+
+    /**
      * Initializes internal state of Base\RatingHeaders object.
+     * @see applyDefaults()
      */
     public function __construct()
     {
+        $this->applyDefaultValues();
     }
 
     /**
@@ -726,6 +742,14 @@ abstract class RatingHeaders implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->upvotes !== '0') {
+                return false;
+            }
+
+            if ($this->downvotes !== '0') {
+                return false;
+            }
+
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -2197,6 +2221,7 @@ abstract class RatingHeaders implements ActiveRecordInterface
         $this->score = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

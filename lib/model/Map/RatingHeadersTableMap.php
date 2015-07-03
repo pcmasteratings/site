@@ -175,12 +175,12 @@ class RatingHeadersTableMap extends TableMap
         $this->addForeignKey('game_id', 'GameId', 'BIGINT', 'games', 'id', true, null, null);
         $this->addForeignKey('user_id', 'UserId', 'BIGINT', 'user', 'id', true, null, null);
         $this->addForeignKey('game_platform_id', 'GamePlatformId', 'BIGINT', 'game_platforms', 'id', true, null, null);
-        $this->addForeignKey('rig_id', 'RigId', 'BIGINT', 'rigs', 'id', true, null, null);
+        $this->addForeignKey('rig_id', 'RigId', 'BIGINT', 'rigs', 'id', false, null, null);
         $this->addColumn('created', 'Created', 'TIMESTAMP', true, null, null);
-        $this->addColumn('upvotes', 'Upvotes', 'BIGINT', true, null, null);
-        $this->addColumn('downvotes', 'Downvotes', 'BIGINT', true, null, null);
+        $this->addColumn('upvotes', 'Upvotes', 'BIGINT', true, null, 0);
+        $this->addColumn('downvotes', 'Downvotes', 'BIGINT', true, null, 0);
         $this->addColumn('comments', 'Comments', 'CLOB', true, null, null);
-        $this->addColumn('score', 'Score', 'INTEGER', true, null, null);
+        $this->addColumn('score', 'Score', 'INTEGER', false, null, null);
     } // initialize()
 
     /**
