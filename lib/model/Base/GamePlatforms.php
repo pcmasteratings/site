@@ -76,6 +76,24 @@ abstract class GamePlatforms implements ActiveRecordInterface
     protected $name;
 
     /**
+     * The value for the title field.
+     * @var        string
+     */
+    protected $title;
+
+    /**
+     * The value for the description field.
+     * @var        string
+     */
+    protected $description;
+
+    /**
+     * The value for the gb_id field.
+     * @var        string
+     */
+    protected $gb_id;
+
+    /**
      * @var        ObjectCollection|ChildRatingHeaders[] Collection to store aggregation of ChildRatingHeaders objects.
      */
     protected $collRatingHeaderss;
@@ -333,6 +351,36 @@ abstract class GamePlatforms implements ActiveRecordInterface
     }
 
     /**
+     * Get the [title] column value.
+     * 
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Get the [description] column value.
+     * 
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Get the [gb_id] column value.
+     * 
+     * @return string
+     */
+    public function getGbId()
+    {
+        return $this->gb_id;
+    }
+
+    /**
      * Set the value of [id] column.
      * 
      * @param string $v new value
@@ -371,6 +419,66 @@ abstract class GamePlatforms implements ActiveRecordInterface
 
         return $this;
     } // setName()
+
+    /**
+     * Set the value of [title] column.
+     * 
+     * @param string $v new value
+     * @return $this|\GamePlatforms The current object (for fluent API support)
+     */
+    public function setTitle($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->title !== $v) {
+            $this->title = $v;
+            $this->modifiedColumns[GamePlatformsTableMap::COL_TITLE] = true;
+        }
+
+        return $this;
+    } // setTitle()
+
+    /**
+     * Set the value of [description] column.
+     * 
+     * @param string $v new value
+     * @return $this|\GamePlatforms The current object (for fluent API support)
+     */
+    public function setDescription($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->description !== $v) {
+            $this->description = $v;
+            $this->modifiedColumns[GamePlatformsTableMap::COL_DESCRIPTION] = true;
+        }
+
+        return $this;
+    } // setDescription()
+
+    /**
+     * Set the value of [gb_id] column.
+     * 
+     * @param string $v new value
+     * @return $this|\GamePlatforms The current object (for fluent API support)
+     */
+    public function setGbId($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->gb_id !== $v) {
+            $this->gb_id = $v;
+            $this->modifiedColumns[GamePlatformsTableMap::COL_GB_ID] = true;
+        }
+
+        return $this;
+    } // setGbId()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -413,6 +521,15 @@ abstract class GamePlatforms implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : GamePlatformsTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
             $this->name = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : GamePlatformsTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->title = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : GamePlatformsTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->description = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : GamePlatformsTableMap::translateFieldName('GbId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->gb_id = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -421,7 +538,7 @@ abstract class GamePlatforms implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 2; // 2 = GamePlatformsTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = GamePlatformsTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\GamePlatforms'), 0, $e);
@@ -643,6 +760,15 @@ abstract class GamePlatforms implements ActiveRecordInterface
         if ($this->isColumnModified(GamePlatformsTableMap::COL_NAME)) {
             $modifiedColumns[':p' . $index++]  = 'name';
         }
+        if ($this->isColumnModified(GamePlatformsTableMap::COL_TITLE)) {
+            $modifiedColumns[':p' . $index++]  = 'title';
+        }
+        if ($this->isColumnModified(GamePlatformsTableMap::COL_DESCRIPTION)) {
+            $modifiedColumns[':p' . $index++]  = 'description';
+        }
+        if ($this->isColumnModified(GamePlatformsTableMap::COL_GB_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'gb_id';
+        }
 
         $sql = sprintf(
             'INSERT INTO game_platforms (%s) VALUES (%s)',
@@ -659,6 +785,15 @@ abstract class GamePlatforms implements ActiveRecordInterface
                         break;
                     case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+                        break;
+                    case 'title':                        
+                        $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
+                        break;
+                    case 'description':                        
+                        $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
+                        break;
+                    case 'gb_id':                        
+                        $stmt->bindValue($identifier, $this->gb_id, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -728,6 +863,15 @@ abstract class GamePlatforms implements ActiveRecordInterface
             case 1:
                 return $this->getName();
                 break;
+            case 2:
+                return $this->getTitle();
+                break;
+            case 3:
+                return $this->getDescription();
+                break;
+            case 4:
+                return $this->getGbId();
+                break;
             default:
                 return null;
                 break;
@@ -760,6 +904,9 @@ abstract class GamePlatforms implements ActiveRecordInterface
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getName(),
+            $keys[2] => $this->getTitle(),
+            $keys[3] => $this->getDescription(),
+            $keys[4] => $this->getGbId(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -822,6 +969,15 @@ abstract class GamePlatforms implements ActiveRecordInterface
             case 1:
                 $this->setName($value);
                 break;
+            case 2:
+                $this->setTitle($value);
+                break;
+            case 3:
+                $this->setDescription($value);
+                break;
+            case 4:
+                $this->setGbId($value);
+                break;
         } // switch()
 
         return $this;
@@ -853,6 +1009,15 @@ abstract class GamePlatforms implements ActiveRecordInterface
         }
         if (array_key_exists($keys[1], $arr)) {
             $this->setName($arr[$keys[1]]);
+        }
+        if (array_key_exists($keys[2], $arr)) {
+            $this->setTitle($arr[$keys[2]]);
+        }
+        if (array_key_exists($keys[3], $arr)) {
+            $this->setDescription($arr[$keys[3]]);
+        }
+        if (array_key_exists($keys[4], $arr)) {
+            $this->setGbId($arr[$keys[4]]);
         }
     }
 
@@ -900,6 +1065,15 @@ abstract class GamePlatforms implements ActiveRecordInterface
         }
         if ($this->isColumnModified(GamePlatformsTableMap::COL_NAME)) {
             $criteria->add(GamePlatformsTableMap::COL_NAME, $this->name);
+        }
+        if ($this->isColumnModified(GamePlatformsTableMap::COL_TITLE)) {
+            $criteria->add(GamePlatformsTableMap::COL_TITLE, $this->title);
+        }
+        if ($this->isColumnModified(GamePlatformsTableMap::COL_DESCRIPTION)) {
+            $criteria->add(GamePlatformsTableMap::COL_DESCRIPTION, $this->description);
+        }
+        if ($this->isColumnModified(GamePlatformsTableMap::COL_GB_ID)) {
+            $criteria->add(GamePlatformsTableMap::COL_GB_ID, $this->gb_id);
         }
 
         return $criteria;
@@ -988,6 +1162,9 @@ abstract class GamePlatforms implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setName($this->getName());
+        $copyObj->setTitle($this->getTitle());
+        $copyObj->setDescription($this->getDescription());
+        $copyObj->setGbId($this->getGbId());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1348,6 +1525,9 @@ abstract class GamePlatforms implements ActiveRecordInterface
     {
         $this->id = null;
         $this->name = null;
+        $this->title = null;
+        $this->description = null;
+        $this->gb_id = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

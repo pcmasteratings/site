@@ -59,7 +59,7 @@ class UserTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class UserTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 4;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the id field
@@ -92,6 +92,21 @@ class UserTableMap extends TableMap
     const COL_REDDIT_ID = 'user.reddit_id';
 
     /**
+     * the column name for the trusted field
+     */
+    const COL_TRUSTED = 'user.trusted';
+
+    /**
+     * the column name for the admin field
+     */
+    const COL_ADMIN = 'user.admin';
+
+    /**
+     * the column name for the banned field
+     */
+    const COL_BANNED = 'user.banned';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -103,11 +118,11 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Username', 'Password', 'RedditId', ),
-        self::TYPE_CAMELNAME     => array('id', 'username', 'password', 'redditId', ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_ID, UserTableMap::COL_USERNAME, UserTableMap::COL_PASSWORD, UserTableMap::COL_REDDIT_ID, ),
-        self::TYPE_FIELDNAME     => array('id', 'username', 'password', 'reddit_id', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('Id', 'Username', 'Password', 'RedditId', 'Trusted', 'Admin', 'Banned', ),
+        self::TYPE_CAMELNAME     => array('id', 'username', 'password', 'redditId', 'trusted', 'admin', 'banned', ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_ID, UserTableMap::COL_USERNAME, UserTableMap::COL_PASSWORD, UserTableMap::COL_REDDIT_ID, UserTableMap::COL_TRUSTED, UserTableMap::COL_ADMIN, UserTableMap::COL_BANNED, ),
+        self::TYPE_FIELDNAME     => array('id', 'username', 'password', 'reddit_id', 'trusted', 'admin', 'banned', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -117,11 +132,11 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Username' => 1, 'Password' => 2, 'RedditId' => 3, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'username' => 1, 'password' => 2, 'redditId' => 3, ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_ID => 0, UserTableMap::COL_USERNAME => 1, UserTableMap::COL_PASSWORD => 2, UserTableMap::COL_REDDIT_ID => 3, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'username' => 1, 'password' => 2, 'reddit_id' => 3, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Username' => 1, 'Password' => 2, 'RedditId' => 3, 'Trusted' => 4, 'Admin' => 5, 'Banned' => 6, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'username' => 1, 'password' => 2, 'redditId' => 3, 'trusted' => 4, 'admin' => 5, 'banned' => 6, ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_ID => 0, UserTableMap::COL_USERNAME => 1, UserTableMap::COL_PASSWORD => 2, UserTableMap::COL_REDDIT_ID => 3, UserTableMap::COL_TRUSTED => 4, UserTableMap::COL_ADMIN => 5, UserTableMap::COL_BANNED => 6, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'username' => 1, 'password' => 2, 'reddit_id' => 3, 'trusted' => 4, 'admin' => 5, 'banned' => 6, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -145,6 +160,9 @@ class UserTableMap extends TableMap
         $this->addColumn('username', 'Username', 'LONGVARCHAR', true, null, null);
         $this->addColumn('password', 'Password', 'LONGVARCHAR', true, null, null);
         $this->addColumn('reddit_id', 'RedditId', 'VARCHAR', true, 32, null);
+        $this->addColumn('trusted', 'Trusted', 'BOOLEAN', true, 1, false);
+        $this->addColumn('admin', 'Admin', 'BOOLEAN', true, 1, false);
+        $this->addColumn('banned', 'Banned', 'BOOLEAN', true, 1, false);
     } // initialize()
 
     /**
@@ -334,11 +352,17 @@ class UserTableMap extends TableMap
             $criteria->addSelectColumn(UserTableMap::COL_USERNAME);
             $criteria->addSelectColumn(UserTableMap::COL_PASSWORD);
             $criteria->addSelectColumn(UserTableMap::COL_REDDIT_ID);
+            $criteria->addSelectColumn(UserTableMap::COL_TRUSTED);
+            $criteria->addSelectColumn(UserTableMap::COL_ADMIN);
+            $criteria->addSelectColumn(UserTableMap::COL_BANNED);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.username');
             $criteria->addSelectColumn($alias . '.password');
             $criteria->addSelectColumn($alias . '.reddit_id');
+            $criteria->addSelectColumn($alias . '.trusted');
+            $criteria->addSelectColumn($alias . '.admin');
+            $criteria->addSelectColumn($alias . '.banned');
         }
     }
 

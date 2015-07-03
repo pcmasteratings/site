@@ -77,9 +77,9 @@ class RatingCategoriesTableMap extends TableMap
     const COL_ID = 'rating_categories.ID';
 
     /**
-     * the column name for the name field
+     * the column name for the title field
      */
-    const COL_NAME = 'rating_categories.name';
+    const COL_TITLE = 'rating_categories.title';
 
     /**
      * the column name for the description field
@@ -108,10 +108,10 @@ class RatingCategoriesTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'Description', 'Weight', 'Sequence', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'description', 'weight', 'sequence', ),
-        self::TYPE_COLNAME       => array(RatingCategoriesTableMap::COL_ID, RatingCategoriesTableMap::COL_NAME, RatingCategoriesTableMap::COL_DESCRIPTION, RatingCategoriesTableMap::COL_WEIGHT, RatingCategoriesTableMap::COL_SEQUENCE, ),
-        self::TYPE_FIELDNAME     => array('ID', 'name', 'description', 'weight', 'sequence', ),
+        self::TYPE_PHPNAME       => array('Id', 'Title', 'Description', 'Weight', 'Sequence', ),
+        self::TYPE_CAMELNAME     => array('id', 'title', 'description', 'weight', 'sequence', ),
+        self::TYPE_COLNAME       => array(RatingCategoriesTableMap::COL_ID, RatingCategoriesTableMap::COL_TITLE, RatingCategoriesTableMap::COL_DESCRIPTION, RatingCategoriesTableMap::COL_WEIGHT, RatingCategoriesTableMap::COL_SEQUENCE, ),
+        self::TYPE_FIELDNAME     => array('ID', 'title', 'description', 'weight', 'sequence', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
@@ -122,10 +122,10 @@ class RatingCategoriesTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Description' => 2, 'Weight' => 3, 'Sequence' => 4, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'description' => 2, 'weight' => 3, 'sequence' => 4, ),
-        self::TYPE_COLNAME       => array(RatingCategoriesTableMap::COL_ID => 0, RatingCategoriesTableMap::COL_NAME => 1, RatingCategoriesTableMap::COL_DESCRIPTION => 2, RatingCategoriesTableMap::COL_WEIGHT => 3, RatingCategoriesTableMap::COL_SEQUENCE => 4, ),
-        self::TYPE_FIELDNAME     => array('ID' => 0, 'name' => 1, 'description' => 2, 'weight' => 3, 'sequence' => 4, ),
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'Description' => 2, 'Weight' => 3, 'Sequence' => 4, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'description' => 2, 'weight' => 3, 'sequence' => 4, ),
+        self::TYPE_COLNAME       => array(RatingCategoriesTableMap::COL_ID => 0, RatingCategoriesTableMap::COL_TITLE => 1, RatingCategoriesTableMap::COL_DESCRIPTION => 2, RatingCategoriesTableMap::COL_WEIGHT => 3, RatingCategoriesTableMap::COL_SEQUENCE => 4, ),
+        self::TYPE_FIELDNAME     => array('ID' => 0, 'title' => 1, 'description' => 2, 'weight' => 3, 'sequence' => 4, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
@@ -147,7 +147,7 @@ class RatingCategoriesTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('ID', 'Id', 'BIGINT', true, null, null);
-        $this->addColumn('name', 'Name', 'LONGVARCHAR', true, null, null);
+        $this->addColumn('title', 'Title', 'LONGVARCHAR', true, null, null);
         $this->addColumn('description', 'Description', 'CLOB', true, null, null);
         $this->addColumn('weight', 'Weight', 'INTEGER', true, null, null);
         $this->addColumn('sequence', 'Sequence', 'INTEGER', true, null, null);
@@ -332,13 +332,13 @@ class RatingCategoriesTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(RatingCategoriesTableMap::COL_ID);
-            $criteria->addSelectColumn(RatingCategoriesTableMap::COL_NAME);
+            $criteria->addSelectColumn(RatingCategoriesTableMap::COL_TITLE);
             $criteria->addSelectColumn(RatingCategoriesTableMap::COL_DESCRIPTION);
             $criteria->addSelectColumn(RatingCategoriesTableMap::COL_WEIGHT);
             $criteria->addSelectColumn(RatingCategoriesTableMap::COL_SEQUENCE);
         } else {
             $criteria->addSelectColumn($alias . '.ID');
-            $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.title');
             $criteria->addSelectColumn($alias . '.description');
             $criteria->addSelectColumn($alias . '.weight');
             $criteria->addSelectColumn($alias . '.sequence');

@@ -87,19 +87,19 @@ class RatingCategoryValuesTableMap extends TableMap
     const COL_RATING_CATEGORY_ID = 'rating_category_values.rating_category_id';
 
     /**
-     * the column name for the value field
+     * the column name for the rating_catgory_option_id field
      */
-    const COL_VALUE = 'rating_category_values.value';
+    const COL_RATING_CATGORY_OPTION_ID = 'rating_category_values.rating_catgory_option_id';
 
     /**
-     * the column name for the sequence field
+     * the column name for the original_value field
      */
-    const COL_SEQUENCE = 'rating_category_values.sequence';
+    const COL_ORIGINAL_VALUE = 'rating_category_values.original_value';
 
     /**
-     * the column name for the review field
+     * the column name for the comments field
      */
-    const COL_REVIEW = 'rating_category_values.review';
+    const COL_COMMENTS = 'rating_category_values.comments';
 
     /**
      * The default string format for model objects of the related table
@@ -113,10 +113,10 @@ class RatingCategoryValuesTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'RatingHeaderId', 'RatingCategoryId', 'Value', 'Sequence', 'Review', ),
-        self::TYPE_CAMELNAME     => array('id', 'ratingHeaderId', 'ratingCategoryId', 'value', 'sequence', 'review', ),
-        self::TYPE_COLNAME       => array(RatingCategoryValuesTableMap::COL_ID, RatingCategoryValuesTableMap::COL_RATING_HEADER_ID, RatingCategoryValuesTableMap::COL_RATING_CATEGORY_ID, RatingCategoryValuesTableMap::COL_VALUE, RatingCategoryValuesTableMap::COL_SEQUENCE, RatingCategoryValuesTableMap::COL_REVIEW, ),
-        self::TYPE_FIELDNAME     => array('id', 'rating_header_id', 'rating_category_id', 'value', 'sequence', 'review', ),
+        self::TYPE_PHPNAME       => array('Id', 'RatingHeaderId', 'RatingCategoryId', 'RatingCatgoryOptionId', 'OriginalValue', 'Comments', ),
+        self::TYPE_CAMELNAME     => array('id', 'ratingHeaderId', 'ratingCategoryId', 'ratingCatgoryOptionId', 'originalValue', 'comments', ),
+        self::TYPE_COLNAME       => array(RatingCategoryValuesTableMap::COL_ID, RatingCategoryValuesTableMap::COL_RATING_HEADER_ID, RatingCategoryValuesTableMap::COL_RATING_CATEGORY_ID, RatingCategoryValuesTableMap::COL_RATING_CATGORY_OPTION_ID, RatingCategoryValuesTableMap::COL_ORIGINAL_VALUE, RatingCategoryValuesTableMap::COL_COMMENTS, ),
+        self::TYPE_FIELDNAME     => array('id', 'rating_header_id', 'rating_category_id', 'rating_catgory_option_id', 'original_value', 'comments', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
@@ -127,10 +127,10 @@ class RatingCategoryValuesTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'RatingHeaderId' => 1, 'RatingCategoryId' => 2, 'Value' => 3, 'Sequence' => 4, 'Review' => 5, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'ratingHeaderId' => 1, 'ratingCategoryId' => 2, 'value' => 3, 'sequence' => 4, 'review' => 5, ),
-        self::TYPE_COLNAME       => array(RatingCategoryValuesTableMap::COL_ID => 0, RatingCategoryValuesTableMap::COL_RATING_HEADER_ID => 1, RatingCategoryValuesTableMap::COL_RATING_CATEGORY_ID => 2, RatingCategoryValuesTableMap::COL_VALUE => 3, RatingCategoryValuesTableMap::COL_SEQUENCE => 4, RatingCategoryValuesTableMap::COL_REVIEW => 5, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'rating_header_id' => 1, 'rating_category_id' => 2, 'value' => 3, 'sequence' => 4, 'review' => 5, ),
+        self::TYPE_PHPNAME       => array('Id' => 0, 'RatingHeaderId' => 1, 'RatingCategoryId' => 2, 'RatingCatgoryOptionId' => 3, 'OriginalValue' => 4, 'Comments' => 5, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'ratingHeaderId' => 1, 'ratingCategoryId' => 2, 'ratingCatgoryOptionId' => 3, 'originalValue' => 4, 'comments' => 5, ),
+        self::TYPE_COLNAME       => array(RatingCategoryValuesTableMap::COL_ID => 0, RatingCategoryValuesTableMap::COL_RATING_HEADER_ID => 1, RatingCategoryValuesTableMap::COL_RATING_CATEGORY_ID => 2, RatingCategoryValuesTableMap::COL_RATING_CATGORY_OPTION_ID => 3, RatingCategoryValuesTableMap::COL_ORIGINAL_VALUE => 4, RatingCategoryValuesTableMap::COL_COMMENTS => 5, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'rating_header_id' => 1, 'rating_category_id' => 2, 'rating_catgory_option_id' => 3, 'original_value' => 4, 'comments' => 5, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
@@ -154,9 +154,9 @@ class RatingCategoryValuesTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
         $this->addForeignKey('rating_header_id', 'RatingHeaderId', 'BIGINT', 'rating_headers', 'id', true, null, null);
         $this->addForeignKey('rating_category_id', 'RatingCategoryId', 'BIGINT', 'rating_categories', 'ID', true, null, null);
-        $this->addColumn('value', 'Value', 'INTEGER', true, null, null);
-        $this->addColumn('sequence', 'Sequence', 'INTEGER', true, null, null);
-        $this->addColumn('review', 'Review', 'LONGVARCHAR', true, null, null);
+        $this->addForeignKey('rating_catgory_option_id', 'RatingCatgoryOptionId', 'BIGINT', 'rating_category_options', 'id', true, null, null);
+        $this->addColumn('original_value', 'OriginalValue', 'INTEGER', true, null, null);
+        $this->addColumn('comments', 'Comments', 'LONGVARCHAR', true, null, null);
     } // initialize()
 
     /**
@@ -178,6 +178,13 @@ class RatingCategoryValuesTableMap extends TableMap
     1 => ':ID',
   ),
 ), 'CASCADE', 'CASCADE', null, false);
+        $this->addRelation('RatingCategoryOptions', '\\RatingCategoryOptions', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':rating_catgory_option_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
     } // buildRelations()
 
     /**
@@ -324,16 +331,16 @@ class RatingCategoryValuesTableMap extends TableMap
             $criteria->addSelectColumn(RatingCategoryValuesTableMap::COL_ID);
             $criteria->addSelectColumn(RatingCategoryValuesTableMap::COL_RATING_HEADER_ID);
             $criteria->addSelectColumn(RatingCategoryValuesTableMap::COL_RATING_CATEGORY_ID);
-            $criteria->addSelectColumn(RatingCategoryValuesTableMap::COL_VALUE);
-            $criteria->addSelectColumn(RatingCategoryValuesTableMap::COL_SEQUENCE);
-            $criteria->addSelectColumn(RatingCategoryValuesTableMap::COL_REVIEW);
+            $criteria->addSelectColumn(RatingCategoryValuesTableMap::COL_RATING_CATGORY_OPTION_ID);
+            $criteria->addSelectColumn(RatingCategoryValuesTableMap::COL_ORIGINAL_VALUE);
+            $criteria->addSelectColumn(RatingCategoryValuesTableMap::COL_COMMENTS);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.rating_header_id');
             $criteria->addSelectColumn($alias . '.rating_category_id');
-            $criteria->addSelectColumn($alias . '.value');
-            $criteria->addSelectColumn($alias . '.sequence');
-            $criteria->addSelectColumn($alias . '.review');
+            $criteria->addSelectColumn($alias . '.rating_catgory_option_id');
+            $criteria->addSelectColumn($alias . '.original_value');
+            $criteria->addSelectColumn($alias . '.comments');
         }
     }
 

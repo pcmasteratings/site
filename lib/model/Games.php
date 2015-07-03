@@ -53,6 +53,7 @@ class Games extends BaseGames
         $name_base = str_replace(array_keys(Games::$TRANSLITERATABLE_CHARACTERS), 
                                 array_values(Games::$TRANSLITERATABLE_CHARACTERS), $title);
         $name_base = strtolower($name_base);
+        $name_base = preg_replace("/[']/", '', $name_base);
         $name_base = preg_replace("/[^a-z0-9]/", '_', $name_base);
 
         $name_base = preg_replace('/_+/', '_',$name_base);
