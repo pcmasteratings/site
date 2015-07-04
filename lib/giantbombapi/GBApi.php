@@ -33,7 +33,9 @@ abstract class GBApi
       'name',
       'original_release_date',
       'image',
-      'api_detail_url'
+      'api_detail_url',
+      'deck',
+      'image'
     ],
     $limit);
 
@@ -45,13 +47,14 @@ abstract class GBApi
       {
         $game = new Games();
         $game->setGbId($result->id);
-        $game->setName($result->name);
+        $game->setName(Games::generateUniqueName($result->name, $result->original_release_date));
         $game->setGbUrl($result->api_detail_url);
-        $game->setTitle('Test Title');
-        $game->setDescription('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac nulla at arcu egestas convallis eget id odio. Curabitur magna felis, congue quis pretium id, pulvinar sed turpis. Praesent ac tortor tortor. In hac habitasse platea dictumst. Morbi fringilla sapien in lectus ultrices, quis varius sapien condimentum. Vivamus fringilla condimentum risus, nec egestas libero sagittis nec. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla facilisi.');
+        $game->setTitle($result->name);
+        $game->setDescription($result->deck);
+        $game->setGbThumb($result->image->screen_url);
+        $game->setGbImage($result->image->medium_url);
         $game->save();
       }
-
       //append result to list.
       array_push($games, $game);
     }
@@ -77,7 +80,7 @@ abstract class GBApi
       //Implode the array so we can add it to the gb request in string format
       $fieldStr = '&field_list='.implode($glue, $fieldArr);
     }
-    
+
     //sanitise query
     $query = trim(preg_replace('/ +/', ' ', preg_replace('/[^A-Za-z0-9 ]/', ' ', urldecode(html_entity_decode(strip_tags($query))))));
     //generate url
@@ -101,7 +104,6 @@ abstract class GBApi
     {
       throw new GBApiException('No results found.');
     }
-
 
     return $json;
   }

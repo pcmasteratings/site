@@ -6,7 +6,7 @@ require('res/include.php');
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/index.css'>
   <?php include('res/head.php'); ?>
   <title>PC Masterratings</title>
 
@@ -61,9 +61,9 @@ require('res/include.php');
           $game = $games[$index];
           echo "<div class='col-sm-6 col-md-4'>
             <div class='thumbnail'>
-            <img src='/tmp/thumbnail.svg' alt='thumbnail'>
+            <img src='{$game->getGbImage()}' alt='{$game->getName()}'>
               <div class='caption'>
-                <h3>{$game->getName()}</h3>
+                <h3>{$game->getTitle()}</h3>
                 <p> {$game->getDescription()} </p>
               </div>
           </div>
