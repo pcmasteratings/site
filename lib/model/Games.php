@@ -85,6 +85,46 @@ class Games extends BaseGames
         }
 
     }
-    
-    
+
+    public function getValidPlatforms() {
+        $con = \Propel\Runtime\Propel::getConnection();
+        $cmd = $con->prepare("SELECT DISTINCT gp.id, gp.name, gp.title FROM rating_headers rh INNER JOIN game_platforms gp ON gp.id = rh.game_platform_id WHERE game_id = :gameid");
+        $cmd->execute(array(':gameid' => $this->getId()));
+        $results = $cmd->fetchAll();
+        return $results;
+    }
+
+    public function getAverageRatingForDefaultPlatform() {
+        $platforms = $this->getValidPlatforms();
+        $windows_present = false;
+        foreach($platforms as $platform) {
+            if($platform["name"]=="windows") {
+                $windows_present = true;
+            }
+        }
+        if($windows_present) {
+            return $this->getAverageRating("windows");
+        } else {
+            return $this->getAverageRating($platforms[0]["name"]);
+        }
+    }
+
+    public function getAverageRating($platform) {
+        $con = \Propel\Runtime\Propel::getConnection();
+        $cmd = $con->prepare("SELECT rating FROM game_ratings WHERE id = :id AND platform = :platform");
+        $cmd->execute(array(':id' => $this->getId(), ':platform' => $platform));
+
+        $result = $cmd->fetchColumn(0);
+        return $result;
+    }
+
+    public function getAverageCategoryRatingDescription($platform, $category_id) {
+        $con = \Propel\Runtime\Propel::getConnection();
+        $cmd = $con->prepare("SELECT rating_description FROM game_category_ratings WHERE id = :id AND platform = :platform AND rating_category_id = :cat_id");
+        $cmd->execute(array(':id' => $this->getId(), ':platform' => $platform, ':cat_id' => $category_id));
+        $result = $cmd->fetchColumn(0);
+        return $result;
+    }
+
+
 }

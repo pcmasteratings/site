@@ -1,14 +1,13 @@
 <?php
 require("res/include.php");
 if(!array_key_exists("game",$_GET)) {
-    //header("Location: /"); /* Redirect browser */
-    echo 'NO GAME';
+    header("Location: /"); /* Redirect browser */
     exit();
 } else {
     $query = new GamesQuery();
     $game = $query->findOneByName($_GET["game"]);
     if($game==null) {
-        echo 'GAME NOT FOUND';
+        header("Location: /"); /* Redirect browser */
         exit();
     }
 }
@@ -27,11 +26,18 @@ if(array_key_exists("category_options_1",$_POST)) {
         }
         $platform = $_POST["platform"];
 
+        $query = new GamePlatformsQuery();
+        $platform = $query->findOneById($platform);
+
+        if($platform==null) {
+            throw new Exception("Invalid platform");
+        }
+
         $header = new RatingHeaders();
         $header->setUserId($user->getId());
         $header->setGameId($game->getId());
         $header->setCreated(new DateTime());
-        $header->setGamePlatformId($platform);
+        $header->setGamePlatforms($platform);
         $header->save($con);
 
         $score = 0;
@@ -65,7 +71,7 @@ if(array_key_exists("category_options_1",$_POST)) {
         $header->save();
 
         $con->commit();
-        echo "Save successful!";
+        header("Location: /game.php?name=". $game->getName()."&platform=". $platform->getName()); /* Redirect browser */
     } catch (Exception $e) {
         $con->rollback();
         echo $e->getMessage();

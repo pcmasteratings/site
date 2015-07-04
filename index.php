@@ -16,67 +16,32 @@ require("res/include.php");
 
 <div class="container">
     <div class="col-md-8">
-        <h1>Top games</h1>
-        <div class="row">
-            <div class="col-sm-6 col-md-4">
-                <div class="thumbnail">
+        <h1>Most recent games</h1>
+        <?php
+            $query = new GamesQuery();
+            $query->limit(6);
+            $query->orderById("DESC");
+            $games = $query->find();
 
-                    <img src="/tmp/thumbnail.svg" alt="thumbnail">
-                    <img class="rating-badge" src="/img/badges/r_tiny.jpg" alt="R">
-                    <div class="caption">
-                        <h3>Some game</h3>
-                        <p> ...... </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4">
-                <div class="thumbnail">
-                    <img src="/tmp/thumbnail.svg" alt="thumbnail">
-                    <div class="caption">
-                        <h3>Some game</h3>
-                        <p> ...... </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4">
-                <div class="thumbnail">
-                    <img src="/tmp/thumbnail.svg" alt="thumbnail">
-                    <div class="caption">
-                        <h3>Some game</h3>
-                        <p> ...... </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6 col-md-4">
-                <div class="thumbnail">
-                    <img src="/tmp/thumbnail.svg" alt="thumbnail">
-                    <div class="caption">
-                        <h3>Some game</h3>
-                        <p> ...... </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4">
-                <div class="thumbnail">
-                    <img src="/tmp/thumbnail.svg" alt="thumbnail">
-                    <div class="caption">
-                        <h3>Some game</h3>
-                        <p> ...... </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4">
-                <div class="thumbnail">
-                    <img src="/tmp/thumbnail.svg" alt="thumbnail">
-                    <div class="caption">
-                        <h3>Some game</h3>
-                        <p> ...... </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+            $i = 0;
+            foreach($games as $game) {
+                if($i%3==0) {
+                    echo '<div class="row">';
+                }
+                echo '<div class="col-sm-6 col-md-4"><div class="thumbnail">';
+                echo '<a href="game.php?name='.$game->getName().'">';
+                echo '<img src="'.$game->getGbThumb().'" alt="thumbnail">';
+                echo '<img class="rating-badge" src="/img/badges/'.$game->getAverageRatingForDefaultPlatform().'_tiny.jpg" alt="R">';
+                echo '<div class="caption"><h3>'.$game->getTitle().'</h3></div>';
+                echo '</a>';
+                echo '</div></div>';
+                if($i%3==0) {
+                    echo '</div>';
+                }
+                $i++;
+            }
+        ?>
     </div>
     <div class="col-md-4">
         <h1>Other stuff</h1>

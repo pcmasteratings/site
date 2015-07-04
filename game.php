@@ -1,7 +1,30 @@
 <?php
-
 require("res/include.php");
+if(!array_key_exists("name",$_GET)) {
+    header("Location: /"); /* Redirect browser */
+    exit();
+} else {
+    $query = new GamesQuery();
+    $game = $query->findOneByName($_GET["name"]);
+    if($game==null) {
+        header("Location: /"); /* Redirect browser */
+        exit();
+    }
+}
 
+if(!array_key_exists("platform",$_GET)) {
+    $platform = "windows";
+} else {
+    $platform = $_GET["platform"];
+}
+$query = new GamePlatformsQuery();
+$platform = $query->findOneByName($platform);
+if($platform==null) {
+    throw new Exception("Invalid platform specified");
+}
+
+// Getting the rating queries the database each time, so we do it once here:
+$rating = $game->getAverageRating($platform->getName());
 ?>
 <!DOCTYPE html>
 <html>
@@ -14,21 +37,36 @@ require("res/include.php");
 		<?php include("res/nav.php"); ?>
 		<div class="container">
 			
-			<h1>GAME TITLE</h1>
+			<h1><?php echo $game->getTitle(); ?></h1>
 			<div class="col-md-4">
 				<table class="table">
-					<tr><td colspan="2" style="text-align:center; border-top: none;"><img src="http://i.imgur.com/t7boxK2.jpg" height="150" /></td></tr>
+					<tr><td colspan="2" style="text-align:center; border-top: none;">
+                            <img src="images/ratings/<?php echo $rating; ?>.jpg" height="150" />
+                        </td></tr>
+                    <tr>
+                        <td>
+                            <?php
+                                $platforms = $game->getValidPlatforms();
+                                foreach($platforms as $plat) {
+                                    if($plat["id"]==$platform->getId()) {
+                                        echo $plat["title"];
+                                    } else {
+                                        echo '<a href="\game.php?name='.$game->getName().'&platform='.$plat['name'].'">'.$plat["title"].'</a>';
+                                    }
+                                }
+                            ?>
+                        </td>
+                    </tr>
 					<th>Item</th><th>Score</th>
-					<tr><td>Frame rate</td><td>Capped 60</td></tr>
-					<tr><td>Resolution</td><td>Max 4k</td></tr>
-					<tr><td>Optimization</td><td>Great</td></tr>
-					<tr><td>Mod support</td><td>Unofficial</td></tr>
-					<tr><td>Servers</td><td>Acceptable</td></tr>
-					<tr><td>DLC</td><td>No Day 1 DLC, dlc is cosmetic only</td></tr>
-					<tr><td>Glitches</td><td>Some glitches, not game breaking</td></tr>
-					<tr><td>Settings</td><td>Full Settings</td></tr>
-					<tr><td>Controls</td><td>Keyboard re-mappable, gamepad support</td></tr>
-					<tr><td>DRM</td><td>Unlimited Install</td></tr>
+                    <?php
+                    $query = new RatingCategoriesQuery();
+                    $query->orderBySequence();
+                    $result = $query->find();
+                    foreach($result as $cat) {
+                        echo '<tr><td>'.$cat->getTitle().'</td>';
+                        echo '<td>'. $game->getAverageCategoryRatingDescription($platform->getName(), $cat->getId()) .'</td></tr>';
+                    }
+                    ?>
 				</table>
 			</div>
 			<div class="col-md-8">
@@ -36,8 +74,24 @@ require("res/include.php");
 			<br/>	
 			<table class="table">
 				<th>*</th><th>Individual reviews</th>
-				<tr><td style="width: 25px"><img src="img/badges/r_tiny.jpg" alt="R" height="20"></td><td>review by /u/pedro19</td></tr>
+                <?php
+                    $reviews = $game->getRatingHeaderss();
+                    foreach($reviews as $review) {
+                        if($review->getGamePlatformId()!=$platform->getId()) {
+                            continue;
+                        }
+                        $rating = $review->getRating();
+                        if($rating==null) {
+                            print_r($review);
+                        }
+                        $user = $review->getUser();
+                        echo '<tr><td style="width: 25px">';
+                        echo '<img src="img/badges/'.$rating->getInitial().'_tiny.jpg" alt="'.strtoupper($rating->getInitial()).'" height="20"></td>';
+                        echo '<td>review by <a href="https://www.reddit.com/user/'.$user->getUsername().'/">/u/'.$user->getUsername().'</a></td></tr>';
+                    }
+                ?>
 			</table>
+                <a href="submit_game.php?game=<?php echo $game->getName() ?>">Submit Review</a>
 			</div>
 		</div>
 		<?php include("res/footer.php"); ?>

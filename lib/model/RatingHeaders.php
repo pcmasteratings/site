@@ -14,5 +14,11 @@ use Base\RatingHeaders as BaseRatingHeaders;
  */
 class RatingHeaders extends BaseRatingHeaders
 {
-
+    public function getRating() {
+        $query = new RatingsQuery();
+        $query->orderByThreshold("DESC");
+        $query->limit(1);
+        $query->where("threshold <= " . $this->getScore());
+        return $query->findOne();
+    }
 }
