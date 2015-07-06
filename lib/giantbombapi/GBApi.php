@@ -97,12 +97,12 @@ abstract class GBApi
     }
     catch(Exception $e)
     {
-      throw new GBApiException('Error contacting Giantbomb');
+      throw new GBApiException('Error contacting Giantbomb. Please try again later.');
     }
     //QueryDb and try to find the object using the giantbomb unique id
     if ($json->results == null || count($json->results) < 1)
     {
-      throw new GBApiException('No results found.');
+      throw new GBApiException('No results found. Please try another search.');
     }
 
     return $json;
@@ -165,7 +165,7 @@ class GBApiException extends Exception
   }
   public function __toString()
   {
-    return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+    return "{$this->message}\n";
   }
 }
 
