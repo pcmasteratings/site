@@ -88,14 +88,14 @@ abstract class GameLinks implements ActiveRecordInterface
     protected $value;
 
     /**
-     * @var        ChildGameLinkTypes
-     */
-    protected $aGameLinkTypes;
-
-    /**
      * @var        ChildGames
      */
     protected $aGames;
+
+    /**
+     * @var        ChildGameLinkTypes
+     */
+    protected $aGameLinkTypes;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -572,8 +572,8 @@ abstract class GameLinks implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aGameLinkTypes = null;
             $this->aGames = null;
+            $this->aGameLinkTypes = null;
         } // if (deep)
     }
 
@@ -678,18 +678,18 @@ abstract class GameLinks implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aGameLinkTypes !== null) {
-                if ($this->aGameLinkTypes->isModified() || $this->aGameLinkTypes->isNew()) {
-                    $affectedRows += $this->aGameLinkTypes->save($con);
-                }
-                $this->setGameLinkTypes($this->aGameLinkTypes);
-            }
-
             if ($this->aGames !== null) {
                 if ($this->aGames->isModified() || $this->aGames->isNew()) {
                     $affectedRows += $this->aGames->save($con);
                 }
                 $this->setGames($this->aGames);
+            }
+
+            if ($this->aGameLinkTypes !== null) {
+                if ($this->aGameLinkTypes->isModified() || $this->aGameLinkTypes->isNew()) {
+                    $affectedRows += $this->aGameLinkTypes->save($con);
+                }
+                $this->setGameLinkTypes($this->aGameLinkTypes);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -879,21 +879,6 @@ abstract class GameLinks implements ActiveRecordInterface
         }
         
         if ($includeForeignObjects) {
-            if (null !== $this->aGameLinkTypes) {
-                
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'gameLinkTypes';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'game_link_types';
-                        break;
-                    default:
-                        $key = 'GameLinkTypes';
-                }
-        
-                $result[$key] = $this->aGameLinkTypes->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
             if (null !== $this->aGames) {
                 
                 switch ($keyType) {
@@ -908,6 +893,21 @@ abstract class GameLinks implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->aGames->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aGameLinkTypes) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'gameLinkTypes';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'game_link_types';
+                        break;
+                    default:
+                        $key = 'GameLinkTypes';
+                }
+        
+                $result[$key] = $this->aGameLinkTypes->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1164,57 +1164,6 @@ abstract class GameLinks implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildGameLinkTypes object.
-     *
-     * @param  ChildGameLinkTypes $v
-     * @return $this|\GameLinks The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setGameLinkTypes(ChildGameLinkTypes $v = null)
-    {
-        if ($v === null) {
-            $this->setGameLinkTypeId(NULL);
-        } else {
-            $this->setGameLinkTypeId($v->getId());
-        }
-
-        $this->aGameLinkTypes = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildGameLinkTypes object, it will not be re-added.
-        if ($v !== null) {
-            $v->addGameLinks($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildGameLinkTypes object
-     *
-     * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildGameLinkTypes The associated ChildGameLinkTypes object.
-     * @throws PropelException
-     */
-    public function getGameLinkTypes(ConnectionInterface $con = null)
-    {
-        if ($this->aGameLinkTypes === null && (($this->game_link_type_id !== "" && $this->game_link_type_id !== null))) {
-            $this->aGameLinkTypes = ChildGameLinkTypesQuery::create()->findPk($this->game_link_type_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aGameLinkTypes->addGameLinkss($this);
-             */
-        }
-
-        return $this->aGameLinkTypes;
-    }
-
-    /**
      * Declares an association between this object and a ChildGames object.
      *
      * @param  ChildGames $v
@@ -1266,17 +1215,68 @@ abstract class GameLinks implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildGameLinkTypes object.
+     *
+     * @param  ChildGameLinkTypes $v
+     * @return $this|\GameLinks The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setGameLinkTypes(ChildGameLinkTypes $v = null)
+    {
+        if ($v === null) {
+            $this->setGameLinkTypeId(NULL);
+        } else {
+            $this->setGameLinkTypeId($v->getId());
+        }
+
+        $this->aGameLinkTypes = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildGameLinkTypes object, it will not be re-added.
+        if ($v !== null) {
+            $v->addGameLinks($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildGameLinkTypes object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildGameLinkTypes The associated ChildGameLinkTypes object.
+     * @throws PropelException
+     */
+    public function getGameLinkTypes(ConnectionInterface $con = null)
+    {
+        if ($this->aGameLinkTypes === null && (($this->game_link_type_id !== "" && $this->game_link_type_id !== null))) {
+            $this->aGameLinkTypes = ChildGameLinkTypesQuery::create()->findPk($this->game_link_type_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aGameLinkTypes->addGameLinkss($this);
+             */
+        }
+
+        return $this->aGameLinkTypes;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
      */
     public function clear()
     {
-        if (null !== $this->aGameLinkTypes) {
-            $this->aGameLinkTypes->removeGameLinks($this);
-        }
         if (null !== $this->aGames) {
             $this->aGames->removeGameLinks($this);
+        }
+        if (null !== $this->aGameLinkTypes) {
+            $this->aGameLinkTypes->removeGameLinks($this);
         }
         $this->id = null;
         $this->game_id = null;
@@ -1302,8 +1302,8 @@ abstract class GameLinks implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aGameLinkTypes = null;
         $this->aGames = null;
+        $this->aGameLinkTypes = null;
     }
 
     /**

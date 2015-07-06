@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \GameLinks;
-use \GameLinksQuery;
+use \UserReviews;
+use \UserReviewsQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'game_links' table.
+ * This class defines the structure of the 'user_reviews' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class GameLinksTableMap extends TableMap
+class UserReviewsTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class GameLinksTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = '.Map.GameLinksTableMap';
+    const CLASS_NAME = '.Map.UserReviewsTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class GameLinksTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'game_links';
+    const TABLE_NAME = 'user_reviews';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\GameLinks';
+    const OM_CLASS = '\\UserReviews';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'GameLinks';
+    const CLASS_DEFAULT = 'UserReviews';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 9;
 
     /**
      * The number of lazy-loaded columns
@@ -69,27 +69,52 @@ class GameLinksTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 4;
+    const NUM_HYDRATE_COLUMNS = 9;
 
     /**
      * the column name for the id field
      */
-    const COL_ID = 'game_links.id';
+    const COL_ID = 'user_reviews.id';
 
     /**
      * the column name for the game_id field
      */
-    const COL_GAME_ID = 'game_links.game_id';
+    const COL_GAME_ID = 'user_reviews.game_id';
 
     /**
-     * the column name for the game_link_type_id field
+     * the column name for the platform_id field
      */
-    const COL_GAME_LINK_TYPE_ID = 'game_links.game_link_type_id';
+    const COL_PLATFORM_ID = 'user_reviews.platform_id';
 
     /**
-     * the column name for the value field
+     * the column name for the user_id field
      */
-    const COL_VALUE = 'game_links.value';
+    const COL_USER_ID = 'user_reviews.user_id';
+
+    /**
+     * the column name for the rig_id field
+     */
+    const COL_RIG_ID = 'user_reviews.rig_id';
+
+    /**
+     * the column name for the rating field
+     */
+    const COL_RATING = 'user_reviews.rating';
+
+    /**
+     * the column name for the review field
+     */
+    const COL_REVIEW = 'user_reviews.review';
+
+    /**
+     * the column name for the upvotes field
+     */
+    const COL_UPVOTES = 'user_reviews.upvotes';
+
+    /**
+     * the column name for the downvotes field
+     */
+    const COL_DOWNVOTES = 'user_reviews.downvotes';
 
     /**
      * The default string format for model objects of the related table
@@ -103,11 +128,11 @@ class GameLinksTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'GameId', 'GameLinkTypeId', 'Value', ),
-        self::TYPE_CAMELNAME     => array('id', 'gameId', 'gameLinkTypeId', 'value', ),
-        self::TYPE_COLNAME       => array(GameLinksTableMap::COL_ID, GameLinksTableMap::COL_GAME_ID, GameLinksTableMap::COL_GAME_LINK_TYPE_ID, GameLinksTableMap::COL_VALUE, ),
-        self::TYPE_FIELDNAME     => array('id', 'game_id', 'game_link_type_id', 'value', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('Id', 'GameId', 'PlatformId', 'UserId', 'RigId', 'Rating', 'Review', 'Upvotes', 'Downvotes', ),
+        self::TYPE_CAMELNAME     => array('id', 'gameId', 'platformId', 'userId', 'rigId', 'rating', 'review', 'upvotes', 'downvotes', ),
+        self::TYPE_COLNAME       => array(UserReviewsTableMap::COL_ID, UserReviewsTableMap::COL_GAME_ID, UserReviewsTableMap::COL_PLATFORM_ID, UserReviewsTableMap::COL_USER_ID, UserReviewsTableMap::COL_RIG_ID, UserReviewsTableMap::COL_RATING, UserReviewsTableMap::COL_REVIEW, UserReviewsTableMap::COL_UPVOTES, UserReviewsTableMap::COL_DOWNVOTES, ),
+        self::TYPE_FIELDNAME     => array('id', 'game_id', 'platform_id', 'user_id', 'rig_id', 'rating', 'review', 'upvotes', 'downvotes', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -117,11 +142,11 @@ class GameLinksTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'GameId' => 1, 'GameLinkTypeId' => 2, 'Value' => 3, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'gameId' => 1, 'gameLinkTypeId' => 2, 'value' => 3, ),
-        self::TYPE_COLNAME       => array(GameLinksTableMap::COL_ID => 0, GameLinksTableMap::COL_GAME_ID => 1, GameLinksTableMap::COL_GAME_LINK_TYPE_ID => 2, GameLinksTableMap::COL_VALUE => 3, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'game_id' => 1, 'game_link_type_id' => 2, 'value' => 3, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'GameId' => 1, 'PlatformId' => 2, 'UserId' => 3, 'RigId' => 4, 'Rating' => 5, 'Review' => 6, 'Upvotes' => 7, 'Downvotes' => 8, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'gameId' => 1, 'platformId' => 2, 'userId' => 3, 'rigId' => 4, 'rating' => 5, 'review' => 6, 'upvotes' => 7, 'downvotes' => 8, ),
+        self::TYPE_COLNAME       => array(UserReviewsTableMap::COL_ID => 0, UserReviewsTableMap::COL_GAME_ID => 1, UserReviewsTableMap::COL_PLATFORM_ID => 2, UserReviewsTableMap::COL_USER_ID => 3, UserReviewsTableMap::COL_RIG_ID => 4, UserReviewsTableMap::COL_RATING => 5, UserReviewsTableMap::COL_REVIEW => 6, UserReviewsTableMap::COL_UPVOTES => 7, UserReviewsTableMap::COL_DOWNVOTES => 8, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'game_id' => 1, 'platform_id' => 2, 'user_id' => 3, 'rig_id' => 4, 'rating' => 5, 'review' => 6, 'upvotes' => 7, 'downvotes' => 8, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -134,17 +159,22 @@ class GameLinksTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('game_links');
-        $this->setPhpName('GameLinks');
+        $this->setName('user_reviews');
+        $this->setPhpName('UserReviews');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\GameLinks');
+        $this->setClassName('\\UserReviews');
         $this->setPackage('');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
         $this->addForeignKey('game_id', 'GameId', 'BIGINT', 'games', 'id', true, null, null);
-        $this->addForeignKey('game_link_type_id', 'GameLinkTypeId', 'BIGINT', 'game_link_types', 'id', true, null, null);
-        $this->addColumn('value', 'Value', 'LONGVARCHAR', true, null, null);
+        $this->addForeignKey('platform_id', 'PlatformId', 'BIGINT', 'game_platforms', 'id', true, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'BIGINT', 'user', 'id', true, null, null);
+        $this->addForeignKey('rig_id', 'RigId', 'BIGINT', 'rigs', 'id', true, null, null);
+        $this->addForeignKey('rating', 'Rating', 'BIGINT', 'ratings', 'id', true, null, null);
+        $this->addColumn('review', 'Review', 'CLOB', true, null, null);
+        $this->addColumn('upvotes', 'Upvotes', 'BIGINT', true, null, null);
+        $this->addColumn('downvotes', 'Downvotes', 'BIGINT', true, null, null);
     } // initialize()
 
     /**
@@ -152,17 +182,38 @@ class GameLinksTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Rigs', '\\Rigs', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':rig_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
         $this->addRelation('Games', '\\Games', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':game_id',
     1 => ':id',
   ),
-), 'CASCADE', 'CASCADE', null, false);
-        $this->addRelation('GameLinkTypes', '\\GameLinkTypes', RelationMap::MANY_TO_ONE, array (
+), null, null, null, false);
+        $this->addRelation('GamePlatforms', '\\GamePlatforms', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':game_link_type_id',
+    0 => ':platform_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('User', '\\User', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('Ratings', '\\Ratings', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':rating',
     1 => ':id',
   ),
 ), null, null, null, false);
@@ -225,7 +276,7 @@ class GameLinksTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? GameLinksTableMap::CLASS_DEFAULT : GameLinksTableMap::OM_CLASS;
+        return $withPrefix ? UserReviewsTableMap::CLASS_DEFAULT : UserReviewsTableMap::OM_CLASS;
     }
 
     /**
@@ -239,22 +290,22 @@ class GameLinksTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (GameLinks object, last column rank)
+     * @return array           (UserReviews object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = GameLinksTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = GameLinksTableMap::getInstanceFromPool($key))) {
+        $key = UserReviewsTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = UserReviewsTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + GameLinksTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + UserReviewsTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = GameLinksTableMap::OM_CLASS;
-            /** @var GameLinks $obj */
+            $cls = UserReviewsTableMap::OM_CLASS;
+            /** @var UserReviews $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            GameLinksTableMap::addInstanceToPool($obj, $key);
+            UserReviewsTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -277,18 +328,18 @@ class GameLinksTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = GameLinksTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = GameLinksTableMap::getInstanceFromPool($key))) {
+            $key = UserReviewsTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = UserReviewsTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var GameLinks $obj */
+                /** @var UserReviews $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                GameLinksTableMap::addInstanceToPool($obj, $key);
+                UserReviewsTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -309,15 +360,25 @@ class GameLinksTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(GameLinksTableMap::COL_ID);
-            $criteria->addSelectColumn(GameLinksTableMap::COL_GAME_ID);
-            $criteria->addSelectColumn(GameLinksTableMap::COL_GAME_LINK_TYPE_ID);
-            $criteria->addSelectColumn(GameLinksTableMap::COL_VALUE);
+            $criteria->addSelectColumn(UserReviewsTableMap::COL_ID);
+            $criteria->addSelectColumn(UserReviewsTableMap::COL_GAME_ID);
+            $criteria->addSelectColumn(UserReviewsTableMap::COL_PLATFORM_ID);
+            $criteria->addSelectColumn(UserReviewsTableMap::COL_USER_ID);
+            $criteria->addSelectColumn(UserReviewsTableMap::COL_RIG_ID);
+            $criteria->addSelectColumn(UserReviewsTableMap::COL_RATING);
+            $criteria->addSelectColumn(UserReviewsTableMap::COL_REVIEW);
+            $criteria->addSelectColumn(UserReviewsTableMap::COL_UPVOTES);
+            $criteria->addSelectColumn(UserReviewsTableMap::COL_DOWNVOTES);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.game_id');
-            $criteria->addSelectColumn($alias . '.game_link_type_id');
-            $criteria->addSelectColumn($alias . '.value');
+            $criteria->addSelectColumn($alias . '.platform_id');
+            $criteria->addSelectColumn($alias . '.user_id');
+            $criteria->addSelectColumn($alias . '.rig_id');
+            $criteria->addSelectColumn($alias . '.rating');
+            $criteria->addSelectColumn($alias . '.review');
+            $criteria->addSelectColumn($alias . '.upvotes');
+            $criteria->addSelectColumn($alias . '.downvotes');
         }
     }
 
@@ -330,7 +391,7 @@ class GameLinksTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(GameLinksTableMap::DATABASE_NAME)->getTable(GameLinksTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(UserReviewsTableMap::DATABASE_NAME)->getTable(UserReviewsTableMap::TABLE_NAME);
     }
 
     /**
@@ -338,16 +399,16 @@ class GameLinksTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(GameLinksTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(GameLinksTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new GameLinksTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(UserReviewsTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(UserReviewsTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new UserReviewsTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a GameLinks or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a UserReviews or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or GameLinks object or primary key or array of primary keys
+     * @param mixed               $values Criteria or UserReviews object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -358,27 +419,27 @@ class GameLinksTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(GameLinksTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(UserReviewsTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \GameLinks) { // it's a model object
+        } elseif ($values instanceof \UserReviews) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(GameLinksTableMap::DATABASE_NAME);
-            $criteria->add(GameLinksTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(UserReviewsTableMap::DATABASE_NAME);
+            $criteria->add(UserReviewsTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = GameLinksQuery::create()->mergeWith($criteria);
+        $query = UserReviewsQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            GameLinksTableMap::clearInstancePool();
+            UserReviewsTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                GameLinksTableMap::removeInstanceFromPool($singleval);
+                UserReviewsTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -386,20 +447,20 @@ class GameLinksTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the game_links table.
+     * Deletes all rows from the user_reviews table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return GameLinksQuery::create()->doDeleteAll($con);
+        return UserReviewsQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a GameLinks or Criteria object.
+     * Performs an INSERT on the database, given a UserReviews or Criteria object.
      *
-     * @param mixed               $criteria Criteria or GameLinks object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or UserReviews object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -408,22 +469,22 @@ class GameLinksTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(GameLinksTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(UserReviewsTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from GameLinks object
+            $criteria = $criteria->buildCriteria(); // build Criteria from UserReviews object
         }
 
-        if ($criteria->containsKey(GameLinksTableMap::COL_ID) && $criteria->keyContainsValue(GameLinksTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.GameLinksTableMap::COL_ID.')');
+        if ($criteria->containsKey(UserReviewsTableMap::COL_ID) && $criteria->keyContainsValue(UserReviewsTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.UserReviewsTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = GameLinksQuery::create()->mergeWith($criteria);
+        $query = UserReviewsQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -432,7 +493,7 @@ class GameLinksTableMap extends TableMap
         });
     }
 
-} // GameLinksTableMap
+} // UserReviewsTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-GameLinksTableMap::buildTableMap();
+UserReviewsTableMap::buildTableMap();

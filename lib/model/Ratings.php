@@ -14,5 +14,13 @@ use Base\Ratings as BaseRatings;
  */
 class Ratings extends BaseRatings
 {
+    public static function getAllRatings() {
+        $query = new RatingsQuery();
+        $query->orderByThreshold();
+        return $query->find();
+    }
 
+    private function test() {
+        $this->getTitle();
+    }
 }

@@ -158,6 +158,13 @@ class RatingsTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('UserReviews', '\\UserReviews', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':rating',
+    1 => ':id',
+  ),
+), null, null, 'UserReviewss', false);
     } // buildRelations()
 
     /**

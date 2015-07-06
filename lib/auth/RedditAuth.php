@@ -40,10 +40,6 @@ class RedditAuth extends AAuth
                     $reddit_id = $response['result']['id'];
 
                     $user = $this->setUser($reddit_id, $username);
-
-                    echo('<strong>Response for fetch me.json:</strong><pre>');
-                    print_r($response);
-                    echo('</pre>');
                 } else {
                     throw new Exception("Auth request ID is invalid");
                 }

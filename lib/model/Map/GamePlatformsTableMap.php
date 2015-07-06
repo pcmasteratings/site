@@ -165,6 +165,13 @@ class GamePlatformsTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'RatingHeaderss', false);
+        $this->addRelation('UserReviews', '\\UserReviews', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':platform_id',
+    1 => ':id',
+  ),
+), null, null, 'UserReviewss', false);
     } // buildRelations()
 
     /**

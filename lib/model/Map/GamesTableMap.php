@@ -216,6 +216,13 @@ class GamesTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'RatingHeaderss', false);
+        $this->addRelation('UserReviews', '\\UserReviews', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':game_id',
+    1 => ':id',
+  ),
+), null, null, 'UserReviewss', false);
     } // buildRelations()
     /**
      * Method to invalidate the instance pool of all tables related to games     * by a foreign key with ON DELETE CASCADE

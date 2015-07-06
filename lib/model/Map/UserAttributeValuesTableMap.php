@@ -152,17 +152,17 @@ class UserAttributeValuesTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('User', '\\User', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':user_id',
-    1 => ':id',
-  ),
-), null, null, null, false);
         $this->addRelation('UserAttributes', '\\UserAttributes', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':user_attribute_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('User', '\\User', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':user_id',
     1 => ':id',
   ),
 ), null, null, null, false);

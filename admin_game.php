@@ -1,5 +1,11 @@
 <?php
 require("res/include.php");
+
+if(!Auth::checkIfAdmin()) {
+    header("Location: /"); /* Redirect browser */
+}
+$user = Auth::getCurrentUser();
+
 if(!array_key_exists("game",$_GET)) {
     header("Location: /"); /* Redirect browser */
     exit();

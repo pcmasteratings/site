@@ -56,11 +56,15 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinUserAttributeValues($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserAttributeValues relation
  * @method     ChildUserQuery innerJoinUserAttributeValues($relationAlias = null) Adds a INNER JOIN clause to the query using the UserAttributeValues relation
  *
+ * @method     ChildUserQuery leftJoinUserReviews($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserReviews relation
+ * @method     ChildUserQuery rightJoinUserReviews($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserReviews relation
+ * @method     ChildUserQuery innerJoinUserReviews($relationAlias = null) Adds a INNER JOIN clause to the query using the UserReviews relation
+ *
  * @method     ChildUserQuery leftJoinUserWeights($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserWeights relation
  * @method     ChildUserQuery rightJoinUserWeights($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserWeights relation
  * @method     ChildUserQuery innerJoinUserWeights($relationAlias = null) Adds a INNER JOIN clause to the query using the UserWeights relation
  *
- * @method     \NewsQuery|\RatingHeadersQuery|\RigsQuery|\UserAttributeValuesQuery|\UserWeightsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \NewsQuery|\RatingHeadersQuery|\RigsQuery|\UserAttributeValuesQuery|\UserReviewsQuery|\UserWeightsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildUser findOne(ConnectionInterface $con = null) Return the first ChildUser matching the query
  * @method     ChildUser findOneOrCreate(ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
@@ -773,6 +777,79 @@ abstract class UserQuery extends ModelCriteria
         return $this
             ->joinUserAttributeValues($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'UserAttributeValues', '\UserAttributeValuesQuery');
+    }
+
+    /**
+     * Filter the query by a related \UserReviews object
+     *
+     * @param \UserReviews|ObjectCollection $userReviews the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildUserQuery The current query, for fluid interface
+     */
+    public function filterByUserReviews($userReviews, $comparison = null)
+    {
+        if ($userReviews instanceof \UserReviews) {
+            return $this
+                ->addUsingAlias(UserTableMap::COL_ID, $userReviews->getUserId(), $comparison);
+        } elseif ($userReviews instanceof ObjectCollection) {
+            return $this
+                ->useUserReviewsQuery()
+                ->filterByPrimaryKeys($userReviews->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByUserReviews() only accepts arguments of type \UserReviews or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the UserReviews relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildUserQuery The current query, for fluid interface
+     */
+    public function joinUserReviews($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('UserReviews');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'UserReviews');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the UserReviews relation UserReviews object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \UserReviewsQuery A secondary query class using the current class as primary query
+     */
+    public function useUserReviewsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinUserReviews($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UserReviews', '\UserReviewsQuery');
     }
 
     /**

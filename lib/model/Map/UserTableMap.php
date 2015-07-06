@@ -198,6 +198,13 @@ class UserTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'UserAttributeValuess', false);
+        $this->addRelation('UserReviews', '\\UserReviews', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'UserReviewss', false);
         $this->addRelation('UserWeights', '\\UserWeights', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

@@ -152,13 +152,6 @@ class RigAttributeValuesTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('RigAttributes', '\\RigAttributes', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':rig_attribute_id',
-    1 => ':id',
-  ),
-), null, null, null, false);
         $this->addRelation('Rigs', '\\Rigs', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
@@ -166,6 +159,13 @@ class RigAttributeValuesTableMap extends TableMap
     1 => ':id',
   ),
 ), 'CASCADE', 'CASCADE', null, false);
+        $this->addRelation('RigAttributes', '\\RigAttributes', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':rig_attribute_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
     } // buildRelations()
 
     /**

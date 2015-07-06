@@ -33,4 +33,12 @@ class Auth {
         }
     }
 
+    public static function checkIfAdmin() {
+        if(!self::checkIfAuthenticated()) {
+            return false;
+        }
+        return self::getCurrentUser()->getAdmin();
+    }
+
+
 }

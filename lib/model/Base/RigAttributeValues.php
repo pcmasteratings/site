@@ -88,14 +88,14 @@ abstract class RigAttributeValues implements ActiveRecordInterface
     protected $value;
 
     /**
-     * @var        ChildRigAttributes
-     */
-    protected $aRigAttributes;
-
-    /**
      * @var        ChildRigs
      */
     protected $aRigs;
+
+    /**
+     * @var        ChildRigAttributes
+     */
+    protected $aRigAttributes;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -572,8 +572,8 @@ abstract class RigAttributeValues implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aRigAttributes = null;
             $this->aRigs = null;
+            $this->aRigAttributes = null;
         } // if (deep)
     }
 
@@ -678,18 +678,18 @@ abstract class RigAttributeValues implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aRigAttributes !== null) {
-                if ($this->aRigAttributes->isModified() || $this->aRigAttributes->isNew()) {
-                    $affectedRows += $this->aRigAttributes->save($con);
-                }
-                $this->setRigAttributes($this->aRigAttributes);
-            }
-
             if ($this->aRigs !== null) {
                 if ($this->aRigs->isModified() || $this->aRigs->isNew()) {
                     $affectedRows += $this->aRigs->save($con);
                 }
                 $this->setRigs($this->aRigs);
+            }
+
+            if ($this->aRigAttributes !== null) {
+                if ($this->aRigAttributes->isModified() || $this->aRigAttributes->isNew()) {
+                    $affectedRows += $this->aRigAttributes->save($con);
+                }
+                $this->setRigAttributes($this->aRigAttributes);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -879,21 +879,6 @@ abstract class RigAttributeValues implements ActiveRecordInterface
         }
         
         if ($includeForeignObjects) {
-            if (null !== $this->aRigAttributes) {
-                
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'rigAttributes';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'rig_attributes';
-                        break;
-                    default:
-                        $key = 'RigAttributes';
-                }
-        
-                $result[$key] = $this->aRigAttributes->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
             if (null !== $this->aRigs) {
                 
                 switch ($keyType) {
@@ -908,6 +893,21 @@ abstract class RigAttributeValues implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->aRigs->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aRigAttributes) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'rigAttributes';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'rig_attributes';
+                        break;
+                    default:
+                        $key = 'RigAttributes';
+                }
+        
+                $result[$key] = $this->aRigAttributes->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1164,57 +1164,6 @@ abstract class RigAttributeValues implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildRigAttributes object.
-     *
-     * @param  ChildRigAttributes $v
-     * @return $this|\RigAttributeValues The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setRigAttributes(ChildRigAttributes $v = null)
-    {
-        if ($v === null) {
-            $this->setRigAttributeId(NULL);
-        } else {
-            $this->setRigAttributeId($v->getId());
-        }
-
-        $this->aRigAttributes = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildRigAttributes object, it will not be re-added.
-        if ($v !== null) {
-            $v->addRigAttributeValues($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildRigAttributes object
-     *
-     * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildRigAttributes The associated ChildRigAttributes object.
-     * @throws PropelException
-     */
-    public function getRigAttributes(ConnectionInterface $con = null)
-    {
-        if ($this->aRigAttributes === null && (($this->rig_attribute_id !== "" && $this->rig_attribute_id !== null))) {
-            $this->aRigAttributes = ChildRigAttributesQuery::create()->findPk($this->rig_attribute_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aRigAttributes->addRigAttributeValuess($this);
-             */
-        }
-
-        return $this->aRigAttributes;
-    }
-
-    /**
      * Declares an association between this object and a ChildRigs object.
      *
      * @param  ChildRigs $v
@@ -1266,17 +1215,68 @@ abstract class RigAttributeValues implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildRigAttributes object.
+     *
+     * @param  ChildRigAttributes $v
+     * @return $this|\RigAttributeValues The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setRigAttributes(ChildRigAttributes $v = null)
+    {
+        if ($v === null) {
+            $this->setRigAttributeId(NULL);
+        } else {
+            $this->setRigAttributeId($v->getId());
+        }
+
+        $this->aRigAttributes = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildRigAttributes object, it will not be re-added.
+        if ($v !== null) {
+            $v->addRigAttributeValues($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildRigAttributes object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildRigAttributes The associated ChildRigAttributes object.
+     * @throws PropelException
+     */
+    public function getRigAttributes(ConnectionInterface $con = null)
+    {
+        if ($this->aRigAttributes === null && (($this->rig_attribute_id !== "" && $this->rig_attribute_id !== null))) {
+            $this->aRigAttributes = ChildRigAttributesQuery::create()->findPk($this->rig_attribute_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aRigAttributes->addRigAttributeValuess($this);
+             */
+        }
+
+        return $this->aRigAttributes;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
      */
     public function clear()
     {
-        if (null !== $this->aRigAttributes) {
-            $this->aRigAttributes->removeRigAttributeValues($this);
-        }
         if (null !== $this->aRigs) {
             $this->aRigs->removeRigAttributeValues($this);
+        }
+        if (null !== $this->aRigAttributes) {
+            $this->aRigAttributes->removeRigAttributeValues($this);
         }
         $this->id = null;
         $this->rig_id = null;
@@ -1302,8 +1302,8 @@ abstract class RigAttributeValues implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aRigAttributes = null;
         $this->aRigs = null;
+        $this->aRigAttributes = null;
     }
 
     /**

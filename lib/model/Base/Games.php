@@ -10,6 +10,8 @@ use \Games as ChildGames;
 use \GamesQuery as ChildGamesQuery;
 use \RatingHeaders as ChildRatingHeaders;
 use \RatingHeadersQuery as ChildRatingHeadersQuery;
+use \UserReviews as ChildUserReviews;
+use \UserReviewsQuery as ChildUserReviewsQuery;
 use \Exception;
 use \PDO;
 use Map\GamesTableMap;
@@ -150,6 +152,12 @@ abstract class Games implements ActiveRecordInterface
     protected $collRatingHeaderssPartial;
 
     /**
+     * @var        ObjectCollection|ChildUserReviews[] Collection to store aggregation of ChildUserReviews objects.
+     */
+    protected $collUserReviewss;
+    protected $collUserReviewssPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -168,6 +176,12 @@ abstract class Games implements ActiveRecordInterface
      * @var ObjectCollection|ChildRatingHeaders[]
      */
     protected $ratingHeaderssScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildUserReviews[]
+     */
+    protected $userReviewssScheduledForDeletion = null;
 
     /**
      * Initializes internal state of Base\Games object.
@@ -840,6 +854,8 @@ abstract class Games implements ActiveRecordInterface
 
             $this->collRatingHeaderss = null;
 
+            $this->collUserReviewss = null;
+
         } // if (deep)
     }
 
@@ -997,6 +1013,23 @@ abstract class Games implements ActiveRecordInterface
 
             if ($this->collRatingHeaderss !== null) {
                 foreach ($this->collRatingHeaderss as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->userReviewssScheduledForDeletion !== null) {
+                if (!$this->userReviewssScheduledForDeletion->isEmpty()) {
+                    \UserReviewsQuery::create()
+                        ->filterByPrimaryKeys($this->userReviewssScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->userReviewssScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collUserReviewss !== null) {
+                foreach ($this->collUserReviewss as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1298,6 +1331,21 @@ abstract class Games implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->collRatingHeaderss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collUserReviewss) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'userReviewss';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'user_reviewss';
+                        break;
+                    default:
+                        $key = 'UserReviewss';
+                }
+        
+                $result[$key] = $this->collUserReviewss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1603,6 +1651,12 @@ abstract class Games implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getUserReviewss() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addUserReviews($relObj->copy($deepCopy));
+                }
+            }
+
         } // if ($deepCopy)
 
         if ($makeNew) {
@@ -1751,6 +1805,9 @@ abstract class Games implements ActiveRecordInterface
         }
         if ('RatingHeaders' == $relationName) {
             return $this->initRatingHeaderss();
+        }
+        if ('UserReviews' == $relationName) {
+            return $this->initUserReviewss();
         }
     }
 
@@ -2291,6 +2348,324 @@ abstract class Games implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collUserReviewss collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addUserReviewss()
+     */
+    public function clearUserReviewss()
+    {
+        $this->collUserReviewss = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collUserReviewss collection loaded partially.
+     */
+    public function resetPartialUserReviewss($v = true)
+    {
+        $this->collUserReviewssPartial = $v;
+    }
+
+    /**
+     * Initializes the collUserReviewss collection.
+     *
+     * By default this just sets the collUserReviewss collection to an empty array (like clearcollUserReviewss());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initUserReviewss($overrideExisting = true)
+    {
+        if (null !== $this->collUserReviewss && !$overrideExisting) {
+            return;
+        }
+        $this->collUserReviewss = new ObjectCollection();
+        $this->collUserReviewss->setModel('\UserReviews');
+    }
+
+    /**
+     * Gets an array of ChildUserReviews objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildGames is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     * @throws PropelException
+     */
+    public function getUserReviewss(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collUserReviewssPartial && !$this->isNew();
+        if (null === $this->collUserReviewss || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collUserReviewss) {
+                // return empty collection
+                $this->initUserReviewss();
+            } else {
+                $collUserReviewss = ChildUserReviewsQuery::create(null, $criteria)
+                    ->filterByGames($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collUserReviewssPartial && count($collUserReviewss)) {
+                        $this->initUserReviewss(false);
+
+                        foreach ($collUserReviewss as $obj) {
+                            if (false == $this->collUserReviewss->contains($obj)) {
+                                $this->collUserReviewss->append($obj);
+                            }
+                        }
+
+                        $this->collUserReviewssPartial = true;
+                    }
+
+                    return $collUserReviewss;
+                }
+
+                if ($partial && $this->collUserReviewss) {
+                    foreach ($this->collUserReviewss as $obj) {
+                        if ($obj->isNew()) {
+                            $collUserReviewss[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collUserReviewss = $collUserReviewss;
+                $this->collUserReviewssPartial = false;
+            }
+        }
+
+        return $this->collUserReviewss;
+    }
+
+    /**
+     * Sets a collection of ChildUserReviews objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $userReviewss A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildGames The current object (for fluent API support)
+     */
+    public function setUserReviewss(Collection $userReviewss, ConnectionInterface $con = null)
+    {
+        /** @var ChildUserReviews[] $userReviewssToDelete */
+        $userReviewssToDelete = $this->getUserReviewss(new Criteria(), $con)->diff($userReviewss);
+
+        
+        $this->userReviewssScheduledForDeletion = $userReviewssToDelete;
+
+        foreach ($userReviewssToDelete as $userReviewsRemoved) {
+            $userReviewsRemoved->setGames(null);
+        }
+
+        $this->collUserReviewss = null;
+        foreach ($userReviewss as $userReviews) {
+            $this->addUserReviews($userReviews);
+        }
+
+        $this->collUserReviewss = $userReviewss;
+        $this->collUserReviewssPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related UserReviews objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related UserReviews objects.
+     * @throws PropelException
+     */
+    public function countUserReviewss(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collUserReviewssPartial && !$this->isNew();
+        if (null === $this->collUserReviewss || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collUserReviewss) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getUserReviewss());
+            }
+
+            $query = ChildUserReviewsQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByGames($this)
+                ->count($con);
+        }
+
+        return count($this->collUserReviewss);
+    }
+
+    /**
+     * Method called to associate a ChildUserReviews object to this object
+     * through the ChildUserReviews foreign key attribute.
+     *
+     * @param  ChildUserReviews $l ChildUserReviews
+     * @return $this|\Games The current object (for fluent API support)
+     */
+    public function addUserReviews(ChildUserReviews $l)
+    {
+        if ($this->collUserReviewss === null) {
+            $this->initUserReviewss();
+            $this->collUserReviewssPartial = true;
+        }
+
+        if (!$this->collUserReviewss->contains($l)) {
+            $this->doAddUserReviews($l);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildUserReviews $userReviews The ChildUserReviews object to add.
+     */
+    protected function doAddUserReviews(ChildUserReviews $userReviews)
+    {
+        $this->collUserReviewss[]= $userReviews;
+        $userReviews->setGames($this);
+    }
+
+    /**
+     * @param  ChildUserReviews $userReviews The ChildUserReviews object to remove.
+     * @return $this|ChildGames The current object (for fluent API support)
+     */
+    public function removeUserReviews(ChildUserReviews $userReviews)
+    {
+        if ($this->getUserReviewss()->contains($userReviews)) {
+            $pos = $this->collUserReviewss->search($userReviews);
+            $this->collUserReviewss->remove($pos);
+            if (null === $this->userReviewssScheduledForDeletion) {
+                $this->userReviewssScheduledForDeletion = clone $this->collUserReviewss;
+                $this->userReviewssScheduledForDeletion->clear();
+            }
+            $this->userReviewssScheduledForDeletion[]= clone $userReviews;
+            $userReviews->setGames(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Games is new, it will return
+     * an empty collection; or if this Games has previously
+     * been saved, it will retrieve related UserReviewss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Games.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     */
+    public function getUserReviewssJoinRigs(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildUserReviewsQuery::create(null, $criteria);
+        $query->joinWith('Rigs', $joinBehavior);
+
+        return $this->getUserReviewss($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Games is new, it will return
+     * an empty collection; or if this Games has previously
+     * been saved, it will retrieve related UserReviewss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Games.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     */
+    public function getUserReviewssJoinGamePlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildUserReviewsQuery::create(null, $criteria);
+        $query->joinWith('GamePlatforms', $joinBehavior);
+
+        return $this->getUserReviewss($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Games is new, it will return
+     * an empty collection; or if this Games has previously
+     * been saved, it will retrieve related UserReviewss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Games.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     */
+    public function getUserReviewssJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildUserReviewsQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getUserReviewss($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Games is new, it will return
+     * an empty collection; or if this Games has previously
+     * been saved, it will retrieve related UserReviewss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Games.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     */
+    public function getUserReviewssJoinRatings(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildUserReviewsQuery::create(null, $criteria);
+        $query->joinWith('Ratings', $joinBehavior);
+
+        return $this->getUserReviewss($query, $con);
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -2341,10 +2716,16 @@ abstract class Games implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collUserReviewss) {
+                foreach ($this->collUserReviewss as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
         $this->collGameLinkss = null;
         $this->collRatingHeaderss = null;
+        $this->collUserReviewss = null;
         $this->aCompaniesRelatedByPublisherId = null;
         $this->aCompaniesRelatedByDeveloperId = null;
     }

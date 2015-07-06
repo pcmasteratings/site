@@ -152,18 +152,18 @@ class UserWeightsTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('User', '\\User', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':user_id',
-    1 => ':id',
-  ),
-), null, null, null, false);
         $this->addRelation('RatingCategories', '\\RatingCategories', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':rating_category_id',
     1 => ':ID',
+  ),
+), null, null, null, false);
+        $this->addRelation('User', '\\User', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
   ),
 ), null, null, null, false);
     } // buildRelations()

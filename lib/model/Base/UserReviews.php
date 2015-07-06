@@ -2,14 +2,20 @@
 
 namespace Base;
 
-use \RatingCategories as ChildRatingCategories;
-use \RatingCategoriesQuery as ChildRatingCategoriesQuery;
+use \GamePlatforms as ChildGamePlatforms;
+use \GamePlatformsQuery as ChildGamePlatformsQuery;
+use \Games as ChildGames;
+use \GamesQuery as ChildGamesQuery;
+use \Ratings as ChildRatings;
+use \RatingsQuery as ChildRatingsQuery;
+use \Rigs as ChildRigs;
+use \RigsQuery as ChildRigsQuery;
 use \User as ChildUser;
 use \UserQuery as ChildUserQuery;
-use \UserWeightsQuery as ChildUserWeightsQuery;
+use \UserReviewsQuery as ChildUserReviewsQuery;
 use \Exception;
 use \PDO;
-use Map\UserWeightsTableMap;
+use Map\UserReviewsTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -23,18 +29,18 @@ use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
 
 /**
- * Base class that represents a row from the 'user_weights' table.
+ * Base class that represents a row from the 'user_reviews' table.
  *
  * 
  *
 * @package    propel.generator..Base
 */
-abstract class UserWeights implements ActiveRecordInterface 
+abstract class UserReviews implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Map\\UserWeightsTableMap';
+    const TABLE_MAP = '\\Map\\UserReviewsTableMap';
 
 
     /**
@@ -70,10 +76,16 @@ abstract class UserWeights implements ActiveRecordInterface
     protected $id;
 
     /**
-     * The value for the rating_category_id field.
+     * The value for the game_id field.
      * @var        string
      */
-    protected $rating_category_id;
+    protected $game_id;
+
+    /**
+     * The value for the platform_id field.
+     * @var        string
+     */
+    protected $platform_id;
 
     /**
      * The value for the user_id field.
@@ -82,20 +94,59 @@ abstract class UserWeights implements ActiveRecordInterface
     protected $user_id;
 
     /**
-     * The value for the weight field.
-     * @var        int
+     * The value for the rig_id field.
+     * @var        string
      */
-    protected $weight;
+    protected $rig_id;
 
     /**
-     * @var        ChildRatingCategories
+     * The value for the rating field.
+     * @var        string
      */
-    protected $aRatingCategories;
+    protected $rating;
+
+    /**
+     * The value for the review field.
+     * @var        string
+     */
+    protected $review;
+
+    /**
+     * The value for the upvotes field.
+     * @var        string
+     */
+    protected $upvotes;
+
+    /**
+     * The value for the downvotes field.
+     * @var        string
+     */
+    protected $downvotes;
+
+    /**
+     * @var        ChildRigs
+     */
+    protected $aRigs;
+
+    /**
+     * @var        ChildGames
+     */
+    protected $aGames;
+
+    /**
+     * @var        ChildGamePlatforms
+     */
+    protected $aGamePlatforms;
 
     /**
      * @var        ChildUser
      */
     protected $aUser;
+
+    /**
+     * @var        ChildRatings
+     */
+    protected $aRatings;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -106,7 +157,7 @@ abstract class UserWeights implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * Initializes internal state of Base\UserWeights object.
+     * Initializes internal state of Base\UserReviews object.
      */
     public function __construct()
     {
@@ -201,9 +252,9 @@ abstract class UserWeights implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>UserWeights</code> instance.  If
-     * <code>obj</code> is an instance of <code>UserWeights</code>, delegates to
-     * <code>equals(UserWeights)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>UserReviews</code> instance.  If
+     * <code>obj</code> is an instance of <code>UserReviews</code>, delegates to
+     * <code>equals(UserReviews)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -269,7 +320,7 @@ abstract class UserWeights implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|UserWeights The current object, for fluid interface
+     * @return $this|UserReviews The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -333,13 +384,23 @@ abstract class UserWeights implements ActiveRecordInterface
     }
 
     /**
-     * Get the [rating_category_id] column value.
+     * Get the [game_id] column value.
      * 
      * @return string
      */
-    public function getRatingCategoryId()
+    public function getGameId()
     {
-        return $this->rating_category_id;
+        return $this->game_id;
+    }
+
+    /**
+     * Get the [platform_id] column value.
+     * 
+     * @return string
+     */
+    public function getPlatformId()
+    {
+        return $this->platform_id;
     }
 
     /**
@@ -353,20 +414,60 @@ abstract class UserWeights implements ActiveRecordInterface
     }
 
     /**
-     * Get the [weight] column value.
+     * Get the [rig_id] column value.
      * 
-     * @return int
+     * @return string
      */
-    public function getWeight()
+    public function getRigId()
     {
-        return $this->weight;
+        return $this->rig_id;
+    }
+
+    /**
+     * Get the [rating] column value.
+     * 
+     * @return string
+     */
+    public function getRating()
+    {
+        return $this->rating;
+    }
+
+    /**
+     * Get the [review] column value.
+     * 
+     * @return string
+     */
+    public function getReview()
+    {
+        return $this->review;
+    }
+
+    /**
+     * Get the [upvotes] column value.
+     * 
+     * @return string
+     */
+    public function getUpvotes()
+    {
+        return $this->upvotes;
+    }
+
+    /**
+     * Get the [downvotes] column value.
+     * 
+     * @return string
+     */
+    public function getDownvotes()
+    {
+        return $this->downvotes;
     }
 
     /**
      * Set the value of [id] column.
      * 
      * @param string $v new value
-     * @return $this|\UserWeights The current object (for fluent API support)
+     * @return $this|\UserReviews The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -376,41 +477,65 @@ abstract class UserWeights implements ActiveRecordInterface
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[UserWeightsTableMap::COL_ID] = true;
+            $this->modifiedColumns[UserReviewsTableMap::COL_ID] = true;
         }
 
         return $this;
     } // setId()
 
     /**
-     * Set the value of [rating_category_id] column.
+     * Set the value of [game_id] column.
      * 
      * @param string $v new value
-     * @return $this|\UserWeights The current object (for fluent API support)
+     * @return $this|\UserReviews The current object (for fluent API support)
      */
-    public function setRatingCategoryId($v)
+    public function setGameId($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->rating_category_id !== $v) {
-            $this->rating_category_id = $v;
-            $this->modifiedColumns[UserWeightsTableMap::COL_RATING_CATEGORY_ID] = true;
+        if ($this->game_id !== $v) {
+            $this->game_id = $v;
+            $this->modifiedColumns[UserReviewsTableMap::COL_GAME_ID] = true;
         }
 
-        if ($this->aRatingCategories !== null && $this->aRatingCategories->getId() !== $v) {
-            $this->aRatingCategories = null;
+        if ($this->aGames !== null && $this->aGames->getId() !== $v) {
+            $this->aGames = null;
         }
 
         return $this;
-    } // setRatingCategoryId()
+    } // setGameId()
+
+    /**
+     * Set the value of [platform_id] column.
+     * 
+     * @param string $v new value
+     * @return $this|\UserReviews The current object (for fluent API support)
+     */
+    public function setPlatformId($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->platform_id !== $v) {
+            $this->platform_id = $v;
+            $this->modifiedColumns[UserReviewsTableMap::COL_PLATFORM_ID] = true;
+        }
+
+        if ($this->aGamePlatforms !== null && $this->aGamePlatforms->getId() !== $v) {
+            $this->aGamePlatforms = null;
+        }
+
+        return $this;
+    } // setPlatformId()
 
     /**
      * Set the value of [user_id] column.
      * 
      * @param string $v new value
-     * @return $this|\UserWeights The current object (for fluent API support)
+     * @return $this|\UserReviews The current object (for fluent API support)
      */
     public function setUserId($v)
     {
@@ -420,7 +545,7 @@ abstract class UserWeights implements ActiveRecordInterface
 
         if ($this->user_id !== $v) {
             $this->user_id = $v;
-            $this->modifiedColumns[UserWeightsTableMap::COL_USER_ID] = true;
+            $this->modifiedColumns[UserReviewsTableMap::COL_USER_ID] = true;
         }
 
         if ($this->aUser !== null && $this->aUser->getId() !== $v) {
@@ -431,24 +556,112 @@ abstract class UserWeights implements ActiveRecordInterface
     } // setUserId()
 
     /**
-     * Set the value of [weight] column.
+     * Set the value of [rig_id] column.
      * 
-     * @param int $v new value
-     * @return $this|\UserWeights The current object (for fluent API support)
+     * @param string $v new value
+     * @return $this|\UserReviews The current object (for fluent API support)
      */
-    public function setWeight($v)
+    public function setRigId($v)
     {
         if ($v !== null) {
-            $v = (int) $v;
+            $v = (string) $v;
         }
 
-        if ($this->weight !== $v) {
-            $this->weight = $v;
-            $this->modifiedColumns[UserWeightsTableMap::COL_WEIGHT] = true;
+        if ($this->rig_id !== $v) {
+            $this->rig_id = $v;
+            $this->modifiedColumns[UserReviewsTableMap::COL_RIG_ID] = true;
+        }
+
+        if ($this->aRigs !== null && $this->aRigs->getId() !== $v) {
+            $this->aRigs = null;
         }
 
         return $this;
-    } // setWeight()
+    } // setRigId()
+
+    /**
+     * Set the value of [rating] column.
+     * 
+     * @param string $v new value
+     * @return $this|\UserReviews The current object (for fluent API support)
+     */
+    public function setRating($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->rating !== $v) {
+            $this->rating = $v;
+            $this->modifiedColumns[UserReviewsTableMap::COL_RATING] = true;
+        }
+
+        if ($this->aRatings !== null && $this->aRatings->getId() !== $v) {
+            $this->aRatings = null;
+        }
+
+        return $this;
+    } // setRating()
+
+    /**
+     * Set the value of [review] column.
+     * 
+     * @param string $v new value
+     * @return $this|\UserReviews The current object (for fluent API support)
+     */
+    public function setReview($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->review !== $v) {
+            $this->review = $v;
+            $this->modifiedColumns[UserReviewsTableMap::COL_REVIEW] = true;
+        }
+
+        return $this;
+    } // setReview()
+
+    /**
+     * Set the value of [upvotes] column.
+     * 
+     * @param string $v new value
+     * @return $this|\UserReviews The current object (for fluent API support)
+     */
+    public function setUpvotes($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->upvotes !== $v) {
+            $this->upvotes = $v;
+            $this->modifiedColumns[UserReviewsTableMap::COL_UPVOTES] = true;
+        }
+
+        return $this;
+    } // setUpvotes()
+
+    /**
+     * Set the value of [downvotes] column.
+     * 
+     * @param string $v new value
+     * @return $this|\UserReviews The current object (for fluent API support)
+     */
+    public function setDownvotes($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->downvotes !== $v) {
+            $this->downvotes = $v;
+            $this->modifiedColumns[UserReviewsTableMap::COL_DOWNVOTES] = true;
+        }
+
+        return $this;
+    } // setDownvotes()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -486,17 +699,32 @@ abstract class UserWeights implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : UserWeightsTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : UserReviewsTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : UserWeightsTableMap::translateFieldName('RatingCategoryId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->rating_category_id = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : UserReviewsTableMap::translateFieldName('GameId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->game_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : UserWeightsTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : UserReviewsTableMap::translateFieldName('PlatformId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->platform_id = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : UserReviewsTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : UserWeightsTableMap::translateFieldName('Weight', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->weight = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : UserReviewsTableMap::translateFieldName('RigId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->rig_id = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : UserReviewsTableMap::translateFieldName('Rating', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->rating = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : UserReviewsTableMap::translateFieldName('Review', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->review = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : UserReviewsTableMap::translateFieldName('Upvotes', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->upvotes = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : UserReviewsTableMap::translateFieldName('Downvotes', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->downvotes = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -505,10 +733,10 @@ abstract class UserWeights implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 4; // 4 = UserWeightsTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = UserReviewsTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\UserWeights'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\UserReviews'), 0, $e);
         }
     }
 
@@ -527,11 +755,20 @@ abstract class UserWeights implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
-        if ($this->aRatingCategories !== null && $this->rating_category_id !== $this->aRatingCategories->getId()) {
-            $this->aRatingCategories = null;
+        if ($this->aGames !== null && $this->game_id !== $this->aGames->getId()) {
+            $this->aGames = null;
+        }
+        if ($this->aGamePlatforms !== null && $this->platform_id !== $this->aGamePlatforms->getId()) {
+            $this->aGamePlatforms = null;
         }
         if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
             $this->aUser = null;
+        }
+        if ($this->aRigs !== null && $this->rig_id !== $this->aRigs->getId()) {
+            $this->aRigs = null;
+        }
+        if ($this->aRatings !== null && $this->rating !== $this->aRatings->getId()) {
+            $this->aRatings = null;
         }
     } // ensureConsistency
 
@@ -556,13 +793,13 @@ abstract class UserWeights implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(UserWeightsTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(UserReviewsTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildUserWeightsQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildUserReviewsQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -572,8 +809,11 @@ abstract class UserWeights implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aRatingCategories = null;
+            $this->aRigs = null;
+            $this->aGames = null;
+            $this->aGamePlatforms = null;
             $this->aUser = null;
+            $this->aRatings = null;
         } // if (deep)
     }
 
@@ -583,8 +823,8 @@ abstract class UserWeights implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see UserWeights::setDeleted()
-     * @see UserWeights::isDeleted()
+     * @see UserReviews::setDeleted()
+     * @see UserReviews::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -593,11 +833,11 @@ abstract class UserWeights implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(UserWeightsTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(UserReviewsTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildUserWeightsQuery::create()
+            $deleteQuery = ChildUserReviewsQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -628,7 +868,7 @@ abstract class UserWeights implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(UserWeightsTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(UserReviewsTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -647,7 +887,7 @@ abstract class UserWeights implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                UserWeightsTableMap::addInstanceToPool($this);
+                UserReviewsTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -678,11 +918,25 @@ abstract class UserWeights implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aRatingCategories !== null) {
-                if ($this->aRatingCategories->isModified() || $this->aRatingCategories->isNew()) {
-                    $affectedRows += $this->aRatingCategories->save($con);
+            if ($this->aRigs !== null) {
+                if ($this->aRigs->isModified() || $this->aRigs->isNew()) {
+                    $affectedRows += $this->aRigs->save($con);
                 }
-                $this->setRatingCategories($this->aRatingCategories);
+                $this->setRigs($this->aRigs);
+            }
+
+            if ($this->aGames !== null) {
+                if ($this->aGames->isModified() || $this->aGames->isNew()) {
+                    $affectedRows += $this->aGames->save($con);
+                }
+                $this->setGames($this->aGames);
+            }
+
+            if ($this->aGamePlatforms !== null) {
+                if ($this->aGamePlatforms->isModified() || $this->aGamePlatforms->isNew()) {
+                    $affectedRows += $this->aGamePlatforms->save($con);
+                }
+                $this->setGamePlatforms($this->aGamePlatforms);
             }
 
             if ($this->aUser !== null) {
@@ -690,6 +944,13 @@ abstract class UserWeights implements ActiveRecordInterface
                     $affectedRows += $this->aUser->save($con);
                 }
                 $this->setUser($this->aUser);
+            }
+
+            if ($this->aRatings !== null) {
+                if ($this->aRatings->isModified() || $this->aRatings->isNew()) {
+                    $affectedRows += $this->aRatings->save($con);
+                }
+                $this->setRatings($this->aRatings);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -723,27 +984,42 @@ abstract class UserWeights implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[UserWeightsTableMap::COL_ID] = true;
+        $this->modifiedColumns[UserReviewsTableMap::COL_ID] = true;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . UserWeightsTableMap::COL_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . UserReviewsTableMap::COL_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(UserWeightsTableMap::COL_ID)) {
+        if ($this->isColumnModified(UserReviewsTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(UserWeightsTableMap::COL_RATING_CATEGORY_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'rating_category_id';
+        if ($this->isColumnModified(UserReviewsTableMap::COL_GAME_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'game_id';
         }
-        if ($this->isColumnModified(UserWeightsTableMap::COL_USER_ID)) {
+        if ($this->isColumnModified(UserReviewsTableMap::COL_PLATFORM_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'platform_id';
+        }
+        if ($this->isColumnModified(UserReviewsTableMap::COL_USER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'user_id';
         }
-        if ($this->isColumnModified(UserWeightsTableMap::COL_WEIGHT)) {
-            $modifiedColumns[':p' . $index++]  = 'weight';
+        if ($this->isColumnModified(UserReviewsTableMap::COL_RIG_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'rig_id';
+        }
+        if ($this->isColumnModified(UserReviewsTableMap::COL_RATING)) {
+            $modifiedColumns[':p' . $index++]  = 'rating';
+        }
+        if ($this->isColumnModified(UserReviewsTableMap::COL_REVIEW)) {
+            $modifiedColumns[':p' . $index++]  = 'review';
+        }
+        if ($this->isColumnModified(UserReviewsTableMap::COL_UPVOTES)) {
+            $modifiedColumns[':p' . $index++]  = 'upvotes';
+        }
+        if ($this->isColumnModified(UserReviewsTableMap::COL_DOWNVOTES)) {
+            $modifiedColumns[':p' . $index++]  = 'downvotes';
         }
 
         $sql = sprintf(
-            'INSERT INTO user_weights (%s) VALUES (%s)',
+            'INSERT INTO user_reviews (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -755,14 +1031,29 @@ abstract class UserWeights implements ActiveRecordInterface
                     case 'id':                        
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'rating_category_id':                        
-                        $stmt->bindValue($identifier, $this->rating_category_id, PDO::PARAM_INT);
+                    case 'game_id':                        
+                        $stmt->bindValue($identifier, $this->game_id, PDO::PARAM_INT);
+                        break;
+                    case 'platform_id':                        
+                        $stmt->bindValue($identifier, $this->platform_id, PDO::PARAM_INT);
                         break;
                     case 'user_id':                        
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
                         break;
-                    case 'weight':                        
-                        $stmt->bindValue($identifier, $this->weight, PDO::PARAM_INT);
+                    case 'rig_id':                        
+                        $stmt->bindValue($identifier, $this->rig_id, PDO::PARAM_INT);
+                        break;
+                    case 'rating':                        
+                        $stmt->bindValue($identifier, $this->rating, PDO::PARAM_INT);
+                        break;
+                    case 'review':                        
+                        $stmt->bindValue($identifier, $this->review, PDO::PARAM_STR);
+                        break;
+                    case 'upvotes':                        
+                        $stmt->bindValue($identifier, $this->upvotes, PDO::PARAM_INT);
+                        break;
+                    case 'downvotes':                        
+                        $stmt->bindValue($identifier, $this->downvotes, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -810,7 +1101,7 @@ abstract class UserWeights implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = UserWeightsTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = UserReviewsTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -830,13 +1121,28 @@ abstract class UserWeights implements ActiveRecordInterface
                 return $this->getId();
                 break;
             case 1:
-                return $this->getRatingCategoryId();
+                return $this->getGameId();
                 break;
             case 2:
-                return $this->getUserId();
+                return $this->getPlatformId();
                 break;
             case 3:
-                return $this->getWeight();
+                return $this->getUserId();
+                break;
+            case 4:
+                return $this->getRigId();
+                break;
+            case 5:
+                return $this->getRating();
+                break;
+            case 6:
+                return $this->getReview();
+                break;
+            case 7:
+                return $this->getUpvotes();
+                break;
+            case 8:
+                return $this->getDownvotes();
                 break;
             default:
                 return null;
@@ -862,16 +1168,21 @@ abstract class UserWeights implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['UserWeights'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['UserReviews'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['UserWeights'][$this->hashCode()] = true;
-        $keys = UserWeightsTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['UserReviews'][$this->hashCode()] = true;
+        $keys = UserReviewsTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getRatingCategoryId(),
-            $keys[2] => $this->getUserId(),
-            $keys[3] => $this->getWeight(),
+            $keys[1] => $this->getGameId(),
+            $keys[2] => $this->getPlatformId(),
+            $keys[3] => $this->getUserId(),
+            $keys[4] => $this->getRigId(),
+            $keys[5] => $this->getRating(),
+            $keys[6] => $this->getReview(),
+            $keys[7] => $this->getUpvotes(),
+            $keys[8] => $this->getDownvotes(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -879,20 +1190,50 @@ abstract class UserWeights implements ActiveRecordInterface
         }
         
         if ($includeForeignObjects) {
-            if (null !== $this->aRatingCategories) {
+            if (null !== $this->aRigs) {
                 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'ratingCategories';
+                        $key = 'rigs';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'rating_categories';
+                        $key = 'rigs';
                         break;
                     default:
-                        $key = 'RatingCategories';
+                        $key = 'Rigs';
                 }
         
-                $result[$key] = $this->aRatingCategories->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aRigs->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aGames) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'games';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'games';
+                        break;
+                    default:
+                        $key = 'Games';
+                }
+        
+                $result[$key] = $this->aGames->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aGamePlatforms) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'gamePlatforms';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'game_platforms';
+                        break;
+                    default:
+                        $key = 'GamePlatforms';
+                }
+        
+                $result[$key] = $this->aGamePlatforms->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUser) {
                 
@@ -909,6 +1250,21 @@ abstract class UserWeights implements ActiveRecordInterface
         
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
+            if (null !== $this->aRatings) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'ratings';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'ratings';
+                        break;
+                    default:
+                        $key = 'Ratings';
+                }
+        
+                $result[$key] = $this->aRatings->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
         }
 
         return $result;
@@ -923,11 +1279,11 @@ abstract class UserWeights implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\UserWeights
+     * @return $this|\UserReviews
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = UserWeightsTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = UserReviewsTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -938,7 +1294,7 @@ abstract class UserWeights implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\UserWeights
+     * @return $this|\UserReviews
      */
     public function setByPosition($pos, $value)
     {
@@ -947,13 +1303,28 @@ abstract class UserWeights implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setRatingCategoryId($value);
+                $this->setGameId($value);
                 break;
             case 2:
-                $this->setUserId($value);
+                $this->setPlatformId($value);
                 break;
             case 3:
-                $this->setWeight($value);
+                $this->setUserId($value);
+                break;
+            case 4:
+                $this->setRigId($value);
+                break;
+            case 5:
+                $this->setRating($value);
+                break;
+            case 6:
+                $this->setReview($value);
+                break;
+            case 7:
+                $this->setUpvotes($value);
+                break;
+            case 8:
+                $this->setDownvotes($value);
                 break;
         } // switch()
 
@@ -979,19 +1350,34 @@ abstract class UserWeights implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = UserWeightsTableMap::getFieldNames($keyType);
+        $keys = UserReviewsTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setRatingCategoryId($arr[$keys[1]]);
+            $this->setGameId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setUserId($arr[$keys[2]]);
+            $this->setPlatformId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setWeight($arr[$keys[3]]);
+            $this->setUserId($arr[$keys[3]]);
+        }
+        if (array_key_exists($keys[4], $arr)) {
+            $this->setRigId($arr[$keys[4]]);
+        }
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setRating($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setReview($arr[$keys[6]]);
+        }
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setUpvotes($arr[$keys[7]]);
+        }
+        if (array_key_exists($keys[8], $arr)) {
+            $this->setDownvotes($arr[$keys[8]]);
         }
     }
 
@@ -1012,7 +1398,7 @@ abstract class UserWeights implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\UserWeights The current object, for fluid interface
+     * @return $this|\UserReviews The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1032,19 +1418,34 @@ abstract class UserWeights implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(UserWeightsTableMap::DATABASE_NAME);
+        $criteria = new Criteria(UserReviewsTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(UserWeightsTableMap::COL_ID)) {
-            $criteria->add(UserWeightsTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(UserReviewsTableMap::COL_ID)) {
+            $criteria->add(UserReviewsTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(UserWeightsTableMap::COL_RATING_CATEGORY_ID)) {
-            $criteria->add(UserWeightsTableMap::COL_RATING_CATEGORY_ID, $this->rating_category_id);
+        if ($this->isColumnModified(UserReviewsTableMap::COL_GAME_ID)) {
+            $criteria->add(UserReviewsTableMap::COL_GAME_ID, $this->game_id);
         }
-        if ($this->isColumnModified(UserWeightsTableMap::COL_USER_ID)) {
-            $criteria->add(UserWeightsTableMap::COL_USER_ID, $this->user_id);
+        if ($this->isColumnModified(UserReviewsTableMap::COL_PLATFORM_ID)) {
+            $criteria->add(UserReviewsTableMap::COL_PLATFORM_ID, $this->platform_id);
         }
-        if ($this->isColumnModified(UserWeightsTableMap::COL_WEIGHT)) {
-            $criteria->add(UserWeightsTableMap::COL_WEIGHT, $this->weight);
+        if ($this->isColumnModified(UserReviewsTableMap::COL_USER_ID)) {
+            $criteria->add(UserReviewsTableMap::COL_USER_ID, $this->user_id);
+        }
+        if ($this->isColumnModified(UserReviewsTableMap::COL_RIG_ID)) {
+            $criteria->add(UserReviewsTableMap::COL_RIG_ID, $this->rig_id);
+        }
+        if ($this->isColumnModified(UserReviewsTableMap::COL_RATING)) {
+            $criteria->add(UserReviewsTableMap::COL_RATING, $this->rating);
+        }
+        if ($this->isColumnModified(UserReviewsTableMap::COL_REVIEW)) {
+            $criteria->add(UserReviewsTableMap::COL_REVIEW, $this->review);
+        }
+        if ($this->isColumnModified(UserReviewsTableMap::COL_UPVOTES)) {
+            $criteria->add(UserReviewsTableMap::COL_UPVOTES, $this->upvotes);
+        }
+        if ($this->isColumnModified(UserReviewsTableMap::COL_DOWNVOTES)) {
+            $criteria->add(UserReviewsTableMap::COL_DOWNVOTES, $this->downvotes);
         }
 
         return $criteria;
@@ -1062,8 +1463,8 @@ abstract class UserWeights implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildUserWeightsQuery::create();
-        $criteria->add(UserWeightsTableMap::COL_ID, $this->id);
+        $criteria = ChildUserReviewsQuery::create();
+        $criteria->add(UserReviewsTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -1125,16 +1526,21 @@ abstract class UserWeights implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \UserWeights (or compatible) type.
+     * @param      object $copyObj An object of \UserReviews (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setRatingCategoryId($this->getRatingCategoryId());
+        $copyObj->setGameId($this->getGameId());
+        $copyObj->setPlatformId($this->getPlatformId());
         $copyObj->setUserId($this->getUserId());
-        $copyObj->setWeight($this->getWeight());
+        $copyObj->setRigId($this->getRigId());
+        $copyObj->setRating($this->getRating());
+        $copyObj->setReview($this->getReview());
+        $copyObj->setUpvotes($this->getUpvotes());
+        $copyObj->setDownvotes($this->getDownvotes());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1150,7 +1556,7 @@ abstract class UserWeights implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \UserWeights Clone of current object.
+     * @return \UserReviews Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1164,26 +1570,26 @@ abstract class UserWeights implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildRatingCategories object.
+     * Declares an association between this object and a ChildRigs object.
      *
-     * @param  ChildRatingCategories $v
-     * @return $this|\UserWeights The current object (for fluent API support)
+     * @param  ChildRigs $v
+     * @return $this|\UserReviews The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setRatingCategories(ChildRatingCategories $v = null)
+    public function setRigs(ChildRigs $v = null)
     {
         if ($v === null) {
-            $this->setRatingCategoryId(NULL);
+            $this->setRigId(NULL);
         } else {
-            $this->setRatingCategoryId($v->getId());
+            $this->setRigId($v->getId());
         }
 
-        $this->aRatingCategories = $v;
+        $this->aRigs = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildRatingCategories object, it will not be re-added.
+        // If this object has already been added to the ChildRigs object, it will not be re-added.
         if ($v !== null) {
-            $v->addUserWeights($this);
+            $v->addUserReviews($this);
         }
 
 
@@ -1192,33 +1598,135 @@ abstract class UserWeights implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildRatingCategories object
+     * Get the associated ChildRigs object
      *
      * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildRatingCategories The associated ChildRatingCategories object.
+     * @return ChildRigs The associated ChildRigs object.
      * @throws PropelException
      */
-    public function getRatingCategories(ConnectionInterface $con = null)
+    public function getRigs(ConnectionInterface $con = null)
     {
-        if ($this->aRatingCategories === null && (($this->rating_category_id !== "" && $this->rating_category_id !== null))) {
-            $this->aRatingCategories = ChildRatingCategoriesQuery::create()->findPk($this->rating_category_id, $con);
+        if ($this->aRigs === null && (($this->rig_id !== "" && $this->rig_id !== null))) {
+            $this->aRigs = ChildRigsQuery::create()->findPk($this->rig_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aRatingCategories->addUserWeightss($this);
+                $this->aRigs->addUserReviewss($this);
              */
         }
 
-        return $this->aRatingCategories;
+        return $this->aRigs;
+    }
+
+    /**
+     * Declares an association between this object and a ChildGames object.
+     *
+     * @param  ChildGames $v
+     * @return $this|\UserReviews The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setGames(ChildGames $v = null)
+    {
+        if ($v === null) {
+            $this->setGameId(NULL);
+        } else {
+            $this->setGameId($v->getId());
+        }
+
+        $this->aGames = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildGames object, it will not be re-added.
+        if ($v !== null) {
+            $v->addUserReviews($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildGames object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildGames The associated ChildGames object.
+     * @throws PropelException
+     */
+    public function getGames(ConnectionInterface $con = null)
+    {
+        if ($this->aGames === null && (($this->game_id !== "" && $this->game_id !== null))) {
+            $this->aGames = ChildGamesQuery::create()->findPk($this->game_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aGames->addUserReviewss($this);
+             */
+        }
+
+        return $this->aGames;
+    }
+
+    /**
+     * Declares an association between this object and a ChildGamePlatforms object.
+     *
+     * @param  ChildGamePlatforms $v
+     * @return $this|\UserReviews The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setGamePlatforms(ChildGamePlatforms $v = null)
+    {
+        if ($v === null) {
+            $this->setPlatformId(NULL);
+        } else {
+            $this->setPlatformId($v->getId());
+        }
+
+        $this->aGamePlatforms = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildGamePlatforms object, it will not be re-added.
+        if ($v !== null) {
+            $v->addUserReviews($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildGamePlatforms object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildGamePlatforms The associated ChildGamePlatforms object.
+     * @throws PropelException
+     */
+    public function getGamePlatforms(ConnectionInterface $con = null)
+    {
+        if ($this->aGamePlatforms === null && (($this->platform_id !== "" && $this->platform_id !== null))) {
+            $this->aGamePlatforms = ChildGamePlatformsQuery::create()->findPk($this->platform_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aGamePlatforms->addUserReviewss($this);
+             */
+        }
+
+        return $this->aGamePlatforms;
     }
 
     /**
      * Declares an association between this object and a ChildUser object.
      *
      * @param  ChildUser $v
-     * @return $this|\UserWeights The current object (for fluent API support)
+     * @return $this|\UserReviews The current object (for fluent API support)
      * @throws PropelException
      */
     public function setUser(ChildUser $v = null)
@@ -1234,7 +1742,7 @@ abstract class UserWeights implements ActiveRecordInterface
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the ChildUser object, it will not be re-added.
         if ($v !== null) {
-            $v->addUserWeights($this);
+            $v->addUserReviews($this);
         }
 
 
@@ -1258,11 +1766,62 @@ abstract class UserWeights implements ActiveRecordInterface
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aUser->addUserWeightss($this);
+                $this->aUser->addUserReviewss($this);
              */
         }
 
         return $this->aUser;
+    }
+
+    /**
+     * Declares an association between this object and a ChildRatings object.
+     *
+     * @param  ChildRatings $v
+     * @return $this|\UserReviews The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setRatings(ChildRatings $v = null)
+    {
+        if ($v === null) {
+            $this->setRating(NULL);
+        } else {
+            $this->setRating($v->getId());
+        }
+
+        $this->aRatings = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildRatings object, it will not be re-added.
+        if ($v !== null) {
+            $v->addUserReviews($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildRatings object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildRatings The associated ChildRatings object.
+     * @throws PropelException
+     */
+    public function getRatings(ConnectionInterface $con = null)
+    {
+        if ($this->aRatings === null && (($this->rating !== "" && $this->rating !== null))) {
+            $this->aRatings = ChildRatingsQuery::create()->findPk($this->rating, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aRatings->addUserReviewss($this);
+             */
+        }
+
+        return $this->aRatings;
     }
 
     /**
@@ -1272,16 +1831,30 @@ abstract class UserWeights implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aRatingCategories) {
-            $this->aRatingCategories->removeUserWeights($this);
+        if (null !== $this->aRigs) {
+            $this->aRigs->removeUserReviews($this);
+        }
+        if (null !== $this->aGames) {
+            $this->aGames->removeUserReviews($this);
+        }
+        if (null !== $this->aGamePlatforms) {
+            $this->aGamePlatforms->removeUserReviews($this);
         }
         if (null !== $this->aUser) {
-            $this->aUser->removeUserWeights($this);
+            $this->aUser->removeUserReviews($this);
+        }
+        if (null !== $this->aRatings) {
+            $this->aRatings->removeUserReviews($this);
         }
         $this->id = null;
-        $this->rating_category_id = null;
+        $this->game_id = null;
+        $this->platform_id = null;
         $this->user_id = null;
-        $this->weight = null;
+        $this->rig_id = null;
+        $this->rating = null;
+        $this->review = null;
+        $this->upvotes = null;
+        $this->downvotes = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1302,8 +1875,11 @@ abstract class UserWeights implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aRatingCategories = null;
+        $this->aRigs = null;
+        $this->aGames = null;
+        $this->aGamePlatforms = null;
         $this->aUser = null;
+        $this->aRatings = null;
     }
 
     /**
@@ -1313,7 +1889,7 @@ abstract class UserWeights implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(UserWeightsTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(UserReviewsTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**

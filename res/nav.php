@@ -21,6 +21,9 @@
           <?php
             if(Auth::checkIfAuthenticated()) {
                 $user = Auth::getCurrentUser();
+                if($user->getAdmin()) {
+                    echo '<li><a href="admin.php"><b>Admin</b></a></li>';
+                }
                 echo '<li><a href="?logout=1"><b>Log Out '.$user->getUsername().'</b></a></li>';
             } else {
                 echo '<li><a href="auth.php">Login</a></li>';
