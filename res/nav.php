@@ -29,6 +29,18 @@
                 echo '<li><a href="auth.php">Login</a></li>';
             }
           ?>
+          <div class='container'>
+            <form action='search.php' method='post'> <!-- Submit search -->
+              <div class='input-group'>
+                <span class='input-group-btn'>
+                  <button name='btnSearch' type='submit' class='btn btn-success' aria-label='Left Align'>
+                    <span class='glyphicon glyphicon-search' aria-hidden='true'></span> Search
+                  </button>
+                </span>
+                <input name='txtSearch' type='text' class='form-control' value='<?php if(isset($_POST['txtSearch'])) echo $_POST['txtSearch']; ?>' placeholder='e.g. Deus Ex: Invisible War'>
+              </div>
+            </form>
+          </div>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
