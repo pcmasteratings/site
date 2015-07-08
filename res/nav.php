@@ -5,7 +5,7 @@
   <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -15,32 +15,53 @@
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right">
-          <li><a href="/">Home</a></li>
-          <?php
-            if(Auth::checkIfAuthenticated()) {
-                $user = Auth::getCurrentUser();
-                if($user->getAdmin()) {
-                    echo '<li><a href="admin.php"><b>Admin</b></a></li>';
-                }
-                echo '<li><a href="?logout=1"><b>Log Out '.$user->getUsername().'</b></a></li>';
-            } else {
-                echo '<li><a href="auth.php">Login</a></li>';
-            }
-          ?>
-          <div class='container'>
-            <form action='search.php' method='post'> <!-- Submit search -->
-              <div class='input-group'>
-                <span class='input-group-btn'>
-                  <button name='btnSearch' type='submit' class='btn btn-success' aria-label='Left Align'>
-                    <span class='glyphicon glyphicon-search' aria-hidden='true'></span> Search
-                  </button>
-                </span>
-                <input name='txtSearch' type='text' class='form-control' value='<?php if(isset($_POST['txtSearch'])) echo $_POST['txtSearch']; ?>' placeholder='e.g. Deus Ex: Invisible War'>
-              </div>
-            </form>
+    <div class="collapse navbar-collapse" id="navbar-collapse-1">
+      <form class="navbar-form navbar-left" role="search" action="search.php" method="post">
+        <div class="form-group">
+          <div class="input-group">
+            <input name='txtSearch' type='text' class='form-control' value='<?php if(isset($_POST['txtSearch'])) echo $_POST['txtSearch']; ?>' placeholder='e.g. Deus Ex: Invisible War'>
+            <span class="input-group-btn">
+              <button name='btnSearch' type='submit' class='btn btn-success' aria-label='Left Align'>
+                <span class='glyphicon glyphicon-search' aria-hidden='true'></span> Search
+              </button>
+            </span>
           </div>
+        </div>
+      </form>
+      
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/">Home</a></li>
+        <?php
+          if(Auth::checkIfAuthenticated()) {
+              $user = Auth::getCurrentUser();
+              if($user->getAdmin()) {
+                  echo '<li><a href="admin.php"><b>Admin</b></a></li>';
+              }
+              ?>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><?php $user->getUsername(); ?></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Profile [N/A]</a></li>
+                  <li><a href="?logout=1">Log Out</a></li>
+                </ul>
+              </li>
+              <?php
+          } else {
+              echo '<li><a href="auth.php">Login</a></li>';
+          }
+        ?>
+        <div class='container'>
+          <form action='search.php' method='post'> <!-- Submit search -->
+            <div class='input-group'>
+              <span class='input-group-btn'>
+                <button name='btnSearch' type='submit' class='btn btn-success' aria-label='Left Align'>
+                  <span class='glyphicon glyphicon-search' aria-hidden='true'></span> Search
+                </button>
+              </span>
+              <input name='txtSearch' type='text' class='form-control' value='<?php if(isset($_POST['txtSearch'])) echo $_POST['txtSearch']; ?>' placeholder='e.g. Deus Ex: Invisible War'>
+            </div>
+          </form>
+        </div>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
