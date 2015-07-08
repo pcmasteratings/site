@@ -2,17 +2,17 @@
 
 namespace Base;
 
+use \GamePlatforms as ChildGamePlatforms;
+use \GamePlatformsQuery as ChildGamePlatformsQuery;
+use \Platforms as ChildPlatforms;
+use \PlatformsQuery as ChildPlatformsQuery;
 use \RatingHeaders as ChildRatingHeaders;
 use \RatingHeadersQuery as ChildRatingHeadersQuery;
-use \RigAttributeValues as ChildRigAttributeValues;
-use \RigAttributeValuesQuery as ChildRigAttributeValuesQuery;
-use \Rigs as ChildRigs;
-use \RigsQuery as ChildRigsQuery;
-use \User as ChildUser;
-use \UserQuery as ChildUserQuery;
+use \UserReviews as ChildUserReviews;
+use \UserReviewsQuery as ChildUserReviewsQuery;
 use \Exception;
 use \PDO;
-use Map\RigsTableMap;
+use Map\PlatformsTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -27,18 +27,18 @@ use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
 
 /**
- * Base class that represents a row from the 'rigs' table.
+ * Base class that represents a row from the 'platforms' table.
  *
  * 
  *
 * @package    propel.generator..Base
 */
-abstract class Rigs implements ActiveRecordInterface 
+abstract class Platforms implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Map\\RigsTableMap';
+    const TABLE_MAP = '\\Map\\PlatformsTableMap';
 
 
     /**
@@ -74,10 +74,10 @@ abstract class Rigs implements ActiveRecordInterface
     protected $id;
 
     /**
-     * The value for the user_id field.
+     * The value for the name field.
      * @var        string
      */
-    protected $user_id;
+    protected $name;
 
     /**
      * The value for the title field.
@@ -86,9 +86,22 @@ abstract class Rigs implements ActiveRecordInterface
     protected $title;
 
     /**
-     * @var        ChildUser
+     * The value for the description field.
+     * @var        string
      */
-    protected $aUser;
+    protected $description;
+
+    /**
+     * The value for the gb_id field.
+     * @var        string
+     */
+    protected $gb_id;
+
+    /**
+     * @var        ObjectCollection|ChildGamePlatforms[] Collection to store aggregation of ChildGamePlatforms objects.
+     */
+    protected $collGamePlatformss;
+    protected $collGamePlatformssPartial;
 
     /**
      * @var        ObjectCollection|ChildRatingHeaders[] Collection to store aggregation of ChildRatingHeaders objects.
@@ -97,10 +110,10 @@ abstract class Rigs implements ActiveRecordInterface
     protected $collRatingHeaderssPartial;
 
     /**
-     * @var        ObjectCollection|ChildRigAttributeValues[] Collection to store aggregation of ChildRigAttributeValues objects.
+     * @var        ObjectCollection|ChildUserReviews[] Collection to store aggregation of ChildUserReviews objects.
      */
-    protected $collRigAttributeValuess;
-    protected $collRigAttributeValuessPartial;
+    protected $collUserReviewss;
+    protected $collUserReviewssPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -112,18 +125,24 @@ abstract class Rigs implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildGamePlatforms[]
+     */
+    protected $gamePlatformssScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
      * @var ObjectCollection|ChildRatingHeaders[]
      */
     protected $ratingHeaderssScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildRigAttributeValues[]
+     * @var ObjectCollection|ChildUserReviews[]
      */
-    protected $rigAttributeValuessScheduledForDeletion = null;
+    protected $userReviewssScheduledForDeletion = null;
 
     /**
-     * Initializes internal state of Base\Rigs object.
+     * Initializes internal state of Base\Platforms object.
      */
     public function __construct()
     {
@@ -218,9 +237,9 @@ abstract class Rigs implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Rigs</code> instance.  If
-     * <code>obj</code> is an instance of <code>Rigs</code>, delegates to
-     * <code>equals(Rigs)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>Platforms</code> instance.  If
+     * <code>obj</code> is an instance of <code>Platforms</code>, delegates to
+     * <code>equals(Platforms)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -286,7 +305,7 @@ abstract class Rigs implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|Rigs The current object, for fluid interface
+     * @return $this|Platforms The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -350,13 +369,13 @@ abstract class Rigs implements ActiveRecordInterface
     }
 
     /**
-     * Get the [user_id] column value.
+     * Get the [name] column value.
      * 
      * @return string
      */
-    public function getUserId()
+    public function getName()
     {
-        return $this->user_id;
+        return $this->name;
     }
 
     /**
@@ -370,10 +389,30 @@ abstract class Rigs implements ActiveRecordInterface
     }
 
     /**
+     * Get the [description] column value.
+     * 
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Get the [gb_id] column value.
+     * 
+     * @return string
+     */
+    public function getGbId()
+    {
+        return $this->gb_id;
+    }
+
+    /**
      * Set the value of [id] column.
      * 
      * @param string $v new value
-     * @return $this|\Rigs The current object (for fluent API support)
+     * @return $this|\Platforms The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -383,41 +422,37 @@ abstract class Rigs implements ActiveRecordInterface
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[RigsTableMap::COL_ID] = true;
+            $this->modifiedColumns[PlatformsTableMap::COL_ID] = true;
         }
 
         return $this;
     } // setId()
 
     /**
-     * Set the value of [user_id] column.
+     * Set the value of [name] column.
      * 
      * @param string $v new value
-     * @return $this|\Rigs The current object (for fluent API support)
+     * @return $this|\Platforms The current object (for fluent API support)
      */
-    public function setUserId($v)
+    public function setName($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->user_id !== $v) {
-            $this->user_id = $v;
-            $this->modifiedColumns[RigsTableMap::COL_USER_ID] = true;
-        }
-
-        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
-            $this->aUser = null;
+        if ($this->name !== $v) {
+            $this->name = $v;
+            $this->modifiedColumns[PlatformsTableMap::COL_NAME] = true;
         }
 
         return $this;
-    } // setUserId()
+    } // setName()
 
     /**
      * Set the value of [title] column.
      * 
      * @param string $v new value
-     * @return $this|\Rigs The current object (for fluent API support)
+     * @return $this|\Platforms The current object (for fluent API support)
      */
     public function setTitle($v)
     {
@@ -427,11 +462,51 @@ abstract class Rigs implements ActiveRecordInterface
 
         if ($this->title !== $v) {
             $this->title = $v;
-            $this->modifiedColumns[RigsTableMap::COL_TITLE] = true;
+            $this->modifiedColumns[PlatformsTableMap::COL_TITLE] = true;
         }
 
         return $this;
     } // setTitle()
+
+    /**
+     * Set the value of [description] column.
+     * 
+     * @param string $v new value
+     * @return $this|\Platforms The current object (for fluent API support)
+     */
+    public function setDescription($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->description !== $v) {
+            $this->description = $v;
+            $this->modifiedColumns[PlatformsTableMap::COL_DESCRIPTION] = true;
+        }
+
+        return $this;
+    } // setDescription()
+
+    /**
+     * Set the value of [gb_id] column.
+     * 
+     * @param string $v new value
+     * @return $this|\Platforms The current object (for fluent API support)
+     */
+    public function setGbId($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->gb_id !== $v) {
+            $this->gb_id = $v;
+            $this->modifiedColumns[PlatformsTableMap::COL_GB_ID] = true;
+        }
+
+        return $this;
+    } // setGbId()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -469,14 +544,20 @@ abstract class Rigs implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : RigsTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : PlatformsTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : RigsTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_id = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : PlatformsTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->name = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RigsTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : PlatformsTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
             $this->title = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : PlatformsTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->description = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : PlatformsTableMap::translateFieldName('GbId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->gb_id = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -485,10 +566,10 @@ abstract class Rigs implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 3; // 3 = RigsTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = PlatformsTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Rigs'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\Platforms'), 0, $e);
         }
     }
 
@@ -507,9 +588,6 @@ abstract class Rigs implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
-        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
-            $this->aUser = null;
-        }
     } // ensureConsistency
 
     /**
@@ -533,13 +611,13 @@ abstract class Rigs implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(RigsTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(PlatformsTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildRigsQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildPlatformsQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -549,10 +627,11 @@ abstract class Rigs implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aUser = null;
+            $this->collGamePlatformss = null;
+
             $this->collRatingHeaderss = null;
 
-            $this->collRigAttributeValuess = null;
+            $this->collUserReviewss = null;
 
         } // if (deep)
     }
@@ -563,8 +642,8 @@ abstract class Rigs implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see Rigs::setDeleted()
-     * @see Rigs::isDeleted()
+     * @see Platforms::setDeleted()
+     * @see Platforms::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -573,11 +652,11 @@ abstract class Rigs implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(RigsTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PlatformsTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildRigsQuery::create()
+            $deleteQuery = ChildPlatformsQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -608,7 +687,7 @@ abstract class Rigs implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(RigsTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PlatformsTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -627,7 +706,7 @@ abstract class Rigs implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                RigsTableMap::addInstanceToPool($this);
+                PlatformsTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -653,18 +732,6 @@ abstract class Rigs implements ActiveRecordInterface
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
-            // We call the save method on the following object(s) if they
-            // were passed to this object by their corresponding set
-            // method.  This object relates to these object(s) by a
-            // foreign key reference.
-
-            if ($this->aUser !== null) {
-                if ($this->aUser->isModified() || $this->aUser->isNew()) {
-                    $affectedRows += $this->aUser->save($con);
-                }
-                $this->setUser($this->aUser);
-            }
-
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -676,12 +743,28 @@ abstract class Rigs implements ActiveRecordInterface
                 $this->resetModified();
             }
 
+            if ($this->gamePlatformssScheduledForDeletion !== null) {
+                if (!$this->gamePlatformssScheduledForDeletion->isEmpty()) {
+                    \GamePlatformsQuery::create()
+                        ->filterByPrimaryKeys($this->gamePlatformssScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->gamePlatformssScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collGamePlatformss !== null) {
+                foreach ($this->collGamePlatformss as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->ratingHeaderssScheduledForDeletion !== null) {
                 if (!$this->ratingHeaderssScheduledForDeletion->isEmpty()) {
-                    foreach ($this->ratingHeaderssScheduledForDeletion as $ratingHeaders) {
-                        // need to save related object because we set the relation to null
-                        $ratingHeaders->save($con);
-                    }
+                    \RatingHeadersQuery::create()
+                        ->filterByPrimaryKeys($this->ratingHeaderssScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
                     $this->ratingHeaderssScheduledForDeletion = null;
                 }
             }
@@ -694,17 +777,17 @@ abstract class Rigs implements ActiveRecordInterface
                 }
             }
 
-            if ($this->rigAttributeValuessScheduledForDeletion !== null) {
-                if (!$this->rigAttributeValuessScheduledForDeletion->isEmpty()) {
-                    \RigAttributeValuesQuery::create()
-                        ->filterByPrimaryKeys($this->rigAttributeValuessScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->userReviewssScheduledForDeletion !== null) {
+                if (!$this->userReviewssScheduledForDeletion->isEmpty()) {
+                    \UserReviewsQuery::create()
+                        ->filterByPrimaryKeys($this->userReviewssScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->rigAttributeValuessScheduledForDeletion = null;
+                    $this->userReviewssScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collRigAttributeValuess !== null) {
-                foreach ($this->collRigAttributeValuess as $referrerFK) {
+            if ($this->collUserReviewss !== null) {
+                foreach ($this->collUserReviewss as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -731,24 +814,30 @@ abstract class Rigs implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[RigsTableMap::COL_ID] = true;
+        $this->modifiedColumns[PlatformsTableMap::COL_ID] = true;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . RigsTableMap::COL_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . PlatformsTableMap::COL_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(RigsTableMap::COL_ID)) {
+        if ($this->isColumnModified(PlatformsTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(RigsTableMap::COL_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'user_id';
+        if ($this->isColumnModified(PlatformsTableMap::COL_NAME)) {
+            $modifiedColumns[':p' . $index++]  = 'name';
         }
-        if ($this->isColumnModified(RigsTableMap::COL_TITLE)) {
+        if ($this->isColumnModified(PlatformsTableMap::COL_TITLE)) {
             $modifiedColumns[':p' . $index++]  = 'title';
+        }
+        if ($this->isColumnModified(PlatformsTableMap::COL_DESCRIPTION)) {
+            $modifiedColumns[':p' . $index++]  = 'description';
+        }
+        if ($this->isColumnModified(PlatformsTableMap::COL_GB_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'gb_id';
         }
 
         $sql = sprintf(
-            'INSERT INTO rigs (%s) VALUES (%s)',
+            'INSERT INTO platforms (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -760,11 +849,17 @@ abstract class Rigs implements ActiveRecordInterface
                     case 'id':                        
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'user_id':                        
-                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+                    case 'name':                        
+                        $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
                     case 'title':                        
                         $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
+                        break;
+                    case 'description':                        
+                        $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
+                        break;
+                    case 'gb_id':                        
+                        $stmt->bindValue($identifier, $this->gb_id, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -812,7 +907,7 @@ abstract class Rigs implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = RigsTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = PlatformsTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -832,10 +927,16 @@ abstract class Rigs implements ActiveRecordInterface
                 return $this->getId();
                 break;
             case 1:
-                return $this->getUserId();
+                return $this->getName();
                 break;
             case 2:
                 return $this->getTitle();
+                break;
+            case 3:
+                return $this->getDescription();
+                break;
+            case 4:
+                return $this->getGbId();
                 break;
             default:
                 return null;
@@ -861,15 +962,17 @@ abstract class Rigs implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['Rigs'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['Platforms'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Rigs'][$this->hashCode()] = true;
-        $keys = RigsTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['Platforms'][$this->hashCode()] = true;
+        $keys = PlatformsTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getUserId(),
+            $keys[1] => $this->getName(),
             $keys[2] => $this->getTitle(),
+            $keys[3] => $this->getDescription(),
+            $keys[4] => $this->getGbId(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -877,20 +980,20 @@ abstract class Rigs implements ActiveRecordInterface
         }
         
         if ($includeForeignObjects) {
-            if (null !== $this->aUser) {
+            if (null !== $this->collGamePlatformss) {
                 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'user';
+                        $key = 'gamePlatformss';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'user';
+                        $key = 'game_platformss';
                         break;
                     default:
-                        $key = 'User';
+                        $key = 'GamePlatformss';
                 }
         
-                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->collGamePlatformss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collRatingHeaderss) {
                 
@@ -907,20 +1010,20 @@ abstract class Rigs implements ActiveRecordInterface
         
                 $result[$key] = $this->collRatingHeaderss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collRigAttributeValuess) {
+            if (null !== $this->collUserReviewss) {
                 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'rigAttributeValuess';
+                        $key = 'userReviewss';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'rig_attribute_valuess';
+                        $key = 'user_reviewss';
                         break;
                     default:
-                        $key = 'RigAttributeValuess';
+                        $key = 'UserReviewss';
                 }
         
-                $result[$key] = $this->collRigAttributeValuess->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collUserReviewss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -936,11 +1039,11 @@ abstract class Rigs implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\Rigs
+     * @return $this|\Platforms
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = RigsTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = PlatformsTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -951,7 +1054,7 @@ abstract class Rigs implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\Rigs
+     * @return $this|\Platforms
      */
     public function setByPosition($pos, $value)
     {
@@ -960,10 +1063,16 @@ abstract class Rigs implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setUserId($value);
+                $this->setName($value);
                 break;
             case 2:
                 $this->setTitle($value);
+                break;
+            case 3:
+                $this->setDescription($value);
+                break;
+            case 4:
+                $this->setGbId($value);
                 break;
         } // switch()
 
@@ -989,16 +1098,22 @@ abstract class Rigs implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = RigsTableMap::getFieldNames($keyType);
+        $keys = PlatformsTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setUserId($arr[$keys[1]]);
+            $this->setName($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
             $this->setTitle($arr[$keys[2]]);
+        }
+        if (array_key_exists($keys[3], $arr)) {
+            $this->setDescription($arr[$keys[3]]);
+        }
+        if (array_key_exists($keys[4], $arr)) {
+            $this->setGbId($arr[$keys[4]]);
         }
     }
 
@@ -1019,7 +1134,7 @@ abstract class Rigs implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\Rigs The current object, for fluid interface
+     * @return $this|\Platforms The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1039,16 +1154,22 @@ abstract class Rigs implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(RigsTableMap::DATABASE_NAME);
+        $criteria = new Criteria(PlatformsTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(RigsTableMap::COL_ID)) {
-            $criteria->add(RigsTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(PlatformsTableMap::COL_ID)) {
+            $criteria->add(PlatformsTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(RigsTableMap::COL_USER_ID)) {
-            $criteria->add(RigsTableMap::COL_USER_ID, $this->user_id);
+        if ($this->isColumnModified(PlatformsTableMap::COL_NAME)) {
+            $criteria->add(PlatformsTableMap::COL_NAME, $this->name);
         }
-        if ($this->isColumnModified(RigsTableMap::COL_TITLE)) {
-            $criteria->add(RigsTableMap::COL_TITLE, $this->title);
+        if ($this->isColumnModified(PlatformsTableMap::COL_TITLE)) {
+            $criteria->add(PlatformsTableMap::COL_TITLE, $this->title);
+        }
+        if ($this->isColumnModified(PlatformsTableMap::COL_DESCRIPTION)) {
+            $criteria->add(PlatformsTableMap::COL_DESCRIPTION, $this->description);
+        }
+        if ($this->isColumnModified(PlatformsTableMap::COL_GB_ID)) {
+            $criteria->add(PlatformsTableMap::COL_GB_ID, $this->gb_id);
         }
 
         return $criteria;
@@ -1066,8 +1187,8 @@ abstract class Rigs implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildRigsQuery::create();
-        $criteria->add(RigsTableMap::COL_ID, $this->id);
+        $criteria = ChildPlatformsQuery::create();
+        $criteria->add(PlatformsTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -1129,20 +1250,28 @@ abstract class Rigs implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \Rigs (or compatible) type.
+     * @param      object $copyObj An object of \Platforms (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setUserId($this->getUserId());
+        $copyObj->setName($this->getName());
         $copyObj->setTitle($this->getTitle());
+        $copyObj->setDescription($this->getDescription());
+        $copyObj->setGbId($this->getGbId());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
+
+            foreach ($this->getGamePlatformss() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addGamePlatforms($relObj->copy($deepCopy));
+                }
+            }
 
             foreach ($this->getRatingHeaderss() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
@@ -1150,9 +1279,9 @@ abstract class Rigs implements ActiveRecordInterface
                 }
             }
 
-            foreach ($this->getRigAttributeValuess() as $relObj) {
+            foreach ($this->getUserReviewss() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addRigAttributeValues($relObj->copy($deepCopy));
+                    $copyObj->addUserReviews($relObj->copy($deepCopy));
                 }
             }
 
@@ -1173,7 +1302,7 @@ abstract class Rigs implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Rigs Clone of current object.
+     * @return \Platforms Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1184,57 +1313,6 @@ abstract class Rigs implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
-    }
-
-    /**
-     * Declares an association between this object and a ChildUser object.
-     *
-     * @param  ChildUser $v
-     * @return $this|\Rigs The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setUser(ChildUser $v = null)
-    {
-        if ($v === null) {
-            $this->setUserId(NULL);
-        } else {
-            $this->setUserId($v->getId());
-        }
-
-        $this->aUser = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildUser object, it will not be re-added.
-        if ($v !== null) {
-            $v->addRigs($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildUser object
-     *
-     * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildUser The associated ChildUser object.
-     * @throws PropelException
-     */
-    public function getUser(ConnectionInterface $con = null)
-    {
-        if ($this->aUser === null && (($this->user_id !== "" && $this->user_id !== null))) {
-            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aUser->addRigss($this);
-             */
-        }
-
-        return $this->aUser;
     }
 
 
@@ -1248,12 +1326,261 @@ abstract class Rigs implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
+        if ('GamePlatforms' == $relationName) {
+            return $this->initGamePlatformss();
+        }
         if ('RatingHeaders' == $relationName) {
             return $this->initRatingHeaderss();
         }
-        if ('RigAttributeValues' == $relationName) {
-            return $this->initRigAttributeValuess();
+        if ('UserReviews' == $relationName) {
+            return $this->initUserReviewss();
         }
+    }
+
+    /**
+     * Clears out the collGamePlatformss collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addGamePlatformss()
+     */
+    public function clearGamePlatformss()
+    {
+        $this->collGamePlatformss = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collGamePlatformss collection loaded partially.
+     */
+    public function resetPartialGamePlatformss($v = true)
+    {
+        $this->collGamePlatformssPartial = $v;
+    }
+
+    /**
+     * Initializes the collGamePlatformss collection.
+     *
+     * By default this just sets the collGamePlatformss collection to an empty array (like clearcollGamePlatformss());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initGamePlatformss($overrideExisting = true)
+    {
+        if (null !== $this->collGamePlatformss && !$overrideExisting) {
+            return;
+        }
+        $this->collGamePlatformss = new ObjectCollection();
+        $this->collGamePlatformss->setModel('\GamePlatforms');
+    }
+
+    /**
+     * Gets an array of ChildGamePlatforms objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildPlatforms is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildGamePlatforms[] List of ChildGamePlatforms objects
+     * @throws PropelException
+     */
+    public function getGamePlatformss(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collGamePlatformssPartial && !$this->isNew();
+        if (null === $this->collGamePlatformss || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collGamePlatformss) {
+                // return empty collection
+                $this->initGamePlatformss();
+            } else {
+                $collGamePlatformss = ChildGamePlatformsQuery::create(null, $criteria)
+                    ->filterByPlatforms($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collGamePlatformssPartial && count($collGamePlatformss)) {
+                        $this->initGamePlatformss(false);
+
+                        foreach ($collGamePlatformss as $obj) {
+                            if (false == $this->collGamePlatformss->contains($obj)) {
+                                $this->collGamePlatformss->append($obj);
+                            }
+                        }
+
+                        $this->collGamePlatformssPartial = true;
+                    }
+
+                    return $collGamePlatformss;
+                }
+
+                if ($partial && $this->collGamePlatformss) {
+                    foreach ($this->collGamePlatformss as $obj) {
+                        if ($obj->isNew()) {
+                            $collGamePlatformss[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collGamePlatformss = $collGamePlatformss;
+                $this->collGamePlatformssPartial = false;
+            }
+        }
+
+        return $this->collGamePlatformss;
+    }
+
+    /**
+     * Sets a collection of ChildGamePlatforms objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $gamePlatformss A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildPlatforms The current object (for fluent API support)
+     */
+    public function setGamePlatformss(Collection $gamePlatformss, ConnectionInterface $con = null)
+    {
+        /** @var ChildGamePlatforms[] $gamePlatformssToDelete */
+        $gamePlatformssToDelete = $this->getGamePlatformss(new Criteria(), $con)->diff($gamePlatformss);
+
+        
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->gamePlatformssScheduledForDeletion = clone $gamePlatformssToDelete;
+
+        foreach ($gamePlatformssToDelete as $gamePlatformsRemoved) {
+            $gamePlatformsRemoved->setPlatforms(null);
+        }
+
+        $this->collGamePlatformss = null;
+        foreach ($gamePlatformss as $gamePlatforms) {
+            $this->addGamePlatforms($gamePlatforms);
+        }
+
+        $this->collGamePlatformss = $gamePlatformss;
+        $this->collGamePlatformssPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related GamePlatforms objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related GamePlatforms objects.
+     * @throws PropelException
+     */
+    public function countGamePlatformss(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collGamePlatformssPartial && !$this->isNew();
+        if (null === $this->collGamePlatformss || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collGamePlatformss) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getGamePlatformss());
+            }
+
+            $query = ChildGamePlatformsQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByPlatforms($this)
+                ->count($con);
+        }
+
+        return count($this->collGamePlatformss);
+    }
+
+    /**
+     * Method called to associate a ChildGamePlatforms object to this object
+     * through the ChildGamePlatforms foreign key attribute.
+     *
+     * @param  ChildGamePlatforms $l ChildGamePlatforms
+     * @return $this|\Platforms The current object (for fluent API support)
+     */
+    public function addGamePlatforms(ChildGamePlatforms $l)
+    {
+        if ($this->collGamePlatformss === null) {
+            $this->initGamePlatformss();
+            $this->collGamePlatformssPartial = true;
+        }
+
+        if (!$this->collGamePlatformss->contains($l)) {
+            $this->doAddGamePlatforms($l);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildGamePlatforms $gamePlatforms The ChildGamePlatforms object to add.
+     */
+    protected function doAddGamePlatforms(ChildGamePlatforms $gamePlatforms)
+    {
+        $this->collGamePlatformss[]= $gamePlatforms;
+        $gamePlatforms->setPlatforms($this);
+    }
+
+    /**
+     * @param  ChildGamePlatforms $gamePlatforms The ChildGamePlatforms object to remove.
+     * @return $this|ChildPlatforms The current object (for fluent API support)
+     */
+    public function removeGamePlatforms(ChildGamePlatforms $gamePlatforms)
+    {
+        if ($this->getGamePlatformss()->contains($gamePlatforms)) {
+            $pos = $this->collGamePlatformss->search($gamePlatforms);
+            $this->collGamePlatformss->remove($pos);
+            if (null === $this->gamePlatformssScheduledForDeletion) {
+                $this->gamePlatformssScheduledForDeletion = clone $this->collGamePlatformss;
+                $this->gamePlatformssScheduledForDeletion->clear();
+            }
+            $this->gamePlatformssScheduledForDeletion[]= clone $gamePlatforms;
+            $gamePlatforms->setPlatforms(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Platforms is new, it will return
+     * an empty collection; or if this Platforms has previously
+     * been saved, it will retrieve related GamePlatformss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Platforms.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildGamePlatforms[] List of ChildGamePlatforms objects
+     */
+    public function getGamePlatformssJoinGames(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildGamePlatformsQuery::create(null, $criteria);
+        $query->joinWith('Games', $joinBehavior);
+
+        return $this->getGamePlatformss($query, $con);
     }
 
     /**
@@ -1305,7 +1632,7 @@ abstract class Rigs implements ActiveRecordInterface
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildRigs is new, it will return
+     * If this ChildPlatforms is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
@@ -1322,7 +1649,7 @@ abstract class Rigs implements ActiveRecordInterface
                 $this->initRatingHeaderss();
             } else {
                 $collRatingHeaderss = ChildRatingHeadersQuery::create(null, $criteria)
-                    ->filterByRigs($this)
+                    ->filterByPlatforms($this)
                     ->find($con);
 
                 if (null !== $criteria) {
@@ -1365,7 +1692,7 @@ abstract class Rigs implements ActiveRecordInterface
      *
      * @param      Collection $ratingHeaderss A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildRigs The current object (for fluent API support)
+     * @return $this|ChildPlatforms The current object (for fluent API support)
      */
     public function setRatingHeaderss(Collection $ratingHeaderss, ConnectionInterface $con = null)
     {
@@ -1376,7 +1703,7 @@ abstract class Rigs implements ActiveRecordInterface
         $this->ratingHeaderssScheduledForDeletion = $ratingHeaderssToDelete;
 
         foreach ($ratingHeaderssToDelete as $ratingHeadersRemoved) {
-            $ratingHeadersRemoved->setRigs(null);
+            $ratingHeadersRemoved->setPlatforms(null);
         }
 
         $this->collRatingHeaderss = null;
@@ -1417,7 +1744,7 @@ abstract class Rigs implements ActiveRecordInterface
             }
 
             return $query
-                ->filterByRigs($this)
+                ->filterByPlatforms($this)
                 ->count($con);
         }
 
@@ -1429,7 +1756,7 @@ abstract class Rigs implements ActiveRecordInterface
      * through the ChildRatingHeaders foreign key attribute.
      *
      * @param  ChildRatingHeaders $l ChildRatingHeaders
-     * @return $this|\Rigs The current object (for fluent API support)
+     * @return $this|\Platforms The current object (for fluent API support)
      */
     public function addRatingHeaders(ChildRatingHeaders $l)
     {
@@ -1451,12 +1778,12 @@ abstract class Rigs implements ActiveRecordInterface
     protected function doAddRatingHeaders(ChildRatingHeaders $ratingHeaders)
     {
         $this->collRatingHeaderss[]= $ratingHeaders;
-        $ratingHeaders->setRigs($this);
+        $ratingHeaders->setPlatforms($this);
     }
 
     /**
      * @param  ChildRatingHeaders $ratingHeaders The ChildRatingHeaders object to remove.
-     * @return $this|ChildRigs The current object (for fluent API support)
+     * @return $this|ChildPlatforms The current object (for fluent API support)
      */
     public function removeRatingHeaders(ChildRatingHeaders $ratingHeaders)
     {
@@ -1467,8 +1794,8 @@ abstract class Rigs implements ActiveRecordInterface
                 $this->ratingHeaderssScheduledForDeletion = clone $this->collRatingHeaderss;
                 $this->ratingHeaderssScheduledForDeletion->clear();
             }
-            $this->ratingHeaderssScheduledForDeletion[]= $ratingHeaders;
-            $ratingHeaders->setRigs(null);
+            $this->ratingHeaderssScheduledForDeletion[]= clone $ratingHeaders;
+            $ratingHeaders->setPlatforms(null);
         }
 
         return $this;
@@ -1478,13 +1805,13 @@ abstract class Rigs implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this Rigs is new, it will return
-     * an empty collection; or if this Rigs has previously
+     * Otherwise if this Platforms is new, it will return
+     * an empty collection; or if this Platforms has previously
      * been saved, it will retrieve related RatingHeaderss from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in Rigs.
+     * actually need in Platforms.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
@@ -1503,13 +1830,13 @@ abstract class Rigs implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this Rigs is new, it will return
-     * an empty collection; or if this Rigs has previously
+     * Otherwise if this Platforms is new, it will return
+     * an empty collection; or if this Platforms has previously
      * been saved, it will retrieve related RatingHeaderss from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in Rigs.
+     * actually need in Platforms.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
@@ -1528,53 +1855,53 @@ abstract class Rigs implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this Rigs is new, it will return
-     * an empty collection; or if this Rigs has previously
+     * Otherwise if this Platforms is new, it will return
+     * an empty collection; or if this Platforms has previously
      * been saved, it will retrieve related RatingHeaderss from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in Rigs.
+     * actually need in Platforms.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
      */
-    public function getRatingHeaderssJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getRatingHeaderssJoinRigs(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRatingHeadersQuery::create(null, $criteria);
-        $query->joinWith('Platforms', $joinBehavior);
+        $query->joinWith('Rigs', $joinBehavior);
 
         return $this->getRatingHeaderss($query, $con);
     }
 
     /**
-     * Clears out the collRigAttributeValuess collection
+     * Clears out the collUserReviewss collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addRigAttributeValuess()
+     * @see        addUserReviewss()
      */
-    public function clearRigAttributeValuess()
+    public function clearUserReviewss()
     {
-        $this->collRigAttributeValuess = null; // important to set this to NULL since that means it is uninitialized
+        $this->collUserReviewss = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collRigAttributeValuess collection loaded partially.
+     * Reset is the collUserReviewss collection loaded partially.
      */
-    public function resetPartialRigAttributeValuess($v = true)
+    public function resetPartialUserReviewss($v = true)
     {
-        $this->collRigAttributeValuessPartial = $v;
+        $this->collUserReviewssPartial = $v;
     }
 
     /**
-     * Initializes the collRigAttributeValuess collection.
+     * Initializes the collUserReviewss collection.
      *
-     * By default this just sets the collRigAttributeValuess collection to an empty array (like clearcollRigAttributeValuess());
+     * By default this just sets the collUserReviewss collection to an empty array (like clearcollUserReviewss());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1583,185 +1910,185 @@ abstract class Rigs implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initRigAttributeValuess($overrideExisting = true)
+    public function initUserReviewss($overrideExisting = true)
     {
-        if (null !== $this->collRigAttributeValuess && !$overrideExisting) {
+        if (null !== $this->collUserReviewss && !$overrideExisting) {
             return;
         }
-        $this->collRigAttributeValuess = new ObjectCollection();
-        $this->collRigAttributeValuess->setModel('\RigAttributeValues');
+        $this->collUserReviewss = new ObjectCollection();
+        $this->collUserReviewss->setModel('\UserReviews');
     }
 
     /**
-     * Gets an array of ChildRigAttributeValues objects which contain a foreign key that references this object.
+     * Gets an array of ChildUserReviews objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildRigs is new, it will return
+     * If this ChildPlatforms is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildRigAttributeValues[] List of ChildRigAttributeValues objects
+     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
      * @throws PropelException
      */
-    public function getRigAttributeValuess(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getUserReviewss(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collRigAttributeValuessPartial && !$this->isNew();
-        if (null === $this->collRigAttributeValuess || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collRigAttributeValuess) {
+        $partial = $this->collUserReviewssPartial && !$this->isNew();
+        if (null === $this->collUserReviewss || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collUserReviewss) {
                 // return empty collection
-                $this->initRigAttributeValuess();
+                $this->initUserReviewss();
             } else {
-                $collRigAttributeValuess = ChildRigAttributeValuesQuery::create(null, $criteria)
-                    ->filterByRigs($this)
+                $collUserReviewss = ChildUserReviewsQuery::create(null, $criteria)
+                    ->filterByPlatforms($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collRigAttributeValuessPartial && count($collRigAttributeValuess)) {
-                        $this->initRigAttributeValuess(false);
+                    if (false !== $this->collUserReviewssPartial && count($collUserReviewss)) {
+                        $this->initUserReviewss(false);
 
-                        foreach ($collRigAttributeValuess as $obj) {
-                            if (false == $this->collRigAttributeValuess->contains($obj)) {
-                                $this->collRigAttributeValuess->append($obj);
+                        foreach ($collUserReviewss as $obj) {
+                            if (false == $this->collUserReviewss->contains($obj)) {
+                                $this->collUserReviewss->append($obj);
                             }
                         }
 
-                        $this->collRigAttributeValuessPartial = true;
+                        $this->collUserReviewssPartial = true;
                     }
 
-                    return $collRigAttributeValuess;
+                    return $collUserReviewss;
                 }
 
-                if ($partial && $this->collRigAttributeValuess) {
-                    foreach ($this->collRigAttributeValuess as $obj) {
+                if ($partial && $this->collUserReviewss) {
+                    foreach ($this->collUserReviewss as $obj) {
                         if ($obj->isNew()) {
-                            $collRigAttributeValuess[] = $obj;
+                            $collUserReviewss[] = $obj;
                         }
                     }
                 }
 
-                $this->collRigAttributeValuess = $collRigAttributeValuess;
-                $this->collRigAttributeValuessPartial = false;
+                $this->collUserReviewss = $collUserReviewss;
+                $this->collUserReviewssPartial = false;
             }
         }
 
-        return $this->collRigAttributeValuess;
+        return $this->collUserReviewss;
     }
 
     /**
-     * Sets a collection of ChildRigAttributeValues objects related by a one-to-many relationship
+     * Sets a collection of ChildUserReviews objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $rigAttributeValuess A Propel collection.
+     * @param      Collection $userReviewss A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildRigs The current object (for fluent API support)
+     * @return $this|ChildPlatforms The current object (for fluent API support)
      */
-    public function setRigAttributeValuess(Collection $rigAttributeValuess, ConnectionInterface $con = null)
+    public function setUserReviewss(Collection $userReviewss, ConnectionInterface $con = null)
     {
-        /** @var ChildRigAttributeValues[] $rigAttributeValuessToDelete */
-        $rigAttributeValuessToDelete = $this->getRigAttributeValuess(new Criteria(), $con)->diff($rigAttributeValuess);
+        /** @var ChildUserReviews[] $userReviewssToDelete */
+        $userReviewssToDelete = $this->getUserReviewss(new Criteria(), $con)->diff($userReviewss);
 
         
-        $this->rigAttributeValuessScheduledForDeletion = $rigAttributeValuessToDelete;
+        $this->userReviewssScheduledForDeletion = $userReviewssToDelete;
 
-        foreach ($rigAttributeValuessToDelete as $rigAttributeValuesRemoved) {
-            $rigAttributeValuesRemoved->setRigs(null);
+        foreach ($userReviewssToDelete as $userReviewsRemoved) {
+            $userReviewsRemoved->setPlatforms(null);
         }
 
-        $this->collRigAttributeValuess = null;
-        foreach ($rigAttributeValuess as $rigAttributeValues) {
-            $this->addRigAttributeValues($rigAttributeValues);
+        $this->collUserReviewss = null;
+        foreach ($userReviewss as $userReviews) {
+            $this->addUserReviews($userReviews);
         }
 
-        $this->collRigAttributeValuess = $rigAttributeValuess;
-        $this->collRigAttributeValuessPartial = false;
+        $this->collUserReviewss = $userReviewss;
+        $this->collUserReviewssPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related RigAttributeValues objects.
+     * Returns the number of related UserReviews objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related RigAttributeValues objects.
+     * @return int             Count of related UserReviews objects.
      * @throws PropelException
      */
-    public function countRigAttributeValuess(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countUserReviewss(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collRigAttributeValuessPartial && !$this->isNew();
-        if (null === $this->collRigAttributeValuess || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collRigAttributeValuess) {
+        $partial = $this->collUserReviewssPartial && !$this->isNew();
+        if (null === $this->collUserReviewss || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collUserReviewss) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getRigAttributeValuess());
+                return count($this->getUserReviewss());
             }
 
-            $query = ChildRigAttributeValuesQuery::create(null, $criteria);
+            $query = ChildUserReviewsQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
 
             return $query
-                ->filterByRigs($this)
+                ->filterByPlatforms($this)
                 ->count($con);
         }
 
-        return count($this->collRigAttributeValuess);
+        return count($this->collUserReviewss);
     }
 
     /**
-     * Method called to associate a ChildRigAttributeValues object to this object
-     * through the ChildRigAttributeValues foreign key attribute.
+     * Method called to associate a ChildUserReviews object to this object
+     * through the ChildUserReviews foreign key attribute.
      *
-     * @param  ChildRigAttributeValues $l ChildRigAttributeValues
-     * @return $this|\Rigs The current object (for fluent API support)
+     * @param  ChildUserReviews $l ChildUserReviews
+     * @return $this|\Platforms The current object (for fluent API support)
      */
-    public function addRigAttributeValues(ChildRigAttributeValues $l)
+    public function addUserReviews(ChildUserReviews $l)
     {
-        if ($this->collRigAttributeValuess === null) {
-            $this->initRigAttributeValuess();
-            $this->collRigAttributeValuessPartial = true;
+        if ($this->collUserReviewss === null) {
+            $this->initUserReviewss();
+            $this->collUserReviewssPartial = true;
         }
 
-        if (!$this->collRigAttributeValuess->contains($l)) {
-            $this->doAddRigAttributeValues($l);
+        if (!$this->collUserReviewss->contains($l)) {
+            $this->doAddUserReviews($l);
         }
 
         return $this;
     }
 
     /**
-     * @param ChildRigAttributeValues $rigAttributeValues The ChildRigAttributeValues object to add.
+     * @param ChildUserReviews $userReviews The ChildUserReviews object to add.
      */
-    protected function doAddRigAttributeValues(ChildRigAttributeValues $rigAttributeValues)
+    protected function doAddUserReviews(ChildUserReviews $userReviews)
     {
-        $this->collRigAttributeValuess[]= $rigAttributeValues;
-        $rigAttributeValues->setRigs($this);
+        $this->collUserReviewss[]= $userReviews;
+        $userReviews->setPlatforms($this);
     }
 
     /**
-     * @param  ChildRigAttributeValues $rigAttributeValues The ChildRigAttributeValues object to remove.
-     * @return $this|ChildRigs The current object (for fluent API support)
+     * @param  ChildUserReviews $userReviews The ChildUserReviews object to remove.
+     * @return $this|ChildPlatforms The current object (for fluent API support)
      */
-    public function removeRigAttributeValues(ChildRigAttributeValues $rigAttributeValues)
+    public function removeUserReviews(ChildUserReviews $userReviews)
     {
-        if ($this->getRigAttributeValuess()->contains($rigAttributeValues)) {
-            $pos = $this->collRigAttributeValuess->search($rigAttributeValues);
-            $this->collRigAttributeValuess->remove($pos);
-            if (null === $this->rigAttributeValuessScheduledForDeletion) {
-                $this->rigAttributeValuessScheduledForDeletion = clone $this->collRigAttributeValuess;
-                $this->rigAttributeValuessScheduledForDeletion->clear();
+        if ($this->getUserReviewss()->contains($userReviews)) {
+            $pos = $this->collUserReviewss->search($userReviews);
+            $this->collUserReviewss->remove($pos);
+            if (null === $this->userReviewssScheduledForDeletion) {
+                $this->userReviewssScheduledForDeletion = clone $this->collUserReviewss;
+                $this->userReviewssScheduledForDeletion->clear();
             }
-            $this->rigAttributeValuessScheduledForDeletion[]= clone $rigAttributeValues;
-            $rigAttributeValues->setRigs(null);
+            $this->userReviewssScheduledForDeletion[]= clone $userReviews;
+            $userReviews->setPlatforms(null);
         }
 
         return $this;
@@ -1771,25 +2098,75 @@ abstract class Rigs implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this Rigs is new, it will return
-     * an empty collection; or if this Rigs has previously
-     * been saved, it will retrieve related RigAttributeValuess from storage.
+     * Otherwise if this Platforms is new, it will return
+     * an empty collection; or if this Platforms has previously
+     * been saved, it will retrieve related UserReviewss from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in Rigs.
+     * actually need in Platforms.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildRigAttributeValues[] List of ChildRigAttributeValues objects
+     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
      */
-    public function getRigAttributeValuessJoinRigAttributes(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getUserReviewssJoinGames(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildRigAttributeValuesQuery::create(null, $criteria);
-        $query->joinWith('RigAttributes', $joinBehavior);
+        $query = ChildUserReviewsQuery::create(null, $criteria);
+        $query->joinWith('Games', $joinBehavior);
 
-        return $this->getRigAttributeValuess($query, $con);
+        return $this->getUserReviewss($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Platforms is new, it will return
+     * an empty collection; or if this Platforms has previously
+     * been saved, it will retrieve related UserReviewss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Platforms.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     */
+    public function getUserReviewssJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildUserReviewsQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getUserReviewss($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Platforms is new, it will return
+     * an empty collection; or if this Platforms has previously
+     * been saved, it will retrieve related UserReviewss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Platforms.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     */
+    public function getUserReviewssJoinRatings(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildUserReviewsQuery::create(null, $criteria);
+        $query->joinWith('Ratings', $joinBehavior);
+
+        return $this->getUserReviewss($query, $con);
     }
 
     /**
@@ -1799,12 +2176,11 @@ abstract class Rigs implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aUser) {
-            $this->aUser->removeRigs($this);
-        }
         $this->id = null;
-        $this->user_id = null;
+        $this->name = null;
         $this->title = null;
+        $this->description = null;
+        $this->gb_id = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1823,21 +2199,26 @@ abstract class Rigs implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collGamePlatformss) {
+                foreach ($this->collGamePlatformss as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collRatingHeaderss) {
                 foreach ($this->collRatingHeaderss as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collRigAttributeValuess) {
-                foreach ($this->collRigAttributeValuess as $o) {
+            if ($this->collUserReviewss) {
+                foreach ($this->collUserReviewss as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
         } // if ($deep)
 
+        $this->collGamePlatformss = null;
         $this->collRatingHeaderss = null;
-        $this->collRigAttributeValuess = null;
-        $this->aUser = null;
+        $this->collUserReviewss = null;
     }
 
     /**
@@ -1847,7 +2228,7 @@ abstract class Rigs implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(RigsTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(PlatformsTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**
