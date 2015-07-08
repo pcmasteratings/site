@@ -125,21 +125,25 @@ if(Auth::checkIfAuthenticated()&&array_key_exists("submit_game_review",$_POST)&&
                 <?php if(Auth::checkIfAuthenticated()) : ?>
                     <form action="" method="POST">
                         <?php $review = UserReviews::getUserReview($game,$platform,$user); ?>
-                        <select name="submit_game_rating">
-                            <?php
+                        <div class="form-group">
+                            <select name="submit_game_rating" class="form-control">
+                                <?php
 
-                                $ratings = Ratings::getAllRatings();
-                                foreach($ratings as $rating) {
-                                    echo '<option value="'.$rating->getId().'"';
-                                    if($review!=null&&$review->getRating()==$rating->getId()) {
-                                        echo ' selected="selected" ';
+                                    $ratings = Ratings::getAllRatings();
+                                    foreach($ratings as $rating) {
+                                        echo '<option value="'.$rating->getId().'"';
+                                        if($review!=null&&$review->getRating()==$rating->getId()) {
+                                            echo ' selected="selected" ';
+                                        }
+                                        echo '>'.$rating->getTitle()."</option>";
                                     }
-                                    echo '>'.$rating->getTitle()."</option>";
-                                }
-                            ?>
-                        </select>
-                        <textarea name="submit_game_review"><?php if($review!=null) { echo $review->getReview(); } ?></textarea>
-                        <input type="submit" />
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-group" name="submit_game_review"><?php if($review!=null) { echo $review->getReview(); } ?></textarea>
+                        </div>
+                        <input type="submit" class="btn btn-primary" />
                     </form>
                 <?php endif; ?>
  			</div>
