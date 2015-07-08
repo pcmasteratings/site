@@ -18,7 +18,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'rig_attribute_values' table.
  *
- * 
+ *
  *
  * @method     ChildRigAttributeValuesQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildRigAttributeValuesQuery orderByRigId($order = Criteria::ASC) Order by the rig_id column
@@ -159,7 +159,7 @@ abstract class RigAttributeValuesQuery extends ModelCriteria
     {
         $sql = 'SELECT id, rig_id, rig_attribute_id, value FROM rig_attribute_values WHERE id = :p0';
         try {
-            $stmt = $con->prepare($sql);            
+            $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -624,9 +624,9 @@ abstract class RigAttributeValuesQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-            
+
             RigAttributeValuesTableMap::removeInstanceFromPool($criteria);
-        
+
             $affectedRows += ModelCriteria::delete($con);
             RigAttributeValuesTableMap::clearRelatedInstancePool();
 

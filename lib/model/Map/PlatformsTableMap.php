@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \RatingHeaders;
-use \RatingHeadersQuery;
+use \Platforms;
+use \PlatformsQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'rating_headers' table.
+ * This class defines the structure of the 'platforms' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class RatingHeadersTableMap extends TableMap
+class PlatformsTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class RatingHeadersTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = '.Map.RatingHeadersTableMap';
+    const CLASS_NAME = '.Map.PlatformsTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class RatingHeadersTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'rating_headers';
+    const TABLE_NAME = 'platforms';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\RatingHeaders';
+    const OM_CLASS = '\\Platforms';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'RatingHeaders';
+    const CLASS_DEFAULT = 'Platforms';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 10;
+    const NUM_COLUMNS = 5;
 
     /**
      * The number of lazy-loaded columns
@@ -69,57 +69,32 @@ class RatingHeadersTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 10;
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /**
      * the column name for the id field
      */
-    const COL_ID = 'rating_headers.id';
+    const COL_ID = 'platforms.id';
 
     /**
-     * the column name for the game_id field
+     * the column name for the name field
      */
-    const COL_GAME_ID = 'rating_headers.game_id';
+    const COL_NAME = 'platforms.name';
 
     /**
-     * the column name for the user_id field
+     * the column name for the title field
      */
-    const COL_USER_ID = 'rating_headers.user_id';
+    const COL_TITLE = 'platforms.title';
 
     /**
-     * the column name for the game_platform_id field
+     * the column name for the description field
      */
-    const COL_GAME_PLATFORM_ID = 'rating_headers.game_platform_id';
+    const COL_DESCRIPTION = 'platforms.description';
 
     /**
-     * the column name for the rig_id field
+     * the column name for the gb_id field
      */
-    const COL_RIG_ID = 'rating_headers.rig_id';
-
-    /**
-     * the column name for the created field
-     */
-    const COL_CREATED = 'rating_headers.created';
-
-    /**
-     * the column name for the upvotes field
-     */
-    const COL_UPVOTES = 'rating_headers.upvotes';
-
-    /**
-     * the column name for the downvotes field
-     */
-    const COL_DOWNVOTES = 'rating_headers.downvotes';
-
-    /**
-     * the column name for the comments field
-     */
-    const COL_COMMENTS = 'rating_headers.comments';
-
-    /**
-     * the column name for the score field
-     */
-    const COL_SCORE = 'rating_headers.score';
+    const COL_GB_ID = 'platforms.gb_id';
 
     /**
      * The default string format for model objects of the related table
@@ -133,11 +108,11 @@ class RatingHeadersTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'GameId', 'UserId', 'GamePlatformId', 'RigId', 'Created', 'Upvotes', 'Downvotes', 'Comments', 'Score', ),
-        self::TYPE_CAMELNAME     => array('id', 'gameId', 'userId', 'gamePlatformId', 'rigId', 'created', 'upvotes', 'downvotes', 'comments', 'score', ),
-        self::TYPE_COLNAME       => array(RatingHeadersTableMap::COL_ID, RatingHeadersTableMap::COL_GAME_ID, RatingHeadersTableMap::COL_USER_ID, RatingHeadersTableMap::COL_GAME_PLATFORM_ID, RatingHeadersTableMap::COL_RIG_ID, RatingHeadersTableMap::COL_CREATED, RatingHeadersTableMap::COL_UPVOTES, RatingHeadersTableMap::COL_DOWNVOTES, RatingHeadersTableMap::COL_COMMENTS, RatingHeadersTableMap::COL_SCORE, ),
-        self::TYPE_FIELDNAME     => array('id', 'game_id', 'user_id', 'game_platform_id', 'rig_id', 'created', 'upvotes', 'downvotes', 'comments', 'score', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        self::TYPE_PHPNAME       => array('Id', 'Name', 'Title', 'Description', 'GbId', ),
+        self::TYPE_CAMELNAME     => array('id', 'name', 'title', 'description', 'gbId', ),
+        self::TYPE_COLNAME       => array(PlatformsTableMap::COL_ID, PlatformsTableMap::COL_NAME, PlatformsTableMap::COL_TITLE, PlatformsTableMap::COL_DESCRIPTION, PlatformsTableMap::COL_GB_ID, ),
+        self::TYPE_FIELDNAME     => array('id', 'name', 'title', 'description', 'gb_id', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -147,11 +122,11 @@ class RatingHeadersTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'GameId' => 1, 'UserId' => 2, 'GamePlatformId' => 3, 'RigId' => 4, 'Created' => 5, 'Upvotes' => 6, 'Downvotes' => 7, 'Comments' => 8, 'Score' => 9, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'gameId' => 1, 'userId' => 2, 'gamePlatformId' => 3, 'rigId' => 4, 'created' => 5, 'upvotes' => 6, 'downvotes' => 7, 'comments' => 8, 'score' => 9, ),
-        self::TYPE_COLNAME       => array(RatingHeadersTableMap::COL_ID => 0, RatingHeadersTableMap::COL_GAME_ID => 1, RatingHeadersTableMap::COL_USER_ID => 2, RatingHeadersTableMap::COL_GAME_PLATFORM_ID => 3, RatingHeadersTableMap::COL_RIG_ID => 4, RatingHeadersTableMap::COL_CREATED => 5, RatingHeadersTableMap::COL_UPVOTES => 6, RatingHeadersTableMap::COL_DOWNVOTES => 7, RatingHeadersTableMap::COL_COMMENTS => 8, RatingHeadersTableMap::COL_SCORE => 9, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'game_id' => 1, 'user_id' => 2, 'game_platform_id' => 3, 'rig_id' => 4, 'created' => 5, 'upvotes' => 6, 'downvotes' => 7, 'comments' => 8, 'score' => 9, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Title' => 2, 'Description' => 3, 'GbId' => 4, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, 'gbId' => 4, ),
+        self::TYPE_COLNAME       => array(PlatformsTableMap::COL_ID => 0, PlatformsTableMap::COL_NAME => 1, PlatformsTableMap::COL_TITLE => 2, PlatformsTableMap::COL_DESCRIPTION => 3, PlatformsTableMap::COL_GB_ID => 4, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, 'gb_id' => 4, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -164,23 +139,18 @@ class RatingHeadersTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('rating_headers');
-        $this->setPhpName('RatingHeaders');
+        $this->setName('platforms');
+        $this->setPhpName('Platforms');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\RatingHeaders');
+        $this->setClassName('\\Platforms');
         $this->setPackage('');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
-        $this->addForeignKey('game_id', 'GameId', 'BIGINT', 'games', 'id', true, null, null);
-        $this->addForeignKey('user_id', 'UserId', 'BIGINT', 'user', 'id', true, null, null);
-        $this->addForeignKey('game_platform_id', 'GamePlatformId', 'BIGINT', 'platforms', 'id', true, null, null);
-        $this->addForeignKey('rig_id', 'RigId', 'BIGINT', 'rigs', 'id', false, null, null);
-        $this->addColumn('created', 'Created', 'TIMESTAMP', true, null, null);
-        $this->addColumn('upvotes', 'Upvotes', 'BIGINT', true, null, 0);
-        $this->addColumn('downvotes', 'Downvotes', 'BIGINT', true, null, 0);
-        $this->addColumn('comments', 'Comments', 'CLOB', true, null, null);
-        $this->addColumn('score', 'Score', 'INTEGER', false, null, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 255, null);
+        $this->addColumn('title', 'Title', 'LONGVARCHAR', true, null, null);
+        $this->addColumn('description', 'Description', 'LONGVARCHAR', true, null, null);
+        $this->addColumn('gb_id', 'GbId', 'BIGINT', true, null, null);
     } // initialize()
 
     /**
@@ -188,50 +158,36 @@ class RatingHeadersTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Games', '\\Games', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('GamePlatforms', '\\GamePlatforms', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':game_id',
+    0 => ':platform_id',
     1 => ':id',
   ),
-), null, null, null, false);
-        $this->addRelation('User', '\\User', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':user_id',
-    1 => ':id',
-  ),
-), null, null, null, false);
-        $this->addRelation('Rigs', '\\Rigs', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':rig_id',
-    1 => ':id',
-  ),
-), null, null, null, false);
-        $this->addRelation('Platforms', '\\Platforms', RelationMap::MANY_TO_ONE, array (
+), 'CASCADE', 'CASCADE', 'GamePlatformss', false);
+        $this->addRelation('RatingHeaders', '\\RatingHeaders', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':game_platform_id',
     1 => ':id',
   ),
-), null, null, null, false);
-        $this->addRelation('RatingCategoryValues', '\\RatingCategoryValues', RelationMap::ONE_TO_MANY, array (
+), null, null, 'RatingHeaderss', false);
+        $this->addRelation('UserReviews', '\\UserReviews', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':rating_header_id',
+    0 => ':platform_id',
     1 => ':id',
   ),
-), 'CASCADE', 'CASCADE', 'RatingCategoryValuess', false);
+), null, null, 'UserReviewss', false);
     } // buildRelations()
     /**
-     * Method to invalidate the instance pool of all tables related to rating_headers     * by a foreign key with ON DELETE CASCADE
+     * Method to invalidate the instance pool of all tables related to platforms     * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
     {
         // Invalidate objects in related instance pools,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        RatingCategoryValuesTableMap::clearInstancePool();
+        GamePlatformsTableMap::clearInstancePool();
     }
 
     /**
@@ -291,7 +247,7 @@ class RatingHeadersTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? RatingHeadersTableMap::CLASS_DEFAULT : RatingHeadersTableMap::OM_CLASS;
+        return $withPrefix ? PlatformsTableMap::CLASS_DEFAULT : PlatformsTableMap::OM_CLASS;
     }
 
     /**
@@ -305,22 +261,22 @@ class RatingHeadersTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (RatingHeaders object, last column rank)
+     * @return array           (Platforms object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = RatingHeadersTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = RatingHeadersTableMap::getInstanceFromPool($key))) {
+        $key = PlatformsTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = PlatformsTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + RatingHeadersTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + PlatformsTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = RatingHeadersTableMap::OM_CLASS;
-            /** @var RatingHeaders $obj */
+            $cls = PlatformsTableMap::OM_CLASS;
+            /** @var Platforms $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            RatingHeadersTableMap::addInstanceToPool($obj, $key);
+            PlatformsTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -343,18 +299,18 @@ class RatingHeadersTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = RatingHeadersTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = RatingHeadersTableMap::getInstanceFromPool($key))) {
+            $key = PlatformsTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = PlatformsTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var RatingHeaders $obj */
+                /** @var Platforms $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                RatingHeadersTableMap::addInstanceToPool($obj, $key);
+                PlatformsTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -375,27 +331,17 @@ class RatingHeadersTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(RatingHeadersTableMap::COL_ID);
-            $criteria->addSelectColumn(RatingHeadersTableMap::COL_GAME_ID);
-            $criteria->addSelectColumn(RatingHeadersTableMap::COL_USER_ID);
-            $criteria->addSelectColumn(RatingHeadersTableMap::COL_GAME_PLATFORM_ID);
-            $criteria->addSelectColumn(RatingHeadersTableMap::COL_RIG_ID);
-            $criteria->addSelectColumn(RatingHeadersTableMap::COL_CREATED);
-            $criteria->addSelectColumn(RatingHeadersTableMap::COL_UPVOTES);
-            $criteria->addSelectColumn(RatingHeadersTableMap::COL_DOWNVOTES);
-            $criteria->addSelectColumn(RatingHeadersTableMap::COL_COMMENTS);
-            $criteria->addSelectColumn(RatingHeadersTableMap::COL_SCORE);
+            $criteria->addSelectColumn(PlatformsTableMap::COL_ID);
+            $criteria->addSelectColumn(PlatformsTableMap::COL_NAME);
+            $criteria->addSelectColumn(PlatformsTableMap::COL_TITLE);
+            $criteria->addSelectColumn(PlatformsTableMap::COL_DESCRIPTION);
+            $criteria->addSelectColumn(PlatformsTableMap::COL_GB_ID);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.game_id');
-            $criteria->addSelectColumn($alias . '.user_id');
-            $criteria->addSelectColumn($alias . '.game_platform_id');
-            $criteria->addSelectColumn($alias . '.rig_id');
-            $criteria->addSelectColumn($alias . '.created');
-            $criteria->addSelectColumn($alias . '.upvotes');
-            $criteria->addSelectColumn($alias . '.downvotes');
-            $criteria->addSelectColumn($alias . '.comments');
-            $criteria->addSelectColumn($alias . '.score');
+            $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.title');
+            $criteria->addSelectColumn($alias . '.description');
+            $criteria->addSelectColumn($alias . '.gb_id');
         }
     }
 
@@ -408,7 +354,7 @@ class RatingHeadersTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(RatingHeadersTableMap::DATABASE_NAME)->getTable(RatingHeadersTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(PlatformsTableMap::DATABASE_NAME)->getTable(PlatformsTableMap::TABLE_NAME);
     }
 
     /**
@@ -416,16 +362,16 @@ class RatingHeadersTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(RatingHeadersTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(RatingHeadersTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new RatingHeadersTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(PlatformsTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(PlatformsTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new PlatformsTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a RatingHeaders or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a Platforms or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or RatingHeaders object or primary key or array of primary keys
+     * @param mixed               $values Criteria or Platforms object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -436,27 +382,27 @@ class RatingHeadersTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(RatingHeadersTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PlatformsTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \RatingHeaders) { // it's a model object
+        } elseif ($values instanceof \Platforms) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(RatingHeadersTableMap::DATABASE_NAME);
-            $criteria->add(RatingHeadersTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(PlatformsTableMap::DATABASE_NAME);
+            $criteria->add(PlatformsTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = RatingHeadersQuery::create()->mergeWith($criteria);
+        $query = PlatformsQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            RatingHeadersTableMap::clearInstancePool();
+            PlatformsTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                RatingHeadersTableMap::removeInstanceFromPool($singleval);
+                PlatformsTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -464,20 +410,20 @@ class RatingHeadersTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the rating_headers table.
+     * Deletes all rows from the platforms table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return RatingHeadersQuery::create()->doDeleteAll($con);
+        return PlatformsQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a RatingHeaders or Criteria object.
+     * Performs an INSERT on the database, given a Platforms or Criteria object.
      *
-     * @param mixed               $criteria Criteria or RatingHeaders object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or Platforms object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -486,22 +432,22 @@ class RatingHeadersTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(RatingHeadersTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PlatformsTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from RatingHeaders object
+            $criteria = $criteria->buildCriteria(); // build Criteria from Platforms object
         }
 
-        if ($criteria->containsKey(RatingHeadersTableMap::COL_ID) && $criteria->keyContainsValue(RatingHeadersTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.RatingHeadersTableMap::COL_ID.')');
+        if ($criteria->containsKey(PlatformsTableMap::COL_ID) && $criteria->keyContainsValue(PlatformsTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.PlatformsTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = RatingHeadersQuery::create()->mergeWith($criteria);
+        $query = PlatformsQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -510,7 +456,7 @@ class RatingHeadersTableMap extends TableMap
         });
     }
 
-} // RatingHeadersTableMap
+} // PlatformsTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-RatingHeadersTableMap::buildTableMap();
+PlatformsTableMap::buildTableMap();

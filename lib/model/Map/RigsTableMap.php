@@ -167,13 +167,6 @@ class RigsTableMap extends TableMap
     1 => ':id',
   ),
 ), 'CASCADE', 'CASCADE', 'RigAttributeValuess', false);
-        $this->addRelation('UserReviews', '\\UserReviews', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':rig_id',
-    1 => ':id',
-  ),
-), null, null, 'UserReviewss', false);
     } // buildRelations()
     /**
      * Method to invalidate the instance pool of all tables related to rigs     * by a foreign key with ON DELETE CASCADE
@@ -228,7 +221,7 @@ class RigsTableMap extends TableMap
                 : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
         ];
     }
-    
+
     /**
      * The class that the tableMap will make instances of.
      *
@@ -289,7 +282,7 @@ class RigsTableMap extends TableMap
     public static function populateObjects(DataFetcherInterface $dataFetcher)
     {
         $results = array();
-    
+
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
         // populate the object(s)

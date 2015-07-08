@@ -27,11 +27,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'rating_category_values' table.
  *
- * 
+ *
  *
 * @package    propel.generator..Base
 */
-abstract class RatingCategoryValues implements ActiveRecordInterface 
+abstract class RatingCategoryValues implements ActiveRecordInterface
 {
     /**
      * TableMap class name
@@ -349,7 +349,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
 
     /**
      * Get the [id] column value.
-     * 
+     *
      * @return string
      */
     public function getId()
@@ -359,7 +359,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
 
     /**
      * Get the [rating_header_id] column value.
-     * 
+     *
      * @return string
      */
     public function getRatingHeaderId()
@@ -369,7 +369,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
 
     /**
      * Get the [rating_category_id] column value.
-     * 
+     *
      * @return string
      */
     public function getRatingCategoryId()
@@ -379,7 +379,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
 
     /**
      * Get the [rating_category_option_id] column value.
-     * 
+     *
      * @return string
      */
     public function getRatingCategoryOptionId()
@@ -389,7 +389,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
 
     /**
      * Get the [original_value] column value.
-     * 
+     *
      * @return int
      */
     public function getOriginalValue()
@@ -399,7 +399,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
 
     /**
      * Get the [original_weighted_value] column value.
-     * 
+     *
      * @return int
      */
     public function getOriginalWeightedValue()
@@ -409,7 +409,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
 
     /**
      * Get the [comments] column value.
-     * 
+     *
      * @return string
      */
     public function getComments()
@@ -419,7 +419,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
 
     /**
      * Set the value of [id] column.
-     * 
+     *
      * @param string $v new value
      * @return $this|\RatingCategoryValues The current object (for fluent API support)
      */
@@ -439,7 +439,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
 
     /**
      * Set the value of [rating_header_id] column.
-     * 
+     *
      * @param string $v new value
      * @return $this|\RatingCategoryValues The current object (for fluent API support)
      */
@@ -463,7 +463,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
 
     /**
      * Set the value of [rating_category_id] column.
-     * 
+     *
      * @param string $v new value
      * @return $this|\RatingCategoryValues The current object (for fluent API support)
      */
@@ -487,7 +487,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
 
     /**
      * Set the value of [rating_category_option_id] column.
-     * 
+     *
      * @param string $v new value
      * @return $this|\RatingCategoryValues The current object (for fluent API support)
      */
@@ -511,7 +511,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
 
     /**
      * Set the value of [original_value] column.
-     * 
+     *
      * @param int $v new value
      * @return $this|\RatingCategoryValues The current object (for fluent API support)
      */
@@ -531,7 +531,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
 
     /**
      * Set the value of [original_weighted_value] column.
-     * 
+     *
      * @param int $v new value
      * @return $this|\RatingCategoryValues The current object (for fluent API support)
      */
@@ -551,7 +551,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
 
     /**
      * Set the value of [comments] column.
-     * 
+     *
      * @param string $v new value
      * @return $this|\RatingCategoryValues The current object (for fluent API support)
      */
@@ -900,25 +900,25 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':                        
+                    case 'id':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'rating_header_id':                        
+                    case 'rating_header_id':
                         $stmt->bindValue($identifier, $this->rating_header_id, PDO::PARAM_INT);
                         break;
-                    case 'rating_category_id':                        
+                    case 'rating_category_id':
                         $stmt->bindValue($identifier, $this->rating_category_id, PDO::PARAM_INT);
                         break;
-                    case 'rating_category_option_id':                        
+                    case 'rating_category_option_id':
                         $stmt->bindValue($identifier, $this->rating_category_option_id, PDO::PARAM_INT);
                         break;
-                    case 'original_value':                        
+                    case 'original_value':
                         $stmt->bindValue($identifier, $this->original_value, PDO::PARAM_INT);
                         break;
-                    case 'original_weighted_value':                        
+                    case 'original_weighted_value':
                         $stmt->bindValue($identifier, $this->original_weighted_value, PDO::PARAM_INT);
                         break;
-                    case 'comments':                        
+                    case 'comments':
                         $stmt->bindValue($identifier, $this->comments, PDO::PARAM_STR);
                         break;
                 }
@@ -1046,10 +1046,10 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-        
+
         if ($includeForeignObjects) {
             if (null !== $this->aRatingHeaders) {
-                
+
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'ratingHeaders';
@@ -1060,11 +1060,11 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
                     default:
                         $key = 'RatingHeaders';
                 }
-        
+
                 $result[$key] = $this->aRatingHeaders->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aRatingCategories) {
-                
+
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'ratingCategories';
@@ -1075,11 +1075,11 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
                     default:
                         $key = 'RatingCategories';
                 }
-        
+
                 $result[$key] = $this->aRatingCategories->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aRatingCategoryOptions) {
-                
+
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'ratingCategoryOptions';
@@ -1090,7 +1090,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
                     default:
                         $key = 'RatingCategoryOptions';
                 }
-        
+
                 $result[$key] = $this->aRatingCategoryOptions->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
@@ -1300,7 +1300,7 @@ abstract class RatingCategoryValues implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-        
+
     /**
      * Returns the primary key for this object (row).
      * @return string

@@ -18,7 +18,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'rating_category_values' table.
  *
- * 
+ *
  *
  * @method     ChildRatingCategoryValuesQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildRatingCategoryValuesQuery orderByRatingHeaderId($order = Criteria::ASC) Order by the rating_header_id column
@@ -178,7 +178,7 @@ abstract class RatingCategoryValuesQuery extends ModelCriteria
     {
         $sql = 'SELECT id, rating_header_id, rating_category_id, rating_category_option_id, original_value, original_weighted_value, comments FROM rating_category_values WHERE id = :p0';
         try {
-            $stmt = $con->prepare($sql);            
+            $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -845,9 +845,9 @@ abstract class RatingCategoryValuesQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-            
+
             RatingCategoryValuesTableMap::removeInstanceFromPool($criteria);
-        
+
             $affectedRows += ModelCriteria::delete($con);
             RatingCategoryValuesTableMap::clearRelatedInstancePool();
 

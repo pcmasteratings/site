@@ -18,7 +18,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'rigs' table.
  *
- * 
+ *
  *
  * @method     ChildRigsQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildRigsQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
@@ -44,11 +44,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRigsQuery rightJoinRigAttributeValues($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RigAttributeValues relation
  * @method     ChildRigsQuery innerJoinRigAttributeValues($relationAlias = null) Adds a INNER JOIN clause to the query using the RigAttributeValues relation
  *
- * @method     ChildRigsQuery leftJoinUserReviews($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserReviews relation
- * @method     ChildRigsQuery rightJoinUserReviews($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserReviews relation
- * @method     ChildRigsQuery innerJoinUserReviews($relationAlias = null) Adds a INNER JOIN clause to the query using the UserReviews relation
- *
- * @method     \UserQuery|\RatingHeadersQuery|\RigAttributeValuesQuery|\UserReviewsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \UserQuery|\RatingHeadersQuery|\RigAttributeValuesQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildRigs findOne(ConnectionInterface $con = null) Return the first ChildRigs matching the query
  * @method     ChildRigs findOneOrCreate(ConnectionInterface $con = null) Return the first ChildRigs matching the query, or a new ChildRigs object populated from the query conditions when no match is found
@@ -162,7 +158,7 @@ abstract class RigsQuery extends ModelCriteria
     {
         $sql = 'SELECT id, user_id, title FROM rigs WHERE id = :p0';
         try {
-            $stmt = $con->prepare($sql);            
+            $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -587,79 +583,6 @@ abstract class RigsQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \UserReviews object
-     *
-     * @param \UserReviews|ObjectCollection $userReviews the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildRigsQuery The current query, for fluid interface
-     */
-    public function filterByUserReviews($userReviews, $comparison = null)
-    {
-        if ($userReviews instanceof \UserReviews) {
-            return $this
-                ->addUsingAlias(RigsTableMap::COL_ID, $userReviews->getRigId(), $comparison);
-        } elseif ($userReviews instanceof ObjectCollection) {
-            return $this
-                ->useUserReviewsQuery()
-                ->filterByPrimaryKeys($userReviews->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByUserReviews() only accepts arguments of type \UserReviews or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the UserReviews relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildRigsQuery The current query, for fluid interface
-     */
-    public function joinUserReviews($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('UserReviews');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'UserReviews');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the UserReviews relation UserReviews object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \UserReviewsQuery A secondary query class using the current class as primary query
-     */
-    public function useUserReviewsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinUserReviews($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'UserReviews', '\UserReviewsQuery');
-    }
-
-    /**
      * Exclude object from result
      *
      * @param   ChildRigs $rigs Object to remove from the list of results
@@ -726,9 +649,9 @@ abstract class RigsQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-            
+
             RigsTableMap::removeInstanceFromPool($criteria);
-        
+
             $affectedRows += ModelCriteria::delete($con);
             RigsTableMap::clearRelatedInstancePool();
 

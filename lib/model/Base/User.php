@@ -35,11 +35,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'user' table.
  *
- * 
+ *
  *
 * @package    propel.generator..Base
 */
-abstract class User implements ActiveRecordInterface 
+abstract class User implements ActiveRecordInterface
 {
     /**
      * TableMap class name
@@ -432,7 +432,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [id] column value.
-     * 
+     *
      * @return string
      */
     public function getId()
@@ -442,7 +442,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [username] column value.
-     * 
+     *
      * @return string
      */
     public function getUsername()
@@ -452,7 +452,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [password] column value.
-     * 
+     *
      * @return string
      */
     public function getPassword()
@@ -462,7 +462,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [reddit_id] column value.
-     * 
+     *
      * @return string
      */
     public function getRedditId()
@@ -472,7 +472,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [trusted] column value.
-     * 
+     *
      * @return boolean
      */
     public function getTrusted()
@@ -482,7 +482,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [trusted] column value.
-     * 
+     *
      * @return boolean
      */
     public function isTrusted()
@@ -492,7 +492,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [admin] column value.
-     * 
+     *
      * @return boolean
      */
     public function getAdmin()
@@ -502,7 +502,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [admin] column value.
-     * 
+     *
      * @return boolean
      */
     public function isAdmin()
@@ -512,7 +512,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [banned] column value.
-     * 
+     *
      * @return boolean
      */
     public function getBanned()
@@ -522,7 +522,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [banned] column value.
-     * 
+     *
      * @return boolean
      */
     public function isBanned()
@@ -532,7 +532,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Set the value of [id] column.
-     * 
+     *
      * @param string $v new value
      * @return $this|\User The current object (for fluent API support)
      */
@@ -552,7 +552,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Set the value of [username] column.
-     * 
+     *
      * @param string $v new value
      * @return $this|\User The current object (for fluent API support)
      */
@@ -572,7 +572,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Set the value of [password] column.
-     * 
+     *
      * @param string $v new value
      * @return $this|\User The current object (for fluent API support)
      */
@@ -592,7 +592,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Set the value of [reddit_id] column.
-     * 
+     *
      * @param string $v new value
      * @return $this|\User The current object (for fluent API support)
      */
@@ -616,7 +616,7 @@ abstract class User implements ActiveRecordInterface
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * 
+     *
      * @param  boolean|integer|string $v The new value
      * @return $this|\User The current object (for fluent API support)
      */
@@ -644,7 +644,7 @@ abstract class User implements ActiveRecordInterface
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * 
+     *
      * @param  boolean|integer|string $v The new value
      * @return $this|\User The current object (for fluent API support)
      */
@@ -672,7 +672,7 @@ abstract class User implements ActiveRecordInterface
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * 
+     *
      * @param  boolean|integer|string $v The new value
      * @return $this|\User The current object (for fluent API support)
      */
@@ -1113,16 +1113,16 @@ abstract class User implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':                        
+                    case 'id':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'username':                        
+                    case 'username':
                         $stmt->bindValue($identifier, $this->username, PDO::PARAM_STR);
                         break;
-                    case 'password':                        
+                    case 'password':
                         $stmt->bindValue($identifier, $this->password, PDO::PARAM_STR);
                         break;
-                    case 'reddit_id':                        
+                    case 'reddit_id':
                         $stmt->bindValue($identifier, $this->reddit_id, PDO::PARAM_STR);
                         break;
                     case 'trusted':
@@ -1259,10 +1259,10 @@ abstract class User implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-        
+
         if ($includeForeignObjects) {
             if (null !== $this->collNews) {
-                
+
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'news';
@@ -1273,11 +1273,11 @@ abstract class User implements ActiveRecordInterface
                     default:
                         $key = 'News';
                 }
-        
+
                 $result[$key] = $this->collNews->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collRatingHeaderss) {
-                
+
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'ratingHeaderss';
@@ -1288,11 +1288,11 @@ abstract class User implements ActiveRecordInterface
                     default:
                         $key = 'RatingHeaderss';
                 }
-        
+
                 $result[$key] = $this->collRatingHeaderss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collRigss) {
-                
+
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'rigss';
@@ -1303,11 +1303,11 @@ abstract class User implements ActiveRecordInterface
                     default:
                         $key = 'Rigss';
                 }
-        
+
                 $result[$key] = $this->collRigss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collUserAttributeValuess) {
-                
+
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'userAttributeValuess';
@@ -1318,11 +1318,11 @@ abstract class User implements ActiveRecordInterface
                     default:
                         $key = 'UserAttributeValuess';
                 }
-        
+
                 $result[$key] = $this->collUserAttributeValuess->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collUserReviewss) {
-                
+
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'userReviewss';
@@ -1333,11 +1333,11 @@ abstract class User implements ActiveRecordInterface
                     default:
                         $key = 'UserReviewss';
                 }
-        
+
                 $result[$key] = $this->collUserReviewss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collUserWeightss) {
-                
+
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'userWeightss';
@@ -1348,7 +1348,7 @@ abstract class User implements ActiveRecordInterface
                     default:
                         $key = 'UserWeightss';
                 }
-        
+
                 $result[$key] = $this->collUserWeightss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1558,7 +1558,7 @@ abstract class User implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-        
+
     /**
      * Returns the primary key for this object (row).
      * @return string
@@ -1826,7 +1826,7 @@ abstract class User implements ActiveRecordInterface
         /** @var ChildNews[] $newsToDelete */
         $newsToDelete = $this->getNews(new Criteria(), $con)->diff($news);
 
-        
+
         $this->newsScheduledForDeletion = $newsToDelete;
 
         foreach ($newsToDelete as $newsRemoved) {
@@ -2044,7 +2044,7 @@ abstract class User implements ActiveRecordInterface
         /** @var ChildRatingHeaders[] $ratingHeaderssToDelete */
         $ratingHeaderssToDelete = $this->getRatingHeaderss(new Criteria(), $con)->diff($ratingHeaderss);
 
-        
+
         $this->ratingHeaderssScheduledForDeletion = $ratingHeaderssToDelete;
 
         foreach ($ratingHeaderssToDelete as $ratingHeadersRemoved) {
@@ -2213,10 +2213,10 @@ abstract class User implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
      */
-    public function getRatingHeaderssJoinGamePlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getRatingHeaderssJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRatingHeadersQuery::create(null, $criteria);
-        $query->joinWith('GamePlatforms', $joinBehavior);
+        $query->joinWith('Platforms', $joinBehavior);
 
         return $this->getRatingHeaderss($query, $con);
     }
@@ -2337,7 +2337,7 @@ abstract class User implements ActiveRecordInterface
         /** @var ChildRigs[] $rigssToDelete */
         $rigssToDelete = $this->getRigss(new Criteria(), $con)->diff($rigss);
 
-        
+
         $this->rigssScheduledForDeletion = $rigssToDelete;
 
         foreach ($rigssToDelete as $rigsRemoved) {
@@ -2555,7 +2555,7 @@ abstract class User implements ActiveRecordInterface
         /** @var ChildUserAttributeValues[] $userAttributeValuessToDelete */
         $userAttributeValuessToDelete = $this->getUserAttributeValuess(new Criteria(), $con)->diff($userAttributeValuess);
 
-        
+
         $this->userAttributeValuessScheduledForDeletion = $userAttributeValuessToDelete;
 
         foreach ($userAttributeValuessToDelete as $userAttributeValuesRemoved) {
@@ -2798,7 +2798,7 @@ abstract class User implements ActiveRecordInterface
         /** @var ChildUserReviews[] $userReviewssToDelete */
         $userReviewssToDelete = $this->getUserReviewss(new Criteria(), $con)->diff($userReviewss);
 
-        
+
         $this->userReviewssScheduledForDeletion = $userReviewssToDelete;
 
         foreach ($userReviewssToDelete as $userReviewsRemoved) {
@@ -2917,31 +2917,6 @@ abstract class User implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
      */
-    public function getUserReviewssJoinRigs(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildUserReviewsQuery::create(null, $criteria);
-        $query->joinWith('Rigs', $joinBehavior);
-
-        return $this->getUserReviewss($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this User is new, it will return
-     * an empty collection; or if this User has previously
-     * been saved, it will retrieve related UserReviewss from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in User.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
-     */
     public function getUserReviewssJoinGames(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildUserReviewsQuery::create(null, $criteria);
@@ -2967,10 +2942,10 @@ abstract class User implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
      */
-    public function getUserReviewssJoinGamePlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getUserReviewssJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildUserReviewsQuery::create(null, $criteria);
-        $query->joinWith('GamePlatforms', $joinBehavior);
+        $query->joinWith('Platforms', $joinBehavior);
 
         return $this->getUserReviewss($query, $con);
     }
@@ -3116,7 +3091,7 @@ abstract class User implements ActiveRecordInterface
         /** @var ChildUserWeights[] $userWeightssToDelete */
         $userWeightssToDelete = $this->getUserWeightss(new Criteria(), $con)->diff($userWeightss);
 
-        
+
         $this->userWeightssScheduledForDeletion = $userWeightssToDelete;
 
         foreach ($userWeightssToDelete as $userWeightsRemoved) {

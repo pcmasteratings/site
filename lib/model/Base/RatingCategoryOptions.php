@@ -27,11 +27,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'rating_category_options' table.
  *
- * 
+ *
  *
 * @package    propel.generator..Base
 */
-abstract class RatingCategoryOptions implements ActiveRecordInterface 
+abstract class RatingCategoryOptions implements ActiveRecordInterface
 {
     /**
      * TableMap class name
@@ -333,7 +333,7 @@ abstract class RatingCategoryOptions implements ActiveRecordInterface
 
     /**
      * Get the [id] column value.
-     * 
+     *
      * @return string
      */
     public function getId()
@@ -343,7 +343,7 @@ abstract class RatingCategoryOptions implements ActiveRecordInterface
 
     /**
      * Get the [rating_category_id] column value.
-     * 
+     *
      * @return string
      */
     public function getRatingCategoryId()
@@ -353,7 +353,7 @@ abstract class RatingCategoryOptions implements ActiveRecordInterface
 
     /**
      * Get the [description] column value.
-     * 
+     *
      * @return string
      */
     public function getDescription()
@@ -363,7 +363,7 @@ abstract class RatingCategoryOptions implements ActiveRecordInterface
 
     /**
      * Get the [value] column value.
-     * 
+     *
      * @return int
      */
     public function getValue()
@@ -373,7 +373,7 @@ abstract class RatingCategoryOptions implements ActiveRecordInterface
 
     /**
      * Set the value of [id] column.
-     * 
+     *
      * @param string $v new value
      * @return $this|\RatingCategoryOptions The current object (for fluent API support)
      */
@@ -393,7 +393,7 @@ abstract class RatingCategoryOptions implements ActiveRecordInterface
 
     /**
      * Set the value of [rating_category_id] column.
-     * 
+     *
      * @param string $v new value
      * @return $this|\RatingCategoryOptions The current object (for fluent API support)
      */
@@ -417,7 +417,7 @@ abstract class RatingCategoryOptions implements ActiveRecordInterface
 
     /**
      * Set the value of [description] column.
-     * 
+     *
      * @param string $v new value
      * @return $this|\RatingCategoryOptions The current object (for fluent API support)
      */
@@ -437,7 +437,7 @@ abstract class RatingCategoryOptions implements ActiveRecordInterface
 
     /**
      * Set the value of [value] column.
-     * 
+     *
      * @param int $v new value
      * @return $this|\RatingCategoryOptions The current object (for fluent API support)
      */
@@ -765,16 +765,16 @@ abstract class RatingCategoryOptions implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':                        
+                    case 'id':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'rating_category_id':                        
+                    case 'rating_category_id':
                         $stmt->bindValue($identifier, $this->rating_category_id, PDO::PARAM_INT);
                         break;
-                    case 'description':                        
+                    case 'description':
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
                         break;
-                    case 'value':                        
+                    case 'value':
                         $stmt->bindValue($identifier, $this->value, PDO::PARAM_INT);
                         break;
                 }
@@ -890,10 +890,10 @@ abstract class RatingCategoryOptions implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-        
+
         if ($includeForeignObjects) {
             if (null !== $this->aRatingCategories) {
-                
+
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'ratingCategories';
@@ -904,11 +904,11 @@ abstract class RatingCategoryOptions implements ActiveRecordInterface
                     default:
                         $key = 'RatingCategories';
                 }
-        
+
                 $result[$key] = $this->aRatingCategories->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collRatingCategoryValuess) {
-                
+
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'ratingCategoryValuess';
@@ -919,7 +919,7 @@ abstract class RatingCategoryOptions implements ActiveRecordInterface
                     default:
                         $key = 'RatingCategoryValuess';
                 }
-        
+
                 $result[$key] = $this->collRatingCategoryValuess->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1102,7 +1102,7 @@ abstract class RatingCategoryOptions implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-        
+
     /**
      * Returns the primary key for this object (row).
      * @return string
@@ -1373,7 +1373,7 @@ abstract class RatingCategoryOptions implements ActiveRecordInterface
         /** @var ChildRatingCategoryValues[] $ratingCategoryValuessToDelete */
         $ratingCategoryValuessToDelete = $this->getRatingCategoryValuess(new Criteria(), $con)->diff($ratingCategoryValuess);
 
-        
+
         $this->ratingCategoryValuessScheduledForDeletion = $ratingCategoryValuessToDelete;
 
         foreach ($ratingCategoryValuessToDelete as $ratingCategoryValuesRemoved) {
