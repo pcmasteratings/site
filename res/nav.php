@@ -15,31 +15,34 @@
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <ul class="nav navbar-nav navbar-right">
-      <li><a href="/">Home</a></li>
-      <?php
-        if(Auth::checkIfAuthenticated()) {
-            $user = Auth::getCurrentUser();
-            if($user->getAdmin()) {
-                echo '<li><a href="admin.php"><b>Admin</b></a></li>';
-            }
-            ?>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><?php $user->getUsername(); ?></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Profile [N/A]</a></li>
-                <li><a href="?logout=1">Log Out</a></li>
-              </ul>
-            </li>
-            <?php
-        } else {
-            echo '<li><a href="auth.php">Login</a></li>';
-        }
-      ?>
-    </ul>
+    
 
     <div class="collapse navbar-collapse" id="navbar-collapse-1">
-      <form class="navbar-form navbar-left" role="search" action="search.php" method="post">
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/">Home</a></li>
+        <?php
+          if(Auth::checkIfAuthenticated()) {
+              $user = Auth::getCurrentUser();
+              if($user->getAdmin()) {
+                  echo '<li><a href="admin.php"><b>Admin</b></a></li>';
+              }
+              ?>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><?php $user->getUsername(); ?></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Profile [N/A]</a></li>
+                  <li><a href="?logout=1">Log Out</a></li>
+                </ul>
+              </li>
+              <?php
+          } else {
+              echo '<li><a href="auth.php">Login</a></li>';
+          }
+        ?>
+      </ul>
+
+      <form class="navbar-form navbar-right" role="search" action="search.php" method="post">
         <div class="form-group">
           <div class="input-group">
             <input name='txtSearch' type='text' class='form-control' value='<?php if(isset($_POST['txtSearch'])) echo $_POST['txtSearch']; ?>' placeholder='e.g. Deus Ex: Invisible War'>
