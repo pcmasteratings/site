@@ -29,6 +29,7 @@ require("res/include.php");
                 if($i%3==0) {
                     echo '<div class="row">';
                 }
+                
                 echo "<div class='col-sm-6 col-md-4'>
                   <div class='thumbnail'>
                     <a href='game.php?name={$game->getName()}'>
@@ -38,7 +39,6 @@ require("res/include.php");
                     </a>
                   </div>
                 </div>";
-
                 if($i%3==0) {
                     echo '</div>';
                 }

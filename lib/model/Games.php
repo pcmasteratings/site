@@ -87,11 +87,14 @@ class Games extends BaseGames
     }
 
     public function getValidPlatforms() {
-        $con = \Propel\Runtime\Propel::getConnection();
-        $cmd = $con->prepare("SELECT DISTINCT gp.id, gp.name, gp.title FROM rating_headers rh INNER JOIN game_platforms gp ON gp.id = rh.game_platform_id WHERE game_id = :gameid");
-        $cmd->execute(array(':gameid' => $this->getId()));
-        $results = $cmd->fetchAll();
-        return $results;
+        $query = new GamePlatformsQuery();
+        $query->orderByPlatformId();
+        return $query->find();
+//        $con = \Propel\Runtime\Propel::getConnection();
+//        $cmd = $con->prepare("SELECT DISTINCT gp.id, gp.name, gp.title FROM rating_headers rh INNER JOIN game_platforms gp ON gp.id = rh.game_platform_id WHERE game_id = :gameid");
+//        $cmd->execute(array(':gameid' => $this->getId()));
+//        $results = $cmd->fetchAll();
+//        return $results;
     }
 
     public function getAverageRatingForDefaultPlatform() {

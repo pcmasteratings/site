@@ -58,15 +58,15 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeadersQuery rightJoinRigs($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Rigs relation
  * @method     ChildRatingHeadersQuery innerJoinRigs($relationAlias = null) Adds a INNER JOIN clause to the query using the Rigs relation
  *
- * @method     ChildRatingHeadersQuery leftJoinGamePlatforms($relationAlias = null) Adds a LEFT JOIN clause to the query using the GamePlatforms relation
- * @method     ChildRatingHeadersQuery rightJoinGamePlatforms($relationAlias = null) Adds a RIGHT JOIN clause to the query using the GamePlatforms relation
- * @method     ChildRatingHeadersQuery innerJoinGamePlatforms($relationAlias = null) Adds a INNER JOIN clause to the query using the GamePlatforms relation
+ * @method     ChildRatingHeadersQuery leftJoinPlatforms($relationAlias = null) Adds a LEFT JOIN clause to the query using the Platforms relation
+ * @method     ChildRatingHeadersQuery rightJoinPlatforms($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Platforms relation
+ * @method     ChildRatingHeadersQuery innerJoinPlatforms($relationAlias = null) Adds a INNER JOIN clause to the query using the Platforms relation
  *
  * @method     ChildRatingHeadersQuery leftJoinRatingCategoryValues($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingCategoryValues relation
  * @method     ChildRatingHeadersQuery rightJoinRatingCategoryValues($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingCategoryValues relation
  * @method     ChildRatingHeadersQuery innerJoinRatingCategoryValues($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingCategoryValues relation
  *
- * @method     \GamesQuery|\UserQuery|\RigsQuery|\GamePlatformsQuery|\RatingCategoryValuesQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \GamesQuery|\UserQuery|\RigsQuery|\PlatformsQuery|\RatingCategoryValuesQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildRatingHeaders findOne(ConnectionInterface $con = null) Return the first ChildRatingHeaders matching the query
  * @method     ChildRatingHeaders findOneOrCreate(ConnectionInterface $con = null) Return the first ChildRatingHeaders matching the query, or a new ChildRatingHeaders object populated from the query conditions when no match is found
@@ -426,7 +426,7 @@ abstract class RatingHeadersQuery extends ModelCriteria
      * $query->filterByGamePlatformId(array('min' => 12)); // WHERE game_platform_id > 12
      * </code>
      *
-     * @see       filterByGamePlatforms()
+     * @see       filterByPlatforms()
      *
      * @param     mixed $gamePlatformId The value to use as filter.
      *              Use scalar values for equality.
@@ -929,44 +929,44 @@ abstract class RatingHeadersQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \GamePlatforms object
+     * Filter the query by a related \Platforms object
      *
-     * @param \GamePlatforms|ObjectCollection $gamePlatforms The related object(s) to use as filter
+     * @param \Platforms|ObjectCollection $platforms The related object(s) to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
      * @return ChildRatingHeadersQuery The current query, for fluid interface
      */
-    public function filterByGamePlatforms($gamePlatforms, $comparison = null)
+    public function filterByPlatforms($platforms, $comparison = null)
     {
-        if ($gamePlatforms instanceof \GamePlatforms) {
+        if ($platforms instanceof \Platforms) {
             return $this
-                ->addUsingAlias(RatingHeadersTableMap::COL_GAME_PLATFORM_ID, $gamePlatforms->getId(), $comparison);
-        } elseif ($gamePlatforms instanceof ObjectCollection) {
+                ->addUsingAlias(RatingHeadersTableMap::COL_GAME_PLATFORM_ID, $platforms->getId(), $comparison);
+        } elseif ($platforms instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(RatingHeadersTableMap::COL_GAME_PLATFORM_ID, $gamePlatforms->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(RatingHeadersTableMap::COL_GAME_PLATFORM_ID, $platforms->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
-            throw new PropelException('filterByGamePlatforms() only accepts arguments of type \GamePlatforms or Collection');
+            throw new PropelException('filterByPlatforms() only accepts arguments of type \Platforms or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the GamePlatforms relation
+     * Adds a JOIN clause to the query using the Platforms relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildRatingHeadersQuery The current query, for fluid interface
      */
-    public function joinGamePlatforms($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinPlatforms($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('GamePlatforms');
+        $relationMap = $tableMap->getRelation('Platforms');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -981,14 +981,14 @@ abstract class RatingHeadersQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'GamePlatforms');
+            $this->addJoinObject($join, 'Platforms');
         }
 
         return $this;
     }
 
     /**
-     * Use the GamePlatforms relation GamePlatforms object
+     * Use the Platforms relation Platforms object
      *
      * @see useQuery()
      *
@@ -996,13 +996,13 @@ abstract class RatingHeadersQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \GamePlatformsQuery A secondary query class using the current class as primary query
+     * @return \PlatformsQuery A secondary query class using the current class as primary query
      */
-    public function useGamePlatformsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function usePlatformsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinGamePlatforms($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'GamePlatforms', '\GamePlatformsQuery');
+            ->joinPlatforms($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Platforms', '\PlatformsQuery');
     }
 
     /**

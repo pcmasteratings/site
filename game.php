@@ -1,5 +1,6 @@
 <?php
 require("res/include.php");
+
 if(!array_key_exists("name",$_GET)) {
     header("Location: /"); /* Redirect browser */
     exit();
@@ -17,14 +18,14 @@ if(!array_key_exists("platform",$_GET)) {
 } else {
     $platform = $_GET["platform"];
 }
-$query = new GamePlatformsQuery();
+$query = new PlatformsQuery();
 $platform = $query->findOneByName($platform);
 if($platform==null) {
     throw new Exception("Invalid platform specified");
 }
 
 // Getting the rating queries the database each time, so we do it once here:
-$rating = $game->getAverageRating($platform->getName());
+//$rating = $game->getAverageRating($platform->getName());
 
 $user = Auth::getCurrentUser();
 
@@ -36,7 +37,7 @@ if(Auth::checkIfAuthenticated()&&array_key_exists("submit_game_review",$_POST)&&
     if($review==null) {
         $review = new UserReviews();
         $review->setGames($game);
-        $review->setGamePlatforms($platform);
+        $review->setPlatforms($platform);
         $review->setUser($user);
     }
     $review->setRating($new_rating);
@@ -87,7 +88,7 @@ if(Auth::checkIfAuthenticated()&&array_key_exists("submit_game_review",$_POST)&&
                     $result = $query->find();
                     foreach($result as $cat) {
                         echo '<tr><td>'.$cat->getTitle().'</td>';
-                        echo '<td>'. $game->getAverageCategoryRatingDescription($platform->getName(), $cat->getId()) .'</td></tr>';
+                        //echo '<td>'. $game->getAverageCategoryRatingDescription($platform->getName(), $cat->getId()) .'</td></tr>';
                     }
 
                     if(Auth::checkIfAdmin()) {
@@ -103,7 +104,7 @@ if(Auth::checkIfAuthenticated()&&array_key_exists("submit_game_review",$_POST)&&
 				<th style="width: 25px">*</th><th style="width:100%;">User reviews</th><th>Review by</th>
                 <?php
                     $query = new UserReviewsQuery();
-                    $query->filterByGamePlatforms($platform);
+                    $query->filterByPlatforms($platform);
                     $reviews = $query->findByGameId($game->getId());
                     if($reviews->count()==0) {
                         echo '<tr><td></td><td>No reviews submitted for this platform...</td></tr>';

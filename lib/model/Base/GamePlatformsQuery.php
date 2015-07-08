@@ -20,56 +20,41 @@ use Propel\Runtime\Exception\PropelException;
  *
  * 
  *
- * @method     ChildGamePlatformsQuery orderById($order = Criteria::ASC) Order by the id column
- * @method     ChildGamePlatformsQuery orderByName($order = Criteria::ASC) Order by the name column
- * @method     ChildGamePlatformsQuery orderByTitle($order = Criteria::ASC) Order by the title column
- * @method     ChildGamePlatformsQuery orderByDescription($order = Criteria::ASC) Order by the description column
- * @method     ChildGamePlatformsQuery orderByGbId($order = Criteria::ASC) Order by the gb_id column
+ * @method     ChildGamePlatformsQuery orderByGameId($order = Criteria::ASC) Order by the game_id column
+ * @method     ChildGamePlatformsQuery orderByPlatformId($order = Criteria::ASC) Order by the platform_id column
  *
- * @method     ChildGamePlatformsQuery groupById() Group by the id column
- * @method     ChildGamePlatformsQuery groupByName() Group by the name column
- * @method     ChildGamePlatformsQuery groupByTitle() Group by the title column
- * @method     ChildGamePlatformsQuery groupByDescription() Group by the description column
- * @method     ChildGamePlatformsQuery groupByGbId() Group by the gb_id column
+ * @method     ChildGamePlatformsQuery groupByGameId() Group by the game_id column
+ * @method     ChildGamePlatformsQuery groupByPlatformId() Group by the platform_id column
  *
  * @method     ChildGamePlatformsQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildGamePlatformsQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     ChildGamePlatformsQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildGamePlatformsQuery leftJoinRatingHeaders($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingHeaders relation
- * @method     ChildGamePlatformsQuery rightJoinRatingHeaders($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingHeaders relation
- * @method     ChildGamePlatformsQuery innerJoinRatingHeaders($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingHeaders relation
+ * @method     ChildGamePlatformsQuery leftJoinPlatforms($relationAlias = null) Adds a LEFT JOIN clause to the query using the Platforms relation
+ * @method     ChildGamePlatformsQuery rightJoinPlatforms($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Platforms relation
+ * @method     ChildGamePlatformsQuery innerJoinPlatforms($relationAlias = null) Adds a INNER JOIN clause to the query using the Platforms relation
  *
- * @method     ChildGamePlatformsQuery leftJoinUserReviews($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserReviews relation
- * @method     ChildGamePlatformsQuery rightJoinUserReviews($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserReviews relation
- * @method     ChildGamePlatformsQuery innerJoinUserReviews($relationAlias = null) Adds a INNER JOIN clause to the query using the UserReviews relation
+ * @method     ChildGamePlatformsQuery leftJoinGames($relationAlias = null) Adds a LEFT JOIN clause to the query using the Games relation
+ * @method     ChildGamePlatformsQuery rightJoinGames($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Games relation
+ * @method     ChildGamePlatformsQuery innerJoinGames($relationAlias = null) Adds a INNER JOIN clause to the query using the Games relation
  *
- * @method     \RatingHeadersQuery|\UserReviewsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \PlatformsQuery|\GamesQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildGamePlatforms findOne(ConnectionInterface $con = null) Return the first ChildGamePlatforms matching the query
  * @method     ChildGamePlatforms findOneOrCreate(ConnectionInterface $con = null) Return the first ChildGamePlatforms matching the query, or a new ChildGamePlatforms object populated from the query conditions when no match is found
  *
- * @method     ChildGamePlatforms findOneById(string $id) Return the first ChildGamePlatforms filtered by the id column
- * @method     ChildGamePlatforms findOneByName(string $name) Return the first ChildGamePlatforms filtered by the name column
- * @method     ChildGamePlatforms findOneByTitle(string $title) Return the first ChildGamePlatforms filtered by the title column
- * @method     ChildGamePlatforms findOneByDescription(string $description) Return the first ChildGamePlatforms filtered by the description column
- * @method     ChildGamePlatforms findOneByGbId(string $gb_id) Return the first ChildGamePlatforms filtered by the gb_id column *
+ * @method     ChildGamePlatforms findOneByGameId(string $game_id) Return the first ChildGamePlatforms filtered by the game_id column
+ * @method     ChildGamePlatforms findOneByPlatformId(string $platform_id) Return the first ChildGamePlatforms filtered by the platform_id column *
 
  * @method     ChildGamePlatforms requirePk($key, ConnectionInterface $con = null) Return the ChildGamePlatforms by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGamePlatforms requireOne(ConnectionInterface $con = null) Return the first ChildGamePlatforms matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildGamePlatforms requireOneById(string $id) Return the first ChildGamePlatforms filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGamePlatforms requireOneByName(string $name) Return the first ChildGamePlatforms filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGamePlatforms requireOneByTitle(string $title) Return the first ChildGamePlatforms filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGamePlatforms requireOneByDescription(string $description) Return the first ChildGamePlatforms filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGamePlatforms requireOneByGbId(string $gb_id) Return the first ChildGamePlatforms filtered by the gb_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGamePlatforms requireOneByGameId(string $game_id) Return the first ChildGamePlatforms filtered by the game_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGamePlatforms requireOneByPlatformId(string $platform_id) Return the first ChildGamePlatforms filtered by the platform_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildGamePlatforms[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildGamePlatforms objects based on current ModelCriteria
- * @method     ChildGamePlatforms[]|ObjectCollection findById(string $id) Return ChildGamePlatforms objects filtered by the id column
- * @method     ChildGamePlatforms[]|ObjectCollection findByName(string $name) Return ChildGamePlatforms objects filtered by the name column
- * @method     ChildGamePlatforms[]|ObjectCollection findByTitle(string $title) Return ChildGamePlatforms objects filtered by the title column
- * @method     ChildGamePlatforms[]|ObjectCollection findByDescription(string $description) Return ChildGamePlatforms objects filtered by the description column
- * @method     ChildGamePlatforms[]|ObjectCollection findByGbId(string $gb_id) Return ChildGamePlatforms objects filtered by the gb_id column
+ * @method     ChildGamePlatforms[]|ObjectCollection findByGameId(string $game_id) Return ChildGamePlatforms objects filtered by the game_id column
+ * @method     ChildGamePlatforms[]|ObjectCollection findByPlatformId(string $platform_id) Return ChildGamePlatforms objects filtered by the platform_id column
  * @method     ChildGamePlatforms[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -119,10 +104,10 @@ abstract class GamePlatformsQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj  = $c->findPk(12, $con);
+     * $obj = $c->findPk(array(12, 34), $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param array[$game_id, $platform_id] $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildGamePlatforms|array|mixed the result, formatted by the current formatter
@@ -132,7 +117,7 @@ abstract class GamePlatformsQuery extends ModelCriteria
         if ($key === null) {
             return null;
         }
-        if ((null !== ($obj = GamePlatformsTableMap::getInstanceFromPool((string) $key))) && !$this->formatter) {
+        if ((null !== ($obj = GamePlatformsTableMap::getInstanceFromPool(serialize(array((string) $key[0], (string) $key[1]))))) && !$this->formatter) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -162,10 +147,11 @@ abstract class GamePlatformsQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, name, title, description, gb_id FROM game_platforms WHERE id = :p0';
+        $sql = 'SELECT game_id, platform_id FROM game_platforms WHERE game_id = :p0 AND platform_id = :p1';
         try {
             $stmt = $con->prepare($sql);            
-            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);            
+            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -176,7 +162,7 @@ abstract class GamePlatformsQuery extends ModelCriteria
             /** @var ChildGamePlatforms $obj */
             $obj = new ChildGamePlatforms();
             $obj->hydrate($row);
-            GamePlatformsTableMap::addInstanceToPool($obj, (string) $key);
+            GamePlatformsTableMap::addInstanceToPool($obj, serialize(array((string) $key[0], (string) $key[1])));
         }
         $stmt->closeCursor();
 
@@ -205,7 +191,7 @@ abstract class GamePlatformsQuery extends ModelCriteria
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(12, 56, 832), $con);
+     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     ConnectionInterface $con an optional connection object
@@ -235,8 +221,10 @@ abstract class GamePlatformsQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
+        $this->addUsingAlias(GamePlatformsTableMap::COL_GAME_ID, $key[0], Criteria::EQUAL);
+        $this->addUsingAlias(GamePlatformsTableMap::COL_PLATFORM_ID, $key[1], Criteria::EQUAL);
 
-        return $this->addUsingAlias(GamePlatformsTableMap::COL_ID, $key, Criteria::EQUAL);
+        return $this;
     }
 
     /**
@@ -248,21 +236,32 @@ abstract class GamePlatformsQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
+        if (empty($keys)) {
+            return $this->add(null, '1<>1', Criteria::CUSTOM);
+        }
+        foreach ($keys as $key) {
+            $cton0 = $this->getNewCriterion(GamePlatformsTableMap::COL_GAME_ID, $key[0], Criteria::EQUAL);
+            $cton1 = $this->getNewCriterion(GamePlatformsTableMap::COL_PLATFORM_ID, $key[1], Criteria::EQUAL);
+            $cton0->addAnd($cton1);
+            $this->addOr($cton0);
+        }
 
-        return $this->addUsingAlias(GamePlatformsTableMap::COL_ID, $keys, Criteria::IN);
+        return $this;
     }
 
     /**
-     * Filter the query on the id column
+     * Filter the query on the game_id column
      *
      * Example usage:
      * <code>
-     * $query->filterById(1234); // WHERE id = 1234
-     * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
-     * $query->filterById(array('min' => 12)); // WHERE id > 12
+     * $query->filterByGameId(1234); // WHERE game_id = 1234
+     * $query->filterByGameId(array(12, 34)); // WHERE game_id IN (12, 34)
+     * $query->filterByGameId(array('min' => 12)); // WHERE game_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @see       filterByGames()
+     *
+     * @param     mixed $gameId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -270,16 +269,16 @@ abstract class GamePlatformsQuery extends ModelCriteria
      *
      * @return $this|ChildGamePlatformsQuery The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterByGameId($gameId = null, $comparison = null)
     {
-        if (is_array($id)) {
+        if (is_array($gameId)) {
             $useMinMax = false;
-            if (isset($id['min'])) {
-                $this->addUsingAlias(GamePlatformsTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
+            if (isset($gameId['min'])) {
+                $this->addUsingAlias(GamePlatformsTableMap::COL_GAME_ID, $gameId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($id['max'])) {
-                $this->addUsingAlias(GamePlatformsTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
+            if (isset($gameId['max'])) {
+                $this->addUsingAlias(GamePlatformsTableMap::COL_GAME_ID, $gameId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -290,107 +289,22 @@ abstract class GamePlatformsQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GamePlatformsTableMap::COL_ID, $id, $comparison);
+        return $this->addUsingAlias(GamePlatformsTableMap::COL_GAME_ID, $gameId, $comparison);
     }
 
     /**
-     * Filter the query on the name column
+     * Filter the query on the platform_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByName('fooValue');   // WHERE name = 'fooValue'
-     * $query->filterByName('%fooValue%'); // WHERE name LIKE '%fooValue%'
+     * $query->filterByPlatformId(1234); // WHERE platform_id = 1234
+     * $query->filterByPlatformId(array(12, 34)); // WHERE platform_id IN (12, 34)
+     * $query->filterByPlatformId(array('min' => 12)); // WHERE platform_id > 12
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @see       filterByPlatforms()
      *
-     * @return $this|ChildGamePlatformsQuery The current query, for fluid interface
-     */
-    public function filterByName($name = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($name)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $name)) {
-                $name = str_replace('*', '%', $name);
-                $comparison = Criteria::LIKE;
-            }
-        }
-
-        return $this->addUsingAlias(GamePlatformsTableMap::COL_NAME, $name, $comparison);
-    }
-
-    /**
-     * Filter the query on the title column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByTitle('fooValue');   // WHERE title = 'fooValue'
-     * $query->filterByTitle('%fooValue%'); // WHERE title LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $title The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildGamePlatformsQuery The current query, for fluid interface
-     */
-    public function filterByTitle($title = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($title)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $title)) {
-                $title = str_replace('*', '%', $title);
-                $comparison = Criteria::LIKE;
-            }
-        }
-
-        return $this->addUsingAlias(GamePlatformsTableMap::COL_TITLE, $title, $comparison);
-    }
-
-    /**
-     * Filter the query on the description column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDescription('fooValue');   // WHERE description = 'fooValue'
-     * $query->filterByDescription('%fooValue%'); // WHERE description LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $description The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildGamePlatformsQuery The current query, for fluid interface
-     */
-    public function filterByDescription($description = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($description)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $description)) {
-                $description = str_replace('*', '%', $description);
-                $comparison = Criteria::LIKE;
-            }
-        }
-
-        return $this->addUsingAlias(GamePlatformsTableMap::COL_DESCRIPTION, $description, $comparison);
-    }
-
-    /**
-     * Filter the query on the gb_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByGbId(1234); // WHERE gb_id = 1234
-     * $query->filterByGbId(array(12, 34)); // WHERE gb_id IN (12, 34)
-     * $query->filterByGbId(array('min' => 12)); // WHERE gb_id > 12
-     * </code>
-     *
-     * @param     mixed $gbId The value to use as filter.
+     * @param     mixed $platformId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -398,16 +312,16 @@ abstract class GamePlatformsQuery extends ModelCriteria
      *
      * @return $this|ChildGamePlatformsQuery The current query, for fluid interface
      */
-    public function filterByGbId($gbId = null, $comparison = null)
+    public function filterByPlatformId($platformId = null, $comparison = null)
     {
-        if (is_array($gbId)) {
+        if (is_array($platformId)) {
             $useMinMax = false;
-            if (isset($gbId['min'])) {
-                $this->addUsingAlias(GamePlatformsTableMap::COL_GB_ID, $gbId['min'], Criteria::GREATER_EQUAL);
+            if (isset($platformId['min'])) {
+                $this->addUsingAlias(GamePlatformsTableMap::COL_PLATFORM_ID, $platformId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($gbId['max'])) {
-                $this->addUsingAlias(GamePlatformsTableMap::COL_GB_ID, $gbId['max'], Criteria::LESS_EQUAL);
+            if (isset($platformId['max'])) {
+                $this->addUsingAlias(GamePlatformsTableMap::COL_PLATFORM_ID, $platformId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -418,44 +332,48 @@ abstract class GamePlatformsQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GamePlatformsTableMap::COL_GB_ID, $gbId, $comparison);
+        return $this->addUsingAlias(GamePlatformsTableMap::COL_PLATFORM_ID, $platformId, $comparison);
     }
 
     /**
-     * Filter the query by a related \RatingHeaders object
+     * Filter the query by a related \Platforms object
      *
-     * @param \RatingHeaders|ObjectCollection $ratingHeaders the related object to use as filter
+     * @param \Platforms|ObjectCollection $platforms The related object(s) to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
      *
      * @return ChildGamePlatformsQuery The current query, for fluid interface
      */
-    public function filterByRatingHeaders($ratingHeaders, $comparison = null)
+    public function filterByPlatforms($platforms, $comparison = null)
     {
-        if ($ratingHeaders instanceof \RatingHeaders) {
+        if ($platforms instanceof \Platforms) {
             return $this
-                ->addUsingAlias(GamePlatformsTableMap::COL_ID, $ratingHeaders->getGamePlatformId(), $comparison);
-        } elseif ($ratingHeaders instanceof ObjectCollection) {
+                ->addUsingAlias(GamePlatformsTableMap::COL_PLATFORM_ID, $platforms->getId(), $comparison);
+        } elseif ($platforms instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
             return $this
-                ->useRatingHeadersQuery()
-                ->filterByPrimaryKeys($ratingHeaders->getPrimaryKeys())
-                ->endUse();
+                ->addUsingAlias(GamePlatformsTableMap::COL_PLATFORM_ID, $platforms->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
-            throw new PropelException('filterByRatingHeaders() only accepts arguments of type \RatingHeaders or Collection');
+            throw new PropelException('filterByPlatforms() only accepts arguments of type \Platforms or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the RatingHeaders relation
+     * Adds a JOIN clause to the query using the Platforms relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildGamePlatformsQuery The current query, for fluid interface
      */
-    public function joinRatingHeaders($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinPlatforms($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('RatingHeaders');
+        $relationMap = $tableMap->getRelation('Platforms');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -470,14 +388,14 @@ abstract class GamePlatformsQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'RatingHeaders');
+            $this->addJoinObject($join, 'Platforms');
         }
 
         return $this;
     }
 
     /**
-     * Use the RatingHeaders relation RatingHeaders object
+     * Use the Platforms relation Platforms object
      *
      * @see useQuery()
      *
@@ -485,50 +403,54 @@ abstract class GamePlatformsQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \RatingHeadersQuery A secondary query class using the current class as primary query
+     * @return \PlatformsQuery A secondary query class using the current class as primary query
      */
-    public function useRatingHeadersQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function usePlatformsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinRatingHeaders($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'RatingHeaders', '\RatingHeadersQuery');
+            ->joinPlatforms($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Platforms', '\PlatformsQuery');
     }
 
     /**
-     * Filter the query by a related \UserReviews object
+     * Filter the query by a related \Games object
      *
-     * @param \UserReviews|ObjectCollection $userReviews the related object to use as filter
+     * @param \Games|ObjectCollection $games The related object(s) to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
      *
      * @return ChildGamePlatformsQuery The current query, for fluid interface
      */
-    public function filterByUserReviews($userReviews, $comparison = null)
+    public function filterByGames($games, $comparison = null)
     {
-        if ($userReviews instanceof \UserReviews) {
+        if ($games instanceof \Games) {
             return $this
-                ->addUsingAlias(GamePlatformsTableMap::COL_ID, $userReviews->getPlatformId(), $comparison);
-        } elseif ($userReviews instanceof ObjectCollection) {
+                ->addUsingAlias(GamePlatformsTableMap::COL_GAME_ID, $games->getId(), $comparison);
+        } elseif ($games instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
             return $this
-                ->useUserReviewsQuery()
-                ->filterByPrimaryKeys($userReviews->getPrimaryKeys())
-                ->endUse();
+                ->addUsingAlias(GamePlatformsTableMap::COL_GAME_ID, $games->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
-            throw new PropelException('filterByUserReviews() only accepts arguments of type \UserReviews or Collection');
+            throw new PropelException('filterByGames() only accepts arguments of type \Games or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the UserReviews relation
+     * Adds a JOIN clause to the query using the Games relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildGamePlatformsQuery The current query, for fluid interface
      */
-    public function joinUserReviews($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinGames($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('UserReviews');
+        $relationMap = $tableMap->getRelation('Games');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -543,14 +465,14 @@ abstract class GamePlatformsQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'UserReviews');
+            $this->addJoinObject($join, 'Games');
         }
 
         return $this;
     }
 
     /**
-     * Use the UserReviews relation UserReviews object
+     * Use the Games relation Games object
      *
      * @see useQuery()
      *
@@ -558,13 +480,13 @@ abstract class GamePlatformsQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \UserReviewsQuery A secondary query class using the current class as primary query
+     * @return \GamesQuery A secondary query class using the current class as primary query
      */
-    public function useUserReviewsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useGamesQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinUserReviews($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'UserReviews', '\UserReviewsQuery');
+            ->joinGames($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Games', '\GamesQuery');
     }
 
     /**
@@ -577,7 +499,9 @@ abstract class GamePlatformsQuery extends ModelCriteria
     public function prune($gamePlatforms = null)
     {
         if ($gamePlatforms) {
-            $this->addUsingAlias(GamePlatformsTableMap::COL_ID, $gamePlatforms->getId(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond0', $this->getAliasedColName(GamePlatformsTableMap::COL_GAME_ID), $gamePlatforms->getGameId(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond1', $this->getAliasedColName(GamePlatformsTableMap::COL_PLATFORM_ID), $gamePlatforms->getPlatformId(), Criteria::NOT_EQUAL);
+            $this->combine(array('pruneCond0', 'pruneCond1'), Criteria::LOGICAL_OR);
         }
 
         return $this;

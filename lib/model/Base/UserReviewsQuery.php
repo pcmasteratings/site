@@ -44,17 +44,13 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserReviewsQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     ChildUserReviewsQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildUserReviewsQuery leftJoinRigs($relationAlias = null) Adds a LEFT JOIN clause to the query using the Rigs relation
- * @method     ChildUserReviewsQuery rightJoinRigs($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Rigs relation
- * @method     ChildUserReviewsQuery innerJoinRigs($relationAlias = null) Adds a INNER JOIN clause to the query using the Rigs relation
- *
  * @method     ChildUserReviewsQuery leftJoinGames($relationAlias = null) Adds a LEFT JOIN clause to the query using the Games relation
  * @method     ChildUserReviewsQuery rightJoinGames($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Games relation
  * @method     ChildUserReviewsQuery innerJoinGames($relationAlias = null) Adds a INNER JOIN clause to the query using the Games relation
  *
- * @method     ChildUserReviewsQuery leftJoinGamePlatforms($relationAlias = null) Adds a LEFT JOIN clause to the query using the GamePlatforms relation
- * @method     ChildUserReviewsQuery rightJoinGamePlatforms($relationAlias = null) Adds a RIGHT JOIN clause to the query using the GamePlatforms relation
- * @method     ChildUserReviewsQuery innerJoinGamePlatforms($relationAlias = null) Adds a INNER JOIN clause to the query using the GamePlatforms relation
+ * @method     ChildUserReviewsQuery leftJoinPlatforms($relationAlias = null) Adds a LEFT JOIN clause to the query using the Platforms relation
+ * @method     ChildUserReviewsQuery rightJoinPlatforms($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Platforms relation
+ * @method     ChildUserReviewsQuery innerJoinPlatforms($relationAlias = null) Adds a INNER JOIN clause to the query using the Platforms relation
  *
  * @method     ChildUserReviewsQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
  * @method     ChildUserReviewsQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
@@ -64,7 +60,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserReviewsQuery rightJoinRatings($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ratings relation
  * @method     ChildUserReviewsQuery innerJoinRatings($relationAlias = null) Adds a INNER JOIN clause to the query using the Ratings relation
  *
- * @method     \RigsQuery|\GamesQuery|\GamePlatformsQuery|\UserQuery|\RatingsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \GamesQuery|\PlatformsQuery|\UserQuery|\RatingsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildUserReviews findOne(ConnectionInterface $con = null) Return the first ChildUserReviews matching the query
  * @method     ChildUserReviews findOneOrCreate(ConnectionInterface $con = null) Return the first ChildUserReviews matching the query, or a new ChildUserReviews object populated from the query conditions when no match is found
@@ -378,7 +374,7 @@ abstract class UserReviewsQuery extends ModelCriteria
      * $query->filterByPlatformId(array('min' => 12)); // WHERE platform_id > 12
      * </code>
      *
-     * @see       filterByGamePlatforms()
+     * @see       filterByPlatforms()
      *
      * @param     mixed $platformId The value to use as filter.
      *              Use scalar values for equality.
@@ -463,8 +459,6 @@ abstract class UserReviewsQuery extends ModelCriteria
      * $query->filterByRigId(array(12, 34)); // WHERE rig_id IN (12, 34)
      * $query->filterByRigId(array('min' => 12)); // WHERE rig_id > 12
      * </code>
-     *
-     * @see       filterByRigs()
      *
      * @param     mixed $rigId The value to use as filter.
      *              Use scalar values for equality.
@@ -652,83 +646,6 @@ abstract class UserReviewsQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \Rigs object
-     *
-     * @param \Rigs|ObjectCollection $rigs The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return ChildUserReviewsQuery The current query, for fluid interface
-     */
-    public function filterByRigs($rigs, $comparison = null)
-    {
-        if ($rigs instanceof \Rigs) {
-            return $this
-                ->addUsingAlias(UserReviewsTableMap::COL_RIG_ID, $rigs->getId(), $comparison);
-        } elseif ($rigs instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(UserReviewsTableMap::COL_RIG_ID, $rigs->toKeyValue('PrimaryKey', 'Id'), $comparison);
-        } else {
-            throw new PropelException('filterByRigs() only accepts arguments of type \Rigs or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Rigs relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildUserReviewsQuery The current query, for fluid interface
-     */
-    public function joinRigs($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Rigs');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Rigs');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Rigs relation Rigs object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \RigsQuery A secondary query class using the current class as primary query
-     */
-    public function useRigsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinRigs($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Rigs', '\RigsQuery');
-    }
-
-    /**
      * Filter the query by a related \Games object
      *
      * @param \Games|ObjectCollection $games The related object(s) to use as filter
@@ -806,44 +723,44 @@ abstract class UserReviewsQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \GamePlatforms object
+     * Filter the query by a related \Platforms object
      *
-     * @param \GamePlatforms|ObjectCollection $gamePlatforms The related object(s) to use as filter
+     * @param \Platforms|ObjectCollection $platforms The related object(s) to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
      * @return ChildUserReviewsQuery The current query, for fluid interface
      */
-    public function filterByGamePlatforms($gamePlatforms, $comparison = null)
+    public function filterByPlatforms($platforms, $comparison = null)
     {
-        if ($gamePlatforms instanceof \GamePlatforms) {
+        if ($platforms instanceof \Platforms) {
             return $this
-                ->addUsingAlias(UserReviewsTableMap::COL_PLATFORM_ID, $gamePlatforms->getId(), $comparison);
-        } elseif ($gamePlatforms instanceof ObjectCollection) {
+                ->addUsingAlias(UserReviewsTableMap::COL_PLATFORM_ID, $platforms->getId(), $comparison);
+        } elseif ($platforms instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(UserReviewsTableMap::COL_PLATFORM_ID, $gamePlatforms->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(UserReviewsTableMap::COL_PLATFORM_ID, $platforms->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
-            throw new PropelException('filterByGamePlatforms() only accepts arguments of type \GamePlatforms or Collection');
+            throw new PropelException('filterByPlatforms() only accepts arguments of type \Platforms or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the GamePlatforms relation
+     * Adds a JOIN clause to the query using the Platforms relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildUserReviewsQuery The current query, for fluid interface
      */
-    public function joinGamePlatforms($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinPlatforms($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('GamePlatforms');
+        $relationMap = $tableMap->getRelation('Platforms');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -858,14 +775,14 @@ abstract class UserReviewsQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'GamePlatforms');
+            $this->addJoinObject($join, 'Platforms');
         }
 
         return $this;
     }
 
     /**
-     * Use the GamePlatforms relation GamePlatforms object
+     * Use the Platforms relation Platforms object
      *
      * @see useQuery()
      *
@@ -873,13 +790,13 @@ abstract class UserReviewsQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \GamePlatformsQuery A secondary query class using the current class as primary query
+     * @return \PlatformsQuery A secondary query class using the current class as primary query
      */
-    public function useGamePlatformsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function usePlatformsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinGamePlatforms($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'GamePlatforms', '\GamePlatformsQuery');
+            ->joinPlatforms($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Platforms', '\PlatformsQuery');
     }
 
     /**
