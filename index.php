@@ -24,18 +24,21 @@ require("res/include.php");
             $games = $query->find();
 
 
-            $i = 0;
+            $i = 1;
             foreach($games as $game) {
                 if($i%3==0) {
                     echo '<div class="row">';
                 }
-                echo '<div class="col-sm-6 col-md-4"><div class="thumbnail">';
-                echo '<a href="game.php?name='.$game->getName().'">';
-                echo '<img src="'.$game->getGbThumb().'" alt="thumbnail">';
-                echo '<img class="rating-badge" src="/img/badges/'.$game->getAverageRatingForDefaultPlatform().'_tiny.jpg" alt="R">';
-                echo '<div class="caption"><h3>'.$game->getTitle().'</h3></div>';
-                echo '</a>';
-                echo '</div></div>';
+                echo "<div class='col-sm-6 col-md-4'>
+                  <div class='thumbnail'>
+                    <a href='game.php?name={$game->getName()}'>
+                      <img src={$game->getGbThumb()} alt='thumbnail'>
+                        <img class='rating-badge' src='/img/badges/r_tiny.jpg' alt='R'>
+                          <div class='caption'><h3>{$game->getTitle()}</h3></div>
+                    </a>
+                  </div>
+                </div>";
+
                 if($i%3==0) {
                     echo '</div>';
                 }
