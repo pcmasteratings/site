@@ -141,7 +141,7 @@ if(Auth::checkIfAuthenticated()&&array_key_exists("submit_game_review",$_POST)&&
                             </select>
                         </div>
                         <div class="form-group">
-                            <textarea class="form-group" name="submit_game_review"><?php if($review!=null) { echo $review->getReview(); } ?></textarea>
+                            <textarea class="form-control" name="submit_game_review"><?php if($review!=null) { echo $review->getReview(); } ?></textarea>
                         </div>
                         <input type="submit" class="btn btn-primary" />
                     </form>
