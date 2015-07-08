@@ -29,7 +29,7 @@
               }
               ?>
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><?php echo $user->getUsername(); ?></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><?php echo $user->getUsername(); ?> <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <li><a href="#">Profile [N/A]</a></li>
                   <li><a href="?logout=1">Log Out</a></li>
