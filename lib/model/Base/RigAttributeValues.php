@@ -25,11 +25,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'rig_attribute_values' table.
  *
- *
+ * 
  *
 * @package    propel.generator..Base
 */
-abstract class RigAttributeValues implements ActiveRecordInterface
+abstract class RigAttributeValues implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -324,7 +324,7 @@ abstract class RigAttributeValues implements ActiveRecordInterface
 
     /**
      * Get the [id] column value.
-     *
+     * 
      * @return string
      */
     public function getId()
@@ -334,7 +334,7 @@ abstract class RigAttributeValues implements ActiveRecordInterface
 
     /**
      * Get the [rig_id] column value.
-     *
+     * 
      * @return string
      */
     public function getRigId()
@@ -344,7 +344,7 @@ abstract class RigAttributeValues implements ActiveRecordInterface
 
     /**
      * Get the [rig_attribute_id] column value.
-     *
+     * 
      * @return string
      */
     public function getRigAttributeId()
@@ -354,7 +354,7 @@ abstract class RigAttributeValues implements ActiveRecordInterface
 
     /**
      * Get the [value] column value.
-     *
+     * 
      * @return string
      */
     public function getValue()
@@ -364,7 +364,7 @@ abstract class RigAttributeValues implements ActiveRecordInterface
 
     /**
      * Set the value of [id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\RigAttributeValues The current object (for fluent API support)
      */
@@ -384,7 +384,7 @@ abstract class RigAttributeValues implements ActiveRecordInterface
 
     /**
      * Set the value of [rig_id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\RigAttributeValues The current object (for fluent API support)
      */
@@ -408,7 +408,7 @@ abstract class RigAttributeValues implements ActiveRecordInterface
 
     /**
      * Set the value of [rig_attribute_id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\RigAttributeValues The current object (for fluent API support)
      */
@@ -432,7 +432,7 @@ abstract class RigAttributeValues implements ActiveRecordInterface
 
     /**
      * Set the value of [value] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\RigAttributeValues The current object (for fluent API support)
      */
@@ -752,16 +752,16 @@ abstract class RigAttributeValues implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
+                    case 'id':                        
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'rig_id':
+                    case 'rig_id':                        
                         $stmt->bindValue($identifier, $this->rig_id, PDO::PARAM_INT);
                         break;
-                    case 'rig_attribute_id':
+                    case 'rig_attribute_id':                        
                         $stmt->bindValue($identifier, $this->rig_attribute_id, PDO::PARAM_INT);
                         break;
-                    case 'value':
+                    case 'value':                        
                         $stmt->bindValue($identifier, $this->value, PDO::PARAM_STR);
                         break;
                 }
@@ -877,10 +877,10 @@ abstract class RigAttributeValues implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aRigs) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'rigs';
@@ -891,11 +891,11 @@ abstract class RigAttributeValues implements ActiveRecordInterface
                     default:
                         $key = 'Rigs';
                 }
-
+        
                 $result[$key] = $this->aRigs->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aRigAttributes) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'rigAttributes';
@@ -906,7 +906,7 @@ abstract class RigAttributeValues implements ActiveRecordInterface
                     default:
                         $key = 'RigAttributes';
                 }
-
+        
                 $result[$key] = $this->aRigAttributes->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
@@ -1089,7 +1089,7 @@ abstract class RigAttributeValues implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return string

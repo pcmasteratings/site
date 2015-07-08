@@ -174,7 +174,7 @@ class RatingHeadersTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
         $this->addForeignKey('game_id', 'GameId', 'BIGINT', 'games', 'id', true, null, null);
         $this->addForeignKey('user_id', 'UserId', 'BIGINT', 'user', 'id', true, null, null);
-        $this->addForeignKey('game_platform_id', 'GamePlatformId', 'BIGINT', 'platforms', 'id', true, null, null);
+        $this->addForeignKey('game_platform_id', 'GamePlatformId', 'BIGINT', 'game_platforms', 'id', true, null, null);
         $this->addForeignKey('rig_id', 'RigId', 'BIGINT', 'rigs', 'id', false, null, null);
         $this->addColumn('created', 'Created', 'TIMESTAMP', true, null, null);
         $this->addColumn('upvotes', 'Upvotes', 'BIGINT', true, null, 0);
@@ -209,7 +209,7 @@ class RatingHeadersTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, null, false);
-        $this->addRelation('Platforms', '\\Platforms', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('GamePlatforms', '\\GamePlatforms', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':game_platform_id',
@@ -277,7 +277,7 @@ class RatingHeadersTableMap extends TableMap
                 : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
         ];
     }
-
+    
     /**
      * The class that the tableMap will make instances of.
      *
@@ -338,7 +338,7 @@ class RatingHeadersTableMap extends TableMap
     public static function populateObjects(DataFetcherInterface $dataFetcher)
     {
         $results = array();
-
+    
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
         // populate the object(s)

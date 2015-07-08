@@ -25,11 +25,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'companies' table.
  *
- *
+ * 
  *
 * @package    propel.generator..Base
 */
-abstract class Companies implements ActiveRecordInterface
+abstract class Companies implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -344,7 +344,7 @@ abstract class Companies implements ActiveRecordInterface
 
     /**
      * Get the [id] column value.
-     *
+     * 
      * @return string
      */
     public function getId()
@@ -354,7 +354,7 @@ abstract class Companies implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -364,7 +364,7 @@ abstract class Companies implements ActiveRecordInterface
 
     /**
      * Get the [title] column value.
-     *
+     * 
      * @return string
      */
     public function getTitle()
@@ -374,7 +374,7 @@ abstract class Companies implements ActiveRecordInterface
 
     /**
      * Get the [description] column value.
-     *
+     * 
      * @return string
      */
     public function getDescription()
@@ -384,7 +384,7 @@ abstract class Companies implements ActiveRecordInterface
 
     /**
      * Get the [bg_id] column value.
-     *
+     * 
      * @return string
      */
     public function getBgId()
@@ -394,7 +394,7 @@ abstract class Companies implements ActiveRecordInterface
 
     /**
      * Set the value of [id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Companies The current object (for fluent API support)
      */
@@ -414,7 +414,7 @@ abstract class Companies implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Companies The current object (for fluent API support)
      */
@@ -434,7 +434,7 @@ abstract class Companies implements ActiveRecordInterface
 
     /**
      * Set the value of [title] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Companies The current object (for fluent API support)
      */
@@ -454,7 +454,7 @@ abstract class Companies implements ActiveRecordInterface
 
     /**
      * Set the value of [description] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Companies The current object (for fluent API support)
      */
@@ -474,7 +474,7 @@ abstract class Companies implements ActiveRecordInterface
 
     /**
      * Set the value of [bg_id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Companies The current object (for fluent API support)
      */
@@ -813,19 +813,19 @@ abstract class Companies implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
+                    case 'id':                        
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'title':
+                    case 'title':                        
                         $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
                         break;
-                    case 'description':
+                    case 'description':                        
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
                         break;
-                    case 'bg_id':
+                    case 'bg_id':                        
                         $stmt->bindValue($identifier, $this->bg_id, PDO::PARAM_INT);
                         break;
                 }
@@ -945,10 +945,10 @@ abstract class Companies implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->collGamessRelatedByPublisherId) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'gamess';
@@ -959,11 +959,11 @@ abstract class Companies implements ActiveRecordInterface
                     default:
                         $key = 'Gamess';
                 }
-
+        
                 $result[$key] = $this->collGamessRelatedByPublisherId->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collGamessRelatedByDeveloperId) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'gamess';
@@ -974,7 +974,7 @@ abstract class Companies implements ActiveRecordInterface
                     default:
                         $key = 'Gamess';
                 }
-
+        
                 $result[$key] = $this->collGamessRelatedByDeveloperId->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1166,7 +1166,7 @@ abstract class Companies implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return string
@@ -1396,7 +1396,7 @@ abstract class Companies implements ActiveRecordInterface
         /** @var ChildGames[] $gamessRelatedByPublisherIdToDelete */
         $gamessRelatedByPublisherIdToDelete = $this->getGamessRelatedByPublisherId(new Criteria(), $con)->diff($gamessRelatedByPublisherId);
 
-
+        
         $this->gamessRelatedByPublisherIdScheduledForDeletion = $gamessRelatedByPublisherIdToDelete;
 
         foreach ($gamessRelatedByPublisherIdToDelete as $gamesRelatedByPublisherIdRemoved) {
@@ -1614,7 +1614,7 @@ abstract class Companies implements ActiveRecordInterface
         /** @var ChildGames[] $gamessRelatedByDeveloperIdToDelete */
         $gamessRelatedByDeveloperIdToDelete = $this->getGamessRelatedByDeveloperId(new Criteria(), $con)->diff($gamessRelatedByDeveloperId);
 
-
+        
         $this->gamessRelatedByDeveloperIdScheduledForDeletion = $gamessRelatedByDeveloperIdToDelete;
 
         foreach ($gamessRelatedByDeveloperIdToDelete as $gamesRelatedByDeveloperIdRemoved) {

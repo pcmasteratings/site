@@ -25,11 +25,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'rig_attributes' table.
  *
- *
+ * 
  *
 * @package    propel.generator..Base
 */
-abstract class RigAttributes implements ActiveRecordInterface
+abstract class RigAttributes implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -314,7 +314,7 @@ abstract class RigAttributes implements ActiveRecordInterface
 
     /**
      * Get the [id] column value.
-     *
+     * 
      * @return string
      */
     public function getId()
@@ -324,7 +324,7 @@ abstract class RigAttributes implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -334,7 +334,7 @@ abstract class RigAttributes implements ActiveRecordInterface
 
     /**
      * Set the value of [id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\RigAttributes The current object (for fluent API support)
      */
@@ -354,7 +354,7 @@ abstract class RigAttributes implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\RigAttributes The current object (for fluent API support)
      */
@@ -654,10 +654,10 @@ abstract class RigAttributes implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
+                    case 'id':                        
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_INT);
                         break;
                 }
@@ -765,10 +765,10 @@ abstract class RigAttributes implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->collRigAttributeValuess) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'rigAttributeValuess';
@@ -779,7 +779,7 @@ abstract class RigAttributes implements ActiveRecordInterface
                     default:
                         $key = 'RigAttributeValuess';
                 }
-
+        
                 $result[$key] = $this->collRigAttributeValuess->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -944,7 +944,7 @@ abstract class RigAttributes implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return string
@@ -1162,7 +1162,7 @@ abstract class RigAttributes implements ActiveRecordInterface
         /** @var ChildRigAttributeValues[] $rigAttributeValuessToDelete */
         $rigAttributeValuessToDelete = $this->getRigAttributeValuess(new Criteria(), $con)->diff($rigAttributeValuess);
 
-
+        
         $this->rigAttributeValuessScheduledForDeletion = $rigAttributeValuessToDelete;
 
         foreach ($rigAttributeValuessToDelete as $rigAttributeValuesRemoved) {

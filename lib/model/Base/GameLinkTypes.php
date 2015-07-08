@@ -25,11 +25,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'game_link_types' table.
  *
- *
+ * 
  *
 * @package    propel.generator..Base
 */
-abstract class GameLinkTypes implements ActiveRecordInterface
+abstract class GameLinkTypes implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -326,7 +326,7 @@ abstract class GameLinkTypes implements ActiveRecordInterface
 
     /**
      * Get the [id] column value.
-     *
+     * 
      * @return string
      */
     public function getId()
@@ -336,7 +336,7 @@ abstract class GameLinkTypes implements ActiveRecordInterface
 
     /**
      * Get the [title] column value.
-     *
+     * 
      * @return string
      */
     public function getTitle()
@@ -346,7 +346,7 @@ abstract class GameLinkTypes implements ActiveRecordInterface
 
     /**
      * Get the [description] column value.
-     *
+     * 
      * @return string
      */
     public function getDescription()
@@ -356,7 +356,7 @@ abstract class GameLinkTypes implements ActiveRecordInterface
 
     /**
      * Get the [url] column value.
-     *
+     * 
      * @return string
      */
     public function getUrl()
@@ -366,7 +366,7 @@ abstract class GameLinkTypes implements ActiveRecordInterface
 
     /**
      * Set the value of [id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\GameLinkTypes The current object (for fluent API support)
      */
@@ -386,7 +386,7 @@ abstract class GameLinkTypes implements ActiveRecordInterface
 
     /**
      * Set the value of [title] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\GameLinkTypes The current object (for fluent API support)
      */
@@ -406,7 +406,7 @@ abstract class GameLinkTypes implements ActiveRecordInterface
 
     /**
      * Set the value of [description] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\GameLinkTypes The current object (for fluent API support)
      */
@@ -426,7 +426,7 @@ abstract class GameLinkTypes implements ActiveRecordInterface
 
     /**
      * Set the value of [url] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\GameLinkTypes The current object (for fluent API support)
      */
@@ -738,16 +738,16 @@ abstract class GameLinkTypes implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
+                    case 'id':                        
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'title':
+                    case 'title':                        
                         $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
                         break;
-                    case 'description':
+                    case 'description':                        
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
                         break;
-                    case 'url':
+                    case 'url':                        
                         $stmt->bindValue($identifier, $this->url, PDO::PARAM_STR);
                         break;
                 }
@@ -863,10 +863,10 @@ abstract class GameLinkTypes implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->collGameLinkss) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'gameLinkss';
@@ -877,7 +877,7 @@ abstract class GameLinkTypes implements ActiveRecordInterface
                     default:
                         $key = 'GameLinkss';
                 }
-
+        
                 $result[$key] = $this->collGameLinkss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1060,7 +1060,7 @@ abstract class GameLinkTypes implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return string
@@ -1280,7 +1280,7 @@ abstract class GameLinkTypes implements ActiveRecordInterface
         /** @var ChildGameLinks[] $gameLinkssToDelete */
         $gameLinkssToDelete = $this->getGameLinkss(new Criteria(), $con)->diff($gameLinkss);
 
-
+        
         $this->gameLinkssScheduledForDeletion = $gameLinkssToDelete;
 
         foreach ($gameLinkssToDelete as $gameLinksRemoved) {

@@ -25,11 +25,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'user_attributes' table.
  *
- *
+ * 
  *
 * @package    propel.generator..Base
 */
-abstract class UserAttributes implements ActiveRecordInterface
+abstract class UserAttributes implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -314,7 +314,7 @@ abstract class UserAttributes implements ActiveRecordInterface
 
     /**
      * Get the [id] column value.
-     *
+     * 
      * @return string
      */
     public function getId()
@@ -324,7 +324,7 @@ abstract class UserAttributes implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -334,7 +334,7 @@ abstract class UserAttributes implements ActiveRecordInterface
 
     /**
      * Set the value of [id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\UserAttributes The current object (for fluent API support)
      */
@@ -354,7 +354,7 @@ abstract class UserAttributes implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\UserAttributes The current object (for fluent API support)
      */
@@ -654,10 +654,10 @@ abstract class UserAttributes implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
+                    case 'id':                        
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
                 }
@@ -765,10 +765,10 @@ abstract class UserAttributes implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->collUserAttributeValuess) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'userAttributeValuess';
@@ -779,7 +779,7 @@ abstract class UserAttributes implements ActiveRecordInterface
                     default:
                         $key = 'UserAttributeValuess';
                 }
-
+        
                 $result[$key] = $this->collUserAttributeValuess->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -944,7 +944,7 @@ abstract class UserAttributes implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return string
@@ -1162,7 +1162,7 @@ abstract class UserAttributes implements ActiveRecordInterface
         /** @var ChildUserAttributeValues[] $userAttributeValuessToDelete */
         $userAttributeValuessToDelete = $this->getUserAttributeValuess(new Criteria(), $con)->diff($userAttributeValuess);
 
-
+        
         $this->userAttributeValuessScheduledForDeletion = $userAttributeValuessToDelete;
 
         foreach ($userAttributeValuessToDelete as $userAttributeValuesRemoved) {

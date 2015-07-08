@@ -25,11 +25,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'ratings' table.
  *
- *
+ * 
  *
 * @package    propel.generator..Base
 */
-abstract class Ratings implements ActiveRecordInterface
+abstract class Ratings implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -332,7 +332,7 @@ abstract class Ratings implements ActiveRecordInterface
 
     /**
      * Get the [id] column value.
-     *
+     * 
      * @return string
      */
     public function getId()
@@ -342,7 +342,7 @@ abstract class Ratings implements ActiveRecordInterface
 
     /**
      * Get the [initial] column value.
-     *
+     * 
      * @return string
      */
     public function getInitial()
@@ -352,7 +352,7 @@ abstract class Ratings implements ActiveRecordInterface
 
     /**
      * Get the [title] column value.
-     *
+     * 
      * @return string
      */
     public function getTitle()
@@ -362,7 +362,7 @@ abstract class Ratings implements ActiveRecordInterface
 
     /**
      * Get the [description] column value.
-     *
+     * 
      * @return string
      */
     public function getDescription()
@@ -372,7 +372,7 @@ abstract class Ratings implements ActiveRecordInterface
 
     /**
      * Get the [threshold] column value.
-     *
+     * 
      * @return int
      */
     public function getThreshold()
@@ -382,7 +382,7 @@ abstract class Ratings implements ActiveRecordInterface
 
     /**
      * Set the value of [id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Ratings The current object (for fluent API support)
      */
@@ -402,7 +402,7 @@ abstract class Ratings implements ActiveRecordInterface
 
     /**
      * Set the value of [initial] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Ratings The current object (for fluent API support)
      */
@@ -422,7 +422,7 @@ abstract class Ratings implements ActiveRecordInterface
 
     /**
      * Set the value of [title] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Ratings The current object (for fluent API support)
      */
@@ -442,7 +442,7 @@ abstract class Ratings implements ActiveRecordInterface
 
     /**
      * Set the value of [description] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Ratings The current object (for fluent API support)
      */
@@ -462,7 +462,7 @@ abstract class Ratings implements ActiveRecordInterface
 
     /**
      * Set the value of [threshold] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\Ratings The current object (for fluent API support)
      */
@@ -780,19 +780,19 @@ abstract class Ratings implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
+                    case 'id':                        
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'initial':
+                    case 'initial':                        
                         $stmt->bindValue($identifier, $this->initial, PDO::PARAM_STR);
                         break;
-                    case 'title':
+                    case 'title':                        
                         $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
                         break;
-                    case 'description':
+                    case 'description':                        
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
                         break;
-                    case 'threshold':
+                    case 'threshold':                        
                         $stmt->bindValue($identifier, $this->threshold, PDO::PARAM_INT);
                         break;
                 }
@@ -912,10 +912,10 @@ abstract class Ratings implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->collUserReviewss) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'userReviewss';
@@ -926,7 +926,7 @@ abstract class Ratings implements ActiveRecordInterface
                     default:
                         $key = 'UserReviewss';
                 }
-
+        
                 $result[$key] = $this->collUserReviewss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1118,7 +1118,7 @@ abstract class Ratings implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return string
@@ -1339,7 +1339,7 @@ abstract class Ratings implements ActiveRecordInterface
         /** @var ChildUserReviews[] $userReviewssToDelete */
         $userReviewssToDelete = $this->getUserReviewss(new Criteria(), $con)->diff($userReviewss);
 
-
+        
         $this->userReviewssScheduledForDeletion = $userReviewssToDelete;
 
         foreach ($userReviewssToDelete as $userReviewsRemoved) {
@@ -1458,6 +1458,31 @@ abstract class Ratings implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
      */
+    public function getUserReviewssJoinRigs(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildUserReviewsQuery::create(null, $criteria);
+        $query->joinWith('Rigs', $joinBehavior);
+
+        return $this->getUserReviewss($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Ratings is new, it will return
+     * an empty collection; or if this Ratings has previously
+     * been saved, it will retrieve related UserReviewss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Ratings.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     */
     public function getUserReviewssJoinGames(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildUserReviewsQuery::create(null, $criteria);
@@ -1483,10 +1508,10 @@ abstract class Ratings implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
      */
-    public function getUserReviewssJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getUserReviewssJoinGamePlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildUserReviewsQuery::create(null, $criteria);
-        $query->joinWith('Platforms', $joinBehavior);
+        $query->joinWith('GamePlatforms', $joinBehavior);
 
         return $this->getUserReviewss($query, $con);
     }

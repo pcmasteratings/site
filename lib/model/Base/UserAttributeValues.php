@@ -25,11 +25,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'user_attribute_values' table.
  *
- *
+ * 
  *
 * @package    propel.generator..Base
 */
-abstract class UserAttributeValues implements ActiveRecordInterface
+abstract class UserAttributeValues implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -324,7 +324,7 @@ abstract class UserAttributeValues implements ActiveRecordInterface
 
     /**
      * Get the [id] column value.
-     *
+     * 
      * @return string
      */
     public function getId()
@@ -334,7 +334,7 @@ abstract class UserAttributeValues implements ActiveRecordInterface
 
     /**
      * Get the [user_attribute_id] column value.
-     *
+     * 
      * @return string
      */
     public function getUserAttributeId()
@@ -344,7 +344,7 @@ abstract class UserAttributeValues implements ActiveRecordInterface
 
     /**
      * Get the [user_id] column value.
-     *
+     * 
      * @return string
      */
     public function getUserId()
@@ -354,7 +354,7 @@ abstract class UserAttributeValues implements ActiveRecordInterface
 
     /**
      * Get the [value] column value.
-     *
+     * 
      * @return string
      */
     public function getValue()
@@ -364,7 +364,7 @@ abstract class UserAttributeValues implements ActiveRecordInterface
 
     /**
      * Set the value of [id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\UserAttributeValues The current object (for fluent API support)
      */
@@ -384,7 +384,7 @@ abstract class UserAttributeValues implements ActiveRecordInterface
 
     /**
      * Set the value of [user_attribute_id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\UserAttributeValues The current object (for fluent API support)
      */
@@ -408,7 +408,7 @@ abstract class UserAttributeValues implements ActiveRecordInterface
 
     /**
      * Set the value of [user_id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\UserAttributeValues The current object (for fluent API support)
      */
@@ -432,7 +432,7 @@ abstract class UserAttributeValues implements ActiveRecordInterface
 
     /**
      * Set the value of [value] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\UserAttributeValues The current object (for fluent API support)
      */
@@ -752,16 +752,16 @@ abstract class UserAttributeValues implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
+                    case 'id':                        
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'user_attribute_id':
+                    case 'user_attribute_id':                        
                         $stmt->bindValue($identifier, $this->user_attribute_id, PDO::PARAM_INT);
                         break;
-                    case 'user_id':
+                    case 'user_id':                        
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
                         break;
-                    case 'value':
+                    case 'value':                        
                         $stmt->bindValue($identifier, $this->value, PDO::PARAM_STR);
                         break;
                 }
@@ -877,10 +877,10 @@ abstract class UserAttributeValues implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aUserAttributes) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'userAttributes';
@@ -891,11 +891,11 @@ abstract class UserAttributeValues implements ActiveRecordInterface
                     default:
                         $key = 'UserAttributes';
                 }
-
+        
                 $result[$key] = $this->aUserAttributes->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUser) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'user';
@@ -906,7 +906,7 @@ abstract class UserAttributeValues implements ActiveRecordInterface
                     default:
                         $key = 'User';
                 }
-
+        
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
@@ -1089,7 +1089,7 @@ abstract class UserAttributeValues implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return string

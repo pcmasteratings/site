@@ -25,11 +25,11 @@ use Propel\Runtime\Util\PropelDateTime;
 /**
  * Base class that represents a row from the 'news' table.
  *
- *
+ * 
  *
 * @package    propel.generator..Base
 */
-abstract class News implements ActiveRecordInterface
+abstract class News implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -331,7 +331,7 @@ abstract class News implements ActiveRecordInterface
 
     /**
      * Get the [id] column value.
-     *
+     * 
      * @return string
      */
     public function getId()
@@ -341,7 +341,7 @@ abstract class News implements ActiveRecordInterface
 
     /**
      * Get the [title] column value.
-     *
+     * 
      * @return string
      */
     public function getTitle()
@@ -351,7 +351,7 @@ abstract class News implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [datetime] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -371,7 +371,7 @@ abstract class News implements ActiveRecordInterface
 
     /**
      * Get the [user_id] column value.
-     *
+     * 
      * @return string
      */
     public function getUserId()
@@ -381,7 +381,7 @@ abstract class News implements ActiveRecordInterface
 
     /**
      * Get the [content] column value.
-     *
+     * 
      * @return string
      */
     public function getContent()
@@ -391,7 +391,7 @@ abstract class News implements ActiveRecordInterface
 
     /**
      * Get the [tags] column value.
-     *
+     * 
      * @return string
      */
     public function getTags()
@@ -401,7 +401,7 @@ abstract class News implements ActiveRecordInterface
 
     /**
      * Set the value of [id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\News The current object (for fluent API support)
      */
@@ -421,7 +421,7 @@ abstract class News implements ActiveRecordInterface
 
     /**
      * Set the value of [title] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\News The current object (for fluent API support)
      */
@@ -441,7 +441,7 @@ abstract class News implements ActiveRecordInterface
 
     /**
      * Sets the value of [datetime] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTime value.
      *               Empty strings are treated as NULL.
      * @return $this|\News The current object (for fluent API support)
@@ -461,7 +461,7 @@ abstract class News implements ActiveRecordInterface
 
     /**
      * Set the value of [user_id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\News The current object (for fluent API support)
      */
@@ -485,7 +485,7 @@ abstract class News implements ActiveRecordInterface
 
     /**
      * Set the value of [content] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\News The current object (for fluent API support)
      */
@@ -505,7 +505,7 @@ abstract class News implements ActiveRecordInterface
 
     /**
      * Set the value of [tags] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\News The current object (for fluent API support)
      */
@@ -829,22 +829,22 @@ abstract class News implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
+                    case 'id':                        
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'title':
+                    case 'title':                        
                         $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
                         break;
-                    case 'datetime':
+                    case 'datetime':                        
                         $stmt->bindValue($identifier, $this->datetime ? $this->datetime->format("Y-m-d H:i:s") : null, PDO::PARAM_STR);
                         break;
-                    case 'user_id':
+                    case 'user_id':                        
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
                         break;
-                    case 'content':
+                    case 'content':                        
                         $stmt->bindValue($identifier, $this->content, PDO::PARAM_STR);
                         break;
-                    case 'tags':
+                    case 'tags':                        
                         $stmt->bindValue($identifier, $this->tags, PDO::PARAM_STR);
                         break;
                 }
@@ -971,15 +971,15 @@ abstract class News implements ActiveRecordInterface
             $dateTime = clone $result[$keys[2]];
             $result[$keys[2]] = $dateTime->setTimezone($utc)->format('Y-m-d\TH:i:s\Z');
         }
-
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aUser) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'user';
@@ -990,7 +990,7 @@ abstract class News implements ActiveRecordInterface
                     default:
                         $key = 'User';
                 }
-
+        
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
@@ -1191,7 +1191,7 @@ abstract class News implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return string

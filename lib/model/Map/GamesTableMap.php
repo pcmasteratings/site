@@ -209,13 +209,6 @@ class GamesTableMap extends TableMap
     1 => ':id',
   ),
 ), 'CASCADE', 'CASCADE', 'GameLinkss', false);
-        $this->addRelation('GamePlatforms', '\\GamePlatforms', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':game_id',
-    1 => ':id',
-  ),
-), 'CASCADE', 'CASCADE', 'GamePlatformss', false);
         $this->addRelation('RatingHeaders', '\\RatingHeaders', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -239,7 +232,6 @@ class GamesTableMap extends TableMap
         // Invalidate objects in related instance pools,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         GameLinksTableMap::clearInstancePool();
-        GamePlatformsTableMap::clearInstancePool();
     }
 
     /**
@@ -285,7 +277,7 @@ class GamesTableMap extends TableMap
                 : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
         ];
     }
-
+    
     /**
      * The class that the tableMap will make instances of.
      *
@@ -346,7 +338,7 @@ class GamesTableMap extends TableMap
     public static function populateObjects(DataFetcherInterface $dataFetcher)
     {
         $results = array();
-
+    
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
         // populate the object(s)

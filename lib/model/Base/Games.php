@@ -6,8 +6,6 @@ use \Companies as ChildCompanies;
 use \CompaniesQuery as ChildCompaniesQuery;
 use \GameLinks as ChildGameLinks;
 use \GameLinksQuery as ChildGameLinksQuery;
-use \GamePlatforms as ChildGamePlatforms;
-use \GamePlatformsQuery as ChildGamePlatformsQuery;
 use \Games as ChildGames;
 use \GamesQuery as ChildGamesQuery;
 use \RatingHeaders as ChildRatingHeaders;
@@ -33,11 +31,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'games' table.
  *
- *
+ * 
  *
 * @package    propel.generator..Base
 */
-abstract class Games implements ActiveRecordInterface
+abstract class Games implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -148,12 +146,6 @@ abstract class Games implements ActiveRecordInterface
     protected $collGameLinkssPartial;
 
     /**
-     * @var        ObjectCollection|ChildGamePlatforms[] Collection to store aggregation of ChildGamePlatforms objects.
-     */
-    protected $collGamePlatformss;
-    protected $collGamePlatformssPartial;
-
-    /**
      * @var        ObjectCollection|ChildRatingHeaders[] Collection to store aggregation of ChildRatingHeaders objects.
      */
     protected $collRatingHeaderss;
@@ -178,12 +170,6 @@ abstract class Games implements ActiveRecordInterface
      * @var ObjectCollection|ChildGameLinks[]
      */
     protected $gameLinkssScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildGamePlatforms[]
-     */
-    protected $gamePlatformssScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -416,7 +402,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Get the [id] column value.
-     *
+     * 
      * @return string
      */
     public function getId()
@@ -426,7 +412,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -436,7 +422,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Get the [title] column value.
-     *
+     * 
      * @return string
      */
     public function getTitle()
@@ -446,7 +432,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Get the [description] column value.
-     *
+     * 
      * @return string
      */
     public function getDescription()
@@ -456,7 +442,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Get the [publisher_id] column value.
-     *
+     * 
      * @return string
      */
     public function getPublisherId()
@@ -466,7 +452,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Get the [developer_id] column value.
-     *
+     * 
      * @return string
      */
     public function getDeveloperId()
@@ -476,7 +462,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Get the [gb_id] column value.
-     *
+     * 
      * @return string
      */
     public function getGbId()
@@ -486,7 +472,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Get the [gb_url] column value.
-     *
+     * 
      * @return string
      */
     public function getGbUrl()
@@ -496,7 +482,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Get the [gb_image] column value.
-     *
+     * 
      * @return string
      */
     public function getGbImage()
@@ -506,7 +492,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Get the [gb_thumb] column value.
-     *
+     * 
      * @return string
      */
     public function getGbThumb()
@@ -516,7 +502,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Set the value of [id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Games The current object (for fluent API support)
      */
@@ -536,7 +522,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Games The current object (for fluent API support)
      */
@@ -556,7 +542,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Set the value of [title] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Games The current object (for fluent API support)
      */
@@ -576,7 +562,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Set the value of [description] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Games The current object (for fluent API support)
      */
@@ -596,7 +582,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Set the value of [publisher_id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Games The current object (for fluent API support)
      */
@@ -620,7 +606,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Set the value of [developer_id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Games The current object (for fluent API support)
      */
@@ -644,7 +630,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Set the value of [gb_id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Games The current object (for fluent API support)
      */
@@ -664,7 +650,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Set the value of [gb_url] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Games The current object (for fluent API support)
      */
@@ -684,7 +670,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Set the value of [gb_image] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Games The current object (for fluent API support)
      */
@@ -704,7 +690,7 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * Set the value of [gb_thumb] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Games The current object (for fluent API support)
      */
@@ -866,8 +852,6 @@ abstract class Games implements ActiveRecordInterface
             $this->aCompaniesRelatedByDeveloperId = null;
             $this->collGameLinkss = null;
 
-            $this->collGamePlatformss = null;
-
             $this->collRatingHeaderss = null;
 
             $this->collUserReviewss = null;
@@ -1018,23 +1002,6 @@ abstract class Games implements ActiveRecordInterface
                 }
             }
 
-            if ($this->gamePlatformssScheduledForDeletion !== null) {
-                if (!$this->gamePlatformssScheduledForDeletion->isEmpty()) {
-                    \GamePlatformsQuery::create()
-                        ->filterByPrimaryKeys($this->gamePlatformssScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->gamePlatformssScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collGamePlatformss !== null) {
-                foreach ($this->collGamePlatformss as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
             if ($this->ratingHeaderssScheduledForDeletion !== null) {
                 if (!$this->ratingHeaderssScheduledForDeletion->isEmpty()) {
                     \RatingHeadersQuery::create()
@@ -1136,34 +1103,34 @@ abstract class Games implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
+                    case 'id':                        
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'title':
+                    case 'title':                        
                         $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
                         break;
-                    case 'description':
+                    case 'description':                        
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
                         break;
-                    case 'publisher_id':
+                    case 'publisher_id':                        
                         $stmt->bindValue($identifier, $this->publisher_id, PDO::PARAM_INT);
                         break;
-                    case 'developer_id':
+                    case 'developer_id':                        
                         $stmt->bindValue($identifier, $this->developer_id, PDO::PARAM_INT);
                         break;
-                    case 'gb_id':
+                    case 'gb_id':                        
                         $stmt->bindValue($identifier, $this->gb_id, PDO::PARAM_INT);
                         break;
-                    case 'gb_url':
+                    case 'gb_url':                        
                         $stmt->bindValue($identifier, $this->gb_url, PDO::PARAM_STR);
                         break;
-                    case 'gb_image':
+                    case 'gb_image':                        
                         $stmt->bindValue($identifier, $this->gb_image, PDO::PARAM_STR);
                         break;
-                    case 'gb_thumb':
+                    case 'gb_thumb':                        
                         $stmt->bindValue($identifier, $this->gb_thumb, PDO::PARAM_STR);
                         break;
                 }
@@ -1303,10 +1270,10 @@ abstract class Games implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aCompaniesRelatedByPublisherId) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'companies';
@@ -1317,11 +1284,11 @@ abstract class Games implements ActiveRecordInterface
                     default:
                         $key = 'Companies';
                 }
-
+        
                 $result[$key] = $this->aCompaniesRelatedByPublisherId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aCompaniesRelatedByDeveloperId) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'companies';
@@ -1332,11 +1299,11 @@ abstract class Games implements ActiveRecordInterface
                     default:
                         $key = 'Companies';
                 }
-
+        
                 $result[$key] = $this->aCompaniesRelatedByDeveloperId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collGameLinkss) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'gameLinkss';
@@ -1347,26 +1314,11 @@ abstract class Games implements ActiveRecordInterface
                     default:
                         $key = 'GameLinkss';
                 }
-
+        
                 $result[$key] = $this->collGameLinkss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collGamePlatformss) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'gamePlatformss';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'game_platformss';
-                        break;
-                    default:
-                        $key = 'GamePlatformss';
-                }
-
-                $result[$key] = $this->collGamePlatformss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
             if (null !== $this->collRatingHeaderss) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'ratingHeaderss';
@@ -1377,11 +1329,11 @@ abstract class Games implements ActiveRecordInterface
                     default:
                         $key = 'RatingHeaderss';
                 }
-
+        
                 $result[$key] = $this->collRatingHeaderss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collUserReviewss) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'userReviewss';
@@ -1392,7 +1344,7 @@ abstract class Games implements ActiveRecordInterface
                     default:
                         $key = 'UserReviewss';
                 }
-
+        
                 $result[$key] = $this->collUserReviewss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1629,7 +1581,7 @@ abstract class Games implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return string
@@ -1690,12 +1642,6 @@ abstract class Games implements ActiveRecordInterface
             foreach ($this->getGameLinkss() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addGameLinks($relObj->copy($deepCopy));
-                }
-            }
-
-            foreach ($this->getGamePlatformss() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addGamePlatforms($relObj->copy($deepCopy));
                 }
             }
 
@@ -1857,9 +1803,6 @@ abstract class Games implements ActiveRecordInterface
         if ('GameLinks' == $relationName) {
             return $this->initGameLinkss();
         }
-        if ('GamePlatforms' == $relationName) {
-            return $this->initGamePlatformss();
-        }
         if ('RatingHeaders' == $relationName) {
             return $this->initRatingHeaderss();
         }
@@ -1984,7 +1927,7 @@ abstract class Games implements ActiveRecordInterface
         /** @var ChildGameLinks[] $gameLinkssToDelete */
         $gameLinkssToDelete = $this->getGameLinkss(new Criteria(), $con)->diff($gameLinkss);
 
-
+        
         $this->gameLinkssScheduledForDeletion = $gameLinkssToDelete;
 
         foreach ($gameLinkssToDelete as $gameLinksRemoved) {
@@ -2112,252 +2055,6 @@ abstract class Games implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collGamePlatformss collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addGamePlatformss()
-     */
-    public function clearGamePlatformss()
-    {
-        $this->collGamePlatformss = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Reset is the collGamePlatformss collection loaded partially.
-     */
-    public function resetPartialGamePlatformss($v = true)
-    {
-        $this->collGamePlatformssPartial = $v;
-    }
-
-    /**
-     * Initializes the collGamePlatformss collection.
-     *
-     * By default this just sets the collGamePlatformss collection to an empty array (like clearcollGamePlatformss());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initGamePlatformss($overrideExisting = true)
-    {
-        if (null !== $this->collGamePlatformss && !$overrideExisting) {
-            return;
-        }
-        $this->collGamePlatformss = new ObjectCollection();
-        $this->collGamePlatformss->setModel('\GamePlatforms');
-    }
-
-    /**
-     * Gets an array of ChildGamePlatforms objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildGames is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildGamePlatforms[] List of ChildGamePlatforms objects
-     * @throws PropelException
-     */
-    public function getGamePlatformss(Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        $partial = $this->collGamePlatformssPartial && !$this->isNew();
-        if (null === $this->collGamePlatformss || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collGamePlatformss) {
-                // return empty collection
-                $this->initGamePlatformss();
-            } else {
-                $collGamePlatformss = ChildGamePlatformsQuery::create(null, $criteria)
-                    ->filterByGames($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collGamePlatformssPartial && count($collGamePlatformss)) {
-                        $this->initGamePlatformss(false);
-
-                        foreach ($collGamePlatformss as $obj) {
-                            if (false == $this->collGamePlatformss->contains($obj)) {
-                                $this->collGamePlatformss->append($obj);
-                            }
-                        }
-
-                        $this->collGamePlatformssPartial = true;
-                    }
-
-                    return $collGamePlatformss;
-                }
-
-                if ($partial && $this->collGamePlatformss) {
-                    foreach ($this->collGamePlatformss as $obj) {
-                        if ($obj->isNew()) {
-                            $collGamePlatformss[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collGamePlatformss = $collGamePlatformss;
-                $this->collGamePlatformssPartial = false;
-            }
-        }
-
-        return $this->collGamePlatformss;
-    }
-
-    /**
-     * Sets a collection of ChildGamePlatforms objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      Collection $gamePlatformss A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildGames The current object (for fluent API support)
-     */
-    public function setGamePlatformss(Collection $gamePlatformss, ConnectionInterface $con = null)
-    {
-        /** @var ChildGamePlatforms[] $gamePlatformssToDelete */
-        $gamePlatformssToDelete = $this->getGamePlatformss(new Criteria(), $con)->diff($gamePlatformss);
-
-
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->gamePlatformssScheduledForDeletion = clone $gamePlatformssToDelete;
-
-        foreach ($gamePlatformssToDelete as $gamePlatformsRemoved) {
-            $gamePlatformsRemoved->setGames(null);
-        }
-
-        $this->collGamePlatformss = null;
-        foreach ($gamePlatformss as $gamePlatforms) {
-            $this->addGamePlatforms($gamePlatforms);
-        }
-
-        $this->collGamePlatformss = $gamePlatformss;
-        $this->collGamePlatformssPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related GamePlatforms objects.
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
-     * @return int             Count of related GamePlatforms objects.
-     * @throws PropelException
-     */
-    public function countGamePlatformss(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
-    {
-        $partial = $this->collGamePlatformssPartial && !$this->isNew();
-        if (null === $this->collGamePlatformss || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collGamePlatformss) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getGamePlatformss());
-            }
-
-            $query = ChildGamePlatformsQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByGames($this)
-                ->count($con);
-        }
-
-        return count($this->collGamePlatformss);
-    }
-
-    /**
-     * Method called to associate a ChildGamePlatforms object to this object
-     * through the ChildGamePlatforms foreign key attribute.
-     *
-     * @param  ChildGamePlatforms $l ChildGamePlatforms
-     * @return $this|\Games The current object (for fluent API support)
-     */
-    public function addGamePlatforms(ChildGamePlatforms $l)
-    {
-        if ($this->collGamePlatformss === null) {
-            $this->initGamePlatformss();
-            $this->collGamePlatformssPartial = true;
-        }
-
-        if (!$this->collGamePlatformss->contains($l)) {
-            $this->doAddGamePlatforms($l);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param ChildGamePlatforms $gamePlatforms The ChildGamePlatforms object to add.
-     */
-    protected function doAddGamePlatforms(ChildGamePlatforms $gamePlatforms)
-    {
-        $this->collGamePlatformss[]= $gamePlatforms;
-        $gamePlatforms->setGames($this);
-    }
-
-    /**
-     * @param  ChildGamePlatforms $gamePlatforms The ChildGamePlatforms object to remove.
-     * @return $this|ChildGames The current object (for fluent API support)
-     */
-    public function removeGamePlatforms(ChildGamePlatforms $gamePlatforms)
-    {
-        if ($this->getGamePlatformss()->contains($gamePlatforms)) {
-            $pos = $this->collGamePlatformss->search($gamePlatforms);
-            $this->collGamePlatformss->remove($pos);
-            if (null === $this->gamePlatformssScheduledForDeletion) {
-                $this->gamePlatformssScheduledForDeletion = clone $this->collGamePlatformss;
-                $this->gamePlatformssScheduledForDeletion->clear();
-            }
-            $this->gamePlatformssScheduledForDeletion[]= clone $gamePlatforms;
-            $gamePlatforms->setGames(null);
-        }
-
-        return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Games is new, it will return
-     * an empty collection; or if this Games has previously
-     * been saved, it will retrieve related GamePlatformss from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Games.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildGamePlatforms[] List of ChildGamePlatforms objects
-     */
-    public function getGamePlatformssJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildGamePlatformsQuery::create(null, $criteria);
-        $query->joinWith('Platforms', $joinBehavior);
-
-        return $this->getGamePlatformss($query, $con);
-    }
-
-    /**
      * Clears out the collRatingHeaderss collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -2473,7 +2170,7 @@ abstract class Games implements ActiveRecordInterface
         /** @var ChildRatingHeaders[] $ratingHeaderssToDelete */
         $ratingHeaderssToDelete = $this->getRatingHeaderss(new Criteria(), $con)->diff($ratingHeaderss);
 
-
+        
         $this->ratingHeaderssScheduledForDeletion = $ratingHeaderssToDelete;
 
         foreach ($ratingHeaderssToDelete as $ratingHeadersRemoved) {
@@ -2642,10 +2339,10 @@ abstract class Games implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
      */
-    public function getRatingHeaderssJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getRatingHeaderssJoinGamePlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRatingHeadersQuery::create(null, $criteria);
-        $query->joinWith('Platforms', $joinBehavior);
+        $query->joinWith('GamePlatforms', $joinBehavior);
 
         return $this->getRatingHeaderss($query, $con);
     }
@@ -2766,7 +2463,7 @@ abstract class Games implements ActiveRecordInterface
         /** @var ChildUserReviews[] $userReviewssToDelete */
         $userReviewssToDelete = $this->getUserReviewss(new Criteria(), $con)->diff($userReviewss);
 
-
+        
         $this->userReviewssScheduledForDeletion = $userReviewssToDelete;
 
         foreach ($userReviewssToDelete as $userReviewsRemoved) {
@@ -2885,10 +2582,35 @@ abstract class Games implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
      */
-    public function getUserReviewssJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getUserReviewssJoinRigs(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildUserReviewsQuery::create(null, $criteria);
-        $query->joinWith('Platforms', $joinBehavior);
+        $query->joinWith('Rigs', $joinBehavior);
+
+        return $this->getUserReviewss($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Games is new, it will return
+     * an empty collection; or if this Games has previously
+     * been saved, it will retrieve related UserReviewss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Games.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     */
+    public function getUserReviewssJoinGamePlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildUserReviewsQuery::create(null, $criteria);
+        $query->joinWith('GamePlatforms', $joinBehavior);
 
         return $this->getUserReviewss($query, $con);
     }
@@ -2989,11 +2711,6 @@ abstract class Games implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collGamePlatformss) {
-                foreach ($this->collGamePlatformss as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
             if ($this->collRatingHeaderss) {
                 foreach ($this->collRatingHeaderss as $o) {
                     $o->clearAllReferences($deep);
@@ -3007,7 +2724,6 @@ abstract class Games implements ActiveRecordInterface
         } // if ($deep)
 
         $this->collGameLinkss = null;
-        $this->collGamePlatformss = null;
         $this->collRatingHeaderss = null;
         $this->collUserReviewss = null;
         $this->aCompaniesRelatedByPublisherId = null;

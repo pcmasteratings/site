@@ -1,18 +1,10 @@
 <?php
-require('res/include.php');
+require_once "res/include.php";
 
-$json = GBApi::search('halo 5',
-GBSearchType::Game,
-[
+echo GBApi::search('metroid prime', GBSearchType::Game, [
   'id',
   'name',
   'original_release_date',
   'image',
-  'api_detail_url',
-  'deck',
-  'image',
-  'platforms'
-],
-10);
-
-echo $json;
+  'api_detail_url'
+  ]);

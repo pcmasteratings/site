@@ -10,6 +10,8 @@ use \Rigs as ChildRigs;
 use \RigsQuery as ChildRigsQuery;
 use \User as ChildUser;
 use \UserQuery as ChildUserQuery;
+use \UserReviews as ChildUserReviews;
+use \UserReviewsQuery as ChildUserReviewsQuery;
 use \Exception;
 use \PDO;
 use Map\RigsTableMap;
@@ -29,11 +31,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'rigs' table.
  *
- *
+ * 
  *
 * @package    propel.generator..Base
 */
-abstract class Rigs implements ActiveRecordInterface
+abstract class Rigs implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -103,6 +105,12 @@ abstract class Rigs implements ActiveRecordInterface
     protected $collRigAttributeValuessPartial;
 
     /**
+     * @var        ObjectCollection|ChildUserReviews[] Collection to store aggregation of ChildUserReviews objects.
+     */
+    protected $collUserReviewss;
+    protected $collUserReviewssPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -121,6 +129,12 @@ abstract class Rigs implements ActiveRecordInterface
      * @var ObjectCollection|ChildRigAttributeValues[]
      */
     protected $rigAttributeValuessScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildUserReviews[]
+     */
+    protected $userReviewssScheduledForDeletion = null;
 
     /**
      * Initializes internal state of Base\Rigs object.
@@ -341,7 +355,7 @@ abstract class Rigs implements ActiveRecordInterface
 
     /**
      * Get the [id] column value.
-     *
+     * 
      * @return string
      */
     public function getId()
@@ -351,7 +365,7 @@ abstract class Rigs implements ActiveRecordInterface
 
     /**
      * Get the [user_id] column value.
-     *
+     * 
      * @return string
      */
     public function getUserId()
@@ -361,7 +375,7 @@ abstract class Rigs implements ActiveRecordInterface
 
     /**
      * Get the [title] column value.
-     *
+     * 
      * @return string
      */
     public function getTitle()
@@ -371,7 +385,7 @@ abstract class Rigs implements ActiveRecordInterface
 
     /**
      * Set the value of [id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Rigs The current object (for fluent API support)
      */
@@ -391,7 +405,7 @@ abstract class Rigs implements ActiveRecordInterface
 
     /**
      * Set the value of [user_id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Rigs The current object (for fluent API support)
      */
@@ -415,7 +429,7 @@ abstract class Rigs implements ActiveRecordInterface
 
     /**
      * Set the value of [title] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Rigs The current object (for fluent API support)
      */
@@ -553,6 +567,8 @@ abstract class Rigs implements ActiveRecordInterface
             $this->collRatingHeaderss = null;
 
             $this->collRigAttributeValuess = null;
+
+            $this->collUserReviewss = null;
 
         } // if (deep)
     }
@@ -711,6 +727,23 @@ abstract class Rigs implements ActiveRecordInterface
                 }
             }
 
+            if ($this->userReviewssScheduledForDeletion !== null) {
+                if (!$this->userReviewssScheduledForDeletion->isEmpty()) {
+                    \UserReviewsQuery::create()
+                        ->filterByPrimaryKeys($this->userReviewssScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->userReviewssScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collUserReviewss !== null) {
+                foreach ($this->collUserReviewss as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             $this->alreadyInSave = false;
 
         }
@@ -757,13 +790,13 @@ abstract class Rigs implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
+                    case 'id':                        
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'user_id':
+                    case 'user_id':                        
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
                         break;
-                    case 'title':
+                    case 'title':                        
                         $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
                         break;
                 }
@@ -875,10 +908,10 @@ abstract class Rigs implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aUser) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'user';
@@ -889,11 +922,11 @@ abstract class Rigs implements ActiveRecordInterface
                     default:
                         $key = 'User';
                 }
-
+        
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collRatingHeaderss) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'ratingHeaderss';
@@ -904,11 +937,11 @@ abstract class Rigs implements ActiveRecordInterface
                     default:
                         $key = 'RatingHeaderss';
                 }
-
+        
                 $result[$key] = $this->collRatingHeaderss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collRigAttributeValuess) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'rigAttributeValuess';
@@ -919,8 +952,23 @@ abstract class Rigs implements ActiveRecordInterface
                     default:
                         $key = 'RigAttributeValuess';
                 }
-
+        
                 $result[$key] = $this->collRigAttributeValuess->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collUserReviewss) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'userReviewss';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'user_reviewss';
+                        break;
+                    default:
+                        $key = 'UserReviewss';
+                }
+        
+                $result[$key] = $this->collUserReviewss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1093,7 +1141,7 @@ abstract class Rigs implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return string
@@ -1153,6 +1201,12 @@ abstract class Rigs implements ActiveRecordInterface
             foreach ($this->getRigAttributeValuess() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addRigAttributeValues($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getUserReviewss() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addUserReviews($relObj->copy($deepCopy));
                 }
             }
 
@@ -1253,6 +1307,9 @@ abstract class Rigs implements ActiveRecordInterface
         }
         if ('RigAttributeValues' == $relationName) {
             return $this->initRigAttributeValuess();
+        }
+        if ('UserReviews' == $relationName) {
+            return $this->initUserReviewss();
         }
     }
 
@@ -1372,7 +1429,7 @@ abstract class Rigs implements ActiveRecordInterface
         /** @var ChildRatingHeaders[] $ratingHeaderssToDelete */
         $ratingHeaderssToDelete = $this->getRatingHeaderss(new Criteria(), $con)->diff($ratingHeaderss);
 
-
+        
         $this->ratingHeaderssScheduledForDeletion = $ratingHeaderssToDelete;
 
         foreach ($ratingHeaderssToDelete as $ratingHeadersRemoved) {
@@ -1541,10 +1598,10 @@ abstract class Rigs implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
      */
-    public function getRatingHeaderssJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getRatingHeaderssJoinGamePlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRatingHeadersQuery::create(null, $criteria);
-        $query->joinWith('Platforms', $joinBehavior);
+        $query->joinWith('GamePlatforms', $joinBehavior);
 
         return $this->getRatingHeaderss($query, $con);
     }
@@ -1665,7 +1722,7 @@ abstract class Rigs implements ActiveRecordInterface
         /** @var ChildRigAttributeValues[] $rigAttributeValuessToDelete */
         $rigAttributeValuessToDelete = $this->getRigAttributeValuess(new Criteria(), $con)->diff($rigAttributeValuess);
 
-
+        
         $this->rigAttributeValuessScheduledForDeletion = $rigAttributeValuessToDelete;
 
         foreach ($rigAttributeValuessToDelete as $rigAttributeValuesRemoved) {
@@ -1793,6 +1850,324 @@ abstract class Rigs implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collUserReviewss collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addUserReviewss()
+     */
+    public function clearUserReviewss()
+    {
+        $this->collUserReviewss = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collUserReviewss collection loaded partially.
+     */
+    public function resetPartialUserReviewss($v = true)
+    {
+        $this->collUserReviewssPartial = $v;
+    }
+
+    /**
+     * Initializes the collUserReviewss collection.
+     *
+     * By default this just sets the collUserReviewss collection to an empty array (like clearcollUserReviewss());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initUserReviewss($overrideExisting = true)
+    {
+        if (null !== $this->collUserReviewss && !$overrideExisting) {
+            return;
+        }
+        $this->collUserReviewss = new ObjectCollection();
+        $this->collUserReviewss->setModel('\UserReviews');
+    }
+
+    /**
+     * Gets an array of ChildUserReviews objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildRigs is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     * @throws PropelException
+     */
+    public function getUserReviewss(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collUserReviewssPartial && !$this->isNew();
+        if (null === $this->collUserReviewss || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collUserReviewss) {
+                // return empty collection
+                $this->initUserReviewss();
+            } else {
+                $collUserReviewss = ChildUserReviewsQuery::create(null, $criteria)
+                    ->filterByRigs($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collUserReviewssPartial && count($collUserReviewss)) {
+                        $this->initUserReviewss(false);
+
+                        foreach ($collUserReviewss as $obj) {
+                            if (false == $this->collUserReviewss->contains($obj)) {
+                                $this->collUserReviewss->append($obj);
+                            }
+                        }
+
+                        $this->collUserReviewssPartial = true;
+                    }
+
+                    return $collUserReviewss;
+                }
+
+                if ($partial && $this->collUserReviewss) {
+                    foreach ($this->collUserReviewss as $obj) {
+                        if ($obj->isNew()) {
+                            $collUserReviewss[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collUserReviewss = $collUserReviewss;
+                $this->collUserReviewssPartial = false;
+            }
+        }
+
+        return $this->collUserReviewss;
+    }
+
+    /**
+     * Sets a collection of ChildUserReviews objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $userReviewss A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildRigs The current object (for fluent API support)
+     */
+    public function setUserReviewss(Collection $userReviewss, ConnectionInterface $con = null)
+    {
+        /** @var ChildUserReviews[] $userReviewssToDelete */
+        $userReviewssToDelete = $this->getUserReviewss(new Criteria(), $con)->diff($userReviewss);
+
+        
+        $this->userReviewssScheduledForDeletion = $userReviewssToDelete;
+
+        foreach ($userReviewssToDelete as $userReviewsRemoved) {
+            $userReviewsRemoved->setRigs(null);
+        }
+
+        $this->collUserReviewss = null;
+        foreach ($userReviewss as $userReviews) {
+            $this->addUserReviews($userReviews);
+        }
+
+        $this->collUserReviewss = $userReviewss;
+        $this->collUserReviewssPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related UserReviews objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related UserReviews objects.
+     * @throws PropelException
+     */
+    public function countUserReviewss(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collUserReviewssPartial && !$this->isNew();
+        if (null === $this->collUserReviewss || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collUserReviewss) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getUserReviewss());
+            }
+
+            $query = ChildUserReviewsQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByRigs($this)
+                ->count($con);
+        }
+
+        return count($this->collUserReviewss);
+    }
+
+    /**
+     * Method called to associate a ChildUserReviews object to this object
+     * through the ChildUserReviews foreign key attribute.
+     *
+     * @param  ChildUserReviews $l ChildUserReviews
+     * @return $this|\Rigs The current object (for fluent API support)
+     */
+    public function addUserReviews(ChildUserReviews $l)
+    {
+        if ($this->collUserReviewss === null) {
+            $this->initUserReviewss();
+            $this->collUserReviewssPartial = true;
+        }
+
+        if (!$this->collUserReviewss->contains($l)) {
+            $this->doAddUserReviews($l);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildUserReviews $userReviews The ChildUserReviews object to add.
+     */
+    protected function doAddUserReviews(ChildUserReviews $userReviews)
+    {
+        $this->collUserReviewss[]= $userReviews;
+        $userReviews->setRigs($this);
+    }
+
+    /**
+     * @param  ChildUserReviews $userReviews The ChildUserReviews object to remove.
+     * @return $this|ChildRigs The current object (for fluent API support)
+     */
+    public function removeUserReviews(ChildUserReviews $userReviews)
+    {
+        if ($this->getUserReviewss()->contains($userReviews)) {
+            $pos = $this->collUserReviewss->search($userReviews);
+            $this->collUserReviewss->remove($pos);
+            if (null === $this->userReviewssScheduledForDeletion) {
+                $this->userReviewssScheduledForDeletion = clone $this->collUserReviewss;
+                $this->userReviewssScheduledForDeletion->clear();
+            }
+            $this->userReviewssScheduledForDeletion[]= clone $userReviews;
+            $userReviews->setRigs(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Rigs is new, it will return
+     * an empty collection; or if this Rigs has previously
+     * been saved, it will retrieve related UserReviewss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Rigs.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     */
+    public function getUserReviewssJoinGames(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildUserReviewsQuery::create(null, $criteria);
+        $query->joinWith('Games', $joinBehavior);
+
+        return $this->getUserReviewss($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Rigs is new, it will return
+     * an empty collection; or if this Rigs has previously
+     * been saved, it will retrieve related UserReviewss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Rigs.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     */
+    public function getUserReviewssJoinGamePlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildUserReviewsQuery::create(null, $criteria);
+        $query->joinWith('GamePlatforms', $joinBehavior);
+
+        return $this->getUserReviewss($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Rigs is new, it will return
+     * an empty collection; or if this Rigs has previously
+     * been saved, it will retrieve related UserReviewss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Rigs.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     */
+    public function getUserReviewssJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildUserReviewsQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getUserReviewss($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Rigs is new, it will return
+     * an empty collection; or if this Rigs has previously
+     * been saved, it will retrieve related UserReviewss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Rigs.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     */
+    public function getUserReviewssJoinRatings(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildUserReviewsQuery::create(null, $criteria);
+        $query->joinWith('Ratings', $joinBehavior);
+
+        return $this->getUserReviewss($query, $con);
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -1833,10 +2208,16 @@ abstract class Rigs implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collUserReviewss) {
+                foreach ($this->collUserReviewss as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
         $this->collRatingHeaderss = null;
         $this->collRigAttributeValuess = null;
+        $this->collUserReviewss = null;
         $this->aUser = null;
     }
 

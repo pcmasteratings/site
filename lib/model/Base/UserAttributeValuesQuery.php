@@ -18,7 +18,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'user_attribute_values' table.
  *
- *
+ * 
  *
  * @method     ChildUserAttributeValuesQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildUserAttributeValuesQuery orderByUserAttributeId($order = Criteria::ASC) Order by the user_attribute_id column
@@ -159,7 +159,7 @@ abstract class UserAttributeValuesQuery extends ModelCriteria
     {
         $sql = 'SELECT id, user_attribute_id, user_id, value FROM user_attribute_values WHERE id = :p0';
         try {
-            $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -624,9 +624,9 @@ abstract class UserAttributeValuesQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             UserAttributeValuesTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             UserAttributeValuesTableMap::clearRelatedInstancePool();
 

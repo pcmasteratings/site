@@ -25,11 +25,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'user_weights' table.
  *
- *
+ * 
  *
 * @package    propel.generator..Base
 */
-abstract class UserWeights implements ActiveRecordInterface
+abstract class UserWeights implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -324,7 +324,7 @@ abstract class UserWeights implements ActiveRecordInterface
 
     /**
      * Get the [id] column value.
-     *
+     * 
      * @return string
      */
     public function getId()
@@ -334,7 +334,7 @@ abstract class UserWeights implements ActiveRecordInterface
 
     /**
      * Get the [rating_category_id] column value.
-     *
+     * 
      * @return string
      */
     public function getRatingCategoryId()
@@ -344,7 +344,7 @@ abstract class UserWeights implements ActiveRecordInterface
 
     /**
      * Get the [user_id] column value.
-     *
+     * 
      * @return string
      */
     public function getUserId()
@@ -354,7 +354,7 @@ abstract class UserWeights implements ActiveRecordInterface
 
     /**
      * Get the [weight] column value.
-     *
+     * 
      * @return int
      */
     public function getWeight()
@@ -364,7 +364,7 @@ abstract class UserWeights implements ActiveRecordInterface
 
     /**
      * Set the value of [id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\UserWeights The current object (for fluent API support)
      */
@@ -384,7 +384,7 @@ abstract class UserWeights implements ActiveRecordInterface
 
     /**
      * Set the value of [rating_category_id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\UserWeights The current object (for fluent API support)
      */
@@ -408,7 +408,7 @@ abstract class UserWeights implements ActiveRecordInterface
 
     /**
      * Set the value of [user_id] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\UserWeights The current object (for fluent API support)
      */
@@ -432,7 +432,7 @@ abstract class UserWeights implements ActiveRecordInterface
 
     /**
      * Set the value of [weight] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\UserWeights The current object (for fluent API support)
      */
@@ -752,16 +752,16 @@ abstract class UserWeights implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
+                    case 'id':                        
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'rating_category_id':
+                    case 'rating_category_id':                        
                         $stmt->bindValue($identifier, $this->rating_category_id, PDO::PARAM_INT);
                         break;
-                    case 'user_id':
+                    case 'user_id':                        
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
                         break;
-                    case 'weight':
+                    case 'weight':                        
                         $stmt->bindValue($identifier, $this->weight, PDO::PARAM_INT);
                         break;
                 }
@@ -877,10 +877,10 @@ abstract class UserWeights implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aRatingCategories) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'ratingCategories';
@@ -891,11 +891,11 @@ abstract class UserWeights implements ActiveRecordInterface
                     default:
                         $key = 'RatingCategories';
                 }
-
+        
                 $result[$key] = $this->aRatingCategories->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUser) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'user';
@@ -906,7 +906,7 @@ abstract class UserWeights implements ActiveRecordInterface
                     default:
                         $key = 'User';
                 }
-
+        
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
@@ -1089,7 +1089,7 @@ abstract class UserWeights implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return string
