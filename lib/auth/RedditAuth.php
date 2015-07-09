@@ -3,13 +3,40 @@
 class RedditAuth extends AAuth
 {
 
-    private $authorizeUrl = 'https://ssl.reddit.com/api/v1/authorize';
-    private $accessTokenUrl = 'https://ssl.reddit.com/api/v1/access_token';
-    private $clientId = 'QedrWwewJGf33A';
-    private $clientSecret = 'gCpw3RU7P_DyjMQ-WmEYX-QIoiA';
-    private $userAgent = 'ChangeMeClient/0.1 by YourUsername';
-    private $redirectUrl = "http://pcmr.darkholme.net/index.php";
+    private static $authorizeUrl = 'https://ssl.reddit.com/api/v1/authorize';
+    private static $accessTokenUrl = 'https://ssl.reddit.com/api/v1/access_token';
+    private static $userAgent = 'ChangeMeClient/0.1 by YourUsername';
+    private static $clientId;
+    private static $clientSecret;
+    private static $redirectUrl;
 
+    public static function setClientId($id)
+    {
+        if (!isset(self::$clientId))
+            self::$clientId = $id;
+    }
+
+    public static function setClientSecret($secret)
+    {
+        if (!isset(self::$clientSecret))
+            self::$clientSecret = $secret;
+    }
+
+    public static function setRedirectUrl($url)
+    {
+        if (!isset(self::$redirectUrl))
+            self::$redirectUrl = $url;
+    }
+
+    private static function validateAuthConfig()
+    {
+        if ((!isset(self::$clientId) || strlen(self::$clientId) < 1)
+            || (!isset(self::$clientSecret) || strlen(self::$clientSecret) < 1)
+            || (!isset(self::$redirectUrl) || strlen(self::$redirectUrl) < 1))
+        {
+            throw new GBApiException('Undefined api key; please set this in /generated-conf/config.php', 0);
+        }
+    }
 
     private $client;
 

@@ -14,7 +14,6 @@ abstract class AAuth {
 
 
         $_SESSION[self::$SESSION_REQUEST_ID] = $id;
-        print_r($_SESSION[self::$SESSION_REQUEST_ID]);
 
         return $id;
     }
