@@ -15,6 +15,10 @@ class Auth {
     }
 
     public static function processAuth() {
+        if(array_key_exists("logout",$_GET)) {
+            session_destroy();
+            unset($_SESSION[self::$SESSION_USER_ID]);
+        }
         $auth = new RedditAuth();
         $auth->processAuthResponse();
     }

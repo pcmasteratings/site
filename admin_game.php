@@ -5,18 +5,25 @@ if(!Auth::checkIfAdmin()) {
     header("Location: /"); /* Redirect browser */
 }
 $user = Auth::getCurrentUser();
+$game = null;
+$platform = null;
 
-if(!array_key_exists("game",$_GET)) {
+if(!array_key_exists("game",$_GET)||!array_key_exists("platform",$_GET)) {
     header("Location: /"); /* Redirect browser */
     exit();
 } else {
     $query = new GamesQuery();
     $game = $query->findOneByName($_GET["game"]);
-    if($game==null) {
+    $query = new PlatformsQuery();
+    $platform = $query->findOneByName($_GET["platform"]);
+    if($game==null||$platform==null) {
         header("Location: /"); /* Redirect browser */
         exit();
     }
 }
+
+$header = RatingHeadersQuery::create()->filterByGames($game)->filterByPlatforms($platform)->findOne();
+
 if(array_key_exists("category_options_1",$_POST)) {
     $con = \Propel\Runtime\Propel::getConnection();
     $con->beginTransaction();
@@ -27,29 +34,24 @@ if(array_key_exists("category_options_1",$_POST)) {
 
         $user = Auth::getCurrentUser();
 
-        if(!array_key_exists("platform",$_POST)) {
-            throw new Exception("Platform not specified");
+        if($header==null) {
+            $header = new RatingHeaders();
+            $header->setGameId($game->getId());
+            $header->setCreated(new DateTime());
+            $header->setPlatforms($platform);
+        } else {
+            RatingCategoryValuesQuery::create()->filterByRatingHeaders($header)->deleteAll($con);
         }
-        $platform = $_POST["platform"];
-
-        $query = new GamePlatformsQuery();
-        $platform = $query->findOneById($platform);
-
-        if($platform==null) {
-            throw new Exception("Invalid platform");
-        }
-
-        $header = new RatingHeaders();
+        $header->setUpdated(new DateTime());
         $header->setUserId($user->getId());
-        $header->setGameId($game->getId());
-        $header->setCreated(new DateTime());
-        $header->setGamePlatforms($platform);
         $header->save($con);
 
         $score = 0;
 
+
+
         $query = new RatingCategoriesQuery();
-        $categories = $query->find();
+        $categories = $query->find($con);
 
         foreach($categories as $category) {
             if(!array_key_exists('category_options_'.$category->getId(),$_POST)) {
@@ -117,7 +119,8 @@ if(array_key_exists("category_options_1",$_POST)) {
 
 		<?php include("res/nav.php"); ?>
 		<div class="container">
-
+            <h4>Game: <?php echo $game->getTitle(); ?></h4>
+            <h4>Platform: <?php echo $platform->getTitle(); ?></h4>
 			<h4>Select all that apply</h4>
 
 
@@ -135,20 +138,7 @@ if(array_key_exists("category_options_1",$_POST)) {
             <th></th>
           </tr>
         </thead>
-        <tbody><tr>
-            <td class="score category">Platform</td>
-        <?php
-        $query = new GamePlatformsQuery();
-        $query->orderByTitle();
-        $results = $query->find();
-        foreach($results as $platform) {
-            echo '<td class="score description"><label>';
-            echo '<input name="platform" type="radio" value="'.$platform->getId().'">';
-            echo '<span class="label-body">'.$platform->getTitle().'</span>';
-            echo '</label></td>';
-        }
-        ?>
-        </tr>
+        <tbody>
         <?php
 
         $query = new RatingCategoriesQuery();
@@ -159,10 +149,18 @@ if(array_key_exists("category_options_1",$_POST)) {
             foreach($results as $cat) {
                 echo "<tr>";
                 echo '<td class="score category">'. $cat->getTitle() .'</td>';
+                $current_value = null;
+                if($header!=null) {
+                    $current_value = $header->getRatingForCategory($cat);
+                }
                 $options = $cat->getRatingCategoryOptionss();
                 foreach($options as $option) {
                     echo '<td class="score description"><label>';
-                    echo '<input name="category_options_'.$cat->getId().'" type="radio" value="'.$option->getId().'">';
+                    echo '<input name="category_options_'.$cat->getId().'" type="radio" value="'.$option->getId().'"';
+                    if($current_value!=null&&$current_value->getRatingCategoryOptionId()==$option->getId()) {
+                        echo ' checked="checked" ';
+                    }
+                    echo '>';
                     echo '<span class="label-body">'.$option->getDescription().'</span>';
                     echo '</label></td>';
                 }

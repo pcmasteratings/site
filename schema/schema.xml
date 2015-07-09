@@ -190,6 +190,7 @@
     <column name="game_platform_id" phpName="GamePlatformId" type="BIGINT" required="true"/>
     <column name="rig_id" phpName="RigId" type="BIGINT"/>
     <column name="created" phpName="Created" type="TIMESTAMP" required="true"/>
+    <column name="updated" phpName="Updated" type="TIMESTAMP" required="true"/>
     <column name="upvotes" phpName="Upvotes" type="BIGINT" required="true" defaultValue="0"/>
     <column name="downvotes" phpName="Downvotes" type="BIGINT" required="true" defaultValue="0"/>
     <column name="comments" phpName="Comments" type="CLOB" required="true"/>
@@ -218,6 +219,10 @@
     <index name="game_platform_id">
       <index-column name="game_platform_id"/>
     </index>
+    <unique name="game_id_2">
+      <unique-column name="game_id"/>
+      <unique-column name="game_platform_id"/>
+    </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>

@@ -20,6 +20,7 @@ require("res/include.php");
         <?php
             $query = new GamesQuery();
             $query->limit(6);
+            $query->innerJoinRatingHeaders();
             $query->orderById("DESC");
             $games = $query->find();
 
@@ -34,7 +35,8 @@ require("res/include.php");
                   <div class='thumbnail'>
                     <a href='game.php?name={$game->getName()}'>
                       <img src={$game->getGbThumb()} alt='thumbnail'>
-                        <img class='rating-badge' src='/img/badges/r_tiny.jpg' alt='R'>
+                        <img class='rating-badge' src='/img/badges/{$game->getRatingForDefaultPlatform()->getInitial()}_tiny.jpg'
+                                    alt='".strtoupper($game->getRatingForDefaultPlatform()->getTitle())."'>
                           <div class='caption'><h3>{$game->getTitle()}</h3></div>
                     </a>
                   </div>
@@ -52,7 +54,7 @@ require("res/include.php");
 
 </div>
 
-<?php include("res/footer.php"); ?>
+<?php include("res/footer.php");  ?>
 
 </body>
 </html>

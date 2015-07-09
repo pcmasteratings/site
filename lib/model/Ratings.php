@@ -20,6 +20,13 @@ class Ratings extends BaseRatings
         return $query->find();
     }
 
+    public static function getRatingForScore($score) {
+        return RatingsQuery::create()
+        ->where('Ratings.Threshold <= ?',$score)
+        ->orderByThreshold("DESC")
+        ->findOne();
+    }
+
     private function test() {
         $this->getTitle();
     }

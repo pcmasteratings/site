@@ -26,6 +26,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeadersQuery orderByGamePlatformId($order = Criteria::ASC) Order by the game_platform_id column
  * @method     ChildRatingHeadersQuery orderByRigId($order = Criteria::ASC) Order by the rig_id column
  * @method     ChildRatingHeadersQuery orderByCreated($order = Criteria::ASC) Order by the created column
+ * @method     ChildRatingHeadersQuery orderByUpdated($order = Criteria::ASC) Order by the updated column
  * @method     ChildRatingHeadersQuery orderByUpvotes($order = Criteria::ASC) Order by the upvotes column
  * @method     ChildRatingHeadersQuery orderByDownvotes($order = Criteria::ASC) Order by the downvotes column
  * @method     ChildRatingHeadersQuery orderByComments($order = Criteria::ASC) Order by the comments column
@@ -37,6 +38,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeadersQuery groupByGamePlatformId() Group by the game_platform_id column
  * @method     ChildRatingHeadersQuery groupByRigId() Group by the rig_id column
  * @method     ChildRatingHeadersQuery groupByCreated() Group by the created column
+ * @method     ChildRatingHeadersQuery groupByUpdated() Group by the updated column
  * @method     ChildRatingHeadersQuery groupByUpvotes() Group by the upvotes column
  * @method     ChildRatingHeadersQuery groupByDownvotes() Group by the downvotes column
  * @method     ChildRatingHeadersQuery groupByComments() Group by the comments column
@@ -77,6 +79,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeaders findOneByGamePlatformId(string $game_platform_id) Return the first ChildRatingHeaders filtered by the game_platform_id column
  * @method     ChildRatingHeaders findOneByRigId(string $rig_id) Return the first ChildRatingHeaders filtered by the rig_id column
  * @method     ChildRatingHeaders findOneByCreated(string $created) Return the first ChildRatingHeaders filtered by the created column
+ * @method     ChildRatingHeaders findOneByUpdated(string $updated) Return the first ChildRatingHeaders filtered by the updated column
  * @method     ChildRatingHeaders findOneByUpvotes(string $upvotes) Return the first ChildRatingHeaders filtered by the upvotes column
  * @method     ChildRatingHeaders findOneByDownvotes(string $downvotes) Return the first ChildRatingHeaders filtered by the downvotes column
  * @method     ChildRatingHeaders findOneByComments(string $comments) Return the first ChildRatingHeaders filtered by the comments column
@@ -91,6 +94,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeaders requireOneByGamePlatformId(string $game_platform_id) Return the first ChildRatingHeaders filtered by the game_platform_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByRigId(string $rig_id) Return the first ChildRatingHeaders filtered by the rig_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByCreated(string $created) Return the first ChildRatingHeaders filtered by the created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRatingHeaders requireOneByUpdated(string $updated) Return the first ChildRatingHeaders filtered by the updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByUpvotes(string $upvotes) Return the first ChildRatingHeaders filtered by the upvotes column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByDownvotes(string $downvotes) Return the first ChildRatingHeaders filtered by the downvotes column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeaders requireOneByComments(string $comments) Return the first ChildRatingHeaders filtered by the comments column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -103,6 +107,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeaders[]|ObjectCollection findByGamePlatformId(string $game_platform_id) Return ChildRatingHeaders objects filtered by the game_platform_id column
  * @method     ChildRatingHeaders[]|ObjectCollection findByRigId(string $rig_id) Return ChildRatingHeaders objects filtered by the rig_id column
  * @method     ChildRatingHeaders[]|ObjectCollection findByCreated(string $created) Return ChildRatingHeaders objects filtered by the created column
+ * @method     ChildRatingHeaders[]|ObjectCollection findByUpdated(string $updated) Return ChildRatingHeaders objects filtered by the updated column
  * @method     ChildRatingHeaders[]|ObjectCollection findByUpvotes(string $upvotes) Return ChildRatingHeaders objects filtered by the upvotes column
  * @method     ChildRatingHeaders[]|ObjectCollection findByDownvotes(string $downvotes) Return ChildRatingHeaders objects filtered by the downvotes column
  * @method     ChildRatingHeaders[]|ObjectCollection findByComments(string $comments) Return ChildRatingHeaders objects filtered by the comments column
@@ -199,7 +204,7 @@ abstract class RatingHeadersQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, game_id, user_id, game_platform_id, rig_id, created, upvotes, downvotes, comments, score FROM rating_headers WHERE id = :p0';
+        $sql = 'SELECT id, game_id, user_id, game_platform_id, rig_id, created, updated, upvotes, downvotes, comments, score FROM rating_headers WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -543,6 +548,49 @@ abstract class RatingHeadersQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RatingHeadersTableMap::COL_CREATED, $created, $comparison);
+    }
+
+    /**
+     * Filter the query on the updated column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByUpdated('2011-03-14'); // WHERE updated = '2011-03-14'
+     * $query->filterByUpdated('now'); // WHERE updated = '2011-03-14'
+     * $query->filterByUpdated(array('max' => 'yesterday')); // WHERE updated > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $updated The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildRatingHeadersQuery The current query, for fluid interface
+     */
+    public function filterByUpdated($updated = null, $comparison = null)
+    {
+        if (is_array($updated)) {
+            $useMinMax = false;
+            if (isset($updated['min'])) {
+                $this->addUsingAlias(RatingHeadersTableMap::COL_UPDATED, $updated['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($updated['max'])) {
+                $this->addUsingAlias(RatingHeadersTableMap::COL_UPDATED, $updated['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RatingHeadersTableMap::COL_UPDATED, $updated, $comparison);
     }
 
     /**

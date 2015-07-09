@@ -21,4 +21,8 @@ class RatingHeaders extends BaseRatingHeaders
         $query->where("threshold <= " . $this->getScore());
         return $query->findOne();
     }
+
+    public function getRatingForCategory(RatingCategories $category) {
+        return RatingCategoryValuesQuery::create()->filterByRatingHeaders($this)->findOneByRatingCategoryId($category->getId());
+    }
 }
