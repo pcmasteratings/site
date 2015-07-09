@@ -34,7 +34,7 @@ class RedditAuth extends AAuth
             || (!isset(self::$clientSecret) || strlen(self::$clientSecret) < 1)
             || (!isset(self::$redirectUrl) || strlen(self::$redirectUrl) < 1))
         {
-            throw new GBApiException('Undefined api key; please set this in /generated-conf/config.php', 0);
+            throw new Exception('Undefined reddit api credentials; please set this in res/config.php', 0);
         }
     }
 
@@ -42,8 +42,8 @@ class RedditAuth extends AAuth
 
     function __construct()
     {
-        $this->client = new OAuth2\Client($this->clientId, $this->clientSecret, OAuth2\Client::AUTH_TYPE_AUTHORIZATION_BASIC);
-        $this->client->setCurlOption(CURLOPT_USERAGENT, $this->userAgent);
+        $this->client = new OAuth2\Client(self::$clientId, self::$clientSecret, OAuth2\Client::AUTH_TYPE_AUTHORIZATION_BASIC);
+        $this->client->setCurlOption(CURLOPT_USERAGENT, self::$userAgent);
     }
 
     public function processAuthResponse() {
@@ -54,8 +54,8 @@ class RedditAuth extends AAuth
             }
             if (isset($_GET["code"]) && isset($_GET["state"])) {
                 if ($this->checkForAuthRequestID($_GET["state"])) {
-                    $params = array("code" => $_GET["code"], "redirect_uri" => $this->redirectUrl);
-                    $response = $this->client->getAccessToken($this->accessTokenUrl, "authorization_code", $params);
+                    $params = array("code" => $_GET["code"], "redirect_uri" => self::$redirectUrl);
+                    $response = $this->client->getAccessToken(self::$accessTokenUrl, "authorization_code", $params);
 
                     $accessTokenResult = $response["result"];
                     $this->client->setAccessToken($accessTokenResult["access_token"]);
@@ -82,8 +82,8 @@ class RedditAuth extends AAuth
     {
         $request_id = $this->createAuthRequestID();
 
-        $authUrl = $this->client->getAuthenticationUrl($this->authorizeUrl,
-            $this->redirectUrl, array("scope" => "identity", "state" => $request_id));
+        $authUrl = $this->client->getAuthenticationUrl(self::$authorizeUrl,
+            self::$redirectUrl, array("scope" => "identity", "state" => $request_id));
         header("Location: " . $authUrl);
         die("Redirect");
     }
