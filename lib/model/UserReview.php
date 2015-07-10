@@ -15,7 +15,7 @@ use Base\UserReview as BaseUserReview;
 class UserReview extends BaseUserReview
 {
     public static function getUserReview(Games $game, Platforms $platform, User $user) {
-        $query = new UserReviewsQuery();
+        $query = new UserReviewQuery();
         $query->filterByGames($game);
         $query->filterByPlatforms($platform);
         $query->filterByUser($user);

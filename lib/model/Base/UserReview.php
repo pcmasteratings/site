@@ -2,10 +2,10 @@
 
 namespace Base;
 
-use \Games as ChildGames;
-use \GamesQuery as ChildGamesQuery;
-use \Platforms as ChildPlatforms;
-use \PlatformsQuery as ChildPlatformsQuery;
+use \Game as ChildGame;
+use \GameQuery as ChildGameQuery;
+use \Platform as ChildPlatform;
+use \PlatformQuery as ChildPlatformQuery;
 use \Rating as ChildRating;
 use \RatingQuery as ChildRatingQuery;
 use \Rig as ChildRig;
@@ -124,14 +124,14 @@ abstract class UserReview implements ActiveRecordInterface
     protected $downvotes;
 
     /**
-     * @var        ChildGames
+     * @var        ChildGame
      */
-    protected $aGames;
+    protected $aGame;
 
     /**
-     * @var        ChildPlatforms
+     * @var        ChildPlatform
      */
-    protected $aPlatforms;
+    protected $aPlatform;
 
     /**
      * @var        ChildUser
@@ -500,8 +500,8 @@ abstract class UserReview implements ActiveRecordInterface
             $this->modifiedColumns[UserReviewTableMap::COL_GAME_ID] = true;
         }
 
-        if ($this->aGames !== null && $this->aGames->getId() !== $v) {
-            $this->aGames = null;
+        if ($this->aGame !== null && $this->aGame->getId() !== $v) {
+            $this->aGame = null;
         }
 
         return $this;
@@ -524,8 +524,8 @@ abstract class UserReview implements ActiveRecordInterface
             $this->modifiedColumns[UserReviewTableMap::COL_PLATFORM_ID] = true;
         }
 
-        if ($this->aPlatforms !== null && $this->aPlatforms->getId() !== $v) {
-            $this->aPlatforms = null;
+        if ($this->aPlatform !== null && $this->aPlatform->getId() !== $v) {
+            $this->aPlatform = null;
         }
 
         return $this;
@@ -755,11 +755,11 @@ abstract class UserReview implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
-        if ($this->aGames !== null && $this->game_id !== $this->aGames->getId()) {
-            $this->aGames = null;
+        if ($this->aGame !== null && $this->game_id !== $this->aGame->getId()) {
+            $this->aGame = null;
         }
-        if ($this->aPlatforms !== null && $this->platform_id !== $this->aPlatforms->getId()) {
-            $this->aPlatforms = null;
+        if ($this->aPlatform !== null && $this->platform_id !== $this->aPlatform->getId()) {
+            $this->aPlatform = null;
         }
         if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
             $this->aUser = null;
@@ -809,8 +809,8 @@ abstract class UserReview implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aGames = null;
-            $this->aPlatforms = null;
+            $this->aGame = null;
+            $this->aPlatform = null;
             $this->aUser = null;
             $this->aRating = null;
             $this->aRig = null;
@@ -918,18 +918,18 @@ abstract class UserReview implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aGames !== null) {
-                if ($this->aGames->isModified() || $this->aGames->isNew()) {
-                    $affectedRows += $this->aGames->save($con);
+            if ($this->aGame !== null) {
+                if ($this->aGame->isModified() || $this->aGame->isNew()) {
+                    $affectedRows += $this->aGame->save($con);
                 }
-                $this->setGames($this->aGames);
+                $this->setGame($this->aGame);
             }
 
-            if ($this->aPlatforms !== null) {
-                if ($this->aPlatforms->isModified() || $this->aPlatforms->isNew()) {
-                    $affectedRows += $this->aPlatforms->save($con);
+            if ($this->aPlatform !== null) {
+                if ($this->aPlatform->isModified() || $this->aPlatform->isNew()) {
+                    $affectedRows += $this->aPlatform->save($con);
                 }
-                $this->setPlatforms($this->aPlatforms);
+                $this->setPlatform($this->aPlatform);
             }
 
             if ($this->aUser !== null) {
@@ -1190,35 +1190,35 @@ abstract class UserReview implements ActiveRecordInterface
         }
         
         if ($includeForeignObjects) {
-            if (null !== $this->aGames) {
+            if (null !== $this->aGame) {
                 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'games';
+                        $key = 'game';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'games';
+                        $key = 'game';
                         break;
                     default:
-                        $key = 'Games';
+                        $key = 'Game';
                 }
         
-                $result[$key] = $this->aGames->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aGame->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->aPlatforms) {
+            if (null !== $this->aPlatform) {
                 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'platforms';
+                        $key = 'platform';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'platforms';
+                        $key = 'platform';
                         break;
                     default:
-                        $key = 'Platforms';
+                        $key = 'Platform';
                 }
         
-                $result[$key] = $this->aPlatforms->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aPlatform->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUser) {
                 
@@ -1570,13 +1570,13 @@ abstract class UserReview implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildGames object.
+     * Declares an association between this object and a ChildGame object.
      *
-     * @param  ChildGames $v
+     * @param  ChildGame $v
      * @return $this|\UserReview The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setGames(ChildGames $v = null)
+    public function setGame(ChildGame $v = null)
     {
         if ($v === null) {
             $this->setGameId(NULL);
@@ -1584,10 +1584,10 @@ abstract class UserReview implements ActiveRecordInterface
             $this->setGameId($v->getId());
         }
 
-        $this->aGames = $v;
+        $this->aGame = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildGames object, it will not be re-added.
+        // If this object has already been added to the ChildGame object, it will not be re-added.
         if ($v !== null) {
             $v->addUserReview($this);
         }
@@ -1598,36 +1598,36 @@ abstract class UserReview implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildGames object
+     * Get the associated ChildGame object
      *
      * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildGames The associated ChildGames object.
+     * @return ChildGame The associated ChildGame object.
      * @throws PropelException
      */
-    public function getGames(ConnectionInterface $con = null)
+    public function getGame(ConnectionInterface $con = null)
     {
-        if ($this->aGames === null && (($this->game_id !== "" && $this->game_id !== null))) {
-            $this->aGames = ChildGamesQuery::create()->findPk($this->game_id, $con);
+        if ($this->aGame === null && (($this->game_id !== "" && $this->game_id !== null))) {
+            $this->aGame = ChildGameQuery::create()->findPk($this->game_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aGames->addUserReviews($this);
+                $this->aGame->addUserReviews($this);
              */
         }
 
-        return $this->aGames;
+        return $this->aGame;
     }
 
     /**
-     * Declares an association between this object and a ChildPlatforms object.
+     * Declares an association between this object and a ChildPlatform object.
      *
-     * @param  ChildPlatforms $v
+     * @param  ChildPlatform $v
      * @return $this|\UserReview The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setPlatforms(ChildPlatforms $v = null)
+    public function setPlatform(ChildPlatform $v = null)
     {
         if ($v === null) {
             $this->setPlatformId(NULL);
@@ -1635,10 +1635,10 @@ abstract class UserReview implements ActiveRecordInterface
             $this->setPlatformId($v->getId());
         }
 
-        $this->aPlatforms = $v;
+        $this->aPlatform = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildPlatforms object, it will not be re-added.
+        // If this object has already been added to the ChildPlatform object, it will not be re-added.
         if ($v !== null) {
             $v->addUserReview($this);
         }
@@ -1649,26 +1649,26 @@ abstract class UserReview implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildPlatforms object
+     * Get the associated ChildPlatform object
      *
      * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildPlatforms The associated ChildPlatforms object.
+     * @return ChildPlatform The associated ChildPlatform object.
      * @throws PropelException
      */
-    public function getPlatforms(ConnectionInterface $con = null)
+    public function getPlatform(ConnectionInterface $con = null)
     {
-        if ($this->aPlatforms === null && (($this->platform_id !== "" && $this->platform_id !== null))) {
-            $this->aPlatforms = ChildPlatformsQuery::create()->findPk($this->platform_id, $con);
+        if ($this->aPlatform === null && (($this->platform_id !== "" && $this->platform_id !== null))) {
+            $this->aPlatform = ChildPlatformQuery::create()->findPk($this->platform_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aPlatforms->addUserReviews($this);
+                $this->aPlatform->addUserReviews($this);
              */
         }
 
-        return $this->aPlatforms;
+        return $this->aPlatform;
     }
 
     /**
@@ -1831,11 +1831,11 @@ abstract class UserReview implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aGames) {
-            $this->aGames->removeUserReview($this);
+        if (null !== $this->aGame) {
+            $this->aGame->removeUserReview($this);
         }
-        if (null !== $this->aPlatforms) {
-            $this->aPlatforms->removeUserReview($this);
+        if (null !== $this->aPlatform) {
+            $this->aPlatform->removeUserReview($this);
         }
         if (null !== $this->aUser) {
             $this->aUser->removeUserReview($this);
@@ -1875,8 +1875,8 @@ abstract class UserReview implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aGames = null;
-        $this->aPlatforms = null;
+        $this->aGame = null;
+        $this->aPlatform = null;
         $this->aUser = null;
         $this->aRating = null;
         $this->aRig = null;

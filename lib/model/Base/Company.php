@@ -4,8 +4,8 @@ namespace Base;
 
 use \Company as ChildCompany;
 use \CompanyQuery as ChildCompanyQuery;
-use \Games as ChildGames;
-use \GamesQuery as ChildGamesQuery;
+use \Game as ChildGame;
+use \GameQuery as ChildGameQuery;
 use \Exception;
 use \PDO;
 use Map\CompanyTableMap;
@@ -94,16 +94,16 @@ abstract class Company implements ActiveRecordInterface
     protected $bg_id;
 
     /**
-     * @var        ObjectCollection|ChildGames[] Collection to store aggregation of ChildGames objects.
+     * @var        ObjectCollection|ChildGame[] Collection to store aggregation of ChildGame objects.
      */
-    protected $collGamessRelatedByPublisherId;
-    protected $collGamessRelatedByPublisherIdPartial;
+    protected $collGamesRelatedByPublisherId;
+    protected $collGamesRelatedByPublisherIdPartial;
 
     /**
-     * @var        ObjectCollection|ChildGames[] Collection to store aggregation of ChildGames objects.
+     * @var        ObjectCollection|ChildGame[] Collection to store aggregation of ChildGame objects.
      */
-    protected $collGamessRelatedByDeveloperId;
-    protected $collGamessRelatedByDeveloperIdPartial;
+    protected $collGamesRelatedByDeveloperId;
+    protected $collGamesRelatedByDeveloperIdPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -115,15 +115,15 @@ abstract class Company implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildGames[]
+     * @var ObjectCollection|ChildGame[]
      */
-    protected $gamessRelatedByPublisherIdScheduledForDeletion = null;
+    protected $gamesRelatedByPublisherIdScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildGames[]
+     * @var ObjectCollection|ChildGame[]
      */
-    protected $gamessRelatedByDeveloperIdScheduledForDeletion = null;
+    protected $gamesRelatedByDeveloperIdScheduledForDeletion = null;
 
     /**
      * Initializes internal state of Base\Company object.
@@ -611,9 +611,9 @@ abstract class Company implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->collGamessRelatedByPublisherId = null;
+            $this->collGamesRelatedByPublisherId = null;
 
-            $this->collGamessRelatedByDeveloperId = null;
+            $this->collGamesRelatedByDeveloperId = null;
 
         } // if (deep)
     }
@@ -725,36 +725,36 @@ abstract class Company implements ActiveRecordInterface
                 $this->resetModified();
             }
 
-            if ($this->gamessRelatedByPublisherIdScheduledForDeletion !== null) {
-                if (!$this->gamessRelatedByPublisherIdScheduledForDeletion->isEmpty()) {
-                    foreach ($this->gamessRelatedByPublisherIdScheduledForDeletion as $gamesRelatedByPublisherId) {
+            if ($this->gamesRelatedByPublisherIdScheduledForDeletion !== null) {
+                if (!$this->gamesRelatedByPublisherIdScheduledForDeletion->isEmpty()) {
+                    foreach ($this->gamesRelatedByPublisherIdScheduledForDeletion as $gameRelatedByPublisherId) {
                         // need to save related object because we set the relation to null
-                        $gamesRelatedByPublisherId->save($con);
+                        $gameRelatedByPublisherId->save($con);
                     }
-                    $this->gamessRelatedByPublisherIdScheduledForDeletion = null;
+                    $this->gamesRelatedByPublisherIdScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collGamessRelatedByPublisherId !== null) {
-                foreach ($this->collGamessRelatedByPublisherId as $referrerFK) {
+            if ($this->collGamesRelatedByPublisherId !== null) {
+                foreach ($this->collGamesRelatedByPublisherId as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
                 }
             }
 
-            if ($this->gamessRelatedByDeveloperIdScheduledForDeletion !== null) {
-                if (!$this->gamessRelatedByDeveloperIdScheduledForDeletion->isEmpty()) {
-                    foreach ($this->gamessRelatedByDeveloperIdScheduledForDeletion as $gamesRelatedByDeveloperId) {
+            if ($this->gamesRelatedByDeveloperIdScheduledForDeletion !== null) {
+                if (!$this->gamesRelatedByDeveloperIdScheduledForDeletion->isEmpty()) {
+                    foreach ($this->gamesRelatedByDeveloperIdScheduledForDeletion as $gameRelatedByDeveloperId) {
                         // need to save related object because we set the relation to null
-                        $gamesRelatedByDeveloperId->save($con);
+                        $gameRelatedByDeveloperId->save($con);
                     }
-                    $this->gamessRelatedByDeveloperIdScheduledForDeletion = null;
+                    $this->gamesRelatedByDeveloperIdScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collGamessRelatedByDeveloperId !== null) {
-                foreach ($this->collGamessRelatedByDeveloperId as $referrerFK) {
+            if ($this->collGamesRelatedByDeveloperId !== null) {
+                foreach ($this->collGamesRelatedByDeveloperId as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -947,35 +947,35 @@ abstract class Company implements ActiveRecordInterface
         }
         
         if ($includeForeignObjects) {
-            if (null !== $this->collGamessRelatedByPublisherId) {
+            if (null !== $this->collGamesRelatedByPublisherId) {
                 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'gamess';
+                        $key = 'games';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'gamess';
+                        $key = 'games';
                         break;
                     default:
-                        $key = 'Gamess';
+                        $key = 'Games';
                 }
         
-                $result[$key] = $this->collGamessRelatedByPublisherId->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collGamesRelatedByPublisherId->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collGamessRelatedByDeveloperId) {
+            if (null !== $this->collGamesRelatedByDeveloperId) {
                 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'gamess';
+                        $key = 'games';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'gamess';
+                        $key = 'games';
                         break;
                     default:
-                        $key = 'Gamess';
+                        $key = 'Games';
                 }
         
-                $result[$key] = $this->collGamessRelatedByDeveloperId->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collGamesRelatedByDeveloperId->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1219,15 +1219,15 @@ abstract class Company implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
-            foreach ($this->getGamessRelatedByPublisherId() as $relObj) {
+            foreach ($this->getGamesRelatedByPublisherId() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addGamesRelatedByPublisherId($relObj->copy($deepCopy));
+                    $copyObj->addGameRelatedByPublisherId($relObj->copy($deepCopy));
                 }
             }
 
-            foreach ($this->getGamessRelatedByDeveloperId() as $relObj) {
+            foreach ($this->getGamesRelatedByDeveloperId() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addGamesRelatedByDeveloperId($relObj->copy($deepCopy));
+                    $copyObj->addGameRelatedByDeveloperId($relObj->copy($deepCopy));
                 }
             }
 
@@ -1272,40 +1272,40 @@ abstract class Company implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
-        if ('GamesRelatedByPublisherId' == $relationName) {
-            return $this->initGamessRelatedByPublisherId();
+        if ('GameRelatedByPublisherId' == $relationName) {
+            return $this->initGamesRelatedByPublisherId();
         }
-        if ('GamesRelatedByDeveloperId' == $relationName) {
-            return $this->initGamessRelatedByDeveloperId();
+        if ('GameRelatedByDeveloperId' == $relationName) {
+            return $this->initGamesRelatedByDeveloperId();
         }
     }
 
     /**
-     * Clears out the collGamessRelatedByPublisherId collection
+     * Clears out the collGamesRelatedByPublisherId collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addGamessRelatedByPublisherId()
+     * @see        addGamesRelatedByPublisherId()
      */
-    public function clearGamessRelatedByPublisherId()
+    public function clearGamesRelatedByPublisherId()
     {
-        $this->collGamessRelatedByPublisherId = null; // important to set this to NULL since that means it is uninitialized
+        $this->collGamesRelatedByPublisherId = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collGamessRelatedByPublisherId collection loaded partially.
+     * Reset is the collGamesRelatedByPublisherId collection loaded partially.
      */
-    public function resetPartialGamessRelatedByPublisherId($v = true)
+    public function resetPartialGamesRelatedByPublisherId($v = true)
     {
-        $this->collGamessRelatedByPublisherIdPartial = $v;
+        $this->collGamesRelatedByPublisherIdPartial = $v;
     }
 
     /**
-     * Initializes the collGamessRelatedByPublisherId collection.
+     * Initializes the collGamesRelatedByPublisherId collection.
      *
-     * By default this just sets the collGamessRelatedByPublisherId collection to an empty array (like clearcollGamessRelatedByPublisherId());
+     * By default this just sets the collGamesRelatedByPublisherId collection to an empty array (like clearcollGamesRelatedByPublisherId());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1314,17 +1314,17 @@ abstract class Company implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initGamessRelatedByPublisherId($overrideExisting = true)
+    public function initGamesRelatedByPublisherId($overrideExisting = true)
     {
-        if (null !== $this->collGamessRelatedByPublisherId && !$overrideExisting) {
+        if (null !== $this->collGamesRelatedByPublisherId && !$overrideExisting) {
             return;
         }
-        $this->collGamessRelatedByPublisherId = new ObjectCollection();
-        $this->collGamessRelatedByPublisherId->setModel('\Games');
+        $this->collGamesRelatedByPublisherId = new ObjectCollection();
+        $this->collGamesRelatedByPublisherId->setModel('\Game');
     }
 
     /**
-     * Gets an array of ChildGames objects which contain a foreign key that references this object.
+     * Gets an array of ChildGame objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -1334,108 +1334,108 @@ abstract class Company implements ActiveRecordInterface
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildGames[] List of ChildGames objects
+     * @return ObjectCollection|ChildGame[] List of ChildGame objects
      * @throws PropelException
      */
-    public function getGamessRelatedByPublisherId(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getGamesRelatedByPublisherId(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collGamessRelatedByPublisherIdPartial && !$this->isNew();
-        if (null === $this->collGamessRelatedByPublisherId || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collGamessRelatedByPublisherId) {
+        $partial = $this->collGamesRelatedByPublisherIdPartial && !$this->isNew();
+        if (null === $this->collGamesRelatedByPublisherId || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collGamesRelatedByPublisherId) {
                 // return empty collection
-                $this->initGamessRelatedByPublisherId();
+                $this->initGamesRelatedByPublisherId();
             } else {
-                $collGamessRelatedByPublisherId = ChildGamesQuery::create(null, $criteria)
+                $collGamesRelatedByPublisherId = ChildGameQuery::create(null, $criteria)
                     ->filterByCompanyRelatedByPublisherId($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collGamessRelatedByPublisherIdPartial && count($collGamessRelatedByPublisherId)) {
-                        $this->initGamessRelatedByPublisherId(false);
+                    if (false !== $this->collGamesRelatedByPublisherIdPartial && count($collGamesRelatedByPublisherId)) {
+                        $this->initGamesRelatedByPublisherId(false);
 
-                        foreach ($collGamessRelatedByPublisherId as $obj) {
-                            if (false == $this->collGamessRelatedByPublisherId->contains($obj)) {
-                                $this->collGamessRelatedByPublisherId->append($obj);
+                        foreach ($collGamesRelatedByPublisherId as $obj) {
+                            if (false == $this->collGamesRelatedByPublisherId->contains($obj)) {
+                                $this->collGamesRelatedByPublisherId->append($obj);
                             }
                         }
 
-                        $this->collGamessRelatedByPublisherIdPartial = true;
+                        $this->collGamesRelatedByPublisherIdPartial = true;
                     }
 
-                    return $collGamessRelatedByPublisherId;
+                    return $collGamesRelatedByPublisherId;
                 }
 
-                if ($partial && $this->collGamessRelatedByPublisherId) {
-                    foreach ($this->collGamessRelatedByPublisherId as $obj) {
+                if ($partial && $this->collGamesRelatedByPublisherId) {
+                    foreach ($this->collGamesRelatedByPublisherId as $obj) {
                         if ($obj->isNew()) {
-                            $collGamessRelatedByPublisherId[] = $obj;
+                            $collGamesRelatedByPublisherId[] = $obj;
                         }
                     }
                 }
 
-                $this->collGamessRelatedByPublisherId = $collGamessRelatedByPublisherId;
-                $this->collGamessRelatedByPublisherIdPartial = false;
+                $this->collGamesRelatedByPublisherId = $collGamesRelatedByPublisherId;
+                $this->collGamesRelatedByPublisherIdPartial = false;
             }
         }
 
-        return $this->collGamessRelatedByPublisherId;
+        return $this->collGamesRelatedByPublisherId;
     }
 
     /**
-     * Sets a collection of ChildGames objects related by a one-to-many relationship
+     * Sets a collection of ChildGame objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $gamessRelatedByPublisherId A Propel collection.
+     * @param      Collection $gamesRelatedByPublisherId A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildCompany The current object (for fluent API support)
      */
-    public function setGamessRelatedByPublisherId(Collection $gamessRelatedByPublisherId, ConnectionInterface $con = null)
+    public function setGamesRelatedByPublisherId(Collection $gamesRelatedByPublisherId, ConnectionInterface $con = null)
     {
-        /** @var ChildGames[] $gamessRelatedByPublisherIdToDelete */
-        $gamessRelatedByPublisherIdToDelete = $this->getGamessRelatedByPublisherId(new Criteria(), $con)->diff($gamessRelatedByPublisherId);
+        /** @var ChildGame[] $gamesRelatedByPublisherIdToDelete */
+        $gamesRelatedByPublisherIdToDelete = $this->getGamesRelatedByPublisherId(new Criteria(), $con)->diff($gamesRelatedByPublisherId);
 
         
-        $this->gamessRelatedByPublisherIdScheduledForDeletion = $gamessRelatedByPublisherIdToDelete;
+        $this->gamesRelatedByPublisherIdScheduledForDeletion = $gamesRelatedByPublisherIdToDelete;
 
-        foreach ($gamessRelatedByPublisherIdToDelete as $gamesRelatedByPublisherIdRemoved) {
-            $gamesRelatedByPublisherIdRemoved->setCompanyRelatedByPublisherId(null);
+        foreach ($gamesRelatedByPublisherIdToDelete as $gameRelatedByPublisherIdRemoved) {
+            $gameRelatedByPublisherIdRemoved->setCompanyRelatedByPublisherId(null);
         }
 
-        $this->collGamessRelatedByPublisherId = null;
-        foreach ($gamessRelatedByPublisherId as $gamesRelatedByPublisherId) {
-            $this->addGamesRelatedByPublisherId($gamesRelatedByPublisherId);
+        $this->collGamesRelatedByPublisherId = null;
+        foreach ($gamesRelatedByPublisherId as $gameRelatedByPublisherId) {
+            $this->addGameRelatedByPublisherId($gameRelatedByPublisherId);
         }
 
-        $this->collGamessRelatedByPublisherId = $gamessRelatedByPublisherId;
-        $this->collGamessRelatedByPublisherIdPartial = false;
+        $this->collGamesRelatedByPublisherId = $gamesRelatedByPublisherId;
+        $this->collGamesRelatedByPublisherIdPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related Games objects.
+     * Returns the number of related Game objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related Games objects.
+     * @return int             Count of related Game objects.
      * @throws PropelException
      */
-    public function countGamessRelatedByPublisherId(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countGamesRelatedByPublisherId(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collGamessRelatedByPublisherIdPartial && !$this->isNew();
-        if (null === $this->collGamessRelatedByPublisherId || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collGamessRelatedByPublisherId) {
+        $partial = $this->collGamesRelatedByPublisherIdPartial && !$this->isNew();
+        if (null === $this->collGamesRelatedByPublisherId || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collGamesRelatedByPublisherId) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getGamessRelatedByPublisherId());
+                return count($this->getGamesRelatedByPublisherId());
             }
 
-            $query = ChildGamesQuery::create(null, $criteria);
+            $query = ChildGameQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -1445,85 +1445,85 @@ abstract class Company implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collGamessRelatedByPublisherId);
+        return count($this->collGamesRelatedByPublisherId);
     }
 
     /**
-     * Method called to associate a ChildGames object to this object
-     * through the ChildGames foreign key attribute.
+     * Method called to associate a ChildGame object to this object
+     * through the ChildGame foreign key attribute.
      *
-     * @param  ChildGames $l ChildGames
+     * @param  ChildGame $l ChildGame
      * @return $this|\Company The current object (for fluent API support)
      */
-    public function addGamesRelatedByPublisherId(ChildGames $l)
+    public function addGameRelatedByPublisherId(ChildGame $l)
     {
-        if ($this->collGamessRelatedByPublisherId === null) {
-            $this->initGamessRelatedByPublisherId();
-            $this->collGamessRelatedByPublisherIdPartial = true;
+        if ($this->collGamesRelatedByPublisherId === null) {
+            $this->initGamesRelatedByPublisherId();
+            $this->collGamesRelatedByPublisherIdPartial = true;
         }
 
-        if (!$this->collGamessRelatedByPublisherId->contains($l)) {
-            $this->doAddGamesRelatedByPublisherId($l);
+        if (!$this->collGamesRelatedByPublisherId->contains($l)) {
+            $this->doAddGameRelatedByPublisherId($l);
         }
 
         return $this;
     }
 
     /**
-     * @param ChildGames $gamesRelatedByPublisherId The ChildGames object to add.
+     * @param ChildGame $gameRelatedByPublisherId The ChildGame object to add.
      */
-    protected function doAddGamesRelatedByPublisherId(ChildGames $gamesRelatedByPublisherId)
+    protected function doAddGameRelatedByPublisherId(ChildGame $gameRelatedByPublisherId)
     {
-        $this->collGamessRelatedByPublisherId[]= $gamesRelatedByPublisherId;
-        $gamesRelatedByPublisherId->setCompanyRelatedByPublisherId($this);
+        $this->collGamesRelatedByPublisherId[]= $gameRelatedByPublisherId;
+        $gameRelatedByPublisherId->setCompanyRelatedByPublisherId($this);
     }
 
     /**
-     * @param  ChildGames $gamesRelatedByPublisherId The ChildGames object to remove.
+     * @param  ChildGame $gameRelatedByPublisherId The ChildGame object to remove.
      * @return $this|ChildCompany The current object (for fluent API support)
      */
-    public function removeGamesRelatedByPublisherId(ChildGames $gamesRelatedByPublisherId)
+    public function removeGameRelatedByPublisherId(ChildGame $gameRelatedByPublisherId)
     {
-        if ($this->getGamessRelatedByPublisherId()->contains($gamesRelatedByPublisherId)) {
-            $pos = $this->collGamessRelatedByPublisherId->search($gamesRelatedByPublisherId);
-            $this->collGamessRelatedByPublisherId->remove($pos);
-            if (null === $this->gamessRelatedByPublisherIdScheduledForDeletion) {
-                $this->gamessRelatedByPublisherIdScheduledForDeletion = clone $this->collGamessRelatedByPublisherId;
-                $this->gamessRelatedByPublisherIdScheduledForDeletion->clear();
+        if ($this->getGamesRelatedByPublisherId()->contains($gameRelatedByPublisherId)) {
+            $pos = $this->collGamesRelatedByPublisherId->search($gameRelatedByPublisherId);
+            $this->collGamesRelatedByPublisherId->remove($pos);
+            if (null === $this->gamesRelatedByPublisherIdScheduledForDeletion) {
+                $this->gamesRelatedByPublisherIdScheduledForDeletion = clone $this->collGamesRelatedByPublisherId;
+                $this->gamesRelatedByPublisherIdScheduledForDeletion->clear();
             }
-            $this->gamessRelatedByPublisherIdScheduledForDeletion[]= $gamesRelatedByPublisherId;
-            $gamesRelatedByPublisherId->setCompanyRelatedByPublisherId(null);
+            $this->gamesRelatedByPublisherIdScheduledForDeletion[]= $gameRelatedByPublisherId;
+            $gameRelatedByPublisherId->setCompanyRelatedByPublisherId(null);
         }
 
         return $this;
     }
 
     /**
-     * Clears out the collGamessRelatedByDeveloperId collection
+     * Clears out the collGamesRelatedByDeveloperId collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addGamessRelatedByDeveloperId()
+     * @see        addGamesRelatedByDeveloperId()
      */
-    public function clearGamessRelatedByDeveloperId()
+    public function clearGamesRelatedByDeveloperId()
     {
-        $this->collGamessRelatedByDeveloperId = null; // important to set this to NULL since that means it is uninitialized
+        $this->collGamesRelatedByDeveloperId = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collGamessRelatedByDeveloperId collection loaded partially.
+     * Reset is the collGamesRelatedByDeveloperId collection loaded partially.
      */
-    public function resetPartialGamessRelatedByDeveloperId($v = true)
+    public function resetPartialGamesRelatedByDeveloperId($v = true)
     {
-        $this->collGamessRelatedByDeveloperIdPartial = $v;
+        $this->collGamesRelatedByDeveloperIdPartial = $v;
     }
 
     /**
-     * Initializes the collGamessRelatedByDeveloperId collection.
+     * Initializes the collGamesRelatedByDeveloperId collection.
      *
-     * By default this just sets the collGamessRelatedByDeveloperId collection to an empty array (like clearcollGamessRelatedByDeveloperId());
+     * By default this just sets the collGamesRelatedByDeveloperId collection to an empty array (like clearcollGamesRelatedByDeveloperId());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1532,17 +1532,17 @@ abstract class Company implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initGamessRelatedByDeveloperId($overrideExisting = true)
+    public function initGamesRelatedByDeveloperId($overrideExisting = true)
     {
-        if (null !== $this->collGamessRelatedByDeveloperId && !$overrideExisting) {
+        if (null !== $this->collGamesRelatedByDeveloperId && !$overrideExisting) {
             return;
         }
-        $this->collGamessRelatedByDeveloperId = new ObjectCollection();
-        $this->collGamessRelatedByDeveloperId->setModel('\Games');
+        $this->collGamesRelatedByDeveloperId = new ObjectCollection();
+        $this->collGamesRelatedByDeveloperId->setModel('\Game');
     }
 
     /**
-     * Gets an array of ChildGames objects which contain a foreign key that references this object.
+     * Gets an array of ChildGame objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -1552,108 +1552,108 @@ abstract class Company implements ActiveRecordInterface
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildGames[] List of ChildGames objects
+     * @return ObjectCollection|ChildGame[] List of ChildGame objects
      * @throws PropelException
      */
-    public function getGamessRelatedByDeveloperId(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getGamesRelatedByDeveloperId(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collGamessRelatedByDeveloperIdPartial && !$this->isNew();
-        if (null === $this->collGamessRelatedByDeveloperId || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collGamessRelatedByDeveloperId) {
+        $partial = $this->collGamesRelatedByDeveloperIdPartial && !$this->isNew();
+        if (null === $this->collGamesRelatedByDeveloperId || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collGamesRelatedByDeveloperId) {
                 // return empty collection
-                $this->initGamessRelatedByDeveloperId();
+                $this->initGamesRelatedByDeveloperId();
             } else {
-                $collGamessRelatedByDeveloperId = ChildGamesQuery::create(null, $criteria)
+                $collGamesRelatedByDeveloperId = ChildGameQuery::create(null, $criteria)
                     ->filterByCompanyRelatedByDeveloperId($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collGamessRelatedByDeveloperIdPartial && count($collGamessRelatedByDeveloperId)) {
-                        $this->initGamessRelatedByDeveloperId(false);
+                    if (false !== $this->collGamesRelatedByDeveloperIdPartial && count($collGamesRelatedByDeveloperId)) {
+                        $this->initGamesRelatedByDeveloperId(false);
 
-                        foreach ($collGamessRelatedByDeveloperId as $obj) {
-                            if (false == $this->collGamessRelatedByDeveloperId->contains($obj)) {
-                                $this->collGamessRelatedByDeveloperId->append($obj);
+                        foreach ($collGamesRelatedByDeveloperId as $obj) {
+                            if (false == $this->collGamesRelatedByDeveloperId->contains($obj)) {
+                                $this->collGamesRelatedByDeveloperId->append($obj);
                             }
                         }
 
-                        $this->collGamessRelatedByDeveloperIdPartial = true;
+                        $this->collGamesRelatedByDeveloperIdPartial = true;
                     }
 
-                    return $collGamessRelatedByDeveloperId;
+                    return $collGamesRelatedByDeveloperId;
                 }
 
-                if ($partial && $this->collGamessRelatedByDeveloperId) {
-                    foreach ($this->collGamessRelatedByDeveloperId as $obj) {
+                if ($partial && $this->collGamesRelatedByDeveloperId) {
+                    foreach ($this->collGamesRelatedByDeveloperId as $obj) {
                         if ($obj->isNew()) {
-                            $collGamessRelatedByDeveloperId[] = $obj;
+                            $collGamesRelatedByDeveloperId[] = $obj;
                         }
                     }
                 }
 
-                $this->collGamessRelatedByDeveloperId = $collGamessRelatedByDeveloperId;
-                $this->collGamessRelatedByDeveloperIdPartial = false;
+                $this->collGamesRelatedByDeveloperId = $collGamesRelatedByDeveloperId;
+                $this->collGamesRelatedByDeveloperIdPartial = false;
             }
         }
 
-        return $this->collGamessRelatedByDeveloperId;
+        return $this->collGamesRelatedByDeveloperId;
     }
 
     /**
-     * Sets a collection of ChildGames objects related by a one-to-many relationship
+     * Sets a collection of ChildGame objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $gamessRelatedByDeveloperId A Propel collection.
+     * @param      Collection $gamesRelatedByDeveloperId A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildCompany The current object (for fluent API support)
      */
-    public function setGamessRelatedByDeveloperId(Collection $gamessRelatedByDeveloperId, ConnectionInterface $con = null)
+    public function setGamesRelatedByDeveloperId(Collection $gamesRelatedByDeveloperId, ConnectionInterface $con = null)
     {
-        /** @var ChildGames[] $gamessRelatedByDeveloperIdToDelete */
-        $gamessRelatedByDeveloperIdToDelete = $this->getGamessRelatedByDeveloperId(new Criteria(), $con)->diff($gamessRelatedByDeveloperId);
+        /** @var ChildGame[] $gamesRelatedByDeveloperIdToDelete */
+        $gamesRelatedByDeveloperIdToDelete = $this->getGamesRelatedByDeveloperId(new Criteria(), $con)->diff($gamesRelatedByDeveloperId);
 
         
-        $this->gamessRelatedByDeveloperIdScheduledForDeletion = $gamessRelatedByDeveloperIdToDelete;
+        $this->gamesRelatedByDeveloperIdScheduledForDeletion = $gamesRelatedByDeveloperIdToDelete;
 
-        foreach ($gamessRelatedByDeveloperIdToDelete as $gamesRelatedByDeveloperIdRemoved) {
-            $gamesRelatedByDeveloperIdRemoved->setCompanyRelatedByDeveloperId(null);
+        foreach ($gamesRelatedByDeveloperIdToDelete as $gameRelatedByDeveloperIdRemoved) {
+            $gameRelatedByDeveloperIdRemoved->setCompanyRelatedByDeveloperId(null);
         }
 
-        $this->collGamessRelatedByDeveloperId = null;
-        foreach ($gamessRelatedByDeveloperId as $gamesRelatedByDeveloperId) {
-            $this->addGamesRelatedByDeveloperId($gamesRelatedByDeveloperId);
+        $this->collGamesRelatedByDeveloperId = null;
+        foreach ($gamesRelatedByDeveloperId as $gameRelatedByDeveloperId) {
+            $this->addGameRelatedByDeveloperId($gameRelatedByDeveloperId);
         }
 
-        $this->collGamessRelatedByDeveloperId = $gamessRelatedByDeveloperId;
-        $this->collGamessRelatedByDeveloperIdPartial = false;
+        $this->collGamesRelatedByDeveloperId = $gamesRelatedByDeveloperId;
+        $this->collGamesRelatedByDeveloperIdPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related Games objects.
+     * Returns the number of related Game objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related Games objects.
+     * @return int             Count of related Game objects.
      * @throws PropelException
      */
-    public function countGamessRelatedByDeveloperId(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countGamesRelatedByDeveloperId(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collGamessRelatedByDeveloperIdPartial && !$this->isNew();
-        if (null === $this->collGamessRelatedByDeveloperId || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collGamessRelatedByDeveloperId) {
+        $partial = $this->collGamesRelatedByDeveloperIdPartial && !$this->isNew();
+        if (null === $this->collGamesRelatedByDeveloperId || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collGamesRelatedByDeveloperId) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getGamessRelatedByDeveloperId());
+                return count($this->getGamesRelatedByDeveloperId());
             }
 
-            $query = ChildGamesQuery::create(null, $criteria);
+            $query = ChildGameQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -1663,54 +1663,54 @@ abstract class Company implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collGamessRelatedByDeveloperId);
+        return count($this->collGamesRelatedByDeveloperId);
     }
 
     /**
-     * Method called to associate a ChildGames object to this object
-     * through the ChildGames foreign key attribute.
+     * Method called to associate a ChildGame object to this object
+     * through the ChildGame foreign key attribute.
      *
-     * @param  ChildGames $l ChildGames
+     * @param  ChildGame $l ChildGame
      * @return $this|\Company The current object (for fluent API support)
      */
-    public function addGamesRelatedByDeveloperId(ChildGames $l)
+    public function addGameRelatedByDeveloperId(ChildGame $l)
     {
-        if ($this->collGamessRelatedByDeveloperId === null) {
-            $this->initGamessRelatedByDeveloperId();
-            $this->collGamessRelatedByDeveloperIdPartial = true;
+        if ($this->collGamesRelatedByDeveloperId === null) {
+            $this->initGamesRelatedByDeveloperId();
+            $this->collGamesRelatedByDeveloperIdPartial = true;
         }
 
-        if (!$this->collGamessRelatedByDeveloperId->contains($l)) {
-            $this->doAddGamesRelatedByDeveloperId($l);
+        if (!$this->collGamesRelatedByDeveloperId->contains($l)) {
+            $this->doAddGameRelatedByDeveloperId($l);
         }
 
         return $this;
     }
 
     /**
-     * @param ChildGames $gamesRelatedByDeveloperId The ChildGames object to add.
+     * @param ChildGame $gameRelatedByDeveloperId The ChildGame object to add.
      */
-    protected function doAddGamesRelatedByDeveloperId(ChildGames $gamesRelatedByDeveloperId)
+    protected function doAddGameRelatedByDeveloperId(ChildGame $gameRelatedByDeveloperId)
     {
-        $this->collGamessRelatedByDeveloperId[]= $gamesRelatedByDeveloperId;
-        $gamesRelatedByDeveloperId->setCompanyRelatedByDeveloperId($this);
+        $this->collGamesRelatedByDeveloperId[]= $gameRelatedByDeveloperId;
+        $gameRelatedByDeveloperId->setCompanyRelatedByDeveloperId($this);
     }
 
     /**
-     * @param  ChildGames $gamesRelatedByDeveloperId The ChildGames object to remove.
+     * @param  ChildGame $gameRelatedByDeveloperId The ChildGame object to remove.
      * @return $this|ChildCompany The current object (for fluent API support)
      */
-    public function removeGamesRelatedByDeveloperId(ChildGames $gamesRelatedByDeveloperId)
+    public function removeGameRelatedByDeveloperId(ChildGame $gameRelatedByDeveloperId)
     {
-        if ($this->getGamessRelatedByDeveloperId()->contains($gamesRelatedByDeveloperId)) {
-            $pos = $this->collGamessRelatedByDeveloperId->search($gamesRelatedByDeveloperId);
-            $this->collGamessRelatedByDeveloperId->remove($pos);
-            if (null === $this->gamessRelatedByDeveloperIdScheduledForDeletion) {
-                $this->gamessRelatedByDeveloperIdScheduledForDeletion = clone $this->collGamessRelatedByDeveloperId;
-                $this->gamessRelatedByDeveloperIdScheduledForDeletion->clear();
+        if ($this->getGamesRelatedByDeveloperId()->contains($gameRelatedByDeveloperId)) {
+            $pos = $this->collGamesRelatedByDeveloperId->search($gameRelatedByDeveloperId);
+            $this->collGamesRelatedByDeveloperId->remove($pos);
+            if (null === $this->gamesRelatedByDeveloperIdScheduledForDeletion) {
+                $this->gamesRelatedByDeveloperIdScheduledForDeletion = clone $this->collGamesRelatedByDeveloperId;
+                $this->gamesRelatedByDeveloperIdScheduledForDeletion->clear();
             }
-            $this->gamessRelatedByDeveloperIdScheduledForDeletion[]= $gamesRelatedByDeveloperId;
-            $gamesRelatedByDeveloperId->setCompanyRelatedByDeveloperId(null);
+            $this->gamesRelatedByDeveloperIdScheduledForDeletion[]= $gameRelatedByDeveloperId;
+            $gameRelatedByDeveloperId->setCompanyRelatedByDeveloperId(null);
         }
 
         return $this;
@@ -1746,20 +1746,20 @@ abstract class Company implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
-            if ($this->collGamessRelatedByPublisherId) {
-                foreach ($this->collGamessRelatedByPublisherId as $o) {
+            if ($this->collGamesRelatedByPublisherId) {
+                foreach ($this->collGamesRelatedByPublisherId as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collGamessRelatedByDeveloperId) {
-                foreach ($this->collGamessRelatedByDeveloperId as $o) {
+            if ($this->collGamesRelatedByDeveloperId) {
+                foreach ($this->collGamesRelatedByDeveloperId as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
         } // if ($deep)
 
-        $this->collGamessRelatedByPublisherId = null;
-        $this->collGamessRelatedByDeveloperId = null;
+        $this->collGamesRelatedByPublisherId = null;
+        $this->collGamesRelatedByDeveloperId = null;
     }
 
     /**

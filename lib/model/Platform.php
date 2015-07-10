@@ -1,9 +1,9 @@
 <?php
 
-use Base\PlatformsQuery as BasePlatformsQuery;
+use Base\Platform as BasePlatform;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'platforms' table.
+ * Skeleton subclass for representing a row from the 'platform' table.
  *
  * 
  *
@@ -12,7 +12,7 @@ use Base\PlatformsQuery as BasePlatformsQuery;
  * long as it does not already exist in the output directory.
  *
  */
-class PlatformsQuery extends BasePlatformsQuery
+class Platform extends BasePlatform
 {
 
 }

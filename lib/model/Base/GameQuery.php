@@ -2,11 +2,11 @@
 
 namespace Base;
 
-use \Games as ChildGames;
-use \GamesQuery as ChildGamesQuery;
+use \Game as ChildGame;
+use \GameQuery as ChildGameQuery;
 use \Exception;
 use \PDO;
-use Map\GamesTableMap;
+use Map\GameTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -16,134 +16,134 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'games' table.
+ * Base class that represents a query for the 'game' table.
  *
  * 
  *
- * @method     ChildGamesQuery orderById($order = Criteria::ASC) Order by the id column
- * @method     ChildGamesQuery orderByName($order = Criteria::ASC) Order by the name column
- * @method     ChildGamesQuery orderByTitle($order = Criteria::ASC) Order by the title column
- * @method     ChildGamesQuery orderByDescription($order = Criteria::ASC) Order by the description column
- * @method     ChildGamesQuery orderByPublisherId($order = Criteria::ASC) Order by the publisher_id column
- * @method     ChildGamesQuery orderByDeveloperId($order = Criteria::ASC) Order by the developer_id column
- * @method     ChildGamesQuery orderByGbId($order = Criteria::ASC) Order by the gb_id column
- * @method     ChildGamesQuery orderByGbUrl($order = Criteria::ASC) Order by the gb_url column
- * @method     ChildGamesQuery orderByGbImage($order = Criteria::ASC) Order by the gb_image column
- * @method     ChildGamesQuery orderByGbThumb($order = Criteria::ASC) Order by the gb_thumb column
+ * @method     ChildGameQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method     ChildGameQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method     ChildGameQuery orderByTitle($order = Criteria::ASC) Order by the title column
+ * @method     ChildGameQuery orderByDescription($order = Criteria::ASC) Order by the description column
+ * @method     ChildGameQuery orderByPublisherId($order = Criteria::ASC) Order by the publisher_id column
+ * @method     ChildGameQuery orderByDeveloperId($order = Criteria::ASC) Order by the developer_id column
+ * @method     ChildGameQuery orderByGbId($order = Criteria::ASC) Order by the gb_id column
+ * @method     ChildGameQuery orderByGbUrl($order = Criteria::ASC) Order by the gb_url column
+ * @method     ChildGameQuery orderByGbImage($order = Criteria::ASC) Order by the gb_image column
+ * @method     ChildGameQuery orderByGbThumb($order = Criteria::ASC) Order by the gb_thumb column
  *
- * @method     ChildGamesQuery groupById() Group by the id column
- * @method     ChildGamesQuery groupByName() Group by the name column
- * @method     ChildGamesQuery groupByTitle() Group by the title column
- * @method     ChildGamesQuery groupByDescription() Group by the description column
- * @method     ChildGamesQuery groupByPublisherId() Group by the publisher_id column
- * @method     ChildGamesQuery groupByDeveloperId() Group by the developer_id column
- * @method     ChildGamesQuery groupByGbId() Group by the gb_id column
- * @method     ChildGamesQuery groupByGbUrl() Group by the gb_url column
- * @method     ChildGamesQuery groupByGbImage() Group by the gb_image column
- * @method     ChildGamesQuery groupByGbThumb() Group by the gb_thumb column
+ * @method     ChildGameQuery groupById() Group by the id column
+ * @method     ChildGameQuery groupByName() Group by the name column
+ * @method     ChildGameQuery groupByTitle() Group by the title column
+ * @method     ChildGameQuery groupByDescription() Group by the description column
+ * @method     ChildGameQuery groupByPublisherId() Group by the publisher_id column
+ * @method     ChildGameQuery groupByDeveloperId() Group by the developer_id column
+ * @method     ChildGameQuery groupByGbId() Group by the gb_id column
+ * @method     ChildGameQuery groupByGbUrl() Group by the gb_url column
+ * @method     ChildGameQuery groupByGbImage() Group by the gb_image column
+ * @method     ChildGameQuery groupByGbThumb() Group by the gb_thumb column
  *
- * @method     ChildGamesQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildGamesQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildGamesQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildGameQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildGameQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildGameQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildGamesQuery leftJoinCompanyRelatedByPublisherId($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompanyRelatedByPublisherId relation
- * @method     ChildGamesQuery rightJoinCompanyRelatedByPublisherId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompanyRelatedByPublisherId relation
- * @method     ChildGamesQuery innerJoinCompanyRelatedByPublisherId($relationAlias = null) Adds a INNER JOIN clause to the query using the CompanyRelatedByPublisherId relation
+ * @method     ChildGameQuery leftJoinCompanyRelatedByPublisherId($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompanyRelatedByPublisherId relation
+ * @method     ChildGameQuery rightJoinCompanyRelatedByPublisherId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompanyRelatedByPublisherId relation
+ * @method     ChildGameQuery innerJoinCompanyRelatedByPublisherId($relationAlias = null) Adds a INNER JOIN clause to the query using the CompanyRelatedByPublisherId relation
  *
- * @method     ChildGamesQuery leftJoinCompanyRelatedByDeveloperId($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompanyRelatedByDeveloperId relation
- * @method     ChildGamesQuery rightJoinCompanyRelatedByDeveloperId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompanyRelatedByDeveloperId relation
- * @method     ChildGamesQuery innerJoinCompanyRelatedByDeveloperId($relationAlias = null) Adds a INNER JOIN clause to the query using the CompanyRelatedByDeveloperId relation
+ * @method     ChildGameQuery leftJoinCompanyRelatedByDeveloperId($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompanyRelatedByDeveloperId relation
+ * @method     ChildGameQuery rightJoinCompanyRelatedByDeveloperId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompanyRelatedByDeveloperId relation
+ * @method     ChildGameQuery innerJoinCompanyRelatedByDeveloperId($relationAlias = null) Adds a INNER JOIN clause to the query using the CompanyRelatedByDeveloperId relation
  *
- * @method     ChildGamesQuery leftJoinGameLinks($relationAlias = null) Adds a LEFT JOIN clause to the query using the GameLinks relation
- * @method     ChildGamesQuery rightJoinGameLinks($relationAlias = null) Adds a RIGHT JOIN clause to the query using the GameLinks relation
- * @method     ChildGamesQuery innerJoinGameLinks($relationAlias = null) Adds a INNER JOIN clause to the query using the GameLinks relation
+ * @method     ChildGameQuery leftJoinGameLink($relationAlias = null) Adds a LEFT JOIN clause to the query using the GameLink relation
+ * @method     ChildGameQuery rightJoinGameLink($relationAlias = null) Adds a RIGHT JOIN clause to the query using the GameLink relation
+ * @method     ChildGameQuery innerJoinGameLink($relationAlias = null) Adds a INNER JOIN clause to the query using the GameLink relation
  *
- * @method     ChildGamesQuery leftJoinGamePlatforms($relationAlias = null) Adds a LEFT JOIN clause to the query using the GamePlatforms relation
- * @method     ChildGamesQuery rightJoinGamePlatforms($relationAlias = null) Adds a RIGHT JOIN clause to the query using the GamePlatforms relation
- * @method     ChildGamesQuery innerJoinGamePlatforms($relationAlias = null) Adds a INNER JOIN clause to the query using the GamePlatforms relation
+ * @method     ChildGameQuery leftJoinGamePlatform($relationAlias = null) Adds a LEFT JOIN clause to the query using the GamePlatform relation
+ * @method     ChildGameQuery rightJoinGamePlatform($relationAlias = null) Adds a RIGHT JOIN clause to the query using the GamePlatform relation
+ * @method     ChildGameQuery innerJoinGamePlatform($relationAlias = null) Adds a INNER JOIN clause to the query using the GamePlatform relation
  *
- * @method     ChildGamesQuery leftJoinRatingHeader($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingHeader relation
- * @method     ChildGamesQuery rightJoinRatingHeader($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingHeader relation
- * @method     ChildGamesQuery innerJoinRatingHeader($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingHeader relation
+ * @method     ChildGameQuery leftJoinRatingHeader($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingHeader relation
+ * @method     ChildGameQuery rightJoinRatingHeader($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingHeader relation
+ * @method     ChildGameQuery innerJoinRatingHeader($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingHeader relation
  *
- * @method     ChildGamesQuery leftJoinUserReview($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserReview relation
- * @method     ChildGamesQuery rightJoinUserReview($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserReview relation
- * @method     ChildGamesQuery innerJoinUserReview($relationAlias = null) Adds a INNER JOIN clause to the query using the UserReview relation
+ * @method     ChildGameQuery leftJoinUserReview($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserReview relation
+ * @method     ChildGameQuery rightJoinUserReview($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserReview relation
+ * @method     ChildGameQuery innerJoinUserReview($relationAlias = null) Adds a INNER JOIN clause to the query using the UserReview relation
  *
- * @method     \CompanyQuery|\GameLinksQuery|\GamePlatformsQuery|\RatingHeaderQuery|\UserReviewQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \CompanyQuery|\GameLinkQuery|\GamePlatformQuery|\RatingHeaderQuery|\UserReviewQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildGames findOne(ConnectionInterface $con = null) Return the first ChildGames matching the query
- * @method     ChildGames findOneOrCreate(ConnectionInterface $con = null) Return the first ChildGames matching the query, or a new ChildGames object populated from the query conditions when no match is found
+ * @method     ChildGame findOne(ConnectionInterface $con = null) Return the first ChildGame matching the query
+ * @method     ChildGame findOneOrCreate(ConnectionInterface $con = null) Return the first ChildGame matching the query, or a new ChildGame object populated from the query conditions when no match is found
  *
- * @method     ChildGames findOneById(string $id) Return the first ChildGames filtered by the id column
- * @method     ChildGames findOneByName(string $name) Return the first ChildGames filtered by the name column
- * @method     ChildGames findOneByTitle(string $title) Return the first ChildGames filtered by the title column
- * @method     ChildGames findOneByDescription(string $description) Return the first ChildGames filtered by the description column
- * @method     ChildGames findOneByPublisherId(string $publisher_id) Return the first ChildGames filtered by the publisher_id column
- * @method     ChildGames findOneByDeveloperId(string $developer_id) Return the first ChildGames filtered by the developer_id column
- * @method     ChildGames findOneByGbId(string $gb_id) Return the first ChildGames filtered by the gb_id column
- * @method     ChildGames findOneByGbUrl(string $gb_url) Return the first ChildGames filtered by the gb_url column
- * @method     ChildGames findOneByGbImage(string $gb_image) Return the first ChildGames filtered by the gb_image column
- * @method     ChildGames findOneByGbThumb(string $gb_thumb) Return the first ChildGames filtered by the gb_thumb column *
+ * @method     ChildGame findOneById(string $id) Return the first ChildGame filtered by the id column
+ * @method     ChildGame findOneByName(string $name) Return the first ChildGame filtered by the name column
+ * @method     ChildGame findOneByTitle(string $title) Return the first ChildGame filtered by the title column
+ * @method     ChildGame findOneByDescription(string $description) Return the first ChildGame filtered by the description column
+ * @method     ChildGame findOneByPublisherId(string $publisher_id) Return the first ChildGame filtered by the publisher_id column
+ * @method     ChildGame findOneByDeveloperId(string $developer_id) Return the first ChildGame filtered by the developer_id column
+ * @method     ChildGame findOneByGbId(string $gb_id) Return the first ChildGame filtered by the gb_id column
+ * @method     ChildGame findOneByGbUrl(string $gb_url) Return the first ChildGame filtered by the gb_url column
+ * @method     ChildGame findOneByGbImage(string $gb_image) Return the first ChildGame filtered by the gb_image column
+ * @method     ChildGame findOneByGbThumb(string $gb_thumb) Return the first ChildGame filtered by the gb_thumb column *
 
- * @method     ChildGames requirePk($key, ConnectionInterface $con = null) Return the ChildGames by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGames requireOne(ConnectionInterface $con = null) Return the first ChildGames matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requirePk($key, ConnectionInterface $con = null) Return the ChildGame by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requireOne(ConnectionInterface $con = null) Return the first ChildGame matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildGames requireOneById(string $id) Return the first ChildGames filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGames requireOneByName(string $name) Return the first ChildGames filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGames requireOneByTitle(string $title) Return the first ChildGames filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGames requireOneByDescription(string $description) Return the first ChildGames filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGames requireOneByPublisherId(string $publisher_id) Return the first ChildGames filtered by the publisher_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGames requireOneByDeveloperId(string $developer_id) Return the first ChildGames filtered by the developer_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGames requireOneByGbId(string $gb_id) Return the first ChildGames filtered by the gb_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGames requireOneByGbUrl(string $gb_url) Return the first ChildGames filtered by the gb_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGames requireOneByGbImage(string $gb_image) Return the first ChildGames filtered by the gb_image column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGames requireOneByGbThumb(string $gb_thumb) Return the first ChildGames filtered by the gb_thumb column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requireOneById(string $id) Return the first ChildGame filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requireOneByName(string $name) Return the first ChildGame filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requireOneByTitle(string $title) Return the first ChildGame filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requireOneByDescription(string $description) Return the first ChildGame filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requireOneByPublisherId(string $publisher_id) Return the first ChildGame filtered by the publisher_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requireOneByDeveloperId(string $developer_id) Return the first ChildGame filtered by the developer_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requireOneByGbId(string $gb_id) Return the first ChildGame filtered by the gb_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requireOneByGbUrl(string $gb_url) Return the first ChildGame filtered by the gb_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requireOneByGbImage(string $gb_image) Return the first ChildGame filtered by the gb_image column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requireOneByGbThumb(string $gb_thumb) Return the first ChildGame filtered by the gb_thumb column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildGames[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildGames objects based on current ModelCriteria
- * @method     ChildGames[]|ObjectCollection findById(string $id) Return ChildGames objects filtered by the id column
- * @method     ChildGames[]|ObjectCollection findByName(string $name) Return ChildGames objects filtered by the name column
- * @method     ChildGames[]|ObjectCollection findByTitle(string $title) Return ChildGames objects filtered by the title column
- * @method     ChildGames[]|ObjectCollection findByDescription(string $description) Return ChildGames objects filtered by the description column
- * @method     ChildGames[]|ObjectCollection findByPublisherId(string $publisher_id) Return ChildGames objects filtered by the publisher_id column
- * @method     ChildGames[]|ObjectCollection findByDeveloperId(string $developer_id) Return ChildGames objects filtered by the developer_id column
- * @method     ChildGames[]|ObjectCollection findByGbId(string $gb_id) Return ChildGames objects filtered by the gb_id column
- * @method     ChildGames[]|ObjectCollection findByGbUrl(string $gb_url) Return ChildGames objects filtered by the gb_url column
- * @method     ChildGames[]|ObjectCollection findByGbImage(string $gb_image) Return ChildGames objects filtered by the gb_image column
- * @method     ChildGames[]|ObjectCollection findByGbThumb(string $gb_thumb) Return ChildGames objects filtered by the gb_thumb column
- * @method     ChildGames[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildGame[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildGame objects based on current ModelCriteria
+ * @method     ChildGame[]|ObjectCollection findById(string $id) Return ChildGame objects filtered by the id column
+ * @method     ChildGame[]|ObjectCollection findByName(string $name) Return ChildGame objects filtered by the name column
+ * @method     ChildGame[]|ObjectCollection findByTitle(string $title) Return ChildGame objects filtered by the title column
+ * @method     ChildGame[]|ObjectCollection findByDescription(string $description) Return ChildGame objects filtered by the description column
+ * @method     ChildGame[]|ObjectCollection findByPublisherId(string $publisher_id) Return ChildGame objects filtered by the publisher_id column
+ * @method     ChildGame[]|ObjectCollection findByDeveloperId(string $developer_id) Return ChildGame objects filtered by the developer_id column
+ * @method     ChildGame[]|ObjectCollection findByGbId(string $gb_id) Return ChildGame objects filtered by the gb_id column
+ * @method     ChildGame[]|ObjectCollection findByGbUrl(string $gb_url) Return ChildGame objects filtered by the gb_url column
+ * @method     ChildGame[]|ObjectCollection findByGbImage(string $gb_image) Return ChildGame objects filtered by the gb_image column
+ * @method     ChildGame[]|ObjectCollection findByGbThumb(string $gb_thumb) Return ChildGame objects filtered by the gb_thumb column
+ * @method     ChildGame[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
-abstract class GamesQuery extends ModelCriteria
+abstract class GameQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \Base\GamesQuery object.
+     * Initializes internal state of \Base\GameQuery object.
      *
      * @param     string $dbName The database name
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = '\\Games', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\Game', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new ChildGamesQuery object.
+     * Returns a new ChildGameQuery object.
      *
      * @param     string $modelAlias The alias of a model in the query
      * @param     Criteria $criteria Optional Criteria to build the query from
      *
-     * @return ChildGamesQuery
+     * @return ChildGameQuery
      */
     public static function create($modelAlias = null, Criteria $criteria = null)
     {
-        if ($criteria instanceof ChildGamesQuery) {
+        if ($criteria instanceof ChildGameQuery) {
             return $criteria;
         }
-        $query = new ChildGamesQuery();
+        $query = new ChildGameQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -166,19 +166,19 @@ abstract class GamesQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return ChildGames|array|mixed the result, formatted by the current formatter
+     * @return ChildGame|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
         }
-        if ((null !== ($obj = GamesTableMap::getInstanceFromPool((string) $key))) && !$this->formatter) {
+        if ((null !== ($obj = GameTableMap::getInstanceFromPool((string) $key))) && !$this->formatter) {
             // the object is already in the instance pool
             return $obj;
         }
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(GamesTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(GameTableMap::DATABASE_NAME);
         }
         $this->basePreSelect($con);
         if ($this->formatter || $this->modelAlias || $this->with || $this->select
@@ -199,11 +199,11 @@ abstract class GamesQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildGames A model object, or null if the key is not found
+     * @return ChildGame A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, name, title, description, publisher_id, developer_id, gb_id, gb_url, gb_image, gb_thumb FROM games WHERE id = :p0';
+        $sql = 'SELECT id, name, title, description, publisher_id, developer_id, gb_id, gb_url, gb_image, gb_thumb FROM game WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -214,10 +214,10 @@ abstract class GamesQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildGames $obj */
-            $obj = new ChildGames();
+            /** @var ChildGame $obj */
+            $obj = new ChildGame();
             $obj->hydrate($row);
-            GamesTableMap::addInstanceToPool($obj, (string) $key);
+            GameTableMap::addInstanceToPool($obj, (string) $key);
         }
         $stmt->closeCursor();
 
@@ -230,7 +230,7 @@ abstract class GamesQuery extends ModelCriteria
      * @param     mixed $key Primary key to use for the query
      * @param     ConnectionInterface $con A connection object
      *
-     * @return ChildGames|array|mixed the result, formatted by the current formatter
+     * @return ChildGame|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -272,12 +272,12 @@ abstract class GamesQuery extends ModelCriteria
      *
      * @param     mixed $key Primary key to use for the query
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(GamesTableMap::COL_ID, $key, Criteria::EQUAL);
+        return $this->addUsingAlias(GameTableMap::COL_ID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -285,12 +285,12 @@ abstract class GamesQuery extends ModelCriteria
      *
      * @param     array $keys The list of primary key to use for the query
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(GamesTableMap::COL_ID, $keys, Criteria::IN);
+        return $this->addUsingAlias(GameTableMap::COL_ID, $keys, Criteria::IN);
     }
 
     /**
@@ -309,18 +309,18 @@ abstract class GamesQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
     public function filterById($id = null, $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
             if (isset($id['min'])) {
-                $this->addUsingAlias(GamesTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(GameTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($id['max'])) {
-                $this->addUsingAlias(GamesTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(GameTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -331,7 +331,7 @@ abstract class GamesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GamesTableMap::COL_ID, $id, $comparison);
+        return $this->addUsingAlias(GameTableMap::COL_ID, $id, $comparison);
     }
 
     /**
@@ -347,7 +347,7 @@ abstract class GamesQuery extends ModelCriteria
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
     public function filterByName($name = null, $comparison = null)
     {
@@ -360,7 +360,7 @@ abstract class GamesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GamesTableMap::COL_NAME, $name, $comparison);
+        return $this->addUsingAlias(GameTableMap::COL_NAME, $name, $comparison);
     }
 
     /**
@@ -376,7 +376,7 @@ abstract class GamesQuery extends ModelCriteria
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
     public function filterByTitle($title = null, $comparison = null)
     {
@@ -389,7 +389,7 @@ abstract class GamesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GamesTableMap::COL_TITLE, $title, $comparison);
+        return $this->addUsingAlias(GameTableMap::COL_TITLE, $title, $comparison);
     }
 
     /**
@@ -405,7 +405,7 @@ abstract class GamesQuery extends ModelCriteria
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
     public function filterByDescription($description = null, $comparison = null)
     {
@@ -418,7 +418,7 @@ abstract class GamesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GamesTableMap::COL_DESCRIPTION, $description, $comparison);
+        return $this->addUsingAlias(GameTableMap::COL_DESCRIPTION, $description, $comparison);
     }
 
     /**
@@ -439,18 +439,18 @@ abstract class GamesQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
     public function filterByPublisherId($publisherId = null, $comparison = null)
     {
         if (is_array($publisherId)) {
             $useMinMax = false;
             if (isset($publisherId['min'])) {
-                $this->addUsingAlias(GamesTableMap::COL_PUBLISHER_ID, $publisherId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(GameTableMap::COL_PUBLISHER_ID, $publisherId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($publisherId['max'])) {
-                $this->addUsingAlias(GamesTableMap::COL_PUBLISHER_ID, $publisherId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(GameTableMap::COL_PUBLISHER_ID, $publisherId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -461,7 +461,7 @@ abstract class GamesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GamesTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+        return $this->addUsingAlias(GameTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
     }
 
     /**
@@ -482,18 +482,18 @@ abstract class GamesQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
     public function filterByDeveloperId($developerId = null, $comparison = null)
     {
         if (is_array($developerId)) {
             $useMinMax = false;
             if (isset($developerId['min'])) {
-                $this->addUsingAlias(GamesTableMap::COL_DEVELOPER_ID, $developerId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(GameTableMap::COL_DEVELOPER_ID, $developerId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($developerId['max'])) {
-                $this->addUsingAlias(GamesTableMap::COL_DEVELOPER_ID, $developerId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(GameTableMap::COL_DEVELOPER_ID, $developerId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -504,7 +504,7 @@ abstract class GamesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GamesTableMap::COL_DEVELOPER_ID, $developerId, $comparison);
+        return $this->addUsingAlias(GameTableMap::COL_DEVELOPER_ID, $developerId, $comparison);
     }
 
     /**
@@ -523,18 +523,18 @@ abstract class GamesQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
     public function filterByGbId($gbId = null, $comparison = null)
     {
         if (is_array($gbId)) {
             $useMinMax = false;
             if (isset($gbId['min'])) {
-                $this->addUsingAlias(GamesTableMap::COL_GB_ID, $gbId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(GameTableMap::COL_GB_ID, $gbId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($gbId['max'])) {
-                $this->addUsingAlias(GamesTableMap::COL_GB_ID, $gbId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(GameTableMap::COL_GB_ID, $gbId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -545,7 +545,7 @@ abstract class GamesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GamesTableMap::COL_GB_ID, $gbId, $comparison);
+        return $this->addUsingAlias(GameTableMap::COL_GB_ID, $gbId, $comparison);
     }
 
     /**
@@ -561,7 +561,7 @@ abstract class GamesQuery extends ModelCriteria
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
     public function filterByGbUrl($gbUrl = null, $comparison = null)
     {
@@ -574,7 +574,7 @@ abstract class GamesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GamesTableMap::COL_GB_URL, $gbUrl, $comparison);
+        return $this->addUsingAlias(GameTableMap::COL_GB_URL, $gbUrl, $comparison);
     }
 
     /**
@@ -590,7 +590,7 @@ abstract class GamesQuery extends ModelCriteria
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
     public function filterByGbImage($gbImage = null, $comparison = null)
     {
@@ -603,7 +603,7 @@ abstract class GamesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GamesTableMap::COL_GB_IMAGE, $gbImage, $comparison);
+        return $this->addUsingAlias(GameTableMap::COL_GB_IMAGE, $gbImage, $comparison);
     }
 
     /**
@@ -619,7 +619,7 @@ abstract class GamesQuery extends ModelCriteria
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
     public function filterByGbThumb($gbThumb = null, $comparison = null)
     {
@@ -632,7 +632,7 @@ abstract class GamesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GamesTableMap::COL_GB_THUMB, $gbThumb, $comparison);
+        return $this->addUsingAlias(GameTableMap::COL_GB_THUMB, $gbThumb, $comparison);
     }
 
     /**
@@ -643,20 +643,20 @@ abstract class GamesQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildGamesQuery The current query, for fluid interface
+     * @return ChildGameQuery The current query, for fluid interface
      */
     public function filterByCompanyRelatedByPublisherId($company, $comparison = null)
     {
         if ($company instanceof \Company) {
             return $this
-                ->addUsingAlias(GamesTableMap::COL_PUBLISHER_ID, $company->getId(), $comparison);
+                ->addUsingAlias(GameTableMap::COL_PUBLISHER_ID, $company->getId(), $comparison);
         } elseif ($company instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(GamesTableMap::COL_PUBLISHER_ID, $company->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(GameTableMap::COL_PUBLISHER_ID, $company->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
             throw new PropelException('filterByCompanyRelatedByPublisherId() only accepts arguments of type \Company or Collection');
         }
@@ -668,7 +668,7 @@ abstract class GamesQuery extends ModelCriteria
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
     public function joinCompanyRelatedByPublisherId($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
@@ -720,20 +720,20 @@ abstract class GamesQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildGamesQuery The current query, for fluid interface
+     * @return ChildGameQuery The current query, for fluid interface
      */
     public function filterByCompanyRelatedByDeveloperId($company, $comparison = null)
     {
         if ($company instanceof \Company) {
             return $this
-                ->addUsingAlias(GamesTableMap::COL_DEVELOPER_ID, $company->getId(), $comparison);
+                ->addUsingAlias(GameTableMap::COL_DEVELOPER_ID, $company->getId(), $comparison);
         } elseif ($company instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(GamesTableMap::COL_DEVELOPER_ID, $company->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(GameTableMap::COL_DEVELOPER_ID, $company->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
             throw new PropelException('filterByCompanyRelatedByDeveloperId() only accepts arguments of type \Company or Collection');
         }
@@ -745,7 +745,7 @@ abstract class GamesQuery extends ModelCriteria
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
     public function joinCompanyRelatedByDeveloperId($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
@@ -790,40 +790,40 @@ abstract class GamesQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \GameLinks object
+     * Filter the query by a related \GameLink object
      *
-     * @param \GameLinks|ObjectCollection $gameLinks the related object to use as filter
+     * @param \GameLink|ObjectCollection $gameLink the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildGamesQuery The current query, for fluid interface
+     * @return ChildGameQuery The current query, for fluid interface
      */
-    public function filterByGameLinks($gameLinks, $comparison = null)
+    public function filterByGameLink($gameLink, $comparison = null)
     {
-        if ($gameLinks instanceof \GameLinks) {
+        if ($gameLink instanceof \GameLink) {
             return $this
-                ->addUsingAlias(GamesTableMap::COL_ID, $gameLinks->getGameId(), $comparison);
-        } elseif ($gameLinks instanceof ObjectCollection) {
+                ->addUsingAlias(GameTableMap::COL_ID, $gameLink->getGameId(), $comparison);
+        } elseif ($gameLink instanceof ObjectCollection) {
             return $this
-                ->useGameLinksQuery()
-                ->filterByPrimaryKeys($gameLinks->getPrimaryKeys())
+                ->useGameLinkQuery()
+                ->filterByPrimaryKeys($gameLink->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByGameLinks() only accepts arguments of type \GameLinks or Collection');
+            throw new PropelException('filterByGameLink() only accepts arguments of type \GameLink or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the GameLinks relation
+     * Adds a JOIN clause to the query using the GameLink relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
-    public function joinGameLinks($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinGameLink($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('GameLinks');
+        $relationMap = $tableMap->getRelation('GameLink');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -838,14 +838,14 @@ abstract class GamesQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'GameLinks');
+            $this->addJoinObject($join, 'GameLink');
         }
 
         return $this;
     }
 
     /**
-     * Use the GameLinks relation GameLinks object
+     * Use the GameLink relation GameLink object
      *
      * @see useQuery()
      *
@@ -853,50 +853,50 @@ abstract class GamesQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \GameLinksQuery A secondary query class using the current class as primary query
+     * @return \GameLinkQuery A secondary query class using the current class as primary query
      */
-    public function useGameLinksQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useGameLinkQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinGameLinks($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'GameLinks', '\GameLinksQuery');
+            ->joinGameLink($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'GameLink', '\GameLinkQuery');
     }
 
     /**
-     * Filter the query by a related \GamePlatforms object
+     * Filter the query by a related \GamePlatform object
      *
-     * @param \GamePlatforms|ObjectCollection $gamePlatforms the related object to use as filter
+     * @param \GamePlatform|ObjectCollection $gamePlatform the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildGamesQuery The current query, for fluid interface
+     * @return ChildGameQuery The current query, for fluid interface
      */
-    public function filterByGamePlatforms($gamePlatforms, $comparison = null)
+    public function filterByGamePlatform($gamePlatform, $comparison = null)
     {
-        if ($gamePlatforms instanceof \GamePlatforms) {
+        if ($gamePlatform instanceof \GamePlatform) {
             return $this
-                ->addUsingAlias(GamesTableMap::COL_ID, $gamePlatforms->getGameId(), $comparison);
-        } elseif ($gamePlatforms instanceof ObjectCollection) {
+                ->addUsingAlias(GameTableMap::COL_ID, $gamePlatform->getGameId(), $comparison);
+        } elseif ($gamePlatform instanceof ObjectCollection) {
             return $this
-                ->useGamePlatformsQuery()
-                ->filterByPrimaryKeys($gamePlatforms->getPrimaryKeys())
+                ->useGamePlatformQuery()
+                ->filterByPrimaryKeys($gamePlatform->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByGamePlatforms() only accepts arguments of type \GamePlatforms or Collection');
+            throw new PropelException('filterByGamePlatform() only accepts arguments of type \GamePlatform or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the GamePlatforms relation
+     * Adds a JOIN clause to the query using the GamePlatform relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
-    public function joinGamePlatforms($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinGamePlatform($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('GamePlatforms');
+        $relationMap = $tableMap->getRelation('GamePlatform');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -911,14 +911,14 @@ abstract class GamesQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'GamePlatforms');
+            $this->addJoinObject($join, 'GamePlatform');
         }
 
         return $this;
     }
 
     /**
-     * Use the GamePlatforms relation GamePlatforms object
+     * Use the GamePlatform relation GamePlatform object
      *
      * @see useQuery()
      *
@@ -926,13 +926,13 @@ abstract class GamesQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \GamePlatformsQuery A secondary query class using the current class as primary query
+     * @return \GamePlatformQuery A secondary query class using the current class as primary query
      */
-    public function useGamePlatformsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useGamePlatformQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinGamePlatforms($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'GamePlatforms', '\GamePlatformsQuery');
+            ->joinGamePlatform($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'GamePlatform', '\GamePlatformQuery');
     }
 
     /**
@@ -941,13 +941,13 @@ abstract class GamesQuery extends ModelCriteria
      * @param \RatingHeader|ObjectCollection $ratingHeader the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildGamesQuery The current query, for fluid interface
+     * @return ChildGameQuery The current query, for fluid interface
      */
     public function filterByRatingHeader($ratingHeader, $comparison = null)
     {
         if ($ratingHeader instanceof \RatingHeader) {
             return $this
-                ->addUsingAlias(GamesTableMap::COL_ID, $ratingHeader->getGameId(), $comparison);
+                ->addUsingAlias(GameTableMap::COL_ID, $ratingHeader->getGameId(), $comparison);
         } elseif ($ratingHeader instanceof ObjectCollection) {
             return $this
                 ->useRatingHeaderQuery()
@@ -964,7 +964,7 @@ abstract class GamesQuery extends ModelCriteria
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
     public function joinRatingHeader($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
@@ -1014,13 +1014,13 @@ abstract class GamesQuery extends ModelCriteria
      * @param \UserReview|ObjectCollection $userReview the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildGamesQuery The current query, for fluid interface
+     * @return ChildGameQuery The current query, for fluid interface
      */
     public function filterByUserReview($userReview, $comparison = null)
     {
         if ($userReview instanceof \UserReview) {
             return $this
-                ->addUsingAlias(GamesTableMap::COL_ID, $userReview->getGameId(), $comparison);
+                ->addUsingAlias(GameTableMap::COL_ID, $userReview->getGameId(), $comparison);
         } elseif ($userReview instanceof ObjectCollection) {
             return $this
                 ->useUserReviewQuery()
@@ -1037,7 +1037,7 @@ abstract class GamesQuery extends ModelCriteria
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
     public function joinUserReview($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
@@ -1084,21 +1084,21 @@ abstract class GamesQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildGames $games Object to remove from the list of results
+     * @param   ChildGame $game Object to remove from the list of results
      *
-     * @return $this|ChildGamesQuery The current query, for fluid interface
+     * @return $this|ChildGameQuery The current query, for fluid interface
      */
-    public function prune($games = null)
+    public function prune($game = null)
     {
-        if ($games) {
-            $this->addUsingAlias(GamesTableMap::COL_ID, $games->getId(), Criteria::NOT_EQUAL);
+        if ($game) {
+            $this->addUsingAlias(GameTableMap::COL_ID, $game->getId(), Criteria::NOT_EQUAL);
         }
 
         return $this;
     }
 
     /**
-     * Deletes all rows from the games table.
+     * Deletes all rows from the game table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
@@ -1106,7 +1106,7 @@ abstract class GamesQuery extends ModelCriteria
     public function doDeleteAll(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(GamesTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(GameTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -1117,8 +1117,8 @@ abstract class GamesQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            GamesTableMap::clearInstancePool();
-            GamesTableMap::clearRelatedInstancePool();
+            GameTableMap::clearInstancePool();
+            GameTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -1136,26 +1136,26 @@ abstract class GamesQuery extends ModelCriteria
     public function delete(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(GamesTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(GameTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(GamesTableMap::DATABASE_NAME);
+        $criteria->setDbName(GameTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
             
-            GamesTableMap::removeInstanceFromPool($criteria);
+            GameTableMap::removeInstanceFromPool($criteria);
         
             $affectedRows += ModelCriteria::delete($con);
-            GamesTableMap::clearRelatedInstancePool();
+            GameTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
     }
 
-} // GamesQuery
+} // GameQuery

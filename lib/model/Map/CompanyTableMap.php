@@ -158,20 +158,20 @@ class CompanyTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('GamesRelatedByPublisherId', '\\Games', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('GameRelatedByPublisherId', '\\Game', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':publisher_id',
     1 => ':id',
   ),
-), null, null, 'GamessRelatedByPublisherId', false);
-        $this->addRelation('GamesRelatedByDeveloperId', '\\Games', RelationMap::ONE_TO_MANY, array (
+), null, null, 'GamesRelatedByPublisherId', false);
+        $this->addRelation('GameRelatedByDeveloperId', '\\Game', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':developer_id',
     1 => ':id',
   ),
-), null, null, 'GamessRelatedByDeveloperId', false);
+), null, null, 'GamesRelatedByDeveloperId', false);
     } // buildRelations()
 
     /**

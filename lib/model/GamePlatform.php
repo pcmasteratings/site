@@ -1,9 +1,9 @@
 <?php
 
-use Base\GameLinks as BaseGameLinks;
+use Base\GamePlatform as BaseGamePlatform;
 
 /**
- * Skeleton subclass for representing a row from the 'game_links' table.
+ * Skeleton subclass for representing a row from the 'game_platform' table.
  *
  * 
  *
@@ -12,7 +12,7 @@ use Base\GameLinks as BaseGameLinks;
  * long as it does not already exist in the output directory.
  *
  */
-class GameLinks extends BaseGameLinks
+class GamePlatform extends BaseGamePlatform
 {
 
 }

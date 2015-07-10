@@ -1,9 +1,9 @@
 <?php
 
-use Base\GamePlatforms as BaseGamePlatforms;
+use Base\GameQuery as BaseGameQuery;
 
 /**
- * Skeleton subclass for representing a row from the 'game_platforms' table.
+ * Skeleton subclass for performing query and update operations on the 'game' table.
  *
  * 
  *
@@ -12,7 +12,7 @@ use Base\GamePlatforms as BaseGamePlatforms;
  * long as it does not already exist in the output directory.
  *
  */
-class GamePlatforms extends BaseGamePlatforms
+class GameQuery extends BaseGameQuery
 {
 
 }

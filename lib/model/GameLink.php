@@ -1,9 +1,9 @@
 <?php
 
-use Base\GamesQuery as BaseGamesQuery;
+use Base\GameLink as BaseGameLink;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'games' table.
+ * Skeleton subclass for representing a row from the 'game_link' table.
  *
  * 
  *
@@ -12,7 +12,7 @@ use Base\GamesQuery as BaseGamesQuery;
  * long as it does not already exist in the output directory.
  *
  */
-class GamesQuery extends BaseGamesQuery
+class GameLink extends BaseGameLink
 {
 
 }

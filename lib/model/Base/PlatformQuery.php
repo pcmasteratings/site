@@ -2,11 +2,11 @@
 
 namespace Base;
 
-use \Platforms as ChildPlatforms;
-use \PlatformsQuery as ChildPlatformsQuery;
+use \Platform as ChildPlatform;
+use \PlatformQuery as ChildPlatformQuery;
 use \Exception;
 use \PDO;
-use Map\PlatformsTableMap;
+use Map\PlatformTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -16,97 +16,97 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'platforms' table.
+ * Base class that represents a query for the 'platform' table.
  *
  * 
  *
- * @method     ChildPlatformsQuery orderById($order = Criteria::ASC) Order by the id column
- * @method     ChildPlatformsQuery orderByName($order = Criteria::ASC) Order by the name column
- * @method     ChildPlatformsQuery orderByTitle($order = Criteria::ASC) Order by the title column
- * @method     ChildPlatformsQuery orderByDescription($order = Criteria::ASC) Order by the description column
- * @method     ChildPlatformsQuery orderByGbId($order = Criteria::ASC) Order by the gb_id column
+ * @method     ChildPlatformQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method     ChildPlatformQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method     ChildPlatformQuery orderByTitle($order = Criteria::ASC) Order by the title column
+ * @method     ChildPlatformQuery orderByDescription($order = Criteria::ASC) Order by the description column
+ * @method     ChildPlatformQuery orderByGbId($order = Criteria::ASC) Order by the gb_id column
  *
- * @method     ChildPlatformsQuery groupById() Group by the id column
- * @method     ChildPlatformsQuery groupByName() Group by the name column
- * @method     ChildPlatformsQuery groupByTitle() Group by the title column
- * @method     ChildPlatformsQuery groupByDescription() Group by the description column
- * @method     ChildPlatformsQuery groupByGbId() Group by the gb_id column
+ * @method     ChildPlatformQuery groupById() Group by the id column
+ * @method     ChildPlatformQuery groupByName() Group by the name column
+ * @method     ChildPlatformQuery groupByTitle() Group by the title column
+ * @method     ChildPlatformQuery groupByDescription() Group by the description column
+ * @method     ChildPlatformQuery groupByGbId() Group by the gb_id column
  *
- * @method     ChildPlatformsQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildPlatformsQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildPlatformsQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildPlatformQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildPlatformQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildPlatformQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildPlatformsQuery leftJoinGamePlatforms($relationAlias = null) Adds a LEFT JOIN clause to the query using the GamePlatforms relation
- * @method     ChildPlatformsQuery rightJoinGamePlatforms($relationAlias = null) Adds a RIGHT JOIN clause to the query using the GamePlatforms relation
- * @method     ChildPlatformsQuery innerJoinGamePlatforms($relationAlias = null) Adds a INNER JOIN clause to the query using the GamePlatforms relation
+ * @method     ChildPlatformQuery leftJoinGamePlatform($relationAlias = null) Adds a LEFT JOIN clause to the query using the GamePlatform relation
+ * @method     ChildPlatformQuery rightJoinGamePlatform($relationAlias = null) Adds a RIGHT JOIN clause to the query using the GamePlatform relation
+ * @method     ChildPlatformQuery innerJoinGamePlatform($relationAlias = null) Adds a INNER JOIN clause to the query using the GamePlatform relation
  *
- * @method     ChildPlatformsQuery leftJoinRatingHeader($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingHeader relation
- * @method     ChildPlatformsQuery rightJoinRatingHeader($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingHeader relation
- * @method     ChildPlatformsQuery innerJoinRatingHeader($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingHeader relation
+ * @method     ChildPlatformQuery leftJoinRatingHeader($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingHeader relation
+ * @method     ChildPlatformQuery rightJoinRatingHeader($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingHeader relation
+ * @method     ChildPlatformQuery innerJoinRatingHeader($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingHeader relation
  *
- * @method     ChildPlatformsQuery leftJoinUserReview($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserReview relation
- * @method     ChildPlatformsQuery rightJoinUserReview($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserReview relation
- * @method     ChildPlatformsQuery innerJoinUserReview($relationAlias = null) Adds a INNER JOIN clause to the query using the UserReview relation
+ * @method     ChildPlatformQuery leftJoinUserReview($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserReview relation
+ * @method     ChildPlatformQuery rightJoinUserReview($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserReview relation
+ * @method     ChildPlatformQuery innerJoinUserReview($relationAlias = null) Adds a INNER JOIN clause to the query using the UserReview relation
  *
- * @method     \GamePlatformsQuery|\RatingHeaderQuery|\UserReviewQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \GamePlatformQuery|\RatingHeaderQuery|\UserReviewQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildPlatforms findOne(ConnectionInterface $con = null) Return the first ChildPlatforms matching the query
- * @method     ChildPlatforms findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPlatforms matching the query, or a new ChildPlatforms object populated from the query conditions when no match is found
+ * @method     ChildPlatform findOne(ConnectionInterface $con = null) Return the first ChildPlatform matching the query
+ * @method     ChildPlatform findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPlatform matching the query, or a new ChildPlatform object populated from the query conditions when no match is found
  *
- * @method     ChildPlatforms findOneById(string $id) Return the first ChildPlatforms filtered by the id column
- * @method     ChildPlatforms findOneByName(string $name) Return the first ChildPlatforms filtered by the name column
- * @method     ChildPlatforms findOneByTitle(string $title) Return the first ChildPlatforms filtered by the title column
- * @method     ChildPlatforms findOneByDescription(string $description) Return the first ChildPlatforms filtered by the description column
- * @method     ChildPlatforms findOneByGbId(string $gb_id) Return the first ChildPlatforms filtered by the gb_id column *
+ * @method     ChildPlatform findOneById(string $id) Return the first ChildPlatform filtered by the id column
+ * @method     ChildPlatform findOneByName(string $name) Return the first ChildPlatform filtered by the name column
+ * @method     ChildPlatform findOneByTitle(string $title) Return the first ChildPlatform filtered by the title column
+ * @method     ChildPlatform findOneByDescription(string $description) Return the first ChildPlatform filtered by the description column
+ * @method     ChildPlatform findOneByGbId(string $gb_id) Return the first ChildPlatform filtered by the gb_id column *
 
- * @method     ChildPlatforms requirePk($key, ConnectionInterface $con = null) Return the ChildPlatforms by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPlatforms requireOne(ConnectionInterface $con = null) Return the first ChildPlatforms matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPlatform requirePk($key, ConnectionInterface $con = null) Return the ChildPlatform by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPlatform requireOne(ConnectionInterface $con = null) Return the first ChildPlatform matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPlatforms requireOneById(string $id) Return the first ChildPlatforms filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPlatforms requireOneByName(string $name) Return the first ChildPlatforms filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPlatforms requireOneByTitle(string $title) Return the first ChildPlatforms filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPlatforms requireOneByDescription(string $description) Return the first ChildPlatforms filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPlatforms requireOneByGbId(string $gb_id) Return the first ChildPlatforms filtered by the gb_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPlatform requireOneById(string $id) Return the first ChildPlatform filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPlatform requireOneByName(string $name) Return the first ChildPlatform filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPlatform requireOneByTitle(string $title) Return the first ChildPlatform filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPlatform requireOneByDescription(string $description) Return the first ChildPlatform filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPlatform requireOneByGbId(string $gb_id) Return the first ChildPlatform filtered by the gb_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPlatforms[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPlatforms objects based on current ModelCriteria
- * @method     ChildPlatforms[]|ObjectCollection findById(string $id) Return ChildPlatforms objects filtered by the id column
- * @method     ChildPlatforms[]|ObjectCollection findByName(string $name) Return ChildPlatforms objects filtered by the name column
- * @method     ChildPlatforms[]|ObjectCollection findByTitle(string $title) Return ChildPlatforms objects filtered by the title column
- * @method     ChildPlatforms[]|ObjectCollection findByDescription(string $description) Return ChildPlatforms objects filtered by the description column
- * @method     ChildPlatforms[]|ObjectCollection findByGbId(string $gb_id) Return ChildPlatforms objects filtered by the gb_id column
- * @method     ChildPlatforms[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildPlatform[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPlatform objects based on current ModelCriteria
+ * @method     ChildPlatform[]|ObjectCollection findById(string $id) Return ChildPlatform objects filtered by the id column
+ * @method     ChildPlatform[]|ObjectCollection findByName(string $name) Return ChildPlatform objects filtered by the name column
+ * @method     ChildPlatform[]|ObjectCollection findByTitle(string $title) Return ChildPlatform objects filtered by the title column
+ * @method     ChildPlatform[]|ObjectCollection findByDescription(string $description) Return ChildPlatform objects filtered by the description column
+ * @method     ChildPlatform[]|ObjectCollection findByGbId(string $gb_id) Return ChildPlatform objects filtered by the gb_id column
+ * @method     ChildPlatform[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
-abstract class PlatformsQuery extends ModelCriteria
+abstract class PlatformQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \Base\PlatformsQuery object.
+     * Initializes internal state of \Base\PlatformQuery object.
      *
      * @param     string $dbName The database name
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = '\\Platforms', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\Platform', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new ChildPlatformsQuery object.
+     * Returns a new ChildPlatformQuery object.
      *
      * @param     string $modelAlias The alias of a model in the query
      * @param     Criteria $criteria Optional Criteria to build the query from
      *
-     * @return ChildPlatformsQuery
+     * @return ChildPlatformQuery
      */
     public static function create($modelAlias = null, Criteria $criteria = null)
     {
-        if ($criteria instanceof ChildPlatformsQuery) {
+        if ($criteria instanceof ChildPlatformQuery) {
             return $criteria;
         }
-        $query = new ChildPlatformsQuery();
+        $query = new ChildPlatformQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -129,19 +129,19 @@ abstract class PlatformsQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return ChildPlatforms|array|mixed the result, formatted by the current formatter
+     * @return ChildPlatform|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
         }
-        if ((null !== ($obj = PlatformsTableMap::getInstanceFromPool((string) $key))) && !$this->formatter) {
+        if ((null !== ($obj = PlatformTableMap::getInstanceFromPool((string) $key))) && !$this->formatter) {
             // the object is already in the instance pool
             return $obj;
         }
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(PlatformsTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(PlatformTableMap::DATABASE_NAME);
         }
         $this->basePreSelect($con);
         if ($this->formatter || $this->modelAlias || $this->with || $this->select
@@ -162,11 +162,11 @@ abstract class PlatformsQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildPlatforms A model object, or null if the key is not found
+     * @return ChildPlatform A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, name, title, description, gb_id FROM platforms WHERE id = :p0';
+        $sql = 'SELECT id, name, title, description, gb_id FROM platform WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -177,10 +177,10 @@ abstract class PlatformsQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildPlatforms $obj */
-            $obj = new ChildPlatforms();
+            /** @var ChildPlatform $obj */
+            $obj = new ChildPlatform();
             $obj->hydrate($row);
-            PlatformsTableMap::addInstanceToPool($obj, (string) $key);
+            PlatformTableMap::addInstanceToPool($obj, (string) $key);
         }
         $stmt->closeCursor();
 
@@ -193,7 +193,7 @@ abstract class PlatformsQuery extends ModelCriteria
      * @param     mixed $key Primary key to use for the query
      * @param     ConnectionInterface $con A connection object
      *
-     * @return ChildPlatforms|array|mixed the result, formatted by the current formatter
+     * @return ChildPlatform|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -235,12 +235,12 @@ abstract class PlatformsQuery extends ModelCriteria
      *
      * @param     mixed $key Primary key to use for the query
      *
-     * @return $this|ChildPlatformsQuery The current query, for fluid interface
+     * @return $this|ChildPlatformQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(PlatformsTableMap::COL_ID, $key, Criteria::EQUAL);
+        return $this->addUsingAlias(PlatformTableMap::COL_ID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -248,12 +248,12 @@ abstract class PlatformsQuery extends ModelCriteria
      *
      * @param     array $keys The list of primary key to use for the query
      *
-     * @return $this|ChildPlatformsQuery The current query, for fluid interface
+     * @return $this|ChildPlatformQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(PlatformsTableMap::COL_ID, $keys, Criteria::IN);
+        return $this->addUsingAlias(PlatformTableMap::COL_ID, $keys, Criteria::IN);
     }
 
     /**
@@ -272,18 +272,18 @@ abstract class PlatformsQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPlatformsQuery The current query, for fluid interface
+     * @return $this|ChildPlatformQuery The current query, for fluid interface
      */
     public function filterById($id = null, $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
             if (isset($id['min'])) {
-                $this->addUsingAlias(PlatformsTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(PlatformTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($id['max'])) {
-                $this->addUsingAlias(PlatformsTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(PlatformTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -294,7 +294,7 @@ abstract class PlatformsQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PlatformsTableMap::COL_ID, $id, $comparison);
+        return $this->addUsingAlias(PlatformTableMap::COL_ID, $id, $comparison);
     }
 
     /**
@@ -310,7 +310,7 @@ abstract class PlatformsQuery extends ModelCriteria
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPlatformsQuery The current query, for fluid interface
+     * @return $this|ChildPlatformQuery The current query, for fluid interface
      */
     public function filterByName($name = null, $comparison = null)
     {
@@ -323,7 +323,7 @@ abstract class PlatformsQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PlatformsTableMap::COL_NAME, $name, $comparison);
+        return $this->addUsingAlias(PlatformTableMap::COL_NAME, $name, $comparison);
     }
 
     /**
@@ -339,7 +339,7 @@ abstract class PlatformsQuery extends ModelCriteria
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPlatformsQuery The current query, for fluid interface
+     * @return $this|ChildPlatformQuery The current query, for fluid interface
      */
     public function filterByTitle($title = null, $comparison = null)
     {
@@ -352,7 +352,7 @@ abstract class PlatformsQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PlatformsTableMap::COL_TITLE, $title, $comparison);
+        return $this->addUsingAlias(PlatformTableMap::COL_TITLE, $title, $comparison);
     }
 
     /**
@@ -368,7 +368,7 @@ abstract class PlatformsQuery extends ModelCriteria
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPlatformsQuery The current query, for fluid interface
+     * @return $this|ChildPlatformQuery The current query, for fluid interface
      */
     public function filterByDescription($description = null, $comparison = null)
     {
@@ -381,7 +381,7 @@ abstract class PlatformsQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PlatformsTableMap::COL_DESCRIPTION, $description, $comparison);
+        return $this->addUsingAlias(PlatformTableMap::COL_DESCRIPTION, $description, $comparison);
     }
 
     /**
@@ -400,18 +400,18 @@ abstract class PlatformsQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPlatformsQuery The current query, for fluid interface
+     * @return $this|ChildPlatformQuery The current query, for fluid interface
      */
     public function filterByGbId($gbId = null, $comparison = null)
     {
         if (is_array($gbId)) {
             $useMinMax = false;
             if (isset($gbId['min'])) {
-                $this->addUsingAlias(PlatformsTableMap::COL_GB_ID, $gbId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(PlatformTableMap::COL_GB_ID, $gbId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($gbId['max'])) {
-                $this->addUsingAlias(PlatformsTableMap::COL_GB_ID, $gbId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(PlatformTableMap::COL_GB_ID, $gbId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -422,44 +422,44 @@ abstract class PlatformsQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PlatformsTableMap::COL_GB_ID, $gbId, $comparison);
+        return $this->addUsingAlias(PlatformTableMap::COL_GB_ID, $gbId, $comparison);
     }
 
     /**
-     * Filter the query by a related \GamePlatforms object
+     * Filter the query by a related \GamePlatform object
      *
-     * @param \GamePlatforms|ObjectCollection $gamePlatforms the related object to use as filter
+     * @param \GamePlatform|ObjectCollection $gamePlatform the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildPlatformsQuery The current query, for fluid interface
+     * @return ChildPlatformQuery The current query, for fluid interface
      */
-    public function filterByGamePlatforms($gamePlatforms, $comparison = null)
+    public function filterByGamePlatform($gamePlatform, $comparison = null)
     {
-        if ($gamePlatforms instanceof \GamePlatforms) {
+        if ($gamePlatform instanceof \GamePlatform) {
             return $this
-                ->addUsingAlias(PlatformsTableMap::COL_ID, $gamePlatforms->getPlatformId(), $comparison);
-        } elseif ($gamePlatforms instanceof ObjectCollection) {
+                ->addUsingAlias(PlatformTableMap::COL_ID, $gamePlatform->getPlatformId(), $comparison);
+        } elseif ($gamePlatform instanceof ObjectCollection) {
             return $this
-                ->useGamePlatformsQuery()
-                ->filterByPrimaryKeys($gamePlatforms->getPrimaryKeys())
+                ->useGamePlatformQuery()
+                ->filterByPrimaryKeys($gamePlatform->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByGamePlatforms() only accepts arguments of type \GamePlatforms or Collection');
+            throw new PropelException('filterByGamePlatform() only accepts arguments of type \GamePlatform or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the GamePlatforms relation
+     * Adds a JOIN clause to the query using the GamePlatform relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildPlatformsQuery The current query, for fluid interface
+     * @return $this|ChildPlatformQuery The current query, for fluid interface
      */
-    public function joinGamePlatforms($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinGamePlatform($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('GamePlatforms');
+        $relationMap = $tableMap->getRelation('GamePlatform');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -474,14 +474,14 @@ abstract class PlatformsQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'GamePlatforms');
+            $this->addJoinObject($join, 'GamePlatform');
         }
 
         return $this;
     }
 
     /**
-     * Use the GamePlatforms relation GamePlatforms object
+     * Use the GamePlatform relation GamePlatform object
      *
      * @see useQuery()
      *
@@ -489,13 +489,13 @@ abstract class PlatformsQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \GamePlatformsQuery A secondary query class using the current class as primary query
+     * @return \GamePlatformQuery A secondary query class using the current class as primary query
      */
-    public function useGamePlatformsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useGamePlatformQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinGamePlatforms($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'GamePlatforms', '\GamePlatformsQuery');
+            ->joinGamePlatform($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'GamePlatform', '\GamePlatformQuery');
     }
 
     /**
@@ -504,13 +504,13 @@ abstract class PlatformsQuery extends ModelCriteria
      * @param \RatingHeader|ObjectCollection $ratingHeader the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildPlatformsQuery The current query, for fluid interface
+     * @return ChildPlatformQuery The current query, for fluid interface
      */
     public function filterByRatingHeader($ratingHeader, $comparison = null)
     {
         if ($ratingHeader instanceof \RatingHeader) {
             return $this
-                ->addUsingAlias(PlatformsTableMap::COL_ID, $ratingHeader->getPlatformId(), $comparison);
+                ->addUsingAlias(PlatformTableMap::COL_ID, $ratingHeader->getPlatformId(), $comparison);
         } elseif ($ratingHeader instanceof ObjectCollection) {
             return $this
                 ->useRatingHeaderQuery()
@@ -527,7 +527,7 @@ abstract class PlatformsQuery extends ModelCriteria
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildPlatformsQuery The current query, for fluid interface
+     * @return $this|ChildPlatformQuery The current query, for fluid interface
      */
     public function joinRatingHeader($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
@@ -577,13 +577,13 @@ abstract class PlatformsQuery extends ModelCriteria
      * @param \UserReview|ObjectCollection $userReview the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildPlatformsQuery The current query, for fluid interface
+     * @return ChildPlatformQuery The current query, for fluid interface
      */
     public function filterByUserReview($userReview, $comparison = null)
     {
         if ($userReview instanceof \UserReview) {
             return $this
-                ->addUsingAlias(PlatformsTableMap::COL_ID, $userReview->getPlatformId(), $comparison);
+                ->addUsingAlias(PlatformTableMap::COL_ID, $userReview->getPlatformId(), $comparison);
         } elseif ($userReview instanceof ObjectCollection) {
             return $this
                 ->useUserReviewQuery()
@@ -600,7 +600,7 @@ abstract class PlatformsQuery extends ModelCriteria
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildPlatformsQuery The current query, for fluid interface
+     * @return $this|ChildPlatformQuery The current query, for fluid interface
      */
     public function joinUserReview($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
@@ -647,21 +647,21 @@ abstract class PlatformsQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildPlatforms $platforms Object to remove from the list of results
+     * @param   ChildPlatform $platform Object to remove from the list of results
      *
-     * @return $this|ChildPlatformsQuery The current query, for fluid interface
+     * @return $this|ChildPlatformQuery The current query, for fluid interface
      */
-    public function prune($platforms = null)
+    public function prune($platform = null)
     {
-        if ($platforms) {
-            $this->addUsingAlias(PlatformsTableMap::COL_ID, $platforms->getId(), Criteria::NOT_EQUAL);
+        if ($platform) {
+            $this->addUsingAlias(PlatformTableMap::COL_ID, $platform->getId(), Criteria::NOT_EQUAL);
         }
 
         return $this;
     }
 
     /**
-     * Deletes all rows from the platforms table.
+     * Deletes all rows from the platform table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
@@ -669,7 +669,7 @@ abstract class PlatformsQuery extends ModelCriteria
     public function doDeleteAll(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PlatformsTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PlatformTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -680,8 +680,8 @@ abstract class PlatformsQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            PlatformsTableMap::clearInstancePool();
-            PlatformsTableMap::clearRelatedInstancePool();
+            PlatformTableMap::clearInstancePool();
+            PlatformTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -699,26 +699,26 @@ abstract class PlatformsQuery extends ModelCriteria
     public function delete(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PlatformsTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PlatformTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(PlatformsTableMap::DATABASE_NAME);
+        $criteria->setDbName(PlatformTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
             
-            PlatformsTableMap::removeInstanceFromPool($criteria);
+            PlatformTableMap::removeInstanceFromPool($criteria);
         
             $affectedRows += ModelCriteria::delete($con);
-            PlatformsTableMap::clearRelatedInstancePool();
+            PlatformTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
     }
 
-} // PlatformsQuery
+} // PlatformQuery

@@ -172,9 +172,9 @@ class RatingHeaderTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
-        $this->addForeignKey('game_id', 'GameId', 'BIGINT', 'games', 'id', true, null, null);
+        $this->addForeignKey('game_id', 'GameId', 'BIGINT', 'game', 'id', true, null, null);
         $this->addForeignKey('user_id', 'UserId', 'BIGINT', 'user', 'id', true, null, null);
-        $this->addForeignKey('platform_id', 'PlatformId', 'BIGINT', 'platforms', 'id', true, null, null);
+        $this->addForeignKey('platform_id', 'PlatformId', 'BIGINT', 'platform', 'id', true, null, null);
         $this->addColumn('created', 'Created', 'TIMESTAMP', true, null, null);
         $this->addColumn('updated', 'Updated', 'TIMESTAMP', true, null, null);
         $this->addColumn('upvotes', 'Upvotes', 'BIGINT', true, null, 0);
@@ -188,7 +188,7 @@ class RatingHeaderTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Games', '\\Games', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('Game', '\\Game', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':game_id',
@@ -202,7 +202,7 @@ class RatingHeaderTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, null, false);
-        $this->addRelation('Platforms', '\\Platforms', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('Platform', '\\Platform', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':platform_id',

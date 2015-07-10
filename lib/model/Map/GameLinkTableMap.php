@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \GameLinks;
-use \GameLinksQuery;
+use \GameLink;
+use \GameLinkQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'game_links' table.
+ * This class defines the structure of the 'game_link' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class GameLinksTableMap extends TableMap
+class GameLinkTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class GameLinksTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = '.Map.GameLinksTableMap';
+    const CLASS_NAME = '.Map.GameLinkTableMap';
 
     /**
      * The default database name for this class
@@ -44,17 +44,17 @@ class GameLinksTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'game_links';
+    const TABLE_NAME = 'game_link';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\GameLinks';
+    const OM_CLASS = '\\GameLink';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'GameLinks';
+    const CLASS_DEFAULT = 'GameLink';
 
     /**
      * The total number of columns
@@ -74,22 +74,22 @@ class GameLinksTableMap extends TableMap
     /**
      * the column name for the id field
      */
-    const COL_ID = 'game_links.id';
+    const COL_ID = 'game_link.id';
 
     /**
      * the column name for the game_id field
      */
-    const COL_GAME_ID = 'game_links.game_id';
+    const COL_GAME_ID = 'game_link.game_id';
 
     /**
      * the column name for the game_link_type_id field
      */
-    const COL_GAME_LINK_TYPE_ID = 'game_links.game_link_type_id';
+    const COL_GAME_LINK_TYPE_ID = 'game_link.game_link_type_id';
 
     /**
      * the column name for the value field
      */
-    const COL_VALUE = 'game_links.value';
+    const COL_VALUE = 'game_link.value';
 
     /**
      * The default string format for model objects of the related table
@@ -105,7 +105,7 @@ class GameLinksTableMap extends TableMap
     protected static $fieldNames = array (
         self::TYPE_PHPNAME       => array('Id', 'GameId', 'GameLinkTypeId', 'Value', ),
         self::TYPE_CAMELNAME     => array('id', 'gameId', 'gameLinkTypeId', 'value', ),
-        self::TYPE_COLNAME       => array(GameLinksTableMap::COL_ID, GameLinksTableMap::COL_GAME_ID, GameLinksTableMap::COL_GAME_LINK_TYPE_ID, GameLinksTableMap::COL_VALUE, ),
+        self::TYPE_COLNAME       => array(GameLinkTableMap::COL_ID, GameLinkTableMap::COL_GAME_ID, GameLinkTableMap::COL_GAME_LINK_TYPE_ID, GameLinkTableMap::COL_VALUE, ),
         self::TYPE_FIELDNAME     => array('id', 'game_id', 'game_link_type_id', 'value', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
@@ -119,7 +119,7 @@ class GameLinksTableMap extends TableMap
     protected static $fieldKeys = array (
         self::TYPE_PHPNAME       => array('Id' => 0, 'GameId' => 1, 'GameLinkTypeId' => 2, 'Value' => 3, ),
         self::TYPE_CAMELNAME     => array('id' => 0, 'gameId' => 1, 'gameLinkTypeId' => 2, 'value' => 3, ),
-        self::TYPE_COLNAME       => array(GameLinksTableMap::COL_ID => 0, GameLinksTableMap::COL_GAME_ID => 1, GameLinksTableMap::COL_GAME_LINK_TYPE_ID => 2, GameLinksTableMap::COL_VALUE => 3, ),
+        self::TYPE_COLNAME       => array(GameLinkTableMap::COL_ID => 0, GameLinkTableMap::COL_GAME_ID => 1, GameLinkTableMap::COL_GAME_LINK_TYPE_ID => 2, GameLinkTableMap::COL_VALUE => 3, ),
         self::TYPE_FIELDNAME     => array('id' => 0, 'game_id' => 1, 'game_link_type_id' => 2, 'value' => 3, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
@@ -134,16 +134,16 @@ class GameLinksTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('game_links');
-        $this->setPhpName('GameLinks');
+        $this->setName('game_link');
+        $this->setPhpName('GameLink');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\GameLinks');
+        $this->setClassName('\\GameLink');
         $this->setPackage('');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
-        $this->addForeignKey('game_id', 'GameId', 'BIGINT', 'games', 'id', true, null, null);
-        $this->addForeignKey('game_link_type_id', 'GameLinkTypeId', 'BIGINT', 'game_link_types', 'id', true, null, null);
+        $this->addForeignKey('game_id', 'GameId', 'BIGINT', 'game', 'id', true, null, null);
+        $this->addForeignKey('game_link_type_id', 'GameLinkTypeId', 'BIGINT', 'game_link_type', 'id', true, null, null);
         $this->addColumn('value', 'Value', 'LONGVARCHAR', true, null, null);
     } // initialize()
 
@@ -152,14 +152,14 @@ class GameLinksTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Games', '\\Games', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('Game', '\\Game', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':game_id',
     1 => ':id',
   ),
 ), 'CASCADE', 'CASCADE', null, false);
-        $this->addRelation('GameLinkTypes', '\\GameLinkTypes', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('GameLinkType', '\\GameLinkType', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':game_link_type_id',
@@ -225,7 +225,7 @@ class GameLinksTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? GameLinksTableMap::CLASS_DEFAULT : GameLinksTableMap::OM_CLASS;
+        return $withPrefix ? GameLinkTableMap::CLASS_DEFAULT : GameLinkTableMap::OM_CLASS;
     }
 
     /**
@@ -239,22 +239,22 @@ class GameLinksTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (GameLinks object, last column rank)
+     * @return array           (GameLink object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = GameLinksTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = GameLinksTableMap::getInstanceFromPool($key))) {
+        $key = GameLinkTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = GameLinkTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + GameLinksTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + GameLinkTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = GameLinksTableMap::OM_CLASS;
-            /** @var GameLinks $obj */
+            $cls = GameLinkTableMap::OM_CLASS;
+            /** @var GameLink $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            GameLinksTableMap::addInstanceToPool($obj, $key);
+            GameLinkTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -277,18 +277,18 @@ class GameLinksTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = GameLinksTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = GameLinksTableMap::getInstanceFromPool($key))) {
+            $key = GameLinkTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = GameLinkTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var GameLinks $obj */
+                /** @var GameLink $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                GameLinksTableMap::addInstanceToPool($obj, $key);
+                GameLinkTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -309,10 +309,10 @@ class GameLinksTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(GameLinksTableMap::COL_ID);
-            $criteria->addSelectColumn(GameLinksTableMap::COL_GAME_ID);
-            $criteria->addSelectColumn(GameLinksTableMap::COL_GAME_LINK_TYPE_ID);
-            $criteria->addSelectColumn(GameLinksTableMap::COL_VALUE);
+            $criteria->addSelectColumn(GameLinkTableMap::COL_ID);
+            $criteria->addSelectColumn(GameLinkTableMap::COL_GAME_ID);
+            $criteria->addSelectColumn(GameLinkTableMap::COL_GAME_LINK_TYPE_ID);
+            $criteria->addSelectColumn(GameLinkTableMap::COL_VALUE);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.game_id');
@@ -330,7 +330,7 @@ class GameLinksTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(GameLinksTableMap::DATABASE_NAME)->getTable(GameLinksTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(GameLinkTableMap::DATABASE_NAME)->getTable(GameLinkTableMap::TABLE_NAME);
     }
 
     /**
@@ -338,16 +338,16 @@ class GameLinksTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(GameLinksTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(GameLinksTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new GameLinksTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(GameLinkTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(GameLinkTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new GameLinkTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a GameLinks or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a GameLink or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or GameLinks object or primary key or array of primary keys
+     * @param mixed               $values Criteria or GameLink object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -358,27 +358,27 @@ class GameLinksTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(GameLinksTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(GameLinkTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \GameLinks) { // it's a model object
+        } elseif ($values instanceof \GameLink) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(GameLinksTableMap::DATABASE_NAME);
-            $criteria->add(GameLinksTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(GameLinkTableMap::DATABASE_NAME);
+            $criteria->add(GameLinkTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = GameLinksQuery::create()->mergeWith($criteria);
+        $query = GameLinkQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            GameLinksTableMap::clearInstancePool();
+            GameLinkTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                GameLinksTableMap::removeInstanceFromPool($singleval);
+                GameLinkTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -386,20 +386,20 @@ class GameLinksTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the game_links table.
+     * Deletes all rows from the game_link table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return GameLinksQuery::create()->doDeleteAll($con);
+        return GameLinkQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a GameLinks or Criteria object.
+     * Performs an INSERT on the database, given a GameLink or Criteria object.
      *
-     * @param mixed               $criteria Criteria or GameLinks object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or GameLink object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -408,22 +408,22 @@ class GameLinksTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(GameLinksTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(GameLinkTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from GameLinks object
+            $criteria = $criteria->buildCriteria(); // build Criteria from GameLink object
         }
 
-        if ($criteria->containsKey(GameLinksTableMap::COL_ID) && $criteria->keyContainsValue(GameLinksTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.GameLinksTableMap::COL_ID.')');
+        if ($criteria->containsKey(GameLinkTableMap::COL_ID) && $criteria->keyContainsValue(GameLinkTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.GameLinkTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = GameLinksQuery::create()->mergeWith($criteria);
+        $query = GameLinkQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -432,7 +432,7 @@ class GameLinksTableMap extends TableMap
         });
     }
 
-} // GameLinksTableMap
+} // GameLinkTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-GameLinksTableMap::buildTableMap();
+GameLinkTableMap::buildTableMap();

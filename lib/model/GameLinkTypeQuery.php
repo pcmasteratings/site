@@ -1,9 +1,9 @@
 <?php
 
-use Base\Platforms as BasePlatforms;
+use Base\GameLinkTypeQuery as BaseGameLinkTypeQuery;
 
 /**
- * Skeleton subclass for representing a row from the 'platforms' table.
+ * Skeleton subclass for performing query and update operations on the 'game_link_type' table.
  *
  * 
  *
@@ -12,7 +12,7 @@ use Base\Platforms as BasePlatforms;
  * long as it does not already exist in the output directory.
  *
  */
-class Platforms extends BasePlatforms
+class GameLinkTypeQuery extends BaseGameLinkTypeQuery
 {
 
 }

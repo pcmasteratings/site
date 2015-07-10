@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \GameLinkTypes;
-use \GameLinkTypesQuery;
+use \GamePlatform;
+use \GamePlatformQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'game_link_types' table.
+ * This class defines the structure of the 'game_platform' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class GameLinkTypesTableMap extends TableMap
+class GamePlatformTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class GameLinkTypesTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = '.Map.GameLinkTypesTableMap';
+    const CLASS_NAME = '.Map.GamePlatformTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class GameLinkTypesTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'game_link_types';
+    const TABLE_NAME = 'game_platform';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\GameLinkTypes';
+    const OM_CLASS = '\\GamePlatform';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'GameLinkTypes';
+    const CLASS_DEFAULT = 'GamePlatform';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 2;
 
     /**
      * The number of lazy-loaded columns
@@ -69,27 +69,17 @@ class GameLinkTypesTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 4;
+    const NUM_HYDRATE_COLUMNS = 2;
 
     /**
-     * the column name for the id field
+     * the column name for the game_id field
      */
-    const COL_ID = 'game_link_types.id';
+    const COL_GAME_ID = 'game_platform.game_id';
 
     /**
-     * the column name for the title field
+     * the column name for the platform_id field
      */
-    const COL_TITLE = 'game_link_types.title';
-
-    /**
-     * the column name for the description field
-     */
-    const COL_DESCRIPTION = 'game_link_types.description';
-
-    /**
-     * the column name for the url field
-     */
-    const COL_URL = 'game_link_types.url';
+    const COL_PLATFORM_ID = 'game_platform.platform_id';
 
     /**
      * The default string format for model objects of the related table
@@ -103,11 +93,11 @@ class GameLinkTypesTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Title', 'Description', 'Url', ),
-        self::TYPE_CAMELNAME     => array('id', 'title', 'description', 'url', ),
-        self::TYPE_COLNAME       => array(GameLinkTypesTableMap::COL_ID, GameLinkTypesTableMap::COL_TITLE, GameLinkTypesTableMap::COL_DESCRIPTION, GameLinkTypesTableMap::COL_URL, ),
-        self::TYPE_FIELDNAME     => array('id', 'title', 'description', 'url', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('GameId', 'PlatformId', ),
+        self::TYPE_CAMELNAME     => array('gameId', 'platformId', ),
+        self::TYPE_COLNAME       => array(GamePlatformTableMap::COL_GAME_ID, GamePlatformTableMap::COL_PLATFORM_ID, ),
+        self::TYPE_FIELDNAME     => array('game_id', 'platform_id', ),
+        self::TYPE_NUM           => array(0, 1, )
     );
 
     /**
@@ -117,11 +107,11 @@ class GameLinkTypesTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Title' => 1, 'Description' => 2, 'Url' => 3, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'title' => 1, 'description' => 2, 'url' => 3, ),
-        self::TYPE_COLNAME       => array(GameLinkTypesTableMap::COL_ID => 0, GameLinkTypesTableMap::COL_TITLE => 1, GameLinkTypesTableMap::COL_DESCRIPTION => 2, GameLinkTypesTableMap::COL_URL => 3, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'title' => 1, 'description' => 2, 'url' => 3, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('GameId' => 0, 'PlatformId' => 1, ),
+        self::TYPE_CAMELNAME     => array('gameId' => 0, 'platformId' => 1, ),
+        self::TYPE_COLNAME       => array(GamePlatformTableMap::COL_GAME_ID => 0, GamePlatformTableMap::COL_PLATFORM_ID => 1, ),
+        self::TYPE_FIELDNAME     => array('game_id' => 0, 'platform_id' => 1, ),
+        self::TYPE_NUM           => array(0, 1, )
     );
 
     /**
@@ -134,17 +124,15 @@ class GameLinkTypesTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('game_link_types');
-        $this->setPhpName('GameLinkTypes');
+        $this->setName('game_platform');
+        $this->setPhpName('GamePlatform');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\GameLinkTypes');
+        $this->setClassName('\\GamePlatform');
         $this->setPackage('');
-        $this->setUseIdGenerator(true);
+        $this->setUseIdGenerator(false);
         // columns
-        $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
-        $this->addColumn('title', 'Title', 'LONGVARCHAR', true, null, null);
-        $this->addColumn('description', 'Description', 'CLOB', true, null, null);
-        $this->addColumn('url', 'Url', 'LONGVARCHAR', true, null, null);
+        $this->addForeignPrimaryKey('game_id', 'GameId', 'BIGINT' , 'game', 'id', true, null, null);
+        $this->addForeignPrimaryKey('platform_id', 'PlatformId', 'BIGINT' , 'platform', 'id', true, null, null);
     } // initialize()
 
     /**
@@ -152,14 +140,74 @@ class GameLinkTypesTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('GameLinks', '\\GameLinks', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('Platform', '\\Platform', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':game_link_type_id',
+    0 => ':platform_id',
     1 => ':id',
   ),
-), null, null, 'GameLinkss', false);
+), 'CASCADE', 'CASCADE', null, false);
+        $this->addRelation('Game', '\\Game', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':game_id',
+    1 => ':id',
+  ),
+), 'CASCADE', 'CASCADE', null, false);
     } // buildRelations()
+
+    /**
+     * Adds an object to the instance pool.
+     *
+     * Propel keeps cached copies of objects in an instance pool when they are retrieved
+     * from the database. In some cases you may need to explicitly add objects
+     * to the cache in order to ensure that the same objects are always returned by find*()
+     * and findPk*() calls.
+     *
+     * @param \GamePlatform $obj A \GamePlatform object.
+     * @param string $key             (optional) key to use for instance map (for performance boost if key was already calculated externally).
+     */
+    public static function addInstanceToPool($obj, $key = null)
+    {
+        if (Propel::isInstancePoolingEnabled()) {
+            if (null === $key) {
+                $key = serialize(array((string) $obj->getGameId(), (string) $obj->getPlatformId()));
+            } // if key === null
+            self::$instances[$key] = $obj;
+        }
+    }
+
+    /**
+     * Removes an object from the instance pool.
+     *
+     * Propel keeps cached copies of objects in an instance pool when they are retrieved
+     * from the database.  In some cases -- especially when you override doDelete
+     * methods in your stub classes -- you may need to explicitly remove objects
+     * from the cache in order to prevent returning objects that no longer exist.
+     *
+     * @param mixed $value A \GamePlatform object or a primary key value.
+     */
+    public static function removeInstanceFromPool($value)
+    {
+        if (Propel::isInstancePoolingEnabled() && null !== $value) {
+            if (is_object($value) && $value instanceof \GamePlatform) {
+                $key = serialize(array((string) $value->getGameId(), (string) $value->getPlatformId()));
+
+            } elseif (is_array($value) && count($value) === 2) {
+                // assume we've been passed a primary key";
+                $key = serialize(array((string) $value[0], (string) $value[1]));
+            } elseif ($value instanceof Criteria) {
+                self::$instances = [];
+
+                return;
+            } else {
+                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or \GamePlatform object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value, true)));
+                throw $e;
+            }
+
+            unset(self::$instances[$key]);
+        }
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -177,11 +225,11 @@ class GameLinkTypesTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('GameId', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('PlatformId', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+        return serialize(array((string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('GameId', TableMap::TYPE_PHPNAME, $indexType)], (string) $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('PlatformId', TableMap::TYPE_PHPNAME, $indexType)]));
     }
 
     /**
@@ -198,11 +246,20 @@ class GameLinkTypesTableMap extends TableMap
      */
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        return (string) $row[
+            $pks = [];
+            
+        $pks[] = (string) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 0 + $offset
-                : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
+                : self::translateFieldName('GameId', TableMap::TYPE_PHPNAME, $indexType)
         ];
+        $pks[] = (string) $row[
+            $indexType == TableMap::TYPE_NUM
+                ? 1 + $offset
+                : self::translateFieldName('PlatformId', TableMap::TYPE_PHPNAME, $indexType)
+        ];
+
+        return $pks;
     }
     
     /**
@@ -218,7 +275,7 @@ class GameLinkTypesTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? GameLinkTypesTableMap::CLASS_DEFAULT : GameLinkTypesTableMap::OM_CLASS;
+        return $withPrefix ? GamePlatformTableMap::CLASS_DEFAULT : GamePlatformTableMap::OM_CLASS;
     }
 
     /**
@@ -232,22 +289,22 @@ class GameLinkTypesTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (GameLinkTypes object, last column rank)
+     * @return array           (GamePlatform object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = GameLinkTypesTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = GameLinkTypesTableMap::getInstanceFromPool($key))) {
+        $key = GamePlatformTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = GamePlatformTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + GameLinkTypesTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + GamePlatformTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = GameLinkTypesTableMap::OM_CLASS;
-            /** @var GameLinkTypes $obj */
+            $cls = GamePlatformTableMap::OM_CLASS;
+            /** @var GamePlatform $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            GameLinkTypesTableMap::addInstanceToPool($obj, $key);
+            GamePlatformTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -270,18 +327,18 @@ class GameLinkTypesTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = GameLinkTypesTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = GameLinkTypesTableMap::getInstanceFromPool($key))) {
+            $key = GamePlatformTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = GamePlatformTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var GameLinkTypes $obj */
+                /** @var GamePlatform $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                GameLinkTypesTableMap::addInstanceToPool($obj, $key);
+                GamePlatformTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -302,15 +359,11 @@ class GameLinkTypesTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(GameLinkTypesTableMap::COL_ID);
-            $criteria->addSelectColumn(GameLinkTypesTableMap::COL_TITLE);
-            $criteria->addSelectColumn(GameLinkTypesTableMap::COL_DESCRIPTION);
-            $criteria->addSelectColumn(GameLinkTypesTableMap::COL_URL);
+            $criteria->addSelectColumn(GamePlatformTableMap::COL_GAME_ID);
+            $criteria->addSelectColumn(GamePlatformTableMap::COL_PLATFORM_ID);
         } else {
-            $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.title');
-            $criteria->addSelectColumn($alias . '.description');
-            $criteria->addSelectColumn($alias . '.url');
+            $criteria->addSelectColumn($alias . '.game_id');
+            $criteria->addSelectColumn($alias . '.platform_id');
         }
     }
 
@@ -323,7 +376,7 @@ class GameLinkTypesTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(GameLinkTypesTableMap::DATABASE_NAME)->getTable(GameLinkTypesTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(GamePlatformTableMap::DATABASE_NAME)->getTable(GamePlatformTableMap::TABLE_NAME);
     }
 
     /**
@@ -331,16 +384,16 @@ class GameLinkTypesTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(GameLinkTypesTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(GameLinkTypesTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new GameLinkTypesTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(GamePlatformTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(GamePlatformTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new GamePlatformTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a GameLinkTypes or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a GamePlatform or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or GameLinkTypes object or primary key or array of primary keys
+     * @param mixed               $values Criteria or GamePlatform object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -351,27 +404,37 @@ class GameLinkTypesTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(GameLinkTypesTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(GamePlatformTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \GameLinkTypes) { // it's a model object
+        } elseif ($values instanceof \GamePlatform) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(GameLinkTypesTableMap::DATABASE_NAME);
-            $criteria->add(GameLinkTypesTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(GamePlatformTableMap::DATABASE_NAME);
+            // primary key is composite; we therefore, expect
+            // the primary key passed to be an array of pkey values
+            if (count($values) == count($values, COUNT_RECURSIVE)) {
+                // array is not multi-dimensional
+                $values = array($values);
+            }
+            foreach ($values as $value) {
+                $criterion = $criteria->getNewCriterion(GamePlatformTableMap::COL_GAME_ID, $value[0]);
+                $criterion->addAnd($criteria->getNewCriterion(GamePlatformTableMap::COL_PLATFORM_ID, $value[1]));
+                $criteria->addOr($criterion);
+            }
         }
 
-        $query = GameLinkTypesQuery::create()->mergeWith($criteria);
+        $query = GamePlatformQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            GameLinkTypesTableMap::clearInstancePool();
+            GamePlatformTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                GameLinkTypesTableMap::removeInstanceFromPool($singleval);
+                GamePlatformTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -379,20 +442,20 @@ class GameLinkTypesTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the game_link_types table.
+     * Deletes all rows from the game_platform table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return GameLinkTypesQuery::create()->doDeleteAll($con);
+        return GamePlatformQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a GameLinkTypes or Criteria object.
+     * Performs an INSERT on the database, given a GamePlatform or Criteria object.
      *
-     * @param mixed               $criteria Criteria or GameLinkTypes object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or GamePlatform object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -401,22 +464,18 @@ class GameLinkTypesTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(GameLinkTypesTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(GamePlatformTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from GameLinkTypes object
-        }
-
-        if ($criteria->containsKey(GameLinkTypesTableMap::COL_ID) && $criteria->keyContainsValue(GameLinkTypesTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.GameLinkTypesTableMap::COL_ID.')');
+            $criteria = $criteria->buildCriteria(); // build Criteria from GamePlatform object
         }
 
 
         // Set the correct dbName
-        $query = GameLinkTypesQuery::create()->mergeWith($criteria);
+        $query = GamePlatformQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -425,7 +484,7 @@ class GameLinkTypesTableMap extends TableMap
         });
     }
 
-} // GameLinkTypesTableMap
+} // GamePlatformTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-GameLinkTypesTableMap::buildTableMap();
+GamePlatformTableMap::buildTableMap();

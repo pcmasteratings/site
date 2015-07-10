@@ -15,14 +15,14 @@ use Base\Rating as BaseRating;
 class Rating extends BaseRating
 {
     public static function getAllRatings() {
-        $query = new RatingsQuery();
+        $query = new RatingQuery();
         $query->orderByThreshold();
         return $query->find();
     }
 
     public static function getRatingForScore($score) {
-        return RatingsQuery::create()
-            ->where('Ratings.Threshold <= ?',$score)
+        return RatingQuery::create()
+            ->where('Rating.Threshold <= ?',$score)
             ->orderByThreshold("DESC")
             ->findOne();
     }

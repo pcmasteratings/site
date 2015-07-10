@@ -2,11 +2,11 @@
 
 namespace Base;
 
-use \GameLinkTypes as ChildGameLinkTypes;
-use \GameLinkTypesQuery as ChildGameLinkTypesQuery;
+use \GameLinkType as ChildGameLinkType;
+use \GameLinkTypeQuery as ChildGameLinkTypeQuery;
 use \Exception;
 use \PDO;
-use Map\GameLinkTypesTableMap;
+use Map\GameLinkTypeTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -16,84 +16,84 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'game_link_types' table.
+ * Base class that represents a query for the 'game_link_type' table.
  *
  * 
  *
- * @method     ChildGameLinkTypesQuery orderById($order = Criteria::ASC) Order by the id column
- * @method     ChildGameLinkTypesQuery orderByTitle($order = Criteria::ASC) Order by the title column
- * @method     ChildGameLinkTypesQuery orderByDescription($order = Criteria::ASC) Order by the description column
- * @method     ChildGameLinkTypesQuery orderByUrl($order = Criteria::ASC) Order by the url column
+ * @method     ChildGameLinkTypeQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method     ChildGameLinkTypeQuery orderByTitle($order = Criteria::ASC) Order by the title column
+ * @method     ChildGameLinkTypeQuery orderByDescription($order = Criteria::ASC) Order by the description column
+ * @method     ChildGameLinkTypeQuery orderByUrl($order = Criteria::ASC) Order by the url column
  *
- * @method     ChildGameLinkTypesQuery groupById() Group by the id column
- * @method     ChildGameLinkTypesQuery groupByTitle() Group by the title column
- * @method     ChildGameLinkTypesQuery groupByDescription() Group by the description column
- * @method     ChildGameLinkTypesQuery groupByUrl() Group by the url column
+ * @method     ChildGameLinkTypeQuery groupById() Group by the id column
+ * @method     ChildGameLinkTypeQuery groupByTitle() Group by the title column
+ * @method     ChildGameLinkTypeQuery groupByDescription() Group by the description column
+ * @method     ChildGameLinkTypeQuery groupByUrl() Group by the url column
  *
- * @method     ChildGameLinkTypesQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildGameLinkTypesQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildGameLinkTypesQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildGameLinkTypeQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildGameLinkTypeQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildGameLinkTypeQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildGameLinkTypesQuery leftJoinGameLinks($relationAlias = null) Adds a LEFT JOIN clause to the query using the GameLinks relation
- * @method     ChildGameLinkTypesQuery rightJoinGameLinks($relationAlias = null) Adds a RIGHT JOIN clause to the query using the GameLinks relation
- * @method     ChildGameLinkTypesQuery innerJoinGameLinks($relationAlias = null) Adds a INNER JOIN clause to the query using the GameLinks relation
+ * @method     ChildGameLinkTypeQuery leftJoinGameLink($relationAlias = null) Adds a LEFT JOIN clause to the query using the GameLink relation
+ * @method     ChildGameLinkTypeQuery rightJoinGameLink($relationAlias = null) Adds a RIGHT JOIN clause to the query using the GameLink relation
+ * @method     ChildGameLinkTypeQuery innerJoinGameLink($relationAlias = null) Adds a INNER JOIN clause to the query using the GameLink relation
  *
- * @method     \GameLinksQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \GameLinkQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildGameLinkTypes findOne(ConnectionInterface $con = null) Return the first ChildGameLinkTypes matching the query
- * @method     ChildGameLinkTypes findOneOrCreate(ConnectionInterface $con = null) Return the first ChildGameLinkTypes matching the query, or a new ChildGameLinkTypes object populated from the query conditions when no match is found
+ * @method     ChildGameLinkType findOne(ConnectionInterface $con = null) Return the first ChildGameLinkType matching the query
+ * @method     ChildGameLinkType findOneOrCreate(ConnectionInterface $con = null) Return the first ChildGameLinkType matching the query, or a new ChildGameLinkType object populated from the query conditions when no match is found
  *
- * @method     ChildGameLinkTypes findOneById(string $id) Return the first ChildGameLinkTypes filtered by the id column
- * @method     ChildGameLinkTypes findOneByTitle(string $title) Return the first ChildGameLinkTypes filtered by the title column
- * @method     ChildGameLinkTypes findOneByDescription(string $description) Return the first ChildGameLinkTypes filtered by the description column
- * @method     ChildGameLinkTypes findOneByUrl(string $url) Return the first ChildGameLinkTypes filtered by the url column *
+ * @method     ChildGameLinkType findOneById(string $id) Return the first ChildGameLinkType filtered by the id column
+ * @method     ChildGameLinkType findOneByTitle(string $title) Return the first ChildGameLinkType filtered by the title column
+ * @method     ChildGameLinkType findOneByDescription(string $description) Return the first ChildGameLinkType filtered by the description column
+ * @method     ChildGameLinkType findOneByUrl(string $url) Return the first ChildGameLinkType filtered by the url column *
 
- * @method     ChildGameLinkTypes requirePk($key, ConnectionInterface $con = null) Return the ChildGameLinkTypes by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGameLinkTypes requireOne(ConnectionInterface $con = null) Return the first ChildGameLinkTypes matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGameLinkType requirePk($key, ConnectionInterface $con = null) Return the ChildGameLinkType by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGameLinkType requireOne(ConnectionInterface $con = null) Return the first ChildGameLinkType matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildGameLinkTypes requireOneById(string $id) Return the first ChildGameLinkTypes filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGameLinkTypes requireOneByTitle(string $title) Return the first ChildGameLinkTypes filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGameLinkTypes requireOneByDescription(string $description) Return the first ChildGameLinkTypes filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGameLinkTypes requireOneByUrl(string $url) Return the first ChildGameLinkTypes filtered by the url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGameLinkType requireOneById(string $id) Return the first ChildGameLinkType filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGameLinkType requireOneByTitle(string $title) Return the first ChildGameLinkType filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGameLinkType requireOneByDescription(string $description) Return the first ChildGameLinkType filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGameLinkType requireOneByUrl(string $url) Return the first ChildGameLinkType filtered by the url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildGameLinkTypes[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildGameLinkTypes objects based on current ModelCriteria
- * @method     ChildGameLinkTypes[]|ObjectCollection findById(string $id) Return ChildGameLinkTypes objects filtered by the id column
- * @method     ChildGameLinkTypes[]|ObjectCollection findByTitle(string $title) Return ChildGameLinkTypes objects filtered by the title column
- * @method     ChildGameLinkTypes[]|ObjectCollection findByDescription(string $description) Return ChildGameLinkTypes objects filtered by the description column
- * @method     ChildGameLinkTypes[]|ObjectCollection findByUrl(string $url) Return ChildGameLinkTypes objects filtered by the url column
- * @method     ChildGameLinkTypes[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildGameLinkType[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildGameLinkType objects based on current ModelCriteria
+ * @method     ChildGameLinkType[]|ObjectCollection findById(string $id) Return ChildGameLinkType objects filtered by the id column
+ * @method     ChildGameLinkType[]|ObjectCollection findByTitle(string $title) Return ChildGameLinkType objects filtered by the title column
+ * @method     ChildGameLinkType[]|ObjectCollection findByDescription(string $description) Return ChildGameLinkType objects filtered by the description column
+ * @method     ChildGameLinkType[]|ObjectCollection findByUrl(string $url) Return ChildGameLinkType objects filtered by the url column
+ * @method     ChildGameLinkType[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
-abstract class GameLinkTypesQuery extends ModelCriteria
+abstract class GameLinkTypeQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \Base\GameLinkTypesQuery object.
+     * Initializes internal state of \Base\GameLinkTypeQuery object.
      *
      * @param     string $dbName The database name
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = '\\GameLinkTypes', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\GameLinkType', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new ChildGameLinkTypesQuery object.
+     * Returns a new ChildGameLinkTypeQuery object.
      *
      * @param     string $modelAlias The alias of a model in the query
      * @param     Criteria $criteria Optional Criteria to build the query from
      *
-     * @return ChildGameLinkTypesQuery
+     * @return ChildGameLinkTypeQuery
      */
     public static function create($modelAlias = null, Criteria $criteria = null)
     {
-        if ($criteria instanceof ChildGameLinkTypesQuery) {
+        if ($criteria instanceof ChildGameLinkTypeQuery) {
             return $criteria;
         }
-        $query = new ChildGameLinkTypesQuery();
+        $query = new ChildGameLinkTypeQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -116,19 +116,19 @@ abstract class GameLinkTypesQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return ChildGameLinkTypes|array|mixed the result, formatted by the current formatter
+     * @return ChildGameLinkType|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
         }
-        if ((null !== ($obj = GameLinkTypesTableMap::getInstanceFromPool((string) $key))) && !$this->formatter) {
+        if ((null !== ($obj = GameLinkTypeTableMap::getInstanceFromPool((string) $key))) && !$this->formatter) {
             // the object is already in the instance pool
             return $obj;
         }
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(GameLinkTypesTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(GameLinkTypeTableMap::DATABASE_NAME);
         }
         $this->basePreSelect($con);
         if ($this->formatter || $this->modelAlias || $this->with || $this->select
@@ -149,11 +149,11 @@ abstract class GameLinkTypesQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildGameLinkTypes A model object, or null if the key is not found
+     * @return ChildGameLinkType A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, title, description, url FROM game_link_types WHERE id = :p0';
+        $sql = 'SELECT id, title, description, url FROM game_link_type WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -164,10 +164,10 @@ abstract class GameLinkTypesQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildGameLinkTypes $obj */
-            $obj = new ChildGameLinkTypes();
+            /** @var ChildGameLinkType $obj */
+            $obj = new ChildGameLinkType();
             $obj->hydrate($row);
-            GameLinkTypesTableMap::addInstanceToPool($obj, (string) $key);
+            GameLinkTypeTableMap::addInstanceToPool($obj, (string) $key);
         }
         $stmt->closeCursor();
 
@@ -180,7 +180,7 @@ abstract class GameLinkTypesQuery extends ModelCriteria
      * @param     mixed $key Primary key to use for the query
      * @param     ConnectionInterface $con A connection object
      *
-     * @return ChildGameLinkTypes|array|mixed the result, formatted by the current formatter
+     * @return ChildGameLinkType|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -222,12 +222,12 @@ abstract class GameLinkTypesQuery extends ModelCriteria
      *
      * @param     mixed $key Primary key to use for the query
      *
-     * @return $this|ChildGameLinkTypesQuery The current query, for fluid interface
+     * @return $this|ChildGameLinkTypeQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(GameLinkTypesTableMap::COL_ID, $key, Criteria::EQUAL);
+        return $this->addUsingAlias(GameLinkTypeTableMap::COL_ID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -235,12 +235,12 @@ abstract class GameLinkTypesQuery extends ModelCriteria
      *
      * @param     array $keys The list of primary key to use for the query
      *
-     * @return $this|ChildGameLinkTypesQuery The current query, for fluid interface
+     * @return $this|ChildGameLinkTypeQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(GameLinkTypesTableMap::COL_ID, $keys, Criteria::IN);
+        return $this->addUsingAlias(GameLinkTypeTableMap::COL_ID, $keys, Criteria::IN);
     }
 
     /**
@@ -259,18 +259,18 @@ abstract class GameLinkTypesQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGameLinkTypesQuery The current query, for fluid interface
+     * @return $this|ChildGameLinkTypeQuery The current query, for fluid interface
      */
     public function filterById($id = null, $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
             if (isset($id['min'])) {
-                $this->addUsingAlias(GameLinkTypesTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(GameLinkTypeTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($id['max'])) {
-                $this->addUsingAlias(GameLinkTypesTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(GameLinkTypeTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -281,7 +281,7 @@ abstract class GameLinkTypesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GameLinkTypesTableMap::COL_ID, $id, $comparison);
+        return $this->addUsingAlias(GameLinkTypeTableMap::COL_ID, $id, $comparison);
     }
 
     /**
@@ -297,7 +297,7 @@ abstract class GameLinkTypesQuery extends ModelCriteria
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGameLinkTypesQuery The current query, for fluid interface
+     * @return $this|ChildGameLinkTypeQuery The current query, for fluid interface
      */
     public function filterByTitle($title = null, $comparison = null)
     {
@@ -310,7 +310,7 @@ abstract class GameLinkTypesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GameLinkTypesTableMap::COL_TITLE, $title, $comparison);
+        return $this->addUsingAlias(GameLinkTypeTableMap::COL_TITLE, $title, $comparison);
     }
 
     /**
@@ -326,7 +326,7 @@ abstract class GameLinkTypesQuery extends ModelCriteria
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGameLinkTypesQuery The current query, for fluid interface
+     * @return $this|ChildGameLinkTypeQuery The current query, for fluid interface
      */
     public function filterByDescription($description = null, $comparison = null)
     {
@@ -339,7 +339,7 @@ abstract class GameLinkTypesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GameLinkTypesTableMap::COL_DESCRIPTION, $description, $comparison);
+        return $this->addUsingAlias(GameLinkTypeTableMap::COL_DESCRIPTION, $description, $comparison);
     }
 
     /**
@@ -355,7 +355,7 @@ abstract class GameLinkTypesQuery extends ModelCriteria
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGameLinkTypesQuery The current query, for fluid interface
+     * @return $this|ChildGameLinkTypeQuery The current query, for fluid interface
      */
     public function filterByUrl($url = null, $comparison = null)
     {
@@ -368,44 +368,44 @@ abstract class GameLinkTypesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GameLinkTypesTableMap::COL_URL, $url, $comparison);
+        return $this->addUsingAlias(GameLinkTypeTableMap::COL_URL, $url, $comparison);
     }
 
     /**
-     * Filter the query by a related \GameLinks object
+     * Filter the query by a related \GameLink object
      *
-     * @param \GameLinks|ObjectCollection $gameLinks the related object to use as filter
+     * @param \GameLink|ObjectCollection $gameLink the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildGameLinkTypesQuery The current query, for fluid interface
+     * @return ChildGameLinkTypeQuery The current query, for fluid interface
      */
-    public function filterByGameLinks($gameLinks, $comparison = null)
+    public function filterByGameLink($gameLink, $comparison = null)
     {
-        if ($gameLinks instanceof \GameLinks) {
+        if ($gameLink instanceof \GameLink) {
             return $this
-                ->addUsingAlias(GameLinkTypesTableMap::COL_ID, $gameLinks->getGameLinkTypeId(), $comparison);
-        } elseif ($gameLinks instanceof ObjectCollection) {
+                ->addUsingAlias(GameLinkTypeTableMap::COL_ID, $gameLink->getGameLinkTypeId(), $comparison);
+        } elseif ($gameLink instanceof ObjectCollection) {
             return $this
-                ->useGameLinksQuery()
-                ->filterByPrimaryKeys($gameLinks->getPrimaryKeys())
+                ->useGameLinkQuery()
+                ->filterByPrimaryKeys($gameLink->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByGameLinks() only accepts arguments of type \GameLinks or Collection');
+            throw new PropelException('filterByGameLink() only accepts arguments of type \GameLink or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the GameLinks relation
+     * Adds a JOIN clause to the query using the GameLink relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildGameLinkTypesQuery The current query, for fluid interface
+     * @return $this|ChildGameLinkTypeQuery The current query, for fluid interface
      */
-    public function joinGameLinks($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinGameLink($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('GameLinks');
+        $relationMap = $tableMap->getRelation('GameLink');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -420,14 +420,14 @@ abstract class GameLinkTypesQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'GameLinks');
+            $this->addJoinObject($join, 'GameLink');
         }
 
         return $this;
     }
 
     /**
-     * Use the GameLinks relation GameLinks object
+     * Use the GameLink relation GameLink object
      *
      * @see useQuery()
      *
@@ -435,33 +435,33 @@ abstract class GameLinkTypesQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \GameLinksQuery A secondary query class using the current class as primary query
+     * @return \GameLinkQuery A secondary query class using the current class as primary query
      */
-    public function useGameLinksQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useGameLinkQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinGameLinks($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'GameLinks', '\GameLinksQuery');
+            ->joinGameLink($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'GameLink', '\GameLinkQuery');
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildGameLinkTypes $gameLinkTypes Object to remove from the list of results
+     * @param   ChildGameLinkType $gameLinkType Object to remove from the list of results
      *
-     * @return $this|ChildGameLinkTypesQuery The current query, for fluid interface
+     * @return $this|ChildGameLinkTypeQuery The current query, for fluid interface
      */
-    public function prune($gameLinkTypes = null)
+    public function prune($gameLinkType = null)
     {
-        if ($gameLinkTypes) {
-            $this->addUsingAlias(GameLinkTypesTableMap::COL_ID, $gameLinkTypes->getId(), Criteria::NOT_EQUAL);
+        if ($gameLinkType) {
+            $this->addUsingAlias(GameLinkTypeTableMap::COL_ID, $gameLinkType->getId(), Criteria::NOT_EQUAL);
         }
 
         return $this;
     }
 
     /**
-     * Deletes all rows from the game_link_types table.
+     * Deletes all rows from the game_link_type table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
@@ -469,7 +469,7 @@ abstract class GameLinkTypesQuery extends ModelCriteria
     public function doDeleteAll(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(GameLinkTypesTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(GameLinkTypeTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -480,8 +480,8 @@ abstract class GameLinkTypesQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            GameLinkTypesTableMap::clearInstancePool();
-            GameLinkTypesTableMap::clearRelatedInstancePool();
+            GameLinkTypeTableMap::clearInstancePool();
+            GameLinkTypeTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -499,26 +499,26 @@ abstract class GameLinkTypesQuery extends ModelCriteria
     public function delete(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(GameLinkTypesTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(GameLinkTypeTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(GameLinkTypesTableMap::DATABASE_NAME);
+        $criteria->setDbName(GameLinkTypeTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
             
-            GameLinkTypesTableMap::removeInstanceFromPool($criteria);
+            GameLinkTypeTableMap::removeInstanceFromPool($criteria);
         
             $affectedRows += ModelCriteria::delete($con);
-            GameLinkTypesTableMap::clearRelatedInstancePool();
+            GameLinkTypeTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
     }
 
-} // GameLinkTypesQuery
+} // GameLinkTypeQuery

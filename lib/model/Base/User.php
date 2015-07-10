@@ -110,11 +110,11 @@ abstract class User implements ActiveRecordInterface
     protected $admin;
 
     /**
-     * The value for the mod field.
+     * The value for the moderator field.
      * Note: this column has a database default value of: false
      * @var        boolean
      */
-    protected $mod;
+    protected $moderator;
 
     /**
      * The value for the probation field.
@@ -207,7 +207,7 @@ abstract class User implements ActiveRecordInterface
     {
         $this->trusted = false;
         $this->admin = false;
-        $this->mod = false;
+        $this->moderator = false;
         $this->banned = false;
     }
 
@@ -511,23 +511,23 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
-     * Get the [mod] column value.
+     * Get the [moderator] column value.
      * 
      * @return boolean
      */
-    public function getMod()
+    public function getModerator()
     {
-        return $this->mod;
+        return $this->moderator;
     }
 
     /**
-     * Get the [mod] column value.
+     * Get the [moderator] column value.
      * 
      * @return boolean
      */
-    public function isMod()
+    public function isModerator()
     {
-        return $this->getMod();
+        return $this->getModerator();
     }
 
     /**
@@ -707,7 +707,7 @@ abstract class User implements ActiveRecordInterface
     } // setAdmin()
 
     /**
-     * Sets the value of the [mod] column.
+     * Sets the value of the [moderator] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
@@ -716,7 +716,7 @@ abstract class User implements ActiveRecordInterface
      * @param  boolean|integer|string $v The new value
      * @return $this|\User The current object (for fluent API support)
      */
-    public function setMod($v)
+    public function setModerator($v)
     {
         if ($v !== null) {
             if (is_string($v)) {
@@ -726,13 +726,13 @@ abstract class User implements ActiveRecordInterface
             }
         }
 
-        if ($this->mod !== $v) {
-            $this->mod = $v;
-            $this->modifiedColumns[UserTableMap::COL_MOD] = true;
+        if ($this->moderator !== $v) {
+            $this->moderator = $v;
+            $this->modifiedColumns[UserTableMap::COL_MODERATOR] = true;
         }
 
         return $this;
-    } // setMod()
+    } // setModerator()
 
     /**
      * Sets the value of the [probation] column.
@@ -808,7 +808,7 @@ abstract class User implements ActiveRecordInterface
                 return false;
             }
 
-            if ($this->mod !== false) {
+            if ($this->moderator !== false) {
                 return false;
             }
 
@@ -860,8 +860,8 @@ abstract class User implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : UserTableMap::translateFieldName('Admin', TableMap::TYPE_PHPNAME, $indexType)];
             $this->admin = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : UserTableMap::translateFieldName('Mod', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->mod = (null !== $col) ? (boolean) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : UserTableMap::translateFieldName('Moderator', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->moderator = (null !== $col) ? (boolean) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : UserTableMap::translateFieldName('Probation', TableMap::TYPE_PHPNAME, $indexType)];
             $this->probation = (null !== $col) ? (boolean) $col : null;
@@ -1186,8 +1186,8 @@ abstract class User implements ActiveRecordInterface
         if ($this->isColumnModified(UserTableMap::COL_ADMIN)) {
             $modifiedColumns[':p' . $index++]  = 'admin';
         }
-        if ($this->isColumnModified(UserTableMap::COL_MOD)) {
-            $modifiedColumns[':p' . $index++]  = 'mod';
+        if ($this->isColumnModified(UserTableMap::COL_MODERATOR)) {
+            $modifiedColumns[':p' . $index++]  = 'moderator';
         }
         if ($this->isColumnModified(UserTableMap::COL_PROBATION)) {
             $modifiedColumns[':p' . $index++]  = 'probation';
@@ -1224,8 +1224,8 @@ abstract class User implements ActiveRecordInterface
                     case 'admin':
                         $stmt->bindValue($identifier, (int) $this->admin, PDO::PARAM_INT);
                         break;
-                    case 'mod':
-                        $stmt->bindValue($identifier, (int) $this->mod, PDO::PARAM_INT);
+                    case 'moderator':
+                        $stmt->bindValue($identifier, (int) $this->moderator, PDO::PARAM_INT);
                         break;
                     case 'probation':
                         $stmt->bindValue($identifier, (int) $this->probation, PDO::PARAM_INT);
@@ -1314,7 +1314,7 @@ abstract class User implements ActiveRecordInterface
                 return $this->getAdmin();
                 break;
             case 6:
-                return $this->getMod();
+                return $this->getModerator();
                 break;
             case 7:
                 return $this->getProbation();
@@ -1358,7 +1358,7 @@ abstract class User implements ActiveRecordInterface
             $keys[3] => $this->getRedditId(),
             $keys[4] => $this->getTrusted(),
             $keys[5] => $this->getAdmin(),
-            $keys[6] => $this->getMod(),
+            $keys[6] => $this->getModerator(),
             $keys[7] => $this->getProbation(),
             $keys[8] => $this->getBanned(),
         );
@@ -1496,7 +1496,7 @@ abstract class User implements ActiveRecordInterface
                 $this->setAdmin($value);
                 break;
             case 6:
-                $this->setMod($value);
+                $this->setModerator($value);
                 break;
             case 7:
                 $this->setProbation($value);
@@ -1549,7 +1549,7 @@ abstract class User implements ActiveRecordInterface
             $this->setAdmin($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setMod($arr[$keys[6]]);
+            $this->setModerator($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
             $this->setProbation($arr[$keys[7]]);
@@ -1616,8 +1616,8 @@ abstract class User implements ActiveRecordInterface
         if ($this->isColumnModified(UserTableMap::COL_ADMIN)) {
             $criteria->add(UserTableMap::COL_ADMIN, $this->admin);
         }
-        if ($this->isColumnModified(UserTableMap::COL_MOD)) {
-            $criteria->add(UserTableMap::COL_MOD, $this->mod);
+        if ($this->isColumnModified(UserTableMap::COL_MODERATOR)) {
+            $criteria->add(UserTableMap::COL_MODERATOR, $this->moderator);
         }
         if ($this->isColumnModified(UserTableMap::COL_PROBATION)) {
             $criteria->add(UserTableMap::COL_PROBATION, $this->probation);
@@ -1716,7 +1716,7 @@ abstract class User implements ActiveRecordInterface
         $copyObj->setRedditId($this->getRedditId());
         $copyObj->setTrusted($this->getTrusted());
         $copyObj->setAdmin($this->getAdmin());
-        $copyObj->setMod($this->getMod());
+        $copyObj->setModerator($this->getModerator());
         $copyObj->setProbation($this->getProbation());
         $copyObj->setBanned($this->getBanned());
 
@@ -2266,10 +2266,10 @@ abstract class User implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildRatingHeader[] List of ChildRatingHeader objects
      */
-    public function getRatingHeadersJoinGames(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getRatingHeadersJoinGame(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRatingHeaderQuery::create(null, $criteria);
-        $query->joinWith('Games', $joinBehavior);
+        $query->joinWith('Game', $joinBehavior);
 
         return $this->getRatingHeaders($query, $con);
     }
@@ -2291,10 +2291,10 @@ abstract class User implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildRatingHeader[] List of ChildRatingHeader objects
      */
-    public function getRatingHeadersJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getRatingHeadersJoinPlatform(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRatingHeaderQuery::create(null, $criteria);
-        $query->joinWith('Platforms', $joinBehavior);
+        $query->joinWith('Platform', $joinBehavior);
 
         return $this->getRatingHeaders($query, $con);
     }
@@ -2995,10 +2995,10 @@ abstract class User implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildUserReview[] List of ChildUserReview objects
      */
-    public function getUserReviewsJoinGames(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getUserReviewsJoinGame(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildUserReviewQuery::create(null, $criteria);
-        $query->joinWith('Games', $joinBehavior);
+        $query->joinWith('Game', $joinBehavior);
 
         return $this->getUserReviews($query, $con);
     }
@@ -3020,10 +3020,10 @@ abstract class User implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildUserReview[] List of ChildUserReview objects
      */
-    public function getUserReviewsJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getUserReviewsJoinPlatform(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildUserReviewQuery::create(null, $criteria);
-        $query->joinWith('Platforms', $joinBehavior);
+        $query->joinWith('Platform', $joinBehavior);
 
         return $this->getUserReviews($query, $con);
     }
@@ -3091,7 +3091,7 @@ abstract class User implements ActiveRecordInterface
         $this->reddit_id = null;
         $this->trusted = null;
         $this->admin = null;
-        $this->mod = null;
+        $this->moderator = null;
         $this->probation = null;
         $this->banned = null;
         $this->alreadyInSave = false;

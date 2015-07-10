@@ -2,11 +2,11 @@
 
 namespace Base;
 
-use \GamePlatforms as ChildGamePlatforms;
-use \GamePlatformsQuery as ChildGamePlatformsQuery;
+use \GamePlatform as ChildGamePlatform;
+use \GamePlatformQuery as ChildGamePlatformQuery;
 use \Exception;
 use \PDO;
-use Map\GamePlatformsTableMap;
+use Map\GamePlatformTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -16,78 +16,78 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'game_platforms' table.
+ * Base class that represents a query for the 'game_platform' table.
  *
  * 
  *
- * @method     ChildGamePlatformsQuery orderByGameId($order = Criteria::ASC) Order by the game_id column
- * @method     ChildGamePlatformsQuery orderByPlatformId($order = Criteria::ASC) Order by the platform_id column
+ * @method     ChildGamePlatformQuery orderByGameId($order = Criteria::ASC) Order by the game_id column
+ * @method     ChildGamePlatformQuery orderByPlatformId($order = Criteria::ASC) Order by the platform_id column
  *
- * @method     ChildGamePlatformsQuery groupByGameId() Group by the game_id column
- * @method     ChildGamePlatformsQuery groupByPlatformId() Group by the platform_id column
+ * @method     ChildGamePlatformQuery groupByGameId() Group by the game_id column
+ * @method     ChildGamePlatformQuery groupByPlatformId() Group by the platform_id column
  *
- * @method     ChildGamePlatformsQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildGamePlatformsQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildGamePlatformsQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildGamePlatformQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildGamePlatformQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildGamePlatformQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildGamePlatformsQuery leftJoinPlatforms($relationAlias = null) Adds a LEFT JOIN clause to the query using the Platforms relation
- * @method     ChildGamePlatformsQuery rightJoinPlatforms($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Platforms relation
- * @method     ChildGamePlatformsQuery innerJoinPlatforms($relationAlias = null) Adds a INNER JOIN clause to the query using the Platforms relation
+ * @method     ChildGamePlatformQuery leftJoinPlatform($relationAlias = null) Adds a LEFT JOIN clause to the query using the Platform relation
+ * @method     ChildGamePlatformQuery rightJoinPlatform($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Platform relation
+ * @method     ChildGamePlatformQuery innerJoinPlatform($relationAlias = null) Adds a INNER JOIN clause to the query using the Platform relation
  *
- * @method     ChildGamePlatformsQuery leftJoinGames($relationAlias = null) Adds a LEFT JOIN clause to the query using the Games relation
- * @method     ChildGamePlatformsQuery rightJoinGames($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Games relation
- * @method     ChildGamePlatformsQuery innerJoinGames($relationAlias = null) Adds a INNER JOIN clause to the query using the Games relation
+ * @method     ChildGamePlatformQuery leftJoinGame($relationAlias = null) Adds a LEFT JOIN clause to the query using the Game relation
+ * @method     ChildGamePlatformQuery rightJoinGame($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Game relation
+ * @method     ChildGamePlatformQuery innerJoinGame($relationAlias = null) Adds a INNER JOIN clause to the query using the Game relation
  *
- * @method     \PlatformsQuery|\GamesQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \PlatformQuery|\GameQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildGamePlatforms findOne(ConnectionInterface $con = null) Return the first ChildGamePlatforms matching the query
- * @method     ChildGamePlatforms findOneOrCreate(ConnectionInterface $con = null) Return the first ChildGamePlatforms matching the query, or a new ChildGamePlatforms object populated from the query conditions when no match is found
+ * @method     ChildGamePlatform findOne(ConnectionInterface $con = null) Return the first ChildGamePlatform matching the query
+ * @method     ChildGamePlatform findOneOrCreate(ConnectionInterface $con = null) Return the first ChildGamePlatform matching the query, or a new ChildGamePlatform object populated from the query conditions when no match is found
  *
- * @method     ChildGamePlatforms findOneByGameId(string $game_id) Return the first ChildGamePlatforms filtered by the game_id column
- * @method     ChildGamePlatforms findOneByPlatformId(string $platform_id) Return the first ChildGamePlatforms filtered by the platform_id column *
+ * @method     ChildGamePlatform findOneByGameId(string $game_id) Return the first ChildGamePlatform filtered by the game_id column
+ * @method     ChildGamePlatform findOneByPlatformId(string $platform_id) Return the first ChildGamePlatform filtered by the platform_id column *
 
- * @method     ChildGamePlatforms requirePk($key, ConnectionInterface $con = null) Return the ChildGamePlatforms by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGamePlatforms requireOne(ConnectionInterface $con = null) Return the first ChildGamePlatforms matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGamePlatform requirePk($key, ConnectionInterface $con = null) Return the ChildGamePlatform by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGamePlatform requireOne(ConnectionInterface $con = null) Return the first ChildGamePlatform matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildGamePlatforms requireOneByGameId(string $game_id) Return the first ChildGamePlatforms filtered by the game_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGamePlatforms requireOneByPlatformId(string $platform_id) Return the first ChildGamePlatforms filtered by the platform_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGamePlatform requireOneByGameId(string $game_id) Return the first ChildGamePlatform filtered by the game_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGamePlatform requireOneByPlatformId(string $platform_id) Return the first ChildGamePlatform filtered by the platform_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildGamePlatforms[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildGamePlatforms objects based on current ModelCriteria
- * @method     ChildGamePlatforms[]|ObjectCollection findByGameId(string $game_id) Return ChildGamePlatforms objects filtered by the game_id column
- * @method     ChildGamePlatforms[]|ObjectCollection findByPlatformId(string $platform_id) Return ChildGamePlatforms objects filtered by the platform_id column
- * @method     ChildGamePlatforms[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildGamePlatform[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildGamePlatform objects based on current ModelCriteria
+ * @method     ChildGamePlatform[]|ObjectCollection findByGameId(string $game_id) Return ChildGamePlatform objects filtered by the game_id column
+ * @method     ChildGamePlatform[]|ObjectCollection findByPlatformId(string $platform_id) Return ChildGamePlatform objects filtered by the platform_id column
+ * @method     ChildGamePlatform[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
-abstract class GamePlatformsQuery extends ModelCriteria
+abstract class GamePlatformQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \Base\GamePlatformsQuery object.
+     * Initializes internal state of \Base\GamePlatformQuery object.
      *
      * @param     string $dbName The database name
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = '\\GamePlatforms', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\GamePlatform', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new ChildGamePlatformsQuery object.
+     * Returns a new ChildGamePlatformQuery object.
      *
      * @param     string $modelAlias The alias of a model in the query
      * @param     Criteria $criteria Optional Criteria to build the query from
      *
-     * @return ChildGamePlatformsQuery
+     * @return ChildGamePlatformQuery
      */
     public static function create($modelAlias = null, Criteria $criteria = null)
     {
-        if ($criteria instanceof ChildGamePlatformsQuery) {
+        if ($criteria instanceof ChildGamePlatformQuery) {
             return $criteria;
         }
-        $query = new ChildGamePlatformsQuery();
+        $query = new ChildGamePlatformQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -110,19 +110,19 @@ abstract class GamePlatformsQuery extends ModelCriteria
      * @param array[$game_id, $platform_id] $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return ChildGamePlatforms|array|mixed the result, formatted by the current formatter
+     * @return ChildGamePlatform|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
         }
-        if ((null !== ($obj = GamePlatformsTableMap::getInstanceFromPool(serialize(array((string) $key[0], (string) $key[1]))))) && !$this->formatter) {
+        if ((null !== ($obj = GamePlatformTableMap::getInstanceFromPool(serialize(array((string) $key[0], (string) $key[1]))))) && !$this->formatter) {
             // the object is already in the instance pool
             return $obj;
         }
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(GamePlatformsTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(GamePlatformTableMap::DATABASE_NAME);
         }
         $this->basePreSelect($con);
         if ($this->formatter || $this->modelAlias || $this->with || $this->select
@@ -143,11 +143,11 @@ abstract class GamePlatformsQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildGamePlatforms A model object, or null if the key is not found
+     * @return ChildGamePlatform A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT game_id, platform_id FROM game_platforms WHERE game_id = :p0 AND platform_id = :p1';
+        $sql = 'SELECT game_id, platform_id FROM game_platform WHERE game_id = :p0 AND platform_id = :p1';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);            
@@ -159,10 +159,10 @@ abstract class GamePlatformsQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildGamePlatforms $obj */
-            $obj = new ChildGamePlatforms();
+            /** @var ChildGamePlatform $obj */
+            $obj = new ChildGamePlatform();
             $obj->hydrate($row);
-            GamePlatformsTableMap::addInstanceToPool($obj, serialize(array((string) $key[0], (string) $key[1])));
+            GamePlatformTableMap::addInstanceToPool($obj, serialize(array((string) $key[0], (string) $key[1])));
         }
         $stmt->closeCursor();
 
@@ -175,7 +175,7 @@ abstract class GamePlatformsQuery extends ModelCriteria
      * @param     mixed $key Primary key to use for the query
      * @param     ConnectionInterface $con A connection object
      *
-     * @return ChildGamePlatforms|array|mixed the result, formatted by the current formatter
+     * @return ChildGamePlatform|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -217,12 +217,12 @@ abstract class GamePlatformsQuery extends ModelCriteria
      *
      * @param     mixed $key Primary key to use for the query
      *
-     * @return $this|ChildGamePlatformsQuery The current query, for fluid interface
+     * @return $this|ChildGamePlatformQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-        $this->addUsingAlias(GamePlatformsTableMap::COL_GAME_ID, $key[0], Criteria::EQUAL);
-        $this->addUsingAlias(GamePlatformsTableMap::COL_PLATFORM_ID, $key[1], Criteria::EQUAL);
+        $this->addUsingAlias(GamePlatformTableMap::COL_GAME_ID, $key[0], Criteria::EQUAL);
+        $this->addUsingAlias(GamePlatformTableMap::COL_PLATFORM_ID, $key[1], Criteria::EQUAL);
 
         return $this;
     }
@@ -232,7 +232,7 @@ abstract class GamePlatformsQuery extends ModelCriteria
      *
      * @param     array $keys The list of primary key to use for the query
      *
-     * @return $this|ChildGamePlatformsQuery The current query, for fluid interface
+     * @return $this|ChildGamePlatformQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
@@ -240,8 +240,8 @@ abstract class GamePlatformsQuery extends ModelCriteria
             return $this->add(null, '1<>1', Criteria::CUSTOM);
         }
         foreach ($keys as $key) {
-            $cton0 = $this->getNewCriterion(GamePlatformsTableMap::COL_GAME_ID, $key[0], Criteria::EQUAL);
-            $cton1 = $this->getNewCriterion(GamePlatformsTableMap::COL_PLATFORM_ID, $key[1], Criteria::EQUAL);
+            $cton0 = $this->getNewCriterion(GamePlatformTableMap::COL_GAME_ID, $key[0], Criteria::EQUAL);
+            $cton1 = $this->getNewCriterion(GamePlatformTableMap::COL_PLATFORM_ID, $key[1], Criteria::EQUAL);
             $cton0->addAnd($cton1);
             $this->addOr($cton0);
         }
@@ -259,7 +259,7 @@ abstract class GamePlatformsQuery extends ModelCriteria
      * $query->filterByGameId(array('min' => 12)); // WHERE game_id > 12
      * </code>
      *
-     * @see       filterByGames()
+     * @see       filterByGame()
      *
      * @param     mixed $gameId The value to use as filter.
      *              Use scalar values for equality.
@@ -267,18 +267,18 @@ abstract class GamePlatformsQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGamePlatformsQuery The current query, for fluid interface
+     * @return $this|ChildGamePlatformQuery The current query, for fluid interface
      */
     public function filterByGameId($gameId = null, $comparison = null)
     {
         if (is_array($gameId)) {
             $useMinMax = false;
             if (isset($gameId['min'])) {
-                $this->addUsingAlias(GamePlatformsTableMap::COL_GAME_ID, $gameId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(GamePlatformTableMap::COL_GAME_ID, $gameId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($gameId['max'])) {
-                $this->addUsingAlias(GamePlatformsTableMap::COL_GAME_ID, $gameId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(GamePlatformTableMap::COL_GAME_ID, $gameId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -289,7 +289,7 @@ abstract class GamePlatformsQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GamePlatformsTableMap::COL_GAME_ID, $gameId, $comparison);
+        return $this->addUsingAlias(GamePlatformTableMap::COL_GAME_ID, $gameId, $comparison);
     }
 
     /**
@@ -302,7 +302,7 @@ abstract class GamePlatformsQuery extends ModelCriteria
      * $query->filterByPlatformId(array('min' => 12)); // WHERE platform_id > 12
      * </code>
      *
-     * @see       filterByPlatforms()
+     * @see       filterByPlatform()
      *
      * @param     mixed $platformId The value to use as filter.
      *              Use scalar values for equality.
@@ -310,18 +310,18 @@ abstract class GamePlatformsQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGamePlatformsQuery The current query, for fluid interface
+     * @return $this|ChildGamePlatformQuery The current query, for fluid interface
      */
     public function filterByPlatformId($platformId = null, $comparison = null)
     {
         if (is_array($platformId)) {
             $useMinMax = false;
             if (isset($platformId['min'])) {
-                $this->addUsingAlias(GamePlatformsTableMap::COL_PLATFORM_ID, $platformId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(GamePlatformTableMap::COL_PLATFORM_ID, $platformId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($platformId['max'])) {
-                $this->addUsingAlias(GamePlatformsTableMap::COL_PLATFORM_ID, $platformId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(GamePlatformTableMap::COL_PLATFORM_ID, $platformId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -332,48 +332,48 @@ abstract class GamePlatformsQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GamePlatformsTableMap::COL_PLATFORM_ID, $platformId, $comparison);
+        return $this->addUsingAlias(GamePlatformTableMap::COL_PLATFORM_ID, $platformId, $comparison);
     }
 
     /**
-     * Filter the query by a related \Platforms object
+     * Filter the query by a related \Platform object
      *
-     * @param \Platforms|ObjectCollection $platforms The related object(s) to use as filter
+     * @param \Platform|ObjectCollection $platform The related object(s) to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildGamePlatformsQuery The current query, for fluid interface
+     * @return ChildGamePlatformQuery The current query, for fluid interface
      */
-    public function filterByPlatforms($platforms, $comparison = null)
+    public function filterByPlatform($platform, $comparison = null)
     {
-        if ($platforms instanceof \Platforms) {
+        if ($platform instanceof \Platform) {
             return $this
-                ->addUsingAlias(GamePlatformsTableMap::COL_PLATFORM_ID, $platforms->getId(), $comparison);
-        } elseif ($platforms instanceof ObjectCollection) {
+                ->addUsingAlias(GamePlatformTableMap::COL_PLATFORM_ID, $platform->getId(), $comparison);
+        } elseif ($platform instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(GamePlatformsTableMap::COL_PLATFORM_ID, $platforms->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(GamePlatformTableMap::COL_PLATFORM_ID, $platform->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
-            throw new PropelException('filterByPlatforms() only accepts arguments of type \Platforms or Collection');
+            throw new PropelException('filterByPlatform() only accepts arguments of type \Platform or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the Platforms relation
+     * Adds a JOIN clause to the query using the Platform relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildGamePlatformsQuery The current query, for fluid interface
+     * @return $this|ChildGamePlatformQuery The current query, for fluid interface
      */
-    public function joinPlatforms($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinPlatform($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Platforms');
+        $relationMap = $tableMap->getRelation('Platform');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -388,14 +388,14 @@ abstract class GamePlatformsQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'Platforms');
+            $this->addJoinObject($join, 'Platform');
         }
 
         return $this;
     }
 
     /**
-     * Use the Platforms relation Platforms object
+     * Use the Platform relation Platform object
      *
      * @see useQuery()
      *
@@ -403,54 +403,54 @@ abstract class GamePlatformsQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \PlatformsQuery A secondary query class using the current class as primary query
+     * @return \PlatformQuery A secondary query class using the current class as primary query
      */
-    public function usePlatformsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function usePlatformQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinPlatforms($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Platforms', '\PlatformsQuery');
+            ->joinPlatform($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Platform', '\PlatformQuery');
     }
 
     /**
-     * Filter the query by a related \Games object
+     * Filter the query by a related \Game object
      *
-     * @param \Games|ObjectCollection $games The related object(s) to use as filter
+     * @param \Game|ObjectCollection $game The related object(s) to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildGamePlatformsQuery The current query, for fluid interface
+     * @return ChildGamePlatformQuery The current query, for fluid interface
      */
-    public function filterByGames($games, $comparison = null)
+    public function filterByGame($game, $comparison = null)
     {
-        if ($games instanceof \Games) {
+        if ($game instanceof \Game) {
             return $this
-                ->addUsingAlias(GamePlatformsTableMap::COL_GAME_ID, $games->getId(), $comparison);
-        } elseif ($games instanceof ObjectCollection) {
+                ->addUsingAlias(GamePlatformTableMap::COL_GAME_ID, $game->getId(), $comparison);
+        } elseif ($game instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(GamePlatformsTableMap::COL_GAME_ID, $games->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(GamePlatformTableMap::COL_GAME_ID, $game->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
-            throw new PropelException('filterByGames() only accepts arguments of type \Games or Collection');
+            throw new PropelException('filterByGame() only accepts arguments of type \Game or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the Games relation
+     * Adds a JOIN clause to the query using the Game relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildGamePlatformsQuery The current query, for fluid interface
+     * @return $this|ChildGamePlatformQuery The current query, for fluid interface
      */
-    public function joinGames($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinGame($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Games');
+        $relationMap = $tableMap->getRelation('Game');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -465,14 +465,14 @@ abstract class GamePlatformsQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'Games');
+            $this->addJoinObject($join, 'Game');
         }
 
         return $this;
     }
 
     /**
-     * Use the Games relation Games object
+     * Use the Game relation Game object
      *
      * @see useQuery()
      *
@@ -480,27 +480,27 @@ abstract class GamePlatformsQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \GamesQuery A secondary query class using the current class as primary query
+     * @return \GameQuery A secondary query class using the current class as primary query
      */
-    public function useGamesQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useGameQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinGames($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Games', '\GamesQuery');
+            ->joinGame($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Game', '\GameQuery');
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildGamePlatforms $gamePlatforms Object to remove from the list of results
+     * @param   ChildGamePlatform $gamePlatform Object to remove from the list of results
      *
-     * @return $this|ChildGamePlatformsQuery The current query, for fluid interface
+     * @return $this|ChildGamePlatformQuery The current query, for fluid interface
      */
-    public function prune($gamePlatforms = null)
+    public function prune($gamePlatform = null)
     {
-        if ($gamePlatforms) {
-            $this->addCond('pruneCond0', $this->getAliasedColName(GamePlatformsTableMap::COL_GAME_ID), $gamePlatforms->getGameId(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond1', $this->getAliasedColName(GamePlatformsTableMap::COL_PLATFORM_ID), $gamePlatforms->getPlatformId(), Criteria::NOT_EQUAL);
+        if ($gamePlatform) {
+            $this->addCond('pruneCond0', $this->getAliasedColName(GamePlatformTableMap::COL_GAME_ID), $gamePlatform->getGameId(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond1', $this->getAliasedColName(GamePlatformTableMap::COL_PLATFORM_ID), $gamePlatform->getPlatformId(), Criteria::NOT_EQUAL);
             $this->combine(array('pruneCond0', 'pruneCond1'), Criteria::LOGICAL_OR);
         }
 
@@ -508,7 +508,7 @@ abstract class GamePlatformsQuery extends ModelCriteria
     }
 
     /**
-     * Deletes all rows from the game_platforms table.
+     * Deletes all rows from the game_platform table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
@@ -516,7 +516,7 @@ abstract class GamePlatformsQuery extends ModelCriteria
     public function doDeleteAll(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(GamePlatformsTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(GamePlatformTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -527,8 +527,8 @@ abstract class GamePlatformsQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            GamePlatformsTableMap::clearInstancePool();
-            GamePlatformsTableMap::clearRelatedInstancePool();
+            GamePlatformTableMap::clearInstancePool();
+            GamePlatformTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -546,26 +546,26 @@ abstract class GamePlatformsQuery extends ModelCriteria
     public function delete(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(GamePlatformsTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(GamePlatformTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(GamePlatformsTableMap::DATABASE_NAME);
+        $criteria->setDbName(GamePlatformTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
             
-            GamePlatformsTableMap::removeInstanceFromPool($criteria);
+            GamePlatformTableMap::removeInstanceFromPool($criteria);
         
             $affectedRows += ModelCriteria::delete($con);
-            GamePlatformsTableMap::clearRelatedInstancePool();
+            GamePlatformTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
     }
 
-} // GamePlatformsQuery
+} // GamePlatformQuery

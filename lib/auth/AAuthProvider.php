@@ -57,8 +57,10 @@ abstract class AAuth {
         if($user->getBanned()) {
             // We block banned users by just not letting them log in
             session_destroy();
+            return null;
         } else {
             $_SESSION[Auth::$SESSION_USER_ID] = $user->getId();
+            return $user;
         }
 
 

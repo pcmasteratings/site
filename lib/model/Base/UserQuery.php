@@ -26,7 +26,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery orderByRedditId($order = Criteria::ASC) Order by the reddit_id column
  * @method     ChildUserQuery orderByTrusted($order = Criteria::ASC) Order by the trusted column
  * @method     ChildUserQuery orderByAdmin($order = Criteria::ASC) Order by the admin column
- * @method     ChildUserQuery orderByMod($order = Criteria::ASC) Order by the mod column
+ * @method     ChildUserQuery orderByModerator($order = Criteria::ASC) Order by the moderator column
  * @method     ChildUserQuery orderByProbation($order = Criteria::ASC) Order by the probation column
  * @method     ChildUserQuery orderByBanned($order = Criteria::ASC) Order by the banned column
  *
@@ -36,7 +36,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery groupByRedditId() Group by the reddit_id column
  * @method     ChildUserQuery groupByTrusted() Group by the trusted column
  * @method     ChildUserQuery groupByAdmin() Group by the admin column
- * @method     ChildUserQuery groupByMod() Group by the mod column
+ * @method     ChildUserQuery groupByModerator() Group by the moderator column
  * @method     ChildUserQuery groupByProbation() Group by the probation column
  * @method     ChildUserQuery groupByBanned() Group by the banned column
  *
@@ -75,7 +75,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser findOneByRedditId(string $reddit_id) Return the first ChildUser filtered by the reddit_id column
  * @method     ChildUser findOneByTrusted(boolean $trusted) Return the first ChildUser filtered by the trusted column
  * @method     ChildUser findOneByAdmin(boolean $admin) Return the first ChildUser filtered by the admin column
- * @method     ChildUser findOneByMod(boolean $mod) Return the first ChildUser filtered by the mod column
+ * @method     ChildUser findOneByModerator(boolean $moderator) Return the first ChildUser filtered by the moderator column
  * @method     ChildUser findOneByProbation(boolean $probation) Return the first ChildUser filtered by the probation column
  * @method     ChildUser findOneByBanned(boolean $banned) Return the first ChildUser filtered by the banned column *
 
@@ -88,7 +88,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser requireOneByRedditId(string $reddit_id) Return the first ChildUser filtered by the reddit_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByTrusted(boolean $trusted) Return the first ChildUser filtered by the trusted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByAdmin(boolean $admin) Return the first ChildUser filtered by the admin column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByMod(boolean $mod) Return the first ChildUser filtered by the mod column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildUser requireOneByModerator(boolean $moderator) Return the first ChildUser filtered by the moderator column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByProbation(boolean $probation) Return the first ChildUser filtered by the probation column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByBanned(boolean $banned) Return the first ChildUser filtered by the banned column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -99,7 +99,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser[]|ObjectCollection findByRedditId(string $reddit_id) Return ChildUser objects filtered by the reddit_id column
  * @method     ChildUser[]|ObjectCollection findByTrusted(boolean $trusted) Return ChildUser objects filtered by the trusted column
  * @method     ChildUser[]|ObjectCollection findByAdmin(boolean $admin) Return ChildUser objects filtered by the admin column
- * @method     ChildUser[]|ObjectCollection findByMod(boolean $mod) Return ChildUser objects filtered by the mod column
+ * @method     ChildUser[]|ObjectCollection findByModerator(boolean $moderator) Return ChildUser objects filtered by the moderator column
  * @method     ChildUser[]|ObjectCollection findByProbation(boolean $probation) Return ChildUser objects filtered by the probation column
  * @method     ChildUser[]|ObjectCollection findByBanned(boolean $banned) Return ChildUser objects filtered by the banned column
  * @method     ChildUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -194,7 +194,7 @@ abstract class UserQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, username, password, reddit_id, trusted, admin, mod, probation, banned FROM user WHERE id = :p0';
+        $sql = 'SELECT id, username, password, reddit_id, trusted, admin, moderator, probation, banned FROM user WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -467,15 +467,15 @@ abstract class UserQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the mod column
+     * Filter the query on the moderator column
      *
      * Example usage:
      * <code>
-     * $query->filterByMod(true); // WHERE mod = true
-     * $query->filterByMod('yes'); // WHERE mod = true
+     * $query->filterByModerator(true); // WHERE moderator = true
+     * $query->filterByModerator('yes'); // WHERE moderator = true
      * </code>
      *
-     * @param     boolean|string $mod The value to use as filter.
+     * @param     boolean|string $moderator The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
@@ -484,13 +484,13 @@ abstract class UserQuery extends ModelCriteria
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
-    public function filterByMod($mod = null, $comparison = null)
+    public function filterByModerator($moderator = null, $comparison = null)
     {
-        if (is_string($mod)) {
-            $mod = in_array(strtolower($mod), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        if (is_string($moderator)) {
+            $moderator = in_array(strtolower($moderator), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_MOD, $mod, $comparison);
+        return $this->addUsingAlias(UserTableMap::COL_MODERATOR, $moderator, $comparison);
     }
 
     /**
