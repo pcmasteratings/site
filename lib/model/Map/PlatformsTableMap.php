@@ -165,20 +165,20 @@ class PlatformsTableMap extends TableMap
     1 => ':id',
   ),
 ), 'CASCADE', 'CASCADE', 'GamePlatformss', false);
-        $this->addRelation('RatingHeaders', '\\RatingHeaders', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':game_platform_id',
-    1 => ':id',
-  ),
-), null, null, 'RatingHeaderss', false);
-        $this->addRelation('UserReviews', '\\UserReviews', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('RatingHeader', '\\RatingHeader', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':platform_id',
     1 => ':id',
   ),
-), null, null, 'UserReviewss', false);
+), null, null, 'RatingHeaders', false);
+        $this->addRelation('UserReview', '\\UserReview', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':platform_id',
+    1 => ':id',
+  ),
+), null, null, 'UserReviews', false);
     } // buildRelations()
     /**
      * Method to invalidate the instance pool of all tables related to platforms     * by a foreign key with ON DELETE CASCADE

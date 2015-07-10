@@ -40,15 +40,15 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPlatformsQuery rightJoinGamePlatforms($relationAlias = null) Adds a RIGHT JOIN clause to the query using the GamePlatforms relation
  * @method     ChildPlatformsQuery innerJoinGamePlatforms($relationAlias = null) Adds a INNER JOIN clause to the query using the GamePlatforms relation
  *
- * @method     ChildPlatformsQuery leftJoinRatingHeaders($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingHeaders relation
- * @method     ChildPlatformsQuery rightJoinRatingHeaders($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingHeaders relation
- * @method     ChildPlatformsQuery innerJoinRatingHeaders($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingHeaders relation
+ * @method     ChildPlatformsQuery leftJoinRatingHeader($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingHeader relation
+ * @method     ChildPlatformsQuery rightJoinRatingHeader($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingHeader relation
+ * @method     ChildPlatformsQuery innerJoinRatingHeader($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingHeader relation
  *
- * @method     ChildPlatformsQuery leftJoinUserReviews($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserReviews relation
- * @method     ChildPlatformsQuery rightJoinUserReviews($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserReviews relation
- * @method     ChildPlatformsQuery innerJoinUserReviews($relationAlias = null) Adds a INNER JOIN clause to the query using the UserReviews relation
+ * @method     ChildPlatformsQuery leftJoinUserReview($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserReview relation
+ * @method     ChildPlatformsQuery rightJoinUserReview($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserReview relation
+ * @method     ChildPlatformsQuery innerJoinUserReview($relationAlias = null) Adds a INNER JOIN clause to the query using the UserReview relation
  *
- * @method     \GamePlatformsQuery|\RatingHeadersQuery|\UserReviewsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \GamePlatformsQuery|\RatingHeaderQuery|\UserReviewQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildPlatforms findOne(ConnectionInterface $con = null) Return the first ChildPlatforms matching the query
  * @method     ChildPlatforms findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPlatforms matching the query, or a new ChildPlatforms object populated from the query conditions when no match is found
@@ -499,40 +499,40 @@ abstract class PlatformsQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \RatingHeaders object
+     * Filter the query by a related \RatingHeader object
      *
-     * @param \RatingHeaders|ObjectCollection $ratingHeaders the related object to use as filter
+     * @param \RatingHeader|ObjectCollection $ratingHeader the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildPlatformsQuery The current query, for fluid interface
      */
-    public function filterByRatingHeaders($ratingHeaders, $comparison = null)
+    public function filterByRatingHeader($ratingHeader, $comparison = null)
     {
-        if ($ratingHeaders instanceof \RatingHeaders) {
+        if ($ratingHeader instanceof \RatingHeader) {
             return $this
-                ->addUsingAlias(PlatformsTableMap::COL_ID, $ratingHeaders->getGamePlatformId(), $comparison);
-        } elseif ($ratingHeaders instanceof ObjectCollection) {
+                ->addUsingAlias(PlatformsTableMap::COL_ID, $ratingHeader->getPlatformId(), $comparison);
+        } elseif ($ratingHeader instanceof ObjectCollection) {
             return $this
-                ->useRatingHeadersQuery()
-                ->filterByPrimaryKeys($ratingHeaders->getPrimaryKeys())
+                ->useRatingHeaderQuery()
+                ->filterByPrimaryKeys($ratingHeader->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByRatingHeaders() only accepts arguments of type \RatingHeaders or Collection');
+            throw new PropelException('filterByRatingHeader() only accepts arguments of type \RatingHeader or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the RatingHeaders relation
+     * Adds a JOIN clause to the query using the RatingHeader relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildPlatformsQuery The current query, for fluid interface
      */
-    public function joinRatingHeaders($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinRatingHeader($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('RatingHeaders');
+        $relationMap = $tableMap->getRelation('RatingHeader');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -547,14 +547,14 @@ abstract class PlatformsQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'RatingHeaders');
+            $this->addJoinObject($join, 'RatingHeader');
         }
 
         return $this;
     }
 
     /**
-     * Use the RatingHeaders relation RatingHeaders object
+     * Use the RatingHeader relation RatingHeader object
      *
      * @see useQuery()
      *
@@ -562,50 +562,50 @@ abstract class PlatformsQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \RatingHeadersQuery A secondary query class using the current class as primary query
+     * @return \RatingHeaderQuery A secondary query class using the current class as primary query
      */
-    public function useRatingHeadersQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useRatingHeaderQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinRatingHeaders($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'RatingHeaders', '\RatingHeadersQuery');
+            ->joinRatingHeader($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'RatingHeader', '\RatingHeaderQuery');
     }
 
     /**
-     * Filter the query by a related \UserReviews object
+     * Filter the query by a related \UserReview object
      *
-     * @param \UserReviews|ObjectCollection $userReviews the related object to use as filter
+     * @param \UserReview|ObjectCollection $userReview the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildPlatformsQuery The current query, for fluid interface
      */
-    public function filterByUserReviews($userReviews, $comparison = null)
+    public function filterByUserReview($userReview, $comparison = null)
     {
-        if ($userReviews instanceof \UserReviews) {
+        if ($userReview instanceof \UserReview) {
             return $this
-                ->addUsingAlias(PlatformsTableMap::COL_ID, $userReviews->getPlatformId(), $comparison);
-        } elseif ($userReviews instanceof ObjectCollection) {
+                ->addUsingAlias(PlatformsTableMap::COL_ID, $userReview->getPlatformId(), $comparison);
+        } elseif ($userReview instanceof ObjectCollection) {
             return $this
-                ->useUserReviewsQuery()
-                ->filterByPrimaryKeys($userReviews->getPrimaryKeys())
+                ->useUserReviewQuery()
+                ->filterByPrimaryKeys($userReview->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByUserReviews() only accepts arguments of type \UserReviews or Collection');
+            throw new PropelException('filterByUserReview() only accepts arguments of type \UserReview or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the UserReviews relation
+     * Adds a JOIN clause to the query using the UserReview relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildPlatformsQuery The current query, for fluid interface
      */
-    public function joinUserReviews($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinUserReview($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('UserReviews');
+        $relationMap = $tableMap->getRelation('UserReview');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -620,14 +620,14 @@ abstract class PlatformsQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'UserReviews');
+            $this->addJoinObject($join, 'UserReview');
         }
 
         return $this;
     }
 
     /**
-     * Use the UserReviews relation UserReviews object
+     * Use the UserReview relation UserReview object
      *
      * @see useQuery()
      *
@@ -635,13 +635,13 @@ abstract class PlatformsQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \UserReviewsQuery A secondary query class using the current class as primary query
+     * @return \UserReviewQuery A secondary query class using the current class as primary query
      */
-    public function useUserReviewsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useUserReviewQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinUserReviews($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'UserReviews', '\UserReviewsQuery');
+            ->joinUserReview($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UserReview', '\UserReviewQuery');
     }
 
     /**

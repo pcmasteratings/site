@@ -46,13 +46,13 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGamesQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     ChildGamesQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildGamesQuery leftJoinCompaniesRelatedByPublisherId($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompaniesRelatedByPublisherId relation
- * @method     ChildGamesQuery rightJoinCompaniesRelatedByPublisherId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompaniesRelatedByPublisherId relation
- * @method     ChildGamesQuery innerJoinCompaniesRelatedByPublisherId($relationAlias = null) Adds a INNER JOIN clause to the query using the CompaniesRelatedByPublisherId relation
+ * @method     ChildGamesQuery leftJoinCompanyRelatedByPublisherId($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompanyRelatedByPublisherId relation
+ * @method     ChildGamesQuery rightJoinCompanyRelatedByPublisherId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompanyRelatedByPublisherId relation
+ * @method     ChildGamesQuery innerJoinCompanyRelatedByPublisherId($relationAlias = null) Adds a INNER JOIN clause to the query using the CompanyRelatedByPublisherId relation
  *
- * @method     ChildGamesQuery leftJoinCompaniesRelatedByDeveloperId($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompaniesRelatedByDeveloperId relation
- * @method     ChildGamesQuery rightJoinCompaniesRelatedByDeveloperId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompaniesRelatedByDeveloperId relation
- * @method     ChildGamesQuery innerJoinCompaniesRelatedByDeveloperId($relationAlias = null) Adds a INNER JOIN clause to the query using the CompaniesRelatedByDeveloperId relation
+ * @method     ChildGamesQuery leftJoinCompanyRelatedByDeveloperId($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompanyRelatedByDeveloperId relation
+ * @method     ChildGamesQuery rightJoinCompanyRelatedByDeveloperId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompanyRelatedByDeveloperId relation
+ * @method     ChildGamesQuery innerJoinCompanyRelatedByDeveloperId($relationAlias = null) Adds a INNER JOIN clause to the query using the CompanyRelatedByDeveloperId relation
  *
  * @method     ChildGamesQuery leftJoinGameLinks($relationAlias = null) Adds a LEFT JOIN clause to the query using the GameLinks relation
  * @method     ChildGamesQuery rightJoinGameLinks($relationAlias = null) Adds a RIGHT JOIN clause to the query using the GameLinks relation
@@ -62,15 +62,15 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGamesQuery rightJoinGamePlatforms($relationAlias = null) Adds a RIGHT JOIN clause to the query using the GamePlatforms relation
  * @method     ChildGamesQuery innerJoinGamePlatforms($relationAlias = null) Adds a INNER JOIN clause to the query using the GamePlatforms relation
  *
- * @method     ChildGamesQuery leftJoinRatingHeaders($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingHeaders relation
- * @method     ChildGamesQuery rightJoinRatingHeaders($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingHeaders relation
- * @method     ChildGamesQuery innerJoinRatingHeaders($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingHeaders relation
+ * @method     ChildGamesQuery leftJoinRatingHeader($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingHeader relation
+ * @method     ChildGamesQuery rightJoinRatingHeader($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingHeader relation
+ * @method     ChildGamesQuery innerJoinRatingHeader($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingHeader relation
  *
- * @method     ChildGamesQuery leftJoinUserReviews($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserReviews relation
- * @method     ChildGamesQuery rightJoinUserReviews($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserReviews relation
- * @method     ChildGamesQuery innerJoinUserReviews($relationAlias = null) Adds a INNER JOIN clause to the query using the UserReviews relation
+ * @method     ChildGamesQuery leftJoinUserReview($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserReview relation
+ * @method     ChildGamesQuery rightJoinUserReview($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserReview relation
+ * @method     ChildGamesQuery innerJoinUserReview($relationAlias = null) Adds a INNER JOIN clause to the query using the UserReview relation
  *
- * @method     \CompaniesQuery|\GameLinksQuery|\GamePlatformsQuery|\RatingHeadersQuery|\UserReviewsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \CompanyQuery|\GameLinksQuery|\GamePlatformsQuery|\RatingHeaderQuery|\UserReviewQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildGames findOne(ConnectionInterface $con = null) Return the first ChildGames matching the query
  * @method     ChildGames findOneOrCreate(ConnectionInterface $con = null) Return the first ChildGames matching the query, or a new ChildGames object populated from the query conditions when no match is found
@@ -431,7 +431,7 @@ abstract class GamesQuery extends ModelCriteria
      * $query->filterByPublisherId(array('min' => 12)); // WHERE publisher_id > 12
      * </code>
      *
-     * @see       filterByCompaniesRelatedByPublisherId()
+     * @see       filterByCompanyRelatedByPublisherId()
      *
      * @param     mixed $publisherId The value to use as filter.
      *              Use scalar values for equality.
@@ -474,7 +474,7 @@ abstract class GamesQuery extends ModelCriteria
      * $query->filterByDeveloperId(array('min' => 12)); // WHERE developer_id > 12
      * </code>
      *
-     * @see       filterByCompaniesRelatedByDeveloperId()
+     * @see       filterByCompanyRelatedByDeveloperId()
      *
      * @param     mixed $developerId The value to use as filter.
      *              Use scalar values for equality.
@@ -636,44 +636,44 @@ abstract class GamesQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \Companies object
+     * Filter the query by a related \Company object
      *
-     * @param \Companies|ObjectCollection $companies The related object(s) to use as filter
+     * @param \Company|ObjectCollection $company The related object(s) to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
      * @return ChildGamesQuery The current query, for fluid interface
      */
-    public function filterByCompaniesRelatedByPublisherId($companies, $comparison = null)
+    public function filterByCompanyRelatedByPublisherId($company, $comparison = null)
     {
-        if ($companies instanceof \Companies) {
+        if ($company instanceof \Company) {
             return $this
-                ->addUsingAlias(GamesTableMap::COL_PUBLISHER_ID, $companies->getId(), $comparison);
-        } elseif ($companies instanceof ObjectCollection) {
+                ->addUsingAlias(GamesTableMap::COL_PUBLISHER_ID, $company->getId(), $comparison);
+        } elseif ($company instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(GamesTableMap::COL_PUBLISHER_ID, $companies->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(GamesTableMap::COL_PUBLISHER_ID, $company->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
-            throw new PropelException('filterByCompaniesRelatedByPublisherId() only accepts arguments of type \Companies or Collection');
+            throw new PropelException('filterByCompanyRelatedByPublisherId() only accepts arguments of type \Company or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the CompaniesRelatedByPublisherId relation
+     * Adds a JOIN clause to the query using the CompanyRelatedByPublisherId relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildGamesQuery The current query, for fluid interface
      */
-    public function joinCompaniesRelatedByPublisherId($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinCompanyRelatedByPublisherId($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('CompaniesRelatedByPublisherId');
+        $relationMap = $tableMap->getRelation('CompanyRelatedByPublisherId');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -688,14 +688,14 @@ abstract class GamesQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'CompaniesRelatedByPublisherId');
+            $this->addJoinObject($join, 'CompanyRelatedByPublisherId');
         }
 
         return $this;
     }
 
     /**
-     * Use the CompaniesRelatedByPublisherId relation Companies object
+     * Use the CompanyRelatedByPublisherId relation Company object
      *
      * @see useQuery()
      *
@@ -703,54 +703,54 @@ abstract class GamesQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \CompaniesQuery A secondary query class using the current class as primary query
+     * @return \CompanyQuery A secondary query class using the current class as primary query
      */
-    public function useCompaniesRelatedByPublisherIdQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useCompanyRelatedByPublisherIdQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
-            ->joinCompaniesRelatedByPublisherId($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'CompaniesRelatedByPublisherId', '\CompaniesQuery');
+            ->joinCompanyRelatedByPublisherId($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CompanyRelatedByPublisherId', '\CompanyQuery');
     }
 
     /**
-     * Filter the query by a related \Companies object
+     * Filter the query by a related \Company object
      *
-     * @param \Companies|ObjectCollection $companies The related object(s) to use as filter
+     * @param \Company|ObjectCollection $company The related object(s) to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
      * @return ChildGamesQuery The current query, for fluid interface
      */
-    public function filterByCompaniesRelatedByDeveloperId($companies, $comparison = null)
+    public function filterByCompanyRelatedByDeveloperId($company, $comparison = null)
     {
-        if ($companies instanceof \Companies) {
+        if ($company instanceof \Company) {
             return $this
-                ->addUsingAlias(GamesTableMap::COL_DEVELOPER_ID, $companies->getId(), $comparison);
-        } elseif ($companies instanceof ObjectCollection) {
+                ->addUsingAlias(GamesTableMap::COL_DEVELOPER_ID, $company->getId(), $comparison);
+        } elseif ($company instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(GamesTableMap::COL_DEVELOPER_ID, $companies->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(GamesTableMap::COL_DEVELOPER_ID, $company->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
-            throw new PropelException('filterByCompaniesRelatedByDeveloperId() only accepts arguments of type \Companies or Collection');
+            throw new PropelException('filterByCompanyRelatedByDeveloperId() only accepts arguments of type \Company or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the CompaniesRelatedByDeveloperId relation
+     * Adds a JOIN clause to the query using the CompanyRelatedByDeveloperId relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildGamesQuery The current query, for fluid interface
      */
-    public function joinCompaniesRelatedByDeveloperId($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinCompanyRelatedByDeveloperId($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('CompaniesRelatedByDeveloperId');
+        $relationMap = $tableMap->getRelation('CompanyRelatedByDeveloperId');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -765,14 +765,14 @@ abstract class GamesQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'CompaniesRelatedByDeveloperId');
+            $this->addJoinObject($join, 'CompanyRelatedByDeveloperId');
         }
 
         return $this;
     }
 
     /**
-     * Use the CompaniesRelatedByDeveloperId relation Companies object
+     * Use the CompanyRelatedByDeveloperId relation Company object
      *
      * @see useQuery()
      *
@@ -780,13 +780,13 @@ abstract class GamesQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \CompaniesQuery A secondary query class using the current class as primary query
+     * @return \CompanyQuery A secondary query class using the current class as primary query
      */
-    public function useCompaniesRelatedByDeveloperIdQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useCompanyRelatedByDeveloperIdQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
-            ->joinCompaniesRelatedByDeveloperId($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'CompaniesRelatedByDeveloperId', '\CompaniesQuery');
+            ->joinCompanyRelatedByDeveloperId($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CompanyRelatedByDeveloperId', '\CompanyQuery');
     }
 
     /**
@@ -936,40 +936,40 @@ abstract class GamesQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \RatingHeaders object
+     * Filter the query by a related \RatingHeader object
      *
-     * @param \RatingHeaders|ObjectCollection $ratingHeaders the related object to use as filter
+     * @param \RatingHeader|ObjectCollection $ratingHeader the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildGamesQuery The current query, for fluid interface
      */
-    public function filterByRatingHeaders($ratingHeaders, $comparison = null)
+    public function filterByRatingHeader($ratingHeader, $comparison = null)
     {
-        if ($ratingHeaders instanceof \RatingHeaders) {
+        if ($ratingHeader instanceof \RatingHeader) {
             return $this
-                ->addUsingAlias(GamesTableMap::COL_ID, $ratingHeaders->getGameId(), $comparison);
-        } elseif ($ratingHeaders instanceof ObjectCollection) {
+                ->addUsingAlias(GamesTableMap::COL_ID, $ratingHeader->getGameId(), $comparison);
+        } elseif ($ratingHeader instanceof ObjectCollection) {
             return $this
-                ->useRatingHeadersQuery()
-                ->filterByPrimaryKeys($ratingHeaders->getPrimaryKeys())
+                ->useRatingHeaderQuery()
+                ->filterByPrimaryKeys($ratingHeader->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByRatingHeaders() only accepts arguments of type \RatingHeaders or Collection');
+            throw new PropelException('filterByRatingHeader() only accepts arguments of type \RatingHeader or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the RatingHeaders relation
+     * Adds a JOIN clause to the query using the RatingHeader relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildGamesQuery The current query, for fluid interface
      */
-    public function joinRatingHeaders($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinRatingHeader($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('RatingHeaders');
+        $relationMap = $tableMap->getRelation('RatingHeader');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -984,14 +984,14 @@ abstract class GamesQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'RatingHeaders');
+            $this->addJoinObject($join, 'RatingHeader');
         }
 
         return $this;
     }
 
     /**
-     * Use the RatingHeaders relation RatingHeaders object
+     * Use the RatingHeader relation RatingHeader object
      *
      * @see useQuery()
      *
@@ -999,50 +999,50 @@ abstract class GamesQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \RatingHeadersQuery A secondary query class using the current class as primary query
+     * @return \RatingHeaderQuery A secondary query class using the current class as primary query
      */
-    public function useRatingHeadersQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useRatingHeaderQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinRatingHeaders($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'RatingHeaders', '\RatingHeadersQuery');
+            ->joinRatingHeader($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'RatingHeader', '\RatingHeaderQuery');
     }
 
     /**
-     * Filter the query by a related \UserReviews object
+     * Filter the query by a related \UserReview object
      *
-     * @param \UserReviews|ObjectCollection $userReviews the related object to use as filter
+     * @param \UserReview|ObjectCollection $userReview the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildGamesQuery The current query, for fluid interface
      */
-    public function filterByUserReviews($userReviews, $comparison = null)
+    public function filterByUserReview($userReview, $comparison = null)
     {
-        if ($userReviews instanceof \UserReviews) {
+        if ($userReview instanceof \UserReview) {
             return $this
-                ->addUsingAlias(GamesTableMap::COL_ID, $userReviews->getGameId(), $comparison);
-        } elseif ($userReviews instanceof ObjectCollection) {
+                ->addUsingAlias(GamesTableMap::COL_ID, $userReview->getGameId(), $comparison);
+        } elseif ($userReview instanceof ObjectCollection) {
             return $this
-                ->useUserReviewsQuery()
-                ->filterByPrimaryKeys($userReviews->getPrimaryKeys())
+                ->useUserReviewQuery()
+                ->filterByPrimaryKeys($userReview->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByUserReviews() only accepts arguments of type \UserReviews or Collection');
+            throw new PropelException('filterByUserReview() only accepts arguments of type \UserReview or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the UserReviews relation
+     * Adds a JOIN clause to the query using the UserReview relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildGamesQuery The current query, for fluid interface
      */
-    public function joinUserReviews($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinUserReview($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('UserReviews');
+        $relationMap = $tableMap->getRelation('UserReview');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -1057,14 +1057,14 @@ abstract class GamesQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'UserReviews');
+            $this->addJoinObject($join, 'UserReview');
         }
 
         return $this;
     }
 
     /**
-     * Use the UserReviews relation UserReviews object
+     * Use the UserReview relation UserReview object
      *
      * @see useQuery()
      *
@@ -1072,13 +1072,13 @@ abstract class GamesQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \UserReviewsQuery A secondary query class using the current class as primary query
+     * @return \UserReviewQuery A secondary query class using the current class as primary query
      */
-    public function useUserReviewsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useUserReviewQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinUserReviews($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'UserReviews', '\UserReviewsQuery');
+            ->joinUserReview($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UserReview', '\UserReviewQuery');
     }
 
     /**

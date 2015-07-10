@@ -2,18 +2,18 @@
 
 namespace Base;
 
-use \Companies as ChildCompanies;
-use \CompaniesQuery as ChildCompaniesQuery;
+use \Company as ChildCompany;
+use \CompanyQuery as ChildCompanyQuery;
 use \GameLinks as ChildGameLinks;
 use \GameLinksQuery as ChildGameLinksQuery;
 use \GamePlatforms as ChildGamePlatforms;
 use \GamePlatformsQuery as ChildGamePlatformsQuery;
 use \Games as ChildGames;
 use \GamesQuery as ChildGamesQuery;
-use \RatingHeaders as ChildRatingHeaders;
-use \RatingHeadersQuery as ChildRatingHeadersQuery;
-use \UserReviews as ChildUserReviews;
-use \UserReviewsQuery as ChildUserReviewsQuery;
+use \RatingHeader as ChildRatingHeader;
+use \RatingHeaderQuery as ChildRatingHeaderQuery;
+use \UserReview as ChildUserReview;
+use \UserReviewQuery as ChildUserReviewQuery;
 use \Exception;
 use \PDO;
 use Map\GamesTableMap;
@@ -132,14 +132,14 @@ abstract class Games implements ActiveRecordInterface
     protected $gb_thumb;
 
     /**
-     * @var        ChildCompanies
+     * @var        ChildCompany
      */
-    protected $aCompaniesRelatedByPublisherId;
+    protected $aCompanyRelatedByPublisherId;
 
     /**
-     * @var        ChildCompanies
+     * @var        ChildCompany
      */
-    protected $aCompaniesRelatedByDeveloperId;
+    protected $aCompanyRelatedByDeveloperId;
 
     /**
      * @var        ObjectCollection|ChildGameLinks[] Collection to store aggregation of ChildGameLinks objects.
@@ -154,16 +154,16 @@ abstract class Games implements ActiveRecordInterface
     protected $collGamePlatformssPartial;
 
     /**
-     * @var        ObjectCollection|ChildRatingHeaders[] Collection to store aggregation of ChildRatingHeaders objects.
+     * @var        ObjectCollection|ChildRatingHeader[] Collection to store aggregation of ChildRatingHeader objects.
      */
-    protected $collRatingHeaderss;
-    protected $collRatingHeaderssPartial;
+    protected $collRatingHeaders;
+    protected $collRatingHeadersPartial;
 
     /**
-     * @var        ObjectCollection|ChildUserReviews[] Collection to store aggregation of ChildUserReviews objects.
+     * @var        ObjectCollection|ChildUserReview[] Collection to store aggregation of ChildUserReview objects.
      */
-    protected $collUserReviewss;
-    protected $collUserReviewssPartial;
+    protected $collUserReviews;
+    protected $collUserReviewsPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -187,15 +187,15 @@ abstract class Games implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildRatingHeaders[]
+     * @var ObjectCollection|ChildRatingHeader[]
      */
-    protected $ratingHeaderssScheduledForDeletion = null;
+    protected $ratingHeadersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildUserReviews[]
+     * @var ObjectCollection|ChildUserReview[]
      */
-    protected $userReviewssScheduledForDeletion = null;
+    protected $userReviewsScheduledForDeletion = null;
 
     /**
      * Initializes internal state of Base\Games object.
@@ -611,8 +611,8 @@ abstract class Games implements ActiveRecordInterface
             $this->modifiedColumns[GamesTableMap::COL_PUBLISHER_ID] = true;
         }
 
-        if ($this->aCompaniesRelatedByPublisherId !== null && $this->aCompaniesRelatedByPublisherId->getId() !== $v) {
-            $this->aCompaniesRelatedByPublisherId = null;
+        if ($this->aCompanyRelatedByPublisherId !== null && $this->aCompanyRelatedByPublisherId->getId() !== $v) {
+            $this->aCompanyRelatedByPublisherId = null;
         }
 
         return $this;
@@ -635,8 +635,8 @@ abstract class Games implements ActiveRecordInterface
             $this->modifiedColumns[GamesTableMap::COL_DEVELOPER_ID] = true;
         }
 
-        if ($this->aCompaniesRelatedByDeveloperId !== null && $this->aCompaniesRelatedByDeveloperId->getId() !== $v) {
-            $this->aCompaniesRelatedByDeveloperId = null;
+        if ($this->aCompanyRelatedByDeveloperId !== null && $this->aCompanyRelatedByDeveloperId->getId() !== $v) {
+            $this->aCompanyRelatedByDeveloperId = null;
         }
 
         return $this;
@@ -817,11 +817,11 @@ abstract class Games implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
-        if ($this->aCompaniesRelatedByPublisherId !== null && $this->publisher_id !== $this->aCompaniesRelatedByPublisherId->getId()) {
-            $this->aCompaniesRelatedByPublisherId = null;
+        if ($this->aCompanyRelatedByPublisherId !== null && $this->publisher_id !== $this->aCompanyRelatedByPublisherId->getId()) {
+            $this->aCompanyRelatedByPublisherId = null;
         }
-        if ($this->aCompaniesRelatedByDeveloperId !== null && $this->developer_id !== $this->aCompaniesRelatedByDeveloperId->getId()) {
-            $this->aCompaniesRelatedByDeveloperId = null;
+        if ($this->aCompanyRelatedByDeveloperId !== null && $this->developer_id !== $this->aCompanyRelatedByDeveloperId->getId()) {
+            $this->aCompanyRelatedByDeveloperId = null;
         }
     } // ensureConsistency
 
@@ -862,15 +862,15 @@ abstract class Games implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aCompaniesRelatedByPublisherId = null;
-            $this->aCompaniesRelatedByDeveloperId = null;
+            $this->aCompanyRelatedByPublisherId = null;
+            $this->aCompanyRelatedByDeveloperId = null;
             $this->collGameLinkss = null;
 
             $this->collGamePlatformss = null;
 
-            $this->collRatingHeaderss = null;
+            $this->collRatingHeaders = null;
 
-            $this->collUserReviewss = null;
+            $this->collUserReviews = null;
 
         } // if (deep)
     }
@@ -976,18 +976,18 @@ abstract class Games implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aCompaniesRelatedByPublisherId !== null) {
-                if ($this->aCompaniesRelatedByPublisherId->isModified() || $this->aCompaniesRelatedByPublisherId->isNew()) {
-                    $affectedRows += $this->aCompaniesRelatedByPublisherId->save($con);
+            if ($this->aCompanyRelatedByPublisherId !== null) {
+                if ($this->aCompanyRelatedByPublisherId->isModified() || $this->aCompanyRelatedByPublisherId->isNew()) {
+                    $affectedRows += $this->aCompanyRelatedByPublisherId->save($con);
                 }
-                $this->setCompaniesRelatedByPublisherId($this->aCompaniesRelatedByPublisherId);
+                $this->setCompanyRelatedByPublisherId($this->aCompanyRelatedByPublisherId);
             }
 
-            if ($this->aCompaniesRelatedByDeveloperId !== null) {
-                if ($this->aCompaniesRelatedByDeveloperId->isModified() || $this->aCompaniesRelatedByDeveloperId->isNew()) {
-                    $affectedRows += $this->aCompaniesRelatedByDeveloperId->save($con);
+            if ($this->aCompanyRelatedByDeveloperId !== null) {
+                if ($this->aCompanyRelatedByDeveloperId->isModified() || $this->aCompanyRelatedByDeveloperId->isNew()) {
+                    $affectedRows += $this->aCompanyRelatedByDeveloperId->save($con);
                 }
-                $this->setCompaniesRelatedByDeveloperId($this->aCompaniesRelatedByDeveloperId);
+                $this->setCompanyRelatedByDeveloperId($this->aCompanyRelatedByDeveloperId);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -1035,34 +1035,34 @@ abstract class Games implements ActiveRecordInterface
                 }
             }
 
-            if ($this->ratingHeaderssScheduledForDeletion !== null) {
-                if (!$this->ratingHeaderssScheduledForDeletion->isEmpty()) {
-                    \RatingHeadersQuery::create()
-                        ->filterByPrimaryKeys($this->ratingHeaderssScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->ratingHeadersScheduledForDeletion !== null) {
+                if (!$this->ratingHeadersScheduledForDeletion->isEmpty()) {
+                    \RatingHeaderQuery::create()
+                        ->filterByPrimaryKeys($this->ratingHeadersScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->ratingHeaderssScheduledForDeletion = null;
+                    $this->ratingHeadersScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collRatingHeaderss !== null) {
-                foreach ($this->collRatingHeaderss as $referrerFK) {
+            if ($this->collRatingHeaders !== null) {
+                foreach ($this->collRatingHeaders as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
                 }
             }
 
-            if ($this->userReviewssScheduledForDeletion !== null) {
-                if (!$this->userReviewssScheduledForDeletion->isEmpty()) {
-                    \UserReviewsQuery::create()
-                        ->filterByPrimaryKeys($this->userReviewssScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->userReviewsScheduledForDeletion !== null) {
+                if (!$this->userReviewsScheduledForDeletion->isEmpty()) {
+                    \UserReviewQuery::create()
+                        ->filterByPrimaryKeys($this->userReviewsScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->userReviewssScheduledForDeletion = null;
+                    $this->userReviewsScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collUserReviewss !== null) {
-                foreach ($this->collUserReviewss as $referrerFK) {
+            if ($this->collUserReviews !== null) {
+                foreach ($this->collUserReviews as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1305,35 +1305,35 @@ abstract class Games implements ActiveRecordInterface
         }
         
         if ($includeForeignObjects) {
-            if (null !== $this->aCompaniesRelatedByPublisherId) {
+            if (null !== $this->aCompanyRelatedByPublisherId) {
                 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'companies';
+                        $key = 'company';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'companies';
+                        $key = 'company';
                         break;
                     default:
-                        $key = 'Companies';
+                        $key = 'Company';
                 }
         
-                $result[$key] = $this->aCompaniesRelatedByPublisherId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aCompanyRelatedByPublisherId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->aCompaniesRelatedByDeveloperId) {
+            if (null !== $this->aCompanyRelatedByDeveloperId) {
                 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'companies';
+                        $key = 'company';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'companies';
+                        $key = 'company';
                         break;
                     default:
-                        $key = 'Companies';
+                        $key = 'Company';
                 }
         
-                $result[$key] = $this->aCompaniesRelatedByDeveloperId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aCompanyRelatedByDeveloperId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collGameLinkss) {
                 
@@ -1365,35 +1365,35 @@ abstract class Games implements ActiveRecordInterface
         
                 $result[$key] = $this->collGamePlatformss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collRatingHeaderss) {
+            if (null !== $this->collRatingHeaders) {
                 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'ratingHeaderss';
+                        $key = 'ratingHeaders';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'rating_headerss';
+                        $key = 'rating_headers';
                         break;
                     default:
-                        $key = 'RatingHeaderss';
+                        $key = 'RatingHeaders';
                 }
         
-                $result[$key] = $this->collRatingHeaderss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collRatingHeaders->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collUserReviewss) {
+            if (null !== $this->collUserReviews) {
                 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'userReviewss';
+                        $key = 'userReviews';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'user_reviewss';
+                        $key = 'user_reviews';
                         break;
                     default:
-                        $key = 'UserReviewss';
+                        $key = 'UserReviews';
                 }
         
-                $result[$key] = $this->collUserReviewss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collUserReviews->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1699,15 +1699,15 @@ abstract class Games implements ActiveRecordInterface
                 }
             }
 
-            foreach ($this->getRatingHeaderss() as $relObj) {
+            foreach ($this->getRatingHeaders() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addRatingHeaders($relObj->copy($deepCopy));
+                    $copyObj->addRatingHeader($relObj->copy($deepCopy));
                 }
             }
 
-            foreach ($this->getUserReviewss() as $relObj) {
+            foreach ($this->getUserReviews() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addUserReviews($relObj->copy($deepCopy));
+                    $copyObj->addUserReview($relObj->copy($deepCopy));
                 }
             }
 
@@ -1742,13 +1742,13 @@ abstract class Games implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildCompanies object.
+     * Declares an association between this object and a ChildCompany object.
      *
-     * @param  ChildCompanies $v
+     * @param  ChildCompany $v
      * @return $this|\Games The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setCompaniesRelatedByPublisherId(ChildCompanies $v = null)
+    public function setCompanyRelatedByPublisherId(ChildCompany $v = null)
     {
         if ($v === null) {
             $this->setPublisherId(NULL);
@@ -1756,10 +1756,10 @@ abstract class Games implements ActiveRecordInterface
             $this->setPublisherId($v->getId());
         }
 
-        $this->aCompaniesRelatedByPublisherId = $v;
+        $this->aCompanyRelatedByPublisherId = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildCompanies object, it will not be re-added.
+        // If this object has already been added to the ChildCompany object, it will not be re-added.
         if ($v !== null) {
             $v->addGamesRelatedByPublisherId($this);
         }
@@ -1770,36 +1770,36 @@ abstract class Games implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildCompanies object
+     * Get the associated ChildCompany object
      *
      * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildCompanies The associated ChildCompanies object.
+     * @return ChildCompany The associated ChildCompany object.
      * @throws PropelException
      */
-    public function getCompaniesRelatedByPublisherId(ConnectionInterface $con = null)
+    public function getCompanyRelatedByPublisherId(ConnectionInterface $con = null)
     {
-        if ($this->aCompaniesRelatedByPublisherId === null && (($this->publisher_id !== "" && $this->publisher_id !== null))) {
-            $this->aCompaniesRelatedByPublisherId = ChildCompaniesQuery::create()->findPk($this->publisher_id, $con);
+        if ($this->aCompanyRelatedByPublisherId === null && (($this->publisher_id !== "" && $this->publisher_id !== null))) {
+            $this->aCompanyRelatedByPublisherId = ChildCompanyQuery::create()->findPk($this->publisher_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aCompaniesRelatedByPublisherId->addGamessRelatedByPublisherId($this);
+                $this->aCompanyRelatedByPublisherId->addGamessRelatedByPublisherId($this);
              */
         }
 
-        return $this->aCompaniesRelatedByPublisherId;
+        return $this->aCompanyRelatedByPublisherId;
     }
 
     /**
-     * Declares an association between this object and a ChildCompanies object.
+     * Declares an association between this object and a ChildCompany object.
      *
-     * @param  ChildCompanies $v
+     * @param  ChildCompany $v
      * @return $this|\Games The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setCompaniesRelatedByDeveloperId(ChildCompanies $v = null)
+    public function setCompanyRelatedByDeveloperId(ChildCompany $v = null)
     {
         if ($v === null) {
             $this->setDeveloperId(NULL);
@@ -1807,10 +1807,10 @@ abstract class Games implements ActiveRecordInterface
             $this->setDeveloperId($v->getId());
         }
 
-        $this->aCompaniesRelatedByDeveloperId = $v;
+        $this->aCompanyRelatedByDeveloperId = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildCompanies object, it will not be re-added.
+        // If this object has already been added to the ChildCompany object, it will not be re-added.
         if ($v !== null) {
             $v->addGamesRelatedByDeveloperId($this);
         }
@@ -1821,26 +1821,26 @@ abstract class Games implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildCompanies object
+     * Get the associated ChildCompany object
      *
      * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildCompanies The associated ChildCompanies object.
+     * @return ChildCompany The associated ChildCompany object.
      * @throws PropelException
      */
-    public function getCompaniesRelatedByDeveloperId(ConnectionInterface $con = null)
+    public function getCompanyRelatedByDeveloperId(ConnectionInterface $con = null)
     {
-        if ($this->aCompaniesRelatedByDeveloperId === null && (($this->developer_id !== "" && $this->developer_id !== null))) {
-            $this->aCompaniesRelatedByDeveloperId = ChildCompaniesQuery::create()->findPk($this->developer_id, $con);
+        if ($this->aCompanyRelatedByDeveloperId === null && (($this->developer_id !== "" && $this->developer_id !== null))) {
+            $this->aCompanyRelatedByDeveloperId = ChildCompanyQuery::create()->findPk($this->developer_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aCompaniesRelatedByDeveloperId->addGamessRelatedByDeveloperId($this);
+                $this->aCompanyRelatedByDeveloperId->addGamessRelatedByDeveloperId($this);
              */
         }
 
-        return $this->aCompaniesRelatedByDeveloperId;
+        return $this->aCompanyRelatedByDeveloperId;
     }
 
 
@@ -1860,11 +1860,11 @@ abstract class Games implements ActiveRecordInterface
         if ('GamePlatforms' == $relationName) {
             return $this->initGamePlatformss();
         }
-        if ('RatingHeaders' == $relationName) {
-            return $this->initRatingHeaderss();
+        if ('RatingHeader' == $relationName) {
+            return $this->initRatingHeaders();
         }
-        if ('UserReviews' == $relationName) {
-            return $this->initUserReviewss();
+        if ('UserReview' == $relationName) {
+            return $this->initUserReviews();
         }
     }
 
@@ -2358,31 +2358,31 @@ abstract class Games implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collRatingHeaderss collection
+     * Clears out the collRatingHeaders collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addRatingHeaderss()
+     * @see        addRatingHeaders()
      */
-    public function clearRatingHeaderss()
+    public function clearRatingHeaders()
     {
-        $this->collRatingHeaderss = null; // important to set this to NULL since that means it is uninitialized
+        $this->collRatingHeaders = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collRatingHeaderss collection loaded partially.
+     * Reset is the collRatingHeaders collection loaded partially.
      */
-    public function resetPartialRatingHeaderss($v = true)
+    public function resetPartialRatingHeaders($v = true)
     {
-        $this->collRatingHeaderssPartial = $v;
+        $this->collRatingHeadersPartial = $v;
     }
 
     /**
-     * Initializes the collRatingHeaderss collection.
+     * Initializes the collRatingHeaders collection.
      *
-     * By default this just sets the collRatingHeaderss collection to an empty array (like clearcollRatingHeaderss());
+     * By default this just sets the collRatingHeaders collection to an empty array (like clearcollRatingHeaders());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -2391,17 +2391,17 @@ abstract class Games implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initRatingHeaderss($overrideExisting = true)
+    public function initRatingHeaders($overrideExisting = true)
     {
-        if (null !== $this->collRatingHeaderss && !$overrideExisting) {
+        if (null !== $this->collRatingHeaders && !$overrideExisting) {
             return;
         }
-        $this->collRatingHeaderss = new ObjectCollection();
-        $this->collRatingHeaderss->setModel('\RatingHeaders');
+        $this->collRatingHeaders = new ObjectCollection();
+        $this->collRatingHeaders->setModel('\RatingHeader');
     }
 
     /**
-     * Gets an array of ChildRatingHeaders objects which contain a foreign key that references this object.
+     * Gets an array of ChildRatingHeader objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -2411,108 +2411,108 @@ abstract class Games implements ActiveRecordInterface
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
+     * @return ObjectCollection|ChildRatingHeader[] List of ChildRatingHeader objects
      * @throws PropelException
      */
-    public function getRatingHeaderss(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getRatingHeaders(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collRatingHeaderssPartial && !$this->isNew();
-        if (null === $this->collRatingHeaderss || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collRatingHeaderss) {
+        $partial = $this->collRatingHeadersPartial && !$this->isNew();
+        if (null === $this->collRatingHeaders || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collRatingHeaders) {
                 // return empty collection
-                $this->initRatingHeaderss();
+                $this->initRatingHeaders();
             } else {
-                $collRatingHeaderss = ChildRatingHeadersQuery::create(null, $criteria)
+                $collRatingHeaders = ChildRatingHeaderQuery::create(null, $criteria)
                     ->filterByGames($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collRatingHeaderssPartial && count($collRatingHeaderss)) {
-                        $this->initRatingHeaderss(false);
+                    if (false !== $this->collRatingHeadersPartial && count($collRatingHeaders)) {
+                        $this->initRatingHeaders(false);
 
-                        foreach ($collRatingHeaderss as $obj) {
-                            if (false == $this->collRatingHeaderss->contains($obj)) {
-                                $this->collRatingHeaderss->append($obj);
+                        foreach ($collRatingHeaders as $obj) {
+                            if (false == $this->collRatingHeaders->contains($obj)) {
+                                $this->collRatingHeaders->append($obj);
                             }
                         }
 
-                        $this->collRatingHeaderssPartial = true;
+                        $this->collRatingHeadersPartial = true;
                     }
 
-                    return $collRatingHeaderss;
+                    return $collRatingHeaders;
                 }
 
-                if ($partial && $this->collRatingHeaderss) {
-                    foreach ($this->collRatingHeaderss as $obj) {
+                if ($partial && $this->collRatingHeaders) {
+                    foreach ($this->collRatingHeaders as $obj) {
                         if ($obj->isNew()) {
-                            $collRatingHeaderss[] = $obj;
+                            $collRatingHeaders[] = $obj;
                         }
                     }
                 }
 
-                $this->collRatingHeaderss = $collRatingHeaderss;
-                $this->collRatingHeaderssPartial = false;
+                $this->collRatingHeaders = $collRatingHeaders;
+                $this->collRatingHeadersPartial = false;
             }
         }
 
-        return $this->collRatingHeaderss;
+        return $this->collRatingHeaders;
     }
 
     /**
-     * Sets a collection of ChildRatingHeaders objects related by a one-to-many relationship
+     * Sets a collection of ChildRatingHeader objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $ratingHeaderss A Propel collection.
+     * @param      Collection $ratingHeaders A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildGames The current object (for fluent API support)
      */
-    public function setRatingHeaderss(Collection $ratingHeaderss, ConnectionInterface $con = null)
+    public function setRatingHeaders(Collection $ratingHeaders, ConnectionInterface $con = null)
     {
-        /** @var ChildRatingHeaders[] $ratingHeaderssToDelete */
-        $ratingHeaderssToDelete = $this->getRatingHeaderss(new Criteria(), $con)->diff($ratingHeaderss);
+        /** @var ChildRatingHeader[] $ratingHeadersToDelete */
+        $ratingHeadersToDelete = $this->getRatingHeaders(new Criteria(), $con)->diff($ratingHeaders);
 
         
-        $this->ratingHeaderssScheduledForDeletion = $ratingHeaderssToDelete;
+        $this->ratingHeadersScheduledForDeletion = $ratingHeadersToDelete;
 
-        foreach ($ratingHeaderssToDelete as $ratingHeadersRemoved) {
-            $ratingHeadersRemoved->setGames(null);
+        foreach ($ratingHeadersToDelete as $ratingHeaderRemoved) {
+            $ratingHeaderRemoved->setGames(null);
         }
 
-        $this->collRatingHeaderss = null;
-        foreach ($ratingHeaderss as $ratingHeaders) {
-            $this->addRatingHeaders($ratingHeaders);
+        $this->collRatingHeaders = null;
+        foreach ($ratingHeaders as $ratingHeader) {
+            $this->addRatingHeader($ratingHeader);
         }
 
-        $this->collRatingHeaderss = $ratingHeaderss;
-        $this->collRatingHeaderssPartial = false;
+        $this->collRatingHeaders = $ratingHeaders;
+        $this->collRatingHeadersPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related RatingHeaders objects.
+     * Returns the number of related RatingHeader objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related RatingHeaders objects.
+     * @return int             Count of related RatingHeader objects.
      * @throws PropelException
      */
-    public function countRatingHeaderss(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countRatingHeaders(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collRatingHeaderssPartial && !$this->isNew();
-        if (null === $this->collRatingHeaderss || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collRatingHeaderss) {
+        $partial = $this->collRatingHeadersPartial && !$this->isNew();
+        if (null === $this->collRatingHeaders || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collRatingHeaders) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getRatingHeaderss());
+                return count($this->getRatingHeaders());
             }
 
-            $query = ChildRatingHeadersQuery::create(null, $criteria);
+            $query = ChildRatingHeaderQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -2522,54 +2522,54 @@ abstract class Games implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collRatingHeaderss);
+        return count($this->collRatingHeaders);
     }
 
     /**
-     * Method called to associate a ChildRatingHeaders object to this object
-     * through the ChildRatingHeaders foreign key attribute.
+     * Method called to associate a ChildRatingHeader object to this object
+     * through the ChildRatingHeader foreign key attribute.
      *
-     * @param  ChildRatingHeaders $l ChildRatingHeaders
+     * @param  ChildRatingHeader $l ChildRatingHeader
      * @return $this|\Games The current object (for fluent API support)
      */
-    public function addRatingHeaders(ChildRatingHeaders $l)
+    public function addRatingHeader(ChildRatingHeader $l)
     {
-        if ($this->collRatingHeaderss === null) {
-            $this->initRatingHeaderss();
-            $this->collRatingHeaderssPartial = true;
+        if ($this->collRatingHeaders === null) {
+            $this->initRatingHeaders();
+            $this->collRatingHeadersPartial = true;
         }
 
-        if (!$this->collRatingHeaderss->contains($l)) {
-            $this->doAddRatingHeaders($l);
+        if (!$this->collRatingHeaders->contains($l)) {
+            $this->doAddRatingHeader($l);
         }
 
         return $this;
     }
 
     /**
-     * @param ChildRatingHeaders $ratingHeaders The ChildRatingHeaders object to add.
+     * @param ChildRatingHeader $ratingHeader The ChildRatingHeader object to add.
      */
-    protected function doAddRatingHeaders(ChildRatingHeaders $ratingHeaders)
+    protected function doAddRatingHeader(ChildRatingHeader $ratingHeader)
     {
-        $this->collRatingHeaderss[]= $ratingHeaders;
-        $ratingHeaders->setGames($this);
+        $this->collRatingHeaders[]= $ratingHeader;
+        $ratingHeader->setGames($this);
     }
 
     /**
-     * @param  ChildRatingHeaders $ratingHeaders The ChildRatingHeaders object to remove.
+     * @param  ChildRatingHeader $ratingHeader The ChildRatingHeader object to remove.
      * @return $this|ChildGames The current object (for fluent API support)
      */
-    public function removeRatingHeaders(ChildRatingHeaders $ratingHeaders)
+    public function removeRatingHeader(ChildRatingHeader $ratingHeader)
     {
-        if ($this->getRatingHeaderss()->contains($ratingHeaders)) {
-            $pos = $this->collRatingHeaderss->search($ratingHeaders);
-            $this->collRatingHeaderss->remove($pos);
-            if (null === $this->ratingHeaderssScheduledForDeletion) {
-                $this->ratingHeaderssScheduledForDeletion = clone $this->collRatingHeaderss;
-                $this->ratingHeaderssScheduledForDeletion->clear();
+        if ($this->getRatingHeaders()->contains($ratingHeader)) {
+            $pos = $this->collRatingHeaders->search($ratingHeader);
+            $this->collRatingHeaders->remove($pos);
+            if (null === $this->ratingHeadersScheduledForDeletion) {
+                $this->ratingHeadersScheduledForDeletion = clone $this->collRatingHeaders;
+                $this->ratingHeadersScheduledForDeletion->clear();
             }
-            $this->ratingHeaderssScheduledForDeletion[]= clone $ratingHeaders;
-            $ratingHeaders->setGames(null);
+            $this->ratingHeadersScheduledForDeletion[]= clone $ratingHeader;
+            $ratingHeader->setGames(null);
         }
 
         return $this;
@@ -2581,7 +2581,7 @@ abstract class Games implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this Games is new, it will return
      * an empty collection; or if this Games has previously
-     * been saved, it will retrieve related RatingHeaderss from storage.
+     * been saved, it will retrieve related RatingHeaders from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -2590,14 +2590,14 @@ abstract class Games implements ActiveRecordInterface
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
+     * @return ObjectCollection|ChildRatingHeader[] List of ChildRatingHeader objects
      */
-    public function getRatingHeaderssJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getRatingHeadersJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildRatingHeadersQuery::create(null, $criteria);
+        $query = ChildRatingHeaderQuery::create(null, $criteria);
         $query->joinWith('User', $joinBehavior);
 
-        return $this->getRatingHeaderss($query, $con);
+        return $this->getRatingHeaders($query, $con);
     }
 
 
@@ -2606,7 +2606,7 @@ abstract class Games implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this Games is new, it will return
      * an empty collection; or if this Games has previously
-     * been saved, it will retrieve related RatingHeaderss from storage.
+     * been saved, it will retrieve related RatingHeaders from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -2615,67 +2615,42 @@ abstract class Games implements ActiveRecordInterface
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
+     * @return ObjectCollection|ChildRatingHeader[] List of ChildRatingHeader objects
      */
-    public function getRatingHeaderssJoinRigs(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getRatingHeadersJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildRatingHeadersQuery::create(null, $criteria);
-        $query->joinWith('Rigs', $joinBehavior);
-
-        return $this->getRatingHeaderss($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Games is new, it will return
-     * an empty collection; or if this Games has previously
-     * been saved, it will retrieve related RatingHeaderss from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Games.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
-     */
-    public function getRatingHeaderssJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildRatingHeadersQuery::create(null, $criteria);
+        $query = ChildRatingHeaderQuery::create(null, $criteria);
         $query->joinWith('Platforms', $joinBehavior);
 
-        return $this->getRatingHeaderss($query, $con);
+        return $this->getRatingHeaders($query, $con);
     }
 
     /**
-     * Clears out the collUserReviewss collection
+     * Clears out the collUserReviews collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addUserReviewss()
+     * @see        addUserReviews()
      */
-    public function clearUserReviewss()
+    public function clearUserReviews()
     {
-        $this->collUserReviewss = null; // important to set this to NULL since that means it is uninitialized
+        $this->collUserReviews = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collUserReviewss collection loaded partially.
+     * Reset is the collUserReviews collection loaded partially.
      */
-    public function resetPartialUserReviewss($v = true)
+    public function resetPartialUserReviews($v = true)
     {
-        $this->collUserReviewssPartial = $v;
+        $this->collUserReviewsPartial = $v;
     }
 
     /**
-     * Initializes the collUserReviewss collection.
+     * Initializes the collUserReviews collection.
      *
-     * By default this just sets the collUserReviewss collection to an empty array (like clearcollUserReviewss());
+     * By default this just sets the collUserReviews collection to an empty array (like clearcollUserReviews());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -2684,17 +2659,17 @@ abstract class Games implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initUserReviewss($overrideExisting = true)
+    public function initUserReviews($overrideExisting = true)
     {
-        if (null !== $this->collUserReviewss && !$overrideExisting) {
+        if (null !== $this->collUserReviews && !$overrideExisting) {
             return;
         }
-        $this->collUserReviewss = new ObjectCollection();
-        $this->collUserReviewss->setModel('\UserReviews');
+        $this->collUserReviews = new ObjectCollection();
+        $this->collUserReviews->setModel('\UserReview');
     }
 
     /**
-     * Gets an array of ChildUserReviews objects which contain a foreign key that references this object.
+     * Gets an array of ChildUserReview objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -2704,108 +2679,108 @@ abstract class Games implements ActiveRecordInterface
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     * @return ObjectCollection|ChildUserReview[] List of ChildUserReview objects
      * @throws PropelException
      */
-    public function getUserReviewss(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getUserReviews(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collUserReviewssPartial && !$this->isNew();
-        if (null === $this->collUserReviewss || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collUserReviewss) {
+        $partial = $this->collUserReviewsPartial && !$this->isNew();
+        if (null === $this->collUserReviews || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collUserReviews) {
                 // return empty collection
-                $this->initUserReviewss();
+                $this->initUserReviews();
             } else {
-                $collUserReviewss = ChildUserReviewsQuery::create(null, $criteria)
+                $collUserReviews = ChildUserReviewQuery::create(null, $criteria)
                     ->filterByGames($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collUserReviewssPartial && count($collUserReviewss)) {
-                        $this->initUserReviewss(false);
+                    if (false !== $this->collUserReviewsPartial && count($collUserReviews)) {
+                        $this->initUserReviews(false);
 
-                        foreach ($collUserReviewss as $obj) {
-                            if (false == $this->collUserReviewss->contains($obj)) {
-                                $this->collUserReviewss->append($obj);
+                        foreach ($collUserReviews as $obj) {
+                            if (false == $this->collUserReviews->contains($obj)) {
+                                $this->collUserReviews->append($obj);
                             }
                         }
 
-                        $this->collUserReviewssPartial = true;
+                        $this->collUserReviewsPartial = true;
                     }
 
-                    return $collUserReviewss;
+                    return $collUserReviews;
                 }
 
-                if ($partial && $this->collUserReviewss) {
-                    foreach ($this->collUserReviewss as $obj) {
+                if ($partial && $this->collUserReviews) {
+                    foreach ($this->collUserReviews as $obj) {
                         if ($obj->isNew()) {
-                            $collUserReviewss[] = $obj;
+                            $collUserReviews[] = $obj;
                         }
                     }
                 }
 
-                $this->collUserReviewss = $collUserReviewss;
-                $this->collUserReviewssPartial = false;
+                $this->collUserReviews = $collUserReviews;
+                $this->collUserReviewsPartial = false;
             }
         }
 
-        return $this->collUserReviewss;
+        return $this->collUserReviews;
     }
 
     /**
-     * Sets a collection of ChildUserReviews objects related by a one-to-many relationship
+     * Sets a collection of ChildUserReview objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $userReviewss A Propel collection.
+     * @param      Collection $userReviews A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildGames The current object (for fluent API support)
      */
-    public function setUserReviewss(Collection $userReviewss, ConnectionInterface $con = null)
+    public function setUserReviews(Collection $userReviews, ConnectionInterface $con = null)
     {
-        /** @var ChildUserReviews[] $userReviewssToDelete */
-        $userReviewssToDelete = $this->getUserReviewss(new Criteria(), $con)->diff($userReviewss);
+        /** @var ChildUserReview[] $userReviewsToDelete */
+        $userReviewsToDelete = $this->getUserReviews(new Criteria(), $con)->diff($userReviews);
 
         
-        $this->userReviewssScheduledForDeletion = $userReviewssToDelete;
+        $this->userReviewsScheduledForDeletion = $userReviewsToDelete;
 
-        foreach ($userReviewssToDelete as $userReviewsRemoved) {
-            $userReviewsRemoved->setGames(null);
+        foreach ($userReviewsToDelete as $userReviewRemoved) {
+            $userReviewRemoved->setGames(null);
         }
 
-        $this->collUserReviewss = null;
-        foreach ($userReviewss as $userReviews) {
-            $this->addUserReviews($userReviews);
+        $this->collUserReviews = null;
+        foreach ($userReviews as $userReview) {
+            $this->addUserReview($userReview);
         }
 
-        $this->collUserReviewss = $userReviewss;
-        $this->collUserReviewssPartial = false;
+        $this->collUserReviews = $userReviews;
+        $this->collUserReviewsPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related UserReviews objects.
+     * Returns the number of related UserReview objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related UserReviews objects.
+     * @return int             Count of related UserReview objects.
      * @throws PropelException
      */
-    public function countUserReviewss(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countUserReviews(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collUserReviewssPartial && !$this->isNew();
-        if (null === $this->collUserReviewss || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collUserReviewss) {
+        $partial = $this->collUserReviewsPartial && !$this->isNew();
+        if (null === $this->collUserReviews || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collUserReviews) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getUserReviewss());
+                return count($this->getUserReviews());
             }
 
-            $query = ChildUserReviewsQuery::create(null, $criteria);
+            $query = ChildUserReviewQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -2815,54 +2790,54 @@ abstract class Games implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collUserReviewss);
+        return count($this->collUserReviews);
     }
 
     /**
-     * Method called to associate a ChildUserReviews object to this object
-     * through the ChildUserReviews foreign key attribute.
+     * Method called to associate a ChildUserReview object to this object
+     * through the ChildUserReview foreign key attribute.
      *
-     * @param  ChildUserReviews $l ChildUserReviews
+     * @param  ChildUserReview $l ChildUserReview
      * @return $this|\Games The current object (for fluent API support)
      */
-    public function addUserReviews(ChildUserReviews $l)
+    public function addUserReview(ChildUserReview $l)
     {
-        if ($this->collUserReviewss === null) {
-            $this->initUserReviewss();
-            $this->collUserReviewssPartial = true;
+        if ($this->collUserReviews === null) {
+            $this->initUserReviews();
+            $this->collUserReviewsPartial = true;
         }
 
-        if (!$this->collUserReviewss->contains($l)) {
-            $this->doAddUserReviews($l);
+        if (!$this->collUserReviews->contains($l)) {
+            $this->doAddUserReview($l);
         }
 
         return $this;
     }
 
     /**
-     * @param ChildUserReviews $userReviews The ChildUserReviews object to add.
+     * @param ChildUserReview $userReview The ChildUserReview object to add.
      */
-    protected function doAddUserReviews(ChildUserReviews $userReviews)
+    protected function doAddUserReview(ChildUserReview $userReview)
     {
-        $this->collUserReviewss[]= $userReviews;
-        $userReviews->setGames($this);
+        $this->collUserReviews[]= $userReview;
+        $userReview->setGames($this);
     }
 
     /**
-     * @param  ChildUserReviews $userReviews The ChildUserReviews object to remove.
+     * @param  ChildUserReview $userReview The ChildUserReview object to remove.
      * @return $this|ChildGames The current object (for fluent API support)
      */
-    public function removeUserReviews(ChildUserReviews $userReviews)
+    public function removeUserReview(ChildUserReview $userReview)
     {
-        if ($this->getUserReviewss()->contains($userReviews)) {
-            $pos = $this->collUserReviewss->search($userReviews);
-            $this->collUserReviewss->remove($pos);
-            if (null === $this->userReviewssScheduledForDeletion) {
-                $this->userReviewssScheduledForDeletion = clone $this->collUserReviewss;
-                $this->userReviewssScheduledForDeletion->clear();
+        if ($this->getUserReviews()->contains($userReview)) {
+            $pos = $this->collUserReviews->search($userReview);
+            $this->collUserReviews->remove($pos);
+            if (null === $this->userReviewsScheduledForDeletion) {
+                $this->userReviewsScheduledForDeletion = clone $this->collUserReviews;
+                $this->userReviewsScheduledForDeletion->clear();
             }
-            $this->userReviewssScheduledForDeletion[]= clone $userReviews;
-            $userReviews->setGames(null);
+            $this->userReviewsScheduledForDeletion[]= clone $userReview;
+            $userReview->setGames(null);
         }
 
         return $this;
@@ -2874,7 +2849,7 @@ abstract class Games implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this Games is new, it will return
      * an empty collection; or if this Games has previously
-     * been saved, it will retrieve related UserReviewss from storage.
+     * been saved, it will retrieve related UserReviews from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -2883,14 +2858,14 @@ abstract class Games implements ActiveRecordInterface
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     * @return ObjectCollection|ChildUserReview[] List of ChildUserReview objects
      */
-    public function getUserReviewssJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getUserReviewsJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildUserReviewsQuery::create(null, $criteria);
+        $query = ChildUserReviewQuery::create(null, $criteria);
         $query->joinWith('Platforms', $joinBehavior);
 
-        return $this->getUserReviewss($query, $con);
+        return $this->getUserReviews($query, $con);
     }
 
 
@@ -2899,7 +2874,7 @@ abstract class Games implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this Games is new, it will return
      * an empty collection; or if this Games has previously
-     * been saved, it will retrieve related UserReviewss from storage.
+     * been saved, it will retrieve related UserReviews from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -2908,14 +2883,14 @@ abstract class Games implements ActiveRecordInterface
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     * @return ObjectCollection|ChildUserReview[] List of ChildUserReview objects
      */
-    public function getUserReviewssJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getUserReviewsJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildUserReviewsQuery::create(null, $criteria);
+        $query = ChildUserReviewQuery::create(null, $criteria);
         $query->joinWith('User', $joinBehavior);
 
-        return $this->getUserReviewss($query, $con);
+        return $this->getUserReviews($query, $con);
     }
 
 
@@ -2924,7 +2899,7 @@ abstract class Games implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this Games is new, it will return
      * an empty collection; or if this Games has previously
-     * been saved, it will retrieve related UserReviewss from storage.
+     * been saved, it will retrieve related UserReviews from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -2933,14 +2908,39 @@ abstract class Games implements ActiveRecordInterface
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     * @return ObjectCollection|ChildUserReview[] List of ChildUserReview objects
      */
-    public function getUserReviewssJoinRatings(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getUserReviewsJoinRating(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildUserReviewsQuery::create(null, $criteria);
-        $query->joinWith('Ratings', $joinBehavior);
+        $query = ChildUserReviewQuery::create(null, $criteria);
+        $query->joinWith('Rating', $joinBehavior);
 
-        return $this->getUserReviewss($query, $con);
+        return $this->getUserReviews($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Games is new, it will return
+     * an empty collection; or if this Games has previously
+     * been saved, it will retrieve related UserReviews from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Games.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildUserReview[] List of ChildUserReview objects
+     */
+    public function getUserReviewsJoinRig(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildUserReviewQuery::create(null, $criteria);
+        $query->joinWith('Rig', $joinBehavior);
+
+        return $this->getUserReviews($query, $con);
     }
 
     /**
@@ -2950,11 +2950,11 @@ abstract class Games implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aCompaniesRelatedByPublisherId) {
-            $this->aCompaniesRelatedByPublisherId->removeGamesRelatedByPublisherId($this);
+        if (null !== $this->aCompanyRelatedByPublisherId) {
+            $this->aCompanyRelatedByPublisherId->removeGamesRelatedByPublisherId($this);
         }
-        if (null !== $this->aCompaniesRelatedByDeveloperId) {
-            $this->aCompaniesRelatedByDeveloperId->removeGamesRelatedByDeveloperId($this);
+        if (null !== $this->aCompanyRelatedByDeveloperId) {
+            $this->aCompanyRelatedByDeveloperId->removeGamesRelatedByDeveloperId($this);
         }
         $this->id = null;
         $this->name = null;
@@ -2994,13 +2994,13 @@ abstract class Games implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collRatingHeaderss) {
-                foreach ($this->collRatingHeaderss as $o) {
+            if ($this->collRatingHeaders) {
+                foreach ($this->collRatingHeaders as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collUserReviewss) {
-                foreach ($this->collUserReviewss as $o) {
+            if ($this->collUserReviews) {
+                foreach ($this->collUserReviews as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -3008,10 +3008,10 @@ abstract class Games implements ActiveRecordInterface
 
         $this->collGameLinkss = null;
         $this->collGamePlatformss = null;
-        $this->collRatingHeaderss = null;
-        $this->collUserReviewss = null;
-        $this->aCompaniesRelatedByPublisherId = null;
-        $this->aCompaniesRelatedByDeveloperId = null;
+        $this->collRatingHeaders = null;
+        $this->collUserReviews = null;
+        $this->aCompanyRelatedByPublisherId = null;
+        $this->aCompanyRelatedByDeveloperId = null;
     }
 
     /**

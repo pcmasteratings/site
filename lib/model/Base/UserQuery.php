@@ -26,6 +26,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery orderByRedditId($order = Criteria::ASC) Order by the reddit_id column
  * @method     ChildUserQuery orderByTrusted($order = Criteria::ASC) Order by the trusted column
  * @method     ChildUserQuery orderByAdmin($order = Criteria::ASC) Order by the admin column
+ * @method     ChildUserQuery orderByMod($order = Criteria::ASC) Order by the mod column
+ * @method     ChildUserQuery orderByProbation($order = Criteria::ASC) Order by the probation column
  * @method     ChildUserQuery orderByBanned($order = Criteria::ASC) Order by the banned column
  *
  * @method     ChildUserQuery groupById() Group by the id column
@@ -34,6 +36,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery groupByRedditId() Group by the reddit_id column
  * @method     ChildUserQuery groupByTrusted() Group by the trusted column
  * @method     ChildUserQuery groupByAdmin() Group by the admin column
+ * @method     ChildUserQuery groupByMod() Group by the mod column
+ * @method     ChildUserQuery groupByProbation() Group by the probation column
  * @method     ChildUserQuery groupByBanned() Group by the banned column
  *
  * @method     ChildUserQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -44,27 +48,23 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinNews($relationAlias = null) Adds a RIGHT JOIN clause to the query using the News relation
  * @method     ChildUserQuery innerJoinNews($relationAlias = null) Adds a INNER JOIN clause to the query using the News relation
  *
- * @method     ChildUserQuery leftJoinRatingHeaders($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingHeaders relation
- * @method     ChildUserQuery rightJoinRatingHeaders($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingHeaders relation
- * @method     ChildUserQuery innerJoinRatingHeaders($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingHeaders relation
+ * @method     ChildUserQuery leftJoinRatingHeader($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingHeader relation
+ * @method     ChildUserQuery rightJoinRatingHeader($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingHeader relation
+ * @method     ChildUserQuery innerJoinRatingHeader($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingHeader relation
  *
- * @method     ChildUserQuery leftJoinRigs($relationAlias = null) Adds a LEFT JOIN clause to the query using the Rigs relation
- * @method     ChildUserQuery rightJoinRigs($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Rigs relation
- * @method     ChildUserQuery innerJoinRigs($relationAlias = null) Adds a INNER JOIN clause to the query using the Rigs relation
+ * @method     ChildUserQuery leftJoinRig($relationAlias = null) Adds a LEFT JOIN clause to the query using the Rig relation
+ * @method     ChildUserQuery rightJoinRig($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Rig relation
+ * @method     ChildUserQuery innerJoinRig($relationAlias = null) Adds a INNER JOIN clause to the query using the Rig relation
  *
- * @method     ChildUserQuery leftJoinUserAttributeValues($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserAttributeValues relation
- * @method     ChildUserQuery rightJoinUserAttributeValues($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserAttributeValues relation
- * @method     ChildUserQuery innerJoinUserAttributeValues($relationAlias = null) Adds a INNER JOIN clause to the query using the UserAttributeValues relation
+ * @method     ChildUserQuery leftJoinUserAttributeValue($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserAttributeValue relation
+ * @method     ChildUserQuery rightJoinUserAttributeValue($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserAttributeValue relation
+ * @method     ChildUserQuery innerJoinUserAttributeValue($relationAlias = null) Adds a INNER JOIN clause to the query using the UserAttributeValue relation
  *
- * @method     ChildUserQuery leftJoinUserReviews($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserReviews relation
- * @method     ChildUserQuery rightJoinUserReviews($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserReviews relation
- * @method     ChildUserQuery innerJoinUserReviews($relationAlias = null) Adds a INNER JOIN clause to the query using the UserReviews relation
+ * @method     ChildUserQuery leftJoinUserReview($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserReview relation
+ * @method     ChildUserQuery rightJoinUserReview($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserReview relation
+ * @method     ChildUserQuery innerJoinUserReview($relationAlias = null) Adds a INNER JOIN clause to the query using the UserReview relation
  *
- * @method     ChildUserQuery leftJoinUserWeights($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserWeights relation
- * @method     ChildUserQuery rightJoinUserWeights($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserWeights relation
- * @method     ChildUserQuery innerJoinUserWeights($relationAlias = null) Adds a INNER JOIN clause to the query using the UserWeights relation
- *
- * @method     \NewsQuery|\RatingHeadersQuery|\RigsQuery|\UserAttributeValuesQuery|\UserReviewsQuery|\UserWeightsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \NewsQuery|\RatingHeaderQuery|\RigQuery|\UserAttributeValueQuery|\UserReviewQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildUser findOne(ConnectionInterface $con = null) Return the first ChildUser matching the query
  * @method     ChildUser findOneOrCreate(ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
@@ -75,6 +75,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser findOneByRedditId(string $reddit_id) Return the first ChildUser filtered by the reddit_id column
  * @method     ChildUser findOneByTrusted(boolean $trusted) Return the first ChildUser filtered by the trusted column
  * @method     ChildUser findOneByAdmin(boolean $admin) Return the first ChildUser filtered by the admin column
+ * @method     ChildUser findOneByMod(boolean $mod) Return the first ChildUser filtered by the mod column
+ * @method     ChildUser findOneByProbation(boolean $probation) Return the first ChildUser filtered by the probation column
  * @method     ChildUser findOneByBanned(boolean $banned) Return the first ChildUser filtered by the banned column *
 
  * @method     ChildUser requirePk($key, ConnectionInterface $con = null) Return the ChildUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -86,6 +88,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser requireOneByRedditId(string $reddit_id) Return the first ChildUser filtered by the reddit_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByTrusted(boolean $trusted) Return the first ChildUser filtered by the trusted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByAdmin(boolean $admin) Return the first ChildUser filtered by the admin column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildUser requireOneByMod(boolean $mod) Return the first ChildUser filtered by the mod column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildUser requireOneByProbation(boolean $probation) Return the first ChildUser filtered by the probation column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByBanned(boolean $banned) Return the first ChildUser filtered by the banned column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildUser[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
@@ -95,6 +99,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser[]|ObjectCollection findByRedditId(string $reddit_id) Return ChildUser objects filtered by the reddit_id column
  * @method     ChildUser[]|ObjectCollection findByTrusted(boolean $trusted) Return ChildUser objects filtered by the trusted column
  * @method     ChildUser[]|ObjectCollection findByAdmin(boolean $admin) Return ChildUser objects filtered by the admin column
+ * @method     ChildUser[]|ObjectCollection findByMod(boolean $mod) Return ChildUser objects filtered by the mod column
+ * @method     ChildUser[]|ObjectCollection findByProbation(boolean $probation) Return ChildUser objects filtered by the probation column
  * @method     ChildUser[]|ObjectCollection findByBanned(boolean $banned) Return ChildUser objects filtered by the banned column
  * @method     ChildUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -188,7 +194,7 @@ abstract class UserQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, username, password, reddit_id, trusted, admin, banned FROM user WHERE id = :p0';
+        $sql = 'SELECT id, username, password, reddit_id, trusted, admin, mod, probation, banned FROM user WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -461,6 +467,60 @@ abstract class UserQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the mod column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMod(true); // WHERE mod = true
+     * $query->filterByMod('yes'); // WHERE mod = true
+     * </code>
+     *
+     * @param     boolean|string $mod The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildUserQuery The current query, for fluid interface
+     */
+    public function filterByMod($mod = null, $comparison = null)
+    {
+        if (is_string($mod)) {
+            $mod = in_array(strtolower($mod), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(UserTableMap::COL_MOD, $mod, $comparison);
+    }
+
+    /**
+     * Filter the query on the probation column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByProbation(true); // WHERE probation = true
+     * $query->filterByProbation('yes'); // WHERE probation = true
+     * </code>
+     *
+     * @param     boolean|string $probation The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildUserQuery The current query, for fluid interface
+     */
+    public function filterByProbation($probation = null, $comparison = null)
+    {
+        if (is_string($probation)) {
+            $probation = in_array(strtolower($probation), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(UserTableMap::COL_PROBATION, $probation, $comparison);
+    }
+
+    /**
      * Filter the query on the banned column
      *
      * Example usage:
@@ -561,40 +621,40 @@ abstract class UserQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \RatingHeaders object
+     * Filter the query by a related \RatingHeader object
      *
-     * @param \RatingHeaders|ObjectCollection $ratingHeaders the related object to use as filter
+     * @param \RatingHeader|ObjectCollection $ratingHeader the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildUserQuery The current query, for fluid interface
      */
-    public function filterByRatingHeaders($ratingHeaders, $comparison = null)
+    public function filterByRatingHeader($ratingHeader, $comparison = null)
     {
-        if ($ratingHeaders instanceof \RatingHeaders) {
+        if ($ratingHeader instanceof \RatingHeader) {
             return $this
-                ->addUsingAlias(UserTableMap::COL_ID, $ratingHeaders->getUserId(), $comparison);
-        } elseif ($ratingHeaders instanceof ObjectCollection) {
+                ->addUsingAlias(UserTableMap::COL_ID, $ratingHeader->getUserId(), $comparison);
+        } elseif ($ratingHeader instanceof ObjectCollection) {
             return $this
-                ->useRatingHeadersQuery()
-                ->filterByPrimaryKeys($ratingHeaders->getPrimaryKeys())
+                ->useRatingHeaderQuery()
+                ->filterByPrimaryKeys($ratingHeader->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByRatingHeaders() only accepts arguments of type \RatingHeaders or Collection');
+            throw new PropelException('filterByRatingHeader() only accepts arguments of type \RatingHeader or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the RatingHeaders relation
+     * Adds a JOIN clause to the query using the RatingHeader relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
-    public function joinRatingHeaders($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinRatingHeader($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('RatingHeaders');
+        $relationMap = $tableMap->getRelation('RatingHeader');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -609,14 +669,14 @@ abstract class UserQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'RatingHeaders');
+            $this->addJoinObject($join, 'RatingHeader');
         }
 
         return $this;
     }
 
     /**
-     * Use the RatingHeaders relation RatingHeaders object
+     * Use the RatingHeader relation RatingHeader object
      *
      * @see useQuery()
      *
@@ -624,50 +684,50 @@ abstract class UserQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \RatingHeadersQuery A secondary query class using the current class as primary query
+     * @return \RatingHeaderQuery A secondary query class using the current class as primary query
      */
-    public function useRatingHeadersQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useRatingHeaderQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinRatingHeaders($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'RatingHeaders', '\RatingHeadersQuery');
+            ->joinRatingHeader($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'RatingHeader', '\RatingHeaderQuery');
     }
 
     /**
-     * Filter the query by a related \Rigs object
+     * Filter the query by a related \Rig object
      *
-     * @param \Rigs|ObjectCollection $rigs the related object to use as filter
+     * @param \Rig|ObjectCollection $rig the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildUserQuery The current query, for fluid interface
      */
-    public function filterByRigs($rigs, $comparison = null)
+    public function filterByRig($rig, $comparison = null)
     {
-        if ($rigs instanceof \Rigs) {
+        if ($rig instanceof \Rig) {
             return $this
-                ->addUsingAlias(UserTableMap::COL_ID, $rigs->getUserId(), $comparison);
-        } elseif ($rigs instanceof ObjectCollection) {
+                ->addUsingAlias(UserTableMap::COL_ID, $rig->getUserId(), $comparison);
+        } elseif ($rig instanceof ObjectCollection) {
             return $this
-                ->useRigsQuery()
-                ->filterByPrimaryKeys($rigs->getPrimaryKeys())
+                ->useRigQuery()
+                ->filterByPrimaryKeys($rig->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByRigs() only accepts arguments of type \Rigs or Collection');
+            throw new PropelException('filterByRig() only accepts arguments of type \Rig or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the Rigs relation
+     * Adds a JOIN clause to the query using the Rig relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
-    public function joinRigs($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinRig($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Rigs');
+        $relationMap = $tableMap->getRelation('Rig');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -682,14 +742,14 @@ abstract class UserQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'Rigs');
+            $this->addJoinObject($join, 'Rig');
         }
 
         return $this;
     }
 
     /**
-     * Use the Rigs relation Rigs object
+     * Use the Rig relation Rig object
      *
      * @see useQuery()
      *
@@ -697,50 +757,50 @@ abstract class UserQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \RigsQuery A secondary query class using the current class as primary query
+     * @return \RigQuery A secondary query class using the current class as primary query
      */
-    public function useRigsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useRigQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinRigs($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Rigs', '\RigsQuery');
+            ->joinRig($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Rig', '\RigQuery');
     }
 
     /**
-     * Filter the query by a related \UserAttributeValues object
+     * Filter the query by a related \UserAttributeValue object
      *
-     * @param \UserAttributeValues|ObjectCollection $userAttributeValues the related object to use as filter
+     * @param \UserAttributeValue|ObjectCollection $userAttributeValue the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildUserQuery The current query, for fluid interface
      */
-    public function filterByUserAttributeValues($userAttributeValues, $comparison = null)
+    public function filterByUserAttributeValue($userAttributeValue, $comparison = null)
     {
-        if ($userAttributeValues instanceof \UserAttributeValues) {
+        if ($userAttributeValue instanceof \UserAttributeValue) {
             return $this
-                ->addUsingAlias(UserTableMap::COL_ID, $userAttributeValues->getUserId(), $comparison);
-        } elseif ($userAttributeValues instanceof ObjectCollection) {
+                ->addUsingAlias(UserTableMap::COL_ID, $userAttributeValue->getUserId(), $comparison);
+        } elseif ($userAttributeValue instanceof ObjectCollection) {
             return $this
-                ->useUserAttributeValuesQuery()
-                ->filterByPrimaryKeys($userAttributeValues->getPrimaryKeys())
+                ->useUserAttributeValueQuery()
+                ->filterByPrimaryKeys($userAttributeValue->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByUserAttributeValues() only accepts arguments of type \UserAttributeValues or Collection');
+            throw new PropelException('filterByUserAttributeValue() only accepts arguments of type \UserAttributeValue or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the UserAttributeValues relation
+     * Adds a JOIN clause to the query using the UserAttributeValue relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
-    public function joinUserAttributeValues($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinUserAttributeValue($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('UserAttributeValues');
+        $relationMap = $tableMap->getRelation('UserAttributeValue');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -755,14 +815,14 @@ abstract class UserQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'UserAttributeValues');
+            $this->addJoinObject($join, 'UserAttributeValue');
         }
 
         return $this;
     }
 
     /**
-     * Use the UserAttributeValues relation UserAttributeValues object
+     * Use the UserAttributeValue relation UserAttributeValue object
      *
      * @see useQuery()
      *
@@ -770,50 +830,50 @@ abstract class UserQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \UserAttributeValuesQuery A secondary query class using the current class as primary query
+     * @return \UserAttributeValueQuery A secondary query class using the current class as primary query
      */
-    public function useUserAttributeValuesQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useUserAttributeValueQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinUserAttributeValues($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'UserAttributeValues', '\UserAttributeValuesQuery');
+            ->joinUserAttributeValue($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UserAttributeValue', '\UserAttributeValueQuery');
     }
 
     /**
-     * Filter the query by a related \UserReviews object
+     * Filter the query by a related \UserReview object
      *
-     * @param \UserReviews|ObjectCollection $userReviews the related object to use as filter
+     * @param \UserReview|ObjectCollection $userReview the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildUserQuery The current query, for fluid interface
      */
-    public function filterByUserReviews($userReviews, $comparison = null)
+    public function filterByUserReview($userReview, $comparison = null)
     {
-        if ($userReviews instanceof \UserReviews) {
+        if ($userReview instanceof \UserReview) {
             return $this
-                ->addUsingAlias(UserTableMap::COL_ID, $userReviews->getUserId(), $comparison);
-        } elseif ($userReviews instanceof ObjectCollection) {
+                ->addUsingAlias(UserTableMap::COL_ID, $userReview->getUserId(), $comparison);
+        } elseif ($userReview instanceof ObjectCollection) {
             return $this
-                ->useUserReviewsQuery()
-                ->filterByPrimaryKeys($userReviews->getPrimaryKeys())
+                ->useUserReviewQuery()
+                ->filterByPrimaryKeys($userReview->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByUserReviews() only accepts arguments of type \UserReviews or Collection');
+            throw new PropelException('filterByUserReview() only accepts arguments of type \UserReview or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the UserReviews relation
+     * Adds a JOIN clause to the query using the UserReview relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
-    public function joinUserReviews($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinUserReview($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('UserReviews');
+        $relationMap = $tableMap->getRelation('UserReview');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -828,14 +888,14 @@ abstract class UserQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'UserReviews');
+            $this->addJoinObject($join, 'UserReview');
         }
 
         return $this;
     }
 
     /**
-     * Use the UserReviews relation UserReviews object
+     * Use the UserReview relation UserReview object
      *
      * @see useQuery()
      *
@@ -843,86 +903,13 @@ abstract class UserQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \UserReviewsQuery A secondary query class using the current class as primary query
+     * @return \UserReviewQuery A secondary query class using the current class as primary query
      */
-    public function useUserReviewsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useUserReviewQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinUserReviews($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'UserReviews', '\UserReviewsQuery');
-    }
-
-    /**
-     * Filter the query by a related \UserWeights object
-     *
-     * @param \UserWeights|ObjectCollection $userWeights the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildUserQuery The current query, for fluid interface
-     */
-    public function filterByUserWeights($userWeights, $comparison = null)
-    {
-        if ($userWeights instanceof \UserWeights) {
-            return $this
-                ->addUsingAlias(UserTableMap::COL_ID, $userWeights->getUserId(), $comparison);
-        } elseif ($userWeights instanceof ObjectCollection) {
-            return $this
-                ->useUserWeightsQuery()
-                ->filterByPrimaryKeys($userWeights->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByUserWeights() only accepts arguments of type \UserWeights or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the UserWeights relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildUserQuery The current query, for fluid interface
-     */
-    public function joinUserWeights($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('UserWeights');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'UserWeights');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the UserWeights relation UserWeights object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \UserWeightsQuery A secondary query class using the current class as primary query
-     */
-    public function useUserWeightsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinUserWeights($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'UserWeights', '\UserWeightsQuery');
+            ->joinUserReview($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UserReview', '\UserReviewQuery');
     }
 
     /**

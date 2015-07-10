@@ -4,18 +4,16 @@ namespace Base;
 
 use \News as ChildNews;
 use \NewsQuery as ChildNewsQuery;
-use \RatingHeaders as ChildRatingHeaders;
-use \RatingHeadersQuery as ChildRatingHeadersQuery;
-use \Rigs as ChildRigs;
-use \RigsQuery as ChildRigsQuery;
+use \RatingHeader as ChildRatingHeader;
+use \RatingHeaderQuery as ChildRatingHeaderQuery;
+use \Rig as ChildRig;
+use \RigQuery as ChildRigQuery;
 use \User as ChildUser;
-use \UserAttributeValues as ChildUserAttributeValues;
-use \UserAttributeValuesQuery as ChildUserAttributeValuesQuery;
+use \UserAttributeValue as ChildUserAttributeValue;
+use \UserAttributeValueQuery as ChildUserAttributeValueQuery;
 use \UserQuery as ChildUserQuery;
-use \UserReviews as ChildUserReviews;
-use \UserReviewsQuery as ChildUserReviewsQuery;
-use \UserWeights as ChildUserWeights;
-use \UserWeightsQuery as ChildUserWeightsQuery;
+use \UserReview as ChildUserReview;
+use \UserReviewQuery as ChildUserReviewQuery;
 use \Exception;
 use \PDO;
 use Map\UserTableMap;
@@ -112,6 +110,19 @@ abstract class User implements ActiveRecordInterface
     protected $admin;
 
     /**
+     * The value for the mod field.
+     * Note: this column has a database default value of: false
+     * @var        boolean
+     */
+    protected $mod;
+
+    /**
+     * The value for the probation field.
+     * @var        boolean
+     */
+    protected $probation;
+
+    /**
      * The value for the banned field.
      * Note: this column has a database default value of: false
      * @var        boolean
@@ -125,34 +136,28 @@ abstract class User implements ActiveRecordInterface
     protected $collNewsPartial;
 
     /**
-     * @var        ObjectCollection|ChildRatingHeaders[] Collection to store aggregation of ChildRatingHeaders objects.
+     * @var        ObjectCollection|ChildRatingHeader[] Collection to store aggregation of ChildRatingHeader objects.
      */
-    protected $collRatingHeaderss;
-    protected $collRatingHeaderssPartial;
+    protected $collRatingHeaders;
+    protected $collRatingHeadersPartial;
 
     /**
-     * @var        ObjectCollection|ChildRigs[] Collection to store aggregation of ChildRigs objects.
+     * @var        ObjectCollection|ChildRig[] Collection to store aggregation of ChildRig objects.
      */
-    protected $collRigss;
-    protected $collRigssPartial;
+    protected $collRigs;
+    protected $collRigsPartial;
 
     /**
-     * @var        ObjectCollection|ChildUserAttributeValues[] Collection to store aggregation of ChildUserAttributeValues objects.
+     * @var        ObjectCollection|ChildUserAttributeValue[] Collection to store aggregation of ChildUserAttributeValue objects.
      */
-    protected $collUserAttributeValuess;
-    protected $collUserAttributeValuessPartial;
+    protected $collUserAttributeValues;
+    protected $collUserAttributeValuesPartial;
 
     /**
-     * @var        ObjectCollection|ChildUserReviews[] Collection to store aggregation of ChildUserReviews objects.
+     * @var        ObjectCollection|ChildUserReview[] Collection to store aggregation of ChildUserReview objects.
      */
-    protected $collUserReviewss;
-    protected $collUserReviewssPartial;
-
-    /**
-     * @var        ObjectCollection|ChildUserWeights[] Collection to store aggregation of ChildUserWeights objects.
-     */
-    protected $collUserWeightss;
-    protected $collUserWeightssPartial;
+    protected $collUserReviews;
+    protected $collUserReviewsPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -170,33 +175,27 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildRatingHeaders[]
+     * @var ObjectCollection|ChildRatingHeader[]
      */
-    protected $ratingHeaderssScheduledForDeletion = null;
+    protected $ratingHeadersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildRigs[]
+     * @var ObjectCollection|ChildRig[]
      */
-    protected $rigssScheduledForDeletion = null;
+    protected $rigsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildUserAttributeValues[]
+     * @var ObjectCollection|ChildUserAttributeValue[]
      */
-    protected $userAttributeValuessScheduledForDeletion = null;
+    protected $userAttributeValuesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildUserReviews[]
+     * @var ObjectCollection|ChildUserReview[]
      */
-    protected $userReviewssScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildUserWeights[]
-     */
-    protected $userWeightssScheduledForDeletion = null;
+    protected $userReviewsScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -208,6 +207,7 @@ abstract class User implements ActiveRecordInterface
     {
         $this->trusted = false;
         $this->admin = false;
+        $this->mod = false;
         $this->banned = false;
     }
 
@@ -511,6 +511,46 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
+     * Get the [mod] column value.
+     * 
+     * @return boolean
+     */
+    public function getMod()
+    {
+        return $this->mod;
+    }
+
+    /**
+     * Get the [mod] column value.
+     * 
+     * @return boolean
+     */
+    public function isMod()
+    {
+        return $this->getMod();
+    }
+
+    /**
+     * Get the [probation] column value.
+     * 
+     * @return boolean
+     */
+    public function getProbation()
+    {
+        return $this->probation;
+    }
+
+    /**
+     * Get the [probation] column value.
+     * 
+     * @return boolean
+     */
+    public function isProbation()
+    {
+        return $this->getProbation();
+    }
+
+    /**
      * Get the [banned] column value.
      * 
      * @return boolean
@@ -667,6 +707,62 @@ abstract class User implements ActiveRecordInterface
     } // setAdmin()
 
     /**
+     * Sets the value of the [mod] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * 
+     * @param  boolean|integer|string $v The new value
+     * @return $this|\User The current object (for fluent API support)
+     */
+    public function setMod($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->mod !== $v) {
+            $this->mod = $v;
+            $this->modifiedColumns[UserTableMap::COL_MOD] = true;
+        }
+
+        return $this;
+    } // setMod()
+
+    /**
+     * Sets the value of the [probation] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * 
+     * @param  boolean|integer|string $v The new value
+     * @return $this|\User The current object (for fluent API support)
+     */
+    public function setProbation($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->probation !== $v) {
+            $this->probation = $v;
+            $this->modifiedColumns[UserTableMap::COL_PROBATION] = true;
+        }
+
+        return $this;
+    } // setProbation()
+
+    /**
      * Sets the value of the [banned] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
@@ -709,6 +805,10 @@ abstract class User implements ActiveRecordInterface
             }
 
             if ($this->admin !== false) {
+                return false;
+            }
+
+            if ($this->mod !== false) {
                 return false;
             }
 
@@ -760,7 +860,13 @@ abstract class User implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : UserTableMap::translateFieldName('Admin', TableMap::TYPE_PHPNAME, $indexType)];
             $this->admin = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : UserTableMap::translateFieldName('Banned', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : UserTableMap::translateFieldName('Mod', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->mod = (null !== $col) ? (boolean) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : UserTableMap::translateFieldName('Probation', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->probation = (null !== $col) ? (boolean) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : UserTableMap::translateFieldName('Banned', TableMap::TYPE_PHPNAME, $indexType)];
             $this->banned = (null !== $col) ? (boolean) $col : null;
             $this->resetModified();
 
@@ -770,7 +876,7 @@ abstract class User implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = UserTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = UserTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\User'), 0, $e);
@@ -833,15 +939,13 @@ abstract class User implements ActiveRecordInterface
 
             $this->collNews = null;
 
-            $this->collRatingHeaderss = null;
+            $this->collRatingHeaders = null;
 
-            $this->collRigss = null;
+            $this->collRigs = null;
 
-            $this->collUserAttributeValuess = null;
+            $this->collUserAttributeValues = null;
 
-            $this->collUserReviewss = null;
-
-            $this->collUserWeightss = null;
+            $this->collUserReviews = null;
 
         } // if (deep)
     }
@@ -970,85 +1074,68 @@ abstract class User implements ActiveRecordInterface
                 }
             }
 
-            if ($this->ratingHeaderssScheduledForDeletion !== null) {
-                if (!$this->ratingHeaderssScheduledForDeletion->isEmpty()) {
-                    \RatingHeadersQuery::create()
-                        ->filterByPrimaryKeys($this->ratingHeaderssScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->ratingHeadersScheduledForDeletion !== null) {
+                if (!$this->ratingHeadersScheduledForDeletion->isEmpty()) {
+                    \RatingHeaderQuery::create()
+                        ->filterByPrimaryKeys($this->ratingHeadersScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->ratingHeaderssScheduledForDeletion = null;
+                    $this->ratingHeadersScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collRatingHeaderss !== null) {
-                foreach ($this->collRatingHeaderss as $referrerFK) {
+            if ($this->collRatingHeaders !== null) {
+                foreach ($this->collRatingHeaders as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
                 }
             }
 
-            if ($this->rigssScheduledForDeletion !== null) {
-                if (!$this->rigssScheduledForDeletion->isEmpty()) {
-                    \RigsQuery::create()
-                        ->filterByPrimaryKeys($this->rigssScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->rigsScheduledForDeletion !== null) {
+                if (!$this->rigsScheduledForDeletion->isEmpty()) {
+                    \RigQuery::create()
+                        ->filterByPrimaryKeys($this->rigsScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->rigssScheduledForDeletion = null;
+                    $this->rigsScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collRigss !== null) {
-                foreach ($this->collRigss as $referrerFK) {
+            if ($this->collRigs !== null) {
+                foreach ($this->collRigs as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
                 }
             }
 
-            if ($this->userAttributeValuessScheduledForDeletion !== null) {
-                if (!$this->userAttributeValuessScheduledForDeletion->isEmpty()) {
-                    \UserAttributeValuesQuery::create()
-                        ->filterByPrimaryKeys($this->userAttributeValuessScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->userAttributeValuesScheduledForDeletion !== null) {
+                if (!$this->userAttributeValuesScheduledForDeletion->isEmpty()) {
+                    \UserAttributeValueQuery::create()
+                        ->filterByPrimaryKeys($this->userAttributeValuesScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->userAttributeValuessScheduledForDeletion = null;
+                    $this->userAttributeValuesScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collUserAttributeValuess !== null) {
-                foreach ($this->collUserAttributeValuess as $referrerFK) {
+            if ($this->collUserAttributeValues !== null) {
+                foreach ($this->collUserAttributeValues as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
                 }
             }
 
-            if ($this->userReviewssScheduledForDeletion !== null) {
-                if (!$this->userReviewssScheduledForDeletion->isEmpty()) {
-                    \UserReviewsQuery::create()
-                        ->filterByPrimaryKeys($this->userReviewssScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->userReviewsScheduledForDeletion !== null) {
+                if (!$this->userReviewsScheduledForDeletion->isEmpty()) {
+                    \UserReviewQuery::create()
+                        ->filterByPrimaryKeys($this->userReviewsScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->userReviewssScheduledForDeletion = null;
+                    $this->userReviewsScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collUserReviewss !== null) {
-                foreach ($this->collUserReviewss as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
-            if ($this->userWeightssScheduledForDeletion !== null) {
-                if (!$this->userWeightssScheduledForDeletion->isEmpty()) {
-                    \UserWeightsQuery::create()
-                        ->filterByPrimaryKeys($this->userWeightssScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->userWeightssScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collUserWeightss !== null) {
-                foreach ($this->collUserWeightss as $referrerFK) {
+            if ($this->collUserReviews !== null) {
+                foreach ($this->collUserReviews as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1099,6 +1186,12 @@ abstract class User implements ActiveRecordInterface
         if ($this->isColumnModified(UserTableMap::COL_ADMIN)) {
             $modifiedColumns[':p' . $index++]  = 'admin';
         }
+        if ($this->isColumnModified(UserTableMap::COL_MOD)) {
+            $modifiedColumns[':p' . $index++]  = 'mod';
+        }
+        if ($this->isColumnModified(UserTableMap::COL_PROBATION)) {
+            $modifiedColumns[':p' . $index++]  = 'probation';
+        }
         if ($this->isColumnModified(UserTableMap::COL_BANNED)) {
             $modifiedColumns[':p' . $index++]  = 'banned';
         }
@@ -1130,6 +1223,12 @@ abstract class User implements ActiveRecordInterface
                         break;
                     case 'admin':
                         $stmt->bindValue($identifier, (int) $this->admin, PDO::PARAM_INT);
+                        break;
+                    case 'mod':
+                        $stmt->bindValue($identifier, (int) $this->mod, PDO::PARAM_INT);
+                        break;
+                    case 'probation':
+                        $stmt->bindValue($identifier, (int) $this->probation, PDO::PARAM_INT);
                         break;
                     case 'banned':
                         $stmt->bindValue($identifier, (int) $this->banned, PDO::PARAM_INT);
@@ -1215,6 +1314,12 @@ abstract class User implements ActiveRecordInterface
                 return $this->getAdmin();
                 break;
             case 6:
+                return $this->getMod();
+                break;
+            case 7:
+                return $this->getProbation();
+                break;
+            case 8:
                 return $this->getBanned();
                 break;
             default:
@@ -1253,7 +1358,9 @@ abstract class User implements ActiveRecordInterface
             $keys[3] => $this->getRedditId(),
             $keys[4] => $this->getTrusted(),
             $keys[5] => $this->getAdmin(),
-            $keys[6] => $this->getBanned(),
+            $keys[6] => $this->getMod(),
+            $keys[7] => $this->getProbation(),
+            $keys[8] => $this->getBanned(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1276,80 +1383,65 @@ abstract class User implements ActiveRecordInterface
         
                 $result[$key] = $this->collNews->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collRatingHeaderss) {
+            if (null !== $this->collRatingHeaders) {
                 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'ratingHeaderss';
+                        $key = 'ratingHeaders';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'rating_headerss';
+                        $key = 'rating_headers';
                         break;
                     default:
-                        $key = 'RatingHeaderss';
+                        $key = 'RatingHeaders';
                 }
         
-                $result[$key] = $this->collRatingHeaderss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collRatingHeaders->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collRigss) {
+            if (null !== $this->collRigs) {
                 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'rigss';
+                        $key = 'rigs';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'rigss';
+                        $key = 'rigs';
                         break;
                     default:
-                        $key = 'Rigss';
+                        $key = 'Rigs';
                 }
         
-                $result[$key] = $this->collRigss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collRigs->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collUserAttributeValuess) {
+            if (null !== $this->collUserAttributeValues) {
                 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'userAttributeValuess';
+                        $key = 'userAttributeValues';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'user_attribute_valuess';
+                        $key = 'user_attribute_values';
                         break;
                     default:
-                        $key = 'UserAttributeValuess';
+                        $key = 'UserAttributeValues';
                 }
         
-                $result[$key] = $this->collUserAttributeValuess->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collUserAttributeValues->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collUserReviewss) {
+            if (null !== $this->collUserReviews) {
                 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'userReviewss';
+                        $key = 'userReviews';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'user_reviewss';
+                        $key = 'user_reviews';
                         break;
                     default:
-                        $key = 'UserReviewss';
+                        $key = 'UserReviews';
                 }
         
-                $result[$key] = $this->collUserReviewss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
-            if (null !== $this->collUserWeightss) {
-                
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'userWeightss';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'user_weightss';
-                        break;
-                    default:
-                        $key = 'UserWeightss';
-                }
-        
-                $result[$key] = $this->collUserWeightss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collUserReviews->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1404,6 +1496,12 @@ abstract class User implements ActiveRecordInterface
                 $this->setAdmin($value);
                 break;
             case 6:
+                $this->setMod($value);
+                break;
+            case 7:
+                $this->setProbation($value);
+                break;
+            case 8:
                 $this->setBanned($value);
                 break;
         } // switch()
@@ -1451,7 +1549,13 @@ abstract class User implements ActiveRecordInterface
             $this->setAdmin($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setBanned($arr[$keys[6]]);
+            $this->setMod($arr[$keys[6]]);
+        }
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setProbation($arr[$keys[7]]);
+        }
+        if (array_key_exists($keys[8], $arr)) {
+            $this->setBanned($arr[$keys[8]]);
         }
     }
 
@@ -1511,6 +1615,12 @@ abstract class User implements ActiveRecordInterface
         }
         if ($this->isColumnModified(UserTableMap::COL_ADMIN)) {
             $criteria->add(UserTableMap::COL_ADMIN, $this->admin);
+        }
+        if ($this->isColumnModified(UserTableMap::COL_MOD)) {
+            $criteria->add(UserTableMap::COL_MOD, $this->mod);
+        }
+        if ($this->isColumnModified(UserTableMap::COL_PROBATION)) {
+            $criteria->add(UserTableMap::COL_PROBATION, $this->probation);
         }
         if ($this->isColumnModified(UserTableMap::COL_BANNED)) {
             $criteria->add(UserTableMap::COL_BANNED, $this->banned);
@@ -1606,6 +1716,8 @@ abstract class User implements ActiveRecordInterface
         $copyObj->setRedditId($this->getRedditId());
         $copyObj->setTrusted($this->getTrusted());
         $copyObj->setAdmin($this->getAdmin());
+        $copyObj->setMod($this->getMod());
+        $copyObj->setProbation($this->getProbation());
         $copyObj->setBanned($this->getBanned());
 
         if ($deepCopy) {
@@ -1619,33 +1731,27 @@ abstract class User implements ActiveRecordInterface
                 }
             }
 
-            foreach ($this->getRatingHeaderss() as $relObj) {
+            foreach ($this->getRatingHeaders() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addRatingHeaders($relObj->copy($deepCopy));
+                    $copyObj->addRatingHeader($relObj->copy($deepCopy));
                 }
             }
 
-            foreach ($this->getRigss() as $relObj) {
+            foreach ($this->getRigs() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addRigs($relObj->copy($deepCopy));
+                    $copyObj->addRig($relObj->copy($deepCopy));
                 }
             }
 
-            foreach ($this->getUserAttributeValuess() as $relObj) {
+            foreach ($this->getUserAttributeValues() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addUserAttributeValues($relObj->copy($deepCopy));
+                    $copyObj->addUserAttributeValue($relObj->copy($deepCopy));
                 }
             }
 
-            foreach ($this->getUserReviewss() as $relObj) {
+            foreach ($this->getUserReviews() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addUserReviews($relObj->copy($deepCopy));
-                }
-            }
-
-            foreach ($this->getUserWeightss() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addUserWeights($relObj->copy($deepCopy));
+                    $copyObj->addUserReview($relObj->copy($deepCopy));
                 }
             }
 
@@ -1693,20 +1799,17 @@ abstract class User implements ActiveRecordInterface
         if ('News' == $relationName) {
             return $this->initNews();
         }
-        if ('RatingHeaders' == $relationName) {
-            return $this->initRatingHeaderss();
+        if ('RatingHeader' == $relationName) {
+            return $this->initRatingHeaders();
         }
-        if ('Rigs' == $relationName) {
-            return $this->initRigss();
+        if ('Rig' == $relationName) {
+            return $this->initRigs();
         }
-        if ('UserAttributeValues' == $relationName) {
-            return $this->initUserAttributeValuess();
+        if ('UserAttributeValue' == $relationName) {
+            return $this->initUserAttributeValues();
         }
-        if ('UserReviews' == $relationName) {
-            return $this->initUserReviewss();
-        }
-        if ('UserWeights' == $relationName) {
-            return $this->initUserWeightss();
+        if ('UserReview' == $relationName) {
+            return $this->initUserReviews();
         }
     }
 
@@ -1929,31 +2032,31 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collRatingHeaderss collection
+     * Clears out the collRatingHeaders collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addRatingHeaderss()
+     * @see        addRatingHeaders()
      */
-    public function clearRatingHeaderss()
+    public function clearRatingHeaders()
     {
-        $this->collRatingHeaderss = null; // important to set this to NULL since that means it is uninitialized
+        $this->collRatingHeaders = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collRatingHeaderss collection loaded partially.
+     * Reset is the collRatingHeaders collection loaded partially.
      */
-    public function resetPartialRatingHeaderss($v = true)
+    public function resetPartialRatingHeaders($v = true)
     {
-        $this->collRatingHeaderssPartial = $v;
+        $this->collRatingHeadersPartial = $v;
     }
 
     /**
-     * Initializes the collRatingHeaderss collection.
+     * Initializes the collRatingHeaders collection.
      *
-     * By default this just sets the collRatingHeaderss collection to an empty array (like clearcollRatingHeaderss());
+     * By default this just sets the collRatingHeaders collection to an empty array (like clearcollRatingHeaders());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1962,17 +2065,17 @@ abstract class User implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initRatingHeaderss($overrideExisting = true)
+    public function initRatingHeaders($overrideExisting = true)
     {
-        if (null !== $this->collRatingHeaderss && !$overrideExisting) {
+        if (null !== $this->collRatingHeaders && !$overrideExisting) {
             return;
         }
-        $this->collRatingHeaderss = new ObjectCollection();
-        $this->collRatingHeaderss->setModel('\RatingHeaders');
+        $this->collRatingHeaders = new ObjectCollection();
+        $this->collRatingHeaders->setModel('\RatingHeader');
     }
 
     /**
-     * Gets an array of ChildRatingHeaders objects which contain a foreign key that references this object.
+     * Gets an array of ChildRatingHeader objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -1982,108 +2085,108 @@ abstract class User implements ActiveRecordInterface
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
+     * @return ObjectCollection|ChildRatingHeader[] List of ChildRatingHeader objects
      * @throws PropelException
      */
-    public function getRatingHeaderss(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getRatingHeaders(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collRatingHeaderssPartial && !$this->isNew();
-        if (null === $this->collRatingHeaderss || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collRatingHeaderss) {
+        $partial = $this->collRatingHeadersPartial && !$this->isNew();
+        if (null === $this->collRatingHeaders || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collRatingHeaders) {
                 // return empty collection
-                $this->initRatingHeaderss();
+                $this->initRatingHeaders();
             } else {
-                $collRatingHeaderss = ChildRatingHeadersQuery::create(null, $criteria)
+                $collRatingHeaders = ChildRatingHeaderQuery::create(null, $criteria)
                     ->filterByUser($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collRatingHeaderssPartial && count($collRatingHeaderss)) {
-                        $this->initRatingHeaderss(false);
+                    if (false !== $this->collRatingHeadersPartial && count($collRatingHeaders)) {
+                        $this->initRatingHeaders(false);
 
-                        foreach ($collRatingHeaderss as $obj) {
-                            if (false == $this->collRatingHeaderss->contains($obj)) {
-                                $this->collRatingHeaderss->append($obj);
+                        foreach ($collRatingHeaders as $obj) {
+                            if (false == $this->collRatingHeaders->contains($obj)) {
+                                $this->collRatingHeaders->append($obj);
                             }
                         }
 
-                        $this->collRatingHeaderssPartial = true;
+                        $this->collRatingHeadersPartial = true;
                     }
 
-                    return $collRatingHeaderss;
+                    return $collRatingHeaders;
                 }
 
-                if ($partial && $this->collRatingHeaderss) {
-                    foreach ($this->collRatingHeaderss as $obj) {
+                if ($partial && $this->collRatingHeaders) {
+                    foreach ($this->collRatingHeaders as $obj) {
                         if ($obj->isNew()) {
-                            $collRatingHeaderss[] = $obj;
+                            $collRatingHeaders[] = $obj;
                         }
                     }
                 }
 
-                $this->collRatingHeaderss = $collRatingHeaderss;
-                $this->collRatingHeaderssPartial = false;
+                $this->collRatingHeaders = $collRatingHeaders;
+                $this->collRatingHeadersPartial = false;
             }
         }
 
-        return $this->collRatingHeaderss;
+        return $this->collRatingHeaders;
     }
 
     /**
-     * Sets a collection of ChildRatingHeaders objects related by a one-to-many relationship
+     * Sets a collection of ChildRatingHeader objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $ratingHeaderss A Propel collection.
+     * @param      Collection $ratingHeaders A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildUser The current object (for fluent API support)
      */
-    public function setRatingHeaderss(Collection $ratingHeaderss, ConnectionInterface $con = null)
+    public function setRatingHeaders(Collection $ratingHeaders, ConnectionInterface $con = null)
     {
-        /** @var ChildRatingHeaders[] $ratingHeaderssToDelete */
-        $ratingHeaderssToDelete = $this->getRatingHeaderss(new Criteria(), $con)->diff($ratingHeaderss);
+        /** @var ChildRatingHeader[] $ratingHeadersToDelete */
+        $ratingHeadersToDelete = $this->getRatingHeaders(new Criteria(), $con)->diff($ratingHeaders);
 
         
-        $this->ratingHeaderssScheduledForDeletion = $ratingHeaderssToDelete;
+        $this->ratingHeadersScheduledForDeletion = $ratingHeadersToDelete;
 
-        foreach ($ratingHeaderssToDelete as $ratingHeadersRemoved) {
-            $ratingHeadersRemoved->setUser(null);
+        foreach ($ratingHeadersToDelete as $ratingHeaderRemoved) {
+            $ratingHeaderRemoved->setUser(null);
         }
 
-        $this->collRatingHeaderss = null;
-        foreach ($ratingHeaderss as $ratingHeaders) {
-            $this->addRatingHeaders($ratingHeaders);
+        $this->collRatingHeaders = null;
+        foreach ($ratingHeaders as $ratingHeader) {
+            $this->addRatingHeader($ratingHeader);
         }
 
-        $this->collRatingHeaderss = $ratingHeaderss;
-        $this->collRatingHeaderssPartial = false;
+        $this->collRatingHeaders = $ratingHeaders;
+        $this->collRatingHeadersPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related RatingHeaders objects.
+     * Returns the number of related RatingHeader objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related RatingHeaders objects.
+     * @return int             Count of related RatingHeader objects.
      * @throws PropelException
      */
-    public function countRatingHeaderss(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countRatingHeaders(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collRatingHeaderssPartial && !$this->isNew();
-        if (null === $this->collRatingHeaderss || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collRatingHeaderss) {
+        $partial = $this->collRatingHeadersPartial && !$this->isNew();
+        if (null === $this->collRatingHeaders || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collRatingHeaders) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getRatingHeaderss());
+                return count($this->getRatingHeaders());
             }
 
-            $query = ChildRatingHeadersQuery::create(null, $criteria);
+            $query = ChildRatingHeaderQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -2093,54 +2196,54 @@ abstract class User implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collRatingHeaderss);
+        return count($this->collRatingHeaders);
     }
 
     /**
-     * Method called to associate a ChildRatingHeaders object to this object
-     * through the ChildRatingHeaders foreign key attribute.
+     * Method called to associate a ChildRatingHeader object to this object
+     * through the ChildRatingHeader foreign key attribute.
      *
-     * @param  ChildRatingHeaders $l ChildRatingHeaders
+     * @param  ChildRatingHeader $l ChildRatingHeader
      * @return $this|\User The current object (for fluent API support)
      */
-    public function addRatingHeaders(ChildRatingHeaders $l)
+    public function addRatingHeader(ChildRatingHeader $l)
     {
-        if ($this->collRatingHeaderss === null) {
-            $this->initRatingHeaderss();
-            $this->collRatingHeaderssPartial = true;
+        if ($this->collRatingHeaders === null) {
+            $this->initRatingHeaders();
+            $this->collRatingHeadersPartial = true;
         }
 
-        if (!$this->collRatingHeaderss->contains($l)) {
-            $this->doAddRatingHeaders($l);
+        if (!$this->collRatingHeaders->contains($l)) {
+            $this->doAddRatingHeader($l);
         }
 
         return $this;
     }
 
     /**
-     * @param ChildRatingHeaders $ratingHeaders The ChildRatingHeaders object to add.
+     * @param ChildRatingHeader $ratingHeader The ChildRatingHeader object to add.
      */
-    protected function doAddRatingHeaders(ChildRatingHeaders $ratingHeaders)
+    protected function doAddRatingHeader(ChildRatingHeader $ratingHeader)
     {
-        $this->collRatingHeaderss[]= $ratingHeaders;
-        $ratingHeaders->setUser($this);
+        $this->collRatingHeaders[]= $ratingHeader;
+        $ratingHeader->setUser($this);
     }
 
     /**
-     * @param  ChildRatingHeaders $ratingHeaders The ChildRatingHeaders object to remove.
+     * @param  ChildRatingHeader $ratingHeader The ChildRatingHeader object to remove.
      * @return $this|ChildUser The current object (for fluent API support)
      */
-    public function removeRatingHeaders(ChildRatingHeaders $ratingHeaders)
+    public function removeRatingHeader(ChildRatingHeader $ratingHeader)
     {
-        if ($this->getRatingHeaderss()->contains($ratingHeaders)) {
-            $pos = $this->collRatingHeaderss->search($ratingHeaders);
-            $this->collRatingHeaderss->remove($pos);
-            if (null === $this->ratingHeaderssScheduledForDeletion) {
-                $this->ratingHeaderssScheduledForDeletion = clone $this->collRatingHeaderss;
-                $this->ratingHeaderssScheduledForDeletion->clear();
+        if ($this->getRatingHeaders()->contains($ratingHeader)) {
+            $pos = $this->collRatingHeaders->search($ratingHeader);
+            $this->collRatingHeaders->remove($pos);
+            if (null === $this->ratingHeadersScheduledForDeletion) {
+                $this->ratingHeadersScheduledForDeletion = clone $this->collRatingHeaders;
+                $this->ratingHeadersScheduledForDeletion->clear();
             }
-            $this->ratingHeaderssScheduledForDeletion[]= clone $ratingHeaders;
-            $ratingHeaders->setUser(null);
+            $this->ratingHeadersScheduledForDeletion[]= clone $ratingHeader;
+            $ratingHeader->setUser(null);
         }
 
         return $this;
@@ -2152,7 +2255,7 @@ abstract class User implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this User is new, it will return
      * an empty collection; or if this User has previously
-     * been saved, it will retrieve related RatingHeaderss from storage.
+     * been saved, it will retrieve related RatingHeaders from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -2161,14 +2264,14 @@ abstract class User implements ActiveRecordInterface
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
+     * @return ObjectCollection|ChildRatingHeader[] List of ChildRatingHeader objects
      */
-    public function getRatingHeaderssJoinGames(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getRatingHeadersJoinGames(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildRatingHeadersQuery::create(null, $criteria);
+        $query = ChildRatingHeaderQuery::create(null, $criteria);
         $query->joinWith('Games', $joinBehavior);
 
-        return $this->getRatingHeaderss($query, $con);
+        return $this->getRatingHeaders($query, $con);
     }
 
 
@@ -2177,7 +2280,7 @@ abstract class User implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this User is new, it will return
      * an empty collection; or if this User has previously
-     * been saved, it will retrieve related RatingHeaderss from storage.
+     * been saved, it will retrieve related RatingHeaders from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -2186,67 +2289,42 @@ abstract class User implements ActiveRecordInterface
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
+     * @return ObjectCollection|ChildRatingHeader[] List of ChildRatingHeader objects
      */
-    public function getRatingHeaderssJoinRigs(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getRatingHeadersJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildRatingHeadersQuery::create(null, $criteria);
-        $query->joinWith('Rigs', $joinBehavior);
-
-        return $this->getRatingHeaderss($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this User is new, it will return
-     * an empty collection; or if this User has previously
-     * been saved, it will retrieve related RatingHeaderss from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in User.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildRatingHeaders[] List of ChildRatingHeaders objects
-     */
-    public function getRatingHeaderssJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildRatingHeadersQuery::create(null, $criteria);
+        $query = ChildRatingHeaderQuery::create(null, $criteria);
         $query->joinWith('Platforms', $joinBehavior);
 
-        return $this->getRatingHeaderss($query, $con);
+        return $this->getRatingHeaders($query, $con);
     }
 
     /**
-     * Clears out the collRigss collection
+     * Clears out the collRigs collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addRigss()
+     * @see        addRigs()
      */
-    public function clearRigss()
+    public function clearRigs()
     {
-        $this->collRigss = null; // important to set this to NULL since that means it is uninitialized
+        $this->collRigs = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collRigss collection loaded partially.
+     * Reset is the collRigs collection loaded partially.
      */
-    public function resetPartialRigss($v = true)
+    public function resetPartialRigs($v = true)
     {
-        $this->collRigssPartial = $v;
+        $this->collRigsPartial = $v;
     }
 
     /**
-     * Initializes the collRigss collection.
+     * Initializes the collRigs collection.
      *
-     * By default this just sets the collRigss collection to an empty array (like clearcollRigss());
+     * By default this just sets the collRigs collection to an empty array (like clearcollRigs());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -2255,17 +2333,17 @@ abstract class User implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initRigss($overrideExisting = true)
+    public function initRigs($overrideExisting = true)
     {
-        if (null !== $this->collRigss && !$overrideExisting) {
+        if (null !== $this->collRigs && !$overrideExisting) {
             return;
         }
-        $this->collRigss = new ObjectCollection();
-        $this->collRigss->setModel('\Rigs');
+        $this->collRigs = new ObjectCollection();
+        $this->collRigs->setModel('\Rig');
     }
 
     /**
-     * Gets an array of ChildRigs objects which contain a foreign key that references this object.
+     * Gets an array of ChildRig objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -2275,108 +2353,108 @@ abstract class User implements ActiveRecordInterface
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildRigs[] List of ChildRigs objects
+     * @return ObjectCollection|ChildRig[] List of ChildRig objects
      * @throws PropelException
      */
-    public function getRigss(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getRigs(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collRigssPartial && !$this->isNew();
-        if (null === $this->collRigss || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collRigss) {
+        $partial = $this->collRigsPartial && !$this->isNew();
+        if (null === $this->collRigs || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collRigs) {
                 // return empty collection
-                $this->initRigss();
+                $this->initRigs();
             } else {
-                $collRigss = ChildRigsQuery::create(null, $criteria)
+                $collRigs = ChildRigQuery::create(null, $criteria)
                     ->filterByUser($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collRigssPartial && count($collRigss)) {
-                        $this->initRigss(false);
+                    if (false !== $this->collRigsPartial && count($collRigs)) {
+                        $this->initRigs(false);
 
-                        foreach ($collRigss as $obj) {
-                            if (false == $this->collRigss->contains($obj)) {
-                                $this->collRigss->append($obj);
+                        foreach ($collRigs as $obj) {
+                            if (false == $this->collRigs->contains($obj)) {
+                                $this->collRigs->append($obj);
                             }
                         }
 
-                        $this->collRigssPartial = true;
+                        $this->collRigsPartial = true;
                     }
 
-                    return $collRigss;
+                    return $collRigs;
                 }
 
-                if ($partial && $this->collRigss) {
-                    foreach ($this->collRigss as $obj) {
+                if ($partial && $this->collRigs) {
+                    foreach ($this->collRigs as $obj) {
                         if ($obj->isNew()) {
-                            $collRigss[] = $obj;
+                            $collRigs[] = $obj;
                         }
                     }
                 }
 
-                $this->collRigss = $collRigss;
-                $this->collRigssPartial = false;
+                $this->collRigs = $collRigs;
+                $this->collRigsPartial = false;
             }
         }
 
-        return $this->collRigss;
+        return $this->collRigs;
     }
 
     /**
-     * Sets a collection of ChildRigs objects related by a one-to-many relationship
+     * Sets a collection of ChildRig objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $rigss A Propel collection.
+     * @param      Collection $rigs A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildUser The current object (for fluent API support)
      */
-    public function setRigss(Collection $rigss, ConnectionInterface $con = null)
+    public function setRigs(Collection $rigs, ConnectionInterface $con = null)
     {
-        /** @var ChildRigs[] $rigssToDelete */
-        $rigssToDelete = $this->getRigss(new Criteria(), $con)->diff($rigss);
+        /** @var ChildRig[] $rigsToDelete */
+        $rigsToDelete = $this->getRigs(new Criteria(), $con)->diff($rigs);
 
         
-        $this->rigssScheduledForDeletion = $rigssToDelete;
+        $this->rigsScheduledForDeletion = $rigsToDelete;
 
-        foreach ($rigssToDelete as $rigsRemoved) {
-            $rigsRemoved->setUser(null);
+        foreach ($rigsToDelete as $rigRemoved) {
+            $rigRemoved->setUser(null);
         }
 
-        $this->collRigss = null;
-        foreach ($rigss as $rigs) {
-            $this->addRigs($rigs);
+        $this->collRigs = null;
+        foreach ($rigs as $rig) {
+            $this->addRig($rig);
         }
 
-        $this->collRigss = $rigss;
-        $this->collRigssPartial = false;
+        $this->collRigs = $rigs;
+        $this->collRigsPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related Rigs objects.
+     * Returns the number of related Rig objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related Rigs objects.
+     * @return int             Count of related Rig objects.
      * @throws PropelException
      */
-    public function countRigss(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countRigs(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collRigssPartial && !$this->isNew();
-        if (null === $this->collRigss || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collRigss) {
+        $partial = $this->collRigsPartial && !$this->isNew();
+        if (null === $this->collRigs || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collRigs) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getRigss());
+                return count($this->getRigs());
             }
 
-            $query = ChildRigsQuery::create(null, $criteria);
+            $query = ChildRigQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -2386,85 +2464,85 @@ abstract class User implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collRigss);
+        return count($this->collRigs);
     }
 
     /**
-     * Method called to associate a ChildRigs object to this object
-     * through the ChildRigs foreign key attribute.
+     * Method called to associate a ChildRig object to this object
+     * through the ChildRig foreign key attribute.
      *
-     * @param  ChildRigs $l ChildRigs
+     * @param  ChildRig $l ChildRig
      * @return $this|\User The current object (for fluent API support)
      */
-    public function addRigs(ChildRigs $l)
+    public function addRig(ChildRig $l)
     {
-        if ($this->collRigss === null) {
-            $this->initRigss();
-            $this->collRigssPartial = true;
+        if ($this->collRigs === null) {
+            $this->initRigs();
+            $this->collRigsPartial = true;
         }
 
-        if (!$this->collRigss->contains($l)) {
-            $this->doAddRigs($l);
+        if (!$this->collRigs->contains($l)) {
+            $this->doAddRig($l);
         }
 
         return $this;
     }
 
     /**
-     * @param ChildRigs $rigs The ChildRigs object to add.
+     * @param ChildRig $rig The ChildRig object to add.
      */
-    protected function doAddRigs(ChildRigs $rigs)
+    protected function doAddRig(ChildRig $rig)
     {
-        $this->collRigss[]= $rigs;
-        $rigs->setUser($this);
+        $this->collRigs[]= $rig;
+        $rig->setUser($this);
     }
 
     /**
-     * @param  ChildRigs $rigs The ChildRigs object to remove.
+     * @param  ChildRig $rig The ChildRig object to remove.
      * @return $this|ChildUser The current object (for fluent API support)
      */
-    public function removeRigs(ChildRigs $rigs)
+    public function removeRig(ChildRig $rig)
     {
-        if ($this->getRigss()->contains($rigs)) {
-            $pos = $this->collRigss->search($rigs);
-            $this->collRigss->remove($pos);
-            if (null === $this->rigssScheduledForDeletion) {
-                $this->rigssScheduledForDeletion = clone $this->collRigss;
-                $this->rigssScheduledForDeletion->clear();
+        if ($this->getRigs()->contains($rig)) {
+            $pos = $this->collRigs->search($rig);
+            $this->collRigs->remove($pos);
+            if (null === $this->rigsScheduledForDeletion) {
+                $this->rigsScheduledForDeletion = clone $this->collRigs;
+                $this->rigsScheduledForDeletion->clear();
             }
-            $this->rigssScheduledForDeletion[]= clone $rigs;
-            $rigs->setUser(null);
+            $this->rigsScheduledForDeletion[]= clone $rig;
+            $rig->setUser(null);
         }
 
         return $this;
     }
 
     /**
-     * Clears out the collUserAttributeValuess collection
+     * Clears out the collUserAttributeValues collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addUserAttributeValuess()
+     * @see        addUserAttributeValues()
      */
-    public function clearUserAttributeValuess()
+    public function clearUserAttributeValues()
     {
-        $this->collUserAttributeValuess = null; // important to set this to NULL since that means it is uninitialized
+        $this->collUserAttributeValues = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collUserAttributeValuess collection loaded partially.
+     * Reset is the collUserAttributeValues collection loaded partially.
      */
-    public function resetPartialUserAttributeValuess($v = true)
+    public function resetPartialUserAttributeValues($v = true)
     {
-        $this->collUserAttributeValuessPartial = $v;
+        $this->collUserAttributeValuesPartial = $v;
     }
 
     /**
-     * Initializes the collUserAttributeValuess collection.
+     * Initializes the collUserAttributeValues collection.
      *
-     * By default this just sets the collUserAttributeValuess collection to an empty array (like clearcollUserAttributeValuess());
+     * By default this just sets the collUserAttributeValues collection to an empty array (like clearcollUserAttributeValues());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -2473,17 +2551,17 @@ abstract class User implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initUserAttributeValuess($overrideExisting = true)
+    public function initUserAttributeValues($overrideExisting = true)
     {
-        if (null !== $this->collUserAttributeValuess && !$overrideExisting) {
+        if (null !== $this->collUserAttributeValues && !$overrideExisting) {
             return;
         }
-        $this->collUserAttributeValuess = new ObjectCollection();
-        $this->collUserAttributeValuess->setModel('\UserAttributeValues');
+        $this->collUserAttributeValues = new ObjectCollection();
+        $this->collUserAttributeValues->setModel('\UserAttributeValue');
     }
 
     /**
-     * Gets an array of ChildUserAttributeValues objects which contain a foreign key that references this object.
+     * Gets an array of ChildUserAttributeValue objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -2493,108 +2571,108 @@ abstract class User implements ActiveRecordInterface
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildUserAttributeValues[] List of ChildUserAttributeValues objects
+     * @return ObjectCollection|ChildUserAttributeValue[] List of ChildUserAttributeValue objects
      * @throws PropelException
      */
-    public function getUserAttributeValuess(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getUserAttributeValues(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collUserAttributeValuessPartial && !$this->isNew();
-        if (null === $this->collUserAttributeValuess || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collUserAttributeValuess) {
+        $partial = $this->collUserAttributeValuesPartial && !$this->isNew();
+        if (null === $this->collUserAttributeValues || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collUserAttributeValues) {
                 // return empty collection
-                $this->initUserAttributeValuess();
+                $this->initUserAttributeValues();
             } else {
-                $collUserAttributeValuess = ChildUserAttributeValuesQuery::create(null, $criteria)
+                $collUserAttributeValues = ChildUserAttributeValueQuery::create(null, $criteria)
                     ->filterByUser($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collUserAttributeValuessPartial && count($collUserAttributeValuess)) {
-                        $this->initUserAttributeValuess(false);
+                    if (false !== $this->collUserAttributeValuesPartial && count($collUserAttributeValues)) {
+                        $this->initUserAttributeValues(false);
 
-                        foreach ($collUserAttributeValuess as $obj) {
-                            if (false == $this->collUserAttributeValuess->contains($obj)) {
-                                $this->collUserAttributeValuess->append($obj);
+                        foreach ($collUserAttributeValues as $obj) {
+                            if (false == $this->collUserAttributeValues->contains($obj)) {
+                                $this->collUserAttributeValues->append($obj);
                             }
                         }
 
-                        $this->collUserAttributeValuessPartial = true;
+                        $this->collUserAttributeValuesPartial = true;
                     }
 
-                    return $collUserAttributeValuess;
+                    return $collUserAttributeValues;
                 }
 
-                if ($partial && $this->collUserAttributeValuess) {
-                    foreach ($this->collUserAttributeValuess as $obj) {
+                if ($partial && $this->collUserAttributeValues) {
+                    foreach ($this->collUserAttributeValues as $obj) {
                         if ($obj->isNew()) {
-                            $collUserAttributeValuess[] = $obj;
+                            $collUserAttributeValues[] = $obj;
                         }
                     }
                 }
 
-                $this->collUserAttributeValuess = $collUserAttributeValuess;
-                $this->collUserAttributeValuessPartial = false;
+                $this->collUserAttributeValues = $collUserAttributeValues;
+                $this->collUserAttributeValuesPartial = false;
             }
         }
 
-        return $this->collUserAttributeValuess;
+        return $this->collUserAttributeValues;
     }
 
     /**
-     * Sets a collection of ChildUserAttributeValues objects related by a one-to-many relationship
+     * Sets a collection of ChildUserAttributeValue objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $userAttributeValuess A Propel collection.
+     * @param      Collection $userAttributeValues A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildUser The current object (for fluent API support)
      */
-    public function setUserAttributeValuess(Collection $userAttributeValuess, ConnectionInterface $con = null)
+    public function setUserAttributeValues(Collection $userAttributeValues, ConnectionInterface $con = null)
     {
-        /** @var ChildUserAttributeValues[] $userAttributeValuessToDelete */
-        $userAttributeValuessToDelete = $this->getUserAttributeValuess(new Criteria(), $con)->diff($userAttributeValuess);
+        /** @var ChildUserAttributeValue[] $userAttributeValuesToDelete */
+        $userAttributeValuesToDelete = $this->getUserAttributeValues(new Criteria(), $con)->diff($userAttributeValues);
 
         
-        $this->userAttributeValuessScheduledForDeletion = $userAttributeValuessToDelete;
+        $this->userAttributeValuesScheduledForDeletion = $userAttributeValuesToDelete;
 
-        foreach ($userAttributeValuessToDelete as $userAttributeValuesRemoved) {
-            $userAttributeValuesRemoved->setUser(null);
+        foreach ($userAttributeValuesToDelete as $userAttributeValueRemoved) {
+            $userAttributeValueRemoved->setUser(null);
         }
 
-        $this->collUserAttributeValuess = null;
-        foreach ($userAttributeValuess as $userAttributeValues) {
-            $this->addUserAttributeValues($userAttributeValues);
+        $this->collUserAttributeValues = null;
+        foreach ($userAttributeValues as $userAttributeValue) {
+            $this->addUserAttributeValue($userAttributeValue);
         }
 
-        $this->collUserAttributeValuess = $userAttributeValuess;
-        $this->collUserAttributeValuessPartial = false;
+        $this->collUserAttributeValues = $userAttributeValues;
+        $this->collUserAttributeValuesPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related UserAttributeValues objects.
+     * Returns the number of related UserAttributeValue objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related UserAttributeValues objects.
+     * @return int             Count of related UserAttributeValue objects.
      * @throws PropelException
      */
-    public function countUserAttributeValuess(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countUserAttributeValues(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collUserAttributeValuessPartial && !$this->isNew();
-        if (null === $this->collUserAttributeValuess || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collUserAttributeValuess) {
+        $partial = $this->collUserAttributeValuesPartial && !$this->isNew();
+        if (null === $this->collUserAttributeValues || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collUserAttributeValues) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getUserAttributeValuess());
+                return count($this->getUserAttributeValues());
             }
 
-            $query = ChildUserAttributeValuesQuery::create(null, $criteria);
+            $query = ChildUserAttributeValueQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -2604,54 +2682,54 @@ abstract class User implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collUserAttributeValuess);
+        return count($this->collUserAttributeValues);
     }
 
     /**
-     * Method called to associate a ChildUserAttributeValues object to this object
-     * through the ChildUserAttributeValues foreign key attribute.
+     * Method called to associate a ChildUserAttributeValue object to this object
+     * through the ChildUserAttributeValue foreign key attribute.
      *
-     * @param  ChildUserAttributeValues $l ChildUserAttributeValues
+     * @param  ChildUserAttributeValue $l ChildUserAttributeValue
      * @return $this|\User The current object (for fluent API support)
      */
-    public function addUserAttributeValues(ChildUserAttributeValues $l)
+    public function addUserAttributeValue(ChildUserAttributeValue $l)
     {
-        if ($this->collUserAttributeValuess === null) {
-            $this->initUserAttributeValuess();
-            $this->collUserAttributeValuessPartial = true;
+        if ($this->collUserAttributeValues === null) {
+            $this->initUserAttributeValues();
+            $this->collUserAttributeValuesPartial = true;
         }
 
-        if (!$this->collUserAttributeValuess->contains($l)) {
-            $this->doAddUserAttributeValues($l);
+        if (!$this->collUserAttributeValues->contains($l)) {
+            $this->doAddUserAttributeValue($l);
         }
 
         return $this;
     }
 
     /**
-     * @param ChildUserAttributeValues $userAttributeValues The ChildUserAttributeValues object to add.
+     * @param ChildUserAttributeValue $userAttributeValue The ChildUserAttributeValue object to add.
      */
-    protected function doAddUserAttributeValues(ChildUserAttributeValues $userAttributeValues)
+    protected function doAddUserAttributeValue(ChildUserAttributeValue $userAttributeValue)
     {
-        $this->collUserAttributeValuess[]= $userAttributeValues;
-        $userAttributeValues->setUser($this);
+        $this->collUserAttributeValues[]= $userAttributeValue;
+        $userAttributeValue->setUser($this);
     }
 
     /**
-     * @param  ChildUserAttributeValues $userAttributeValues The ChildUserAttributeValues object to remove.
+     * @param  ChildUserAttributeValue $userAttributeValue The ChildUserAttributeValue object to remove.
      * @return $this|ChildUser The current object (for fluent API support)
      */
-    public function removeUserAttributeValues(ChildUserAttributeValues $userAttributeValues)
+    public function removeUserAttributeValue(ChildUserAttributeValue $userAttributeValue)
     {
-        if ($this->getUserAttributeValuess()->contains($userAttributeValues)) {
-            $pos = $this->collUserAttributeValuess->search($userAttributeValues);
-            $this->collUserAttributeValuess->remove($pos);
-            if (null === $this->userAttributeValuessScheduledForDeletion) {
-                $this->userAttributeValuessScheduledForDeletion = clone $this->collUserAttributeValuess;
-                $this->userAttributeValuessScheduledForDeletion->clear();
+        if ($this->getUserAttributeValues()->contains($userAttributeValue)) {
+            $pos = $this->collUserAttributeValues->search($userAttributeValue);
+            $this->collUserAttributeValues->remove($pos);
+            if (null === $this->userAttributeValuesScheduledForDeletion) {
+                $this->userAttributeValuesScheduledForDeletion = clone $this->collUserAttributeValues;
+                $this->userAttributeValuesScheduledForDeletion->clear();
             }
-            $this->userAttributeValuessScheduledForDeletion[]= clone $userAttributeValues;
-            $userAttributeValues->setUser(null);
+            $this->userAttributeValuesScheduledForDeletion[]= clone $userAttributeValue;
+            $userAttributeValue->setUser(null);
         }
 
         return $this;
@@ -2663,7 +2741,7 @@ abstract class User implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this User is new, it will return
      * an empty collection; or if this User has previously
-     * been saved, it will retrieve related UserAttributeValuess from storage.
+     * been saved, it will retrieve related UserAttributeValues from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -2672,42 +2750,42 @@ abstract class User implements ActiveRecordInterface
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildUserAttributeValues[] List of ChildUserAttributeValues objects
+     * @return ObjectCollection|ChildUserAttributeValue[] List of ChildUserAttributeValue objects
      */
-    public function getUserAttributeValuessJoinUserAttributes(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getUserAttributeValuesJoinUserAttribute(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildUserAttributeValuesQuery::create(null, $criteria);
-        $query->joinWith('UserAttributes', $joinBehavior);
+        $query = ChildUserAttributeValueQuery::create(null, $criteria);
+        $query->joinWith('UserAttribute', $joinBehavior);
 
-        return $this->getUserAttributeValuess($query, $con);
+        return $this->getUserAttributeValues($query, $con);
     }
 
     /**
-     * Clears out the collUserReviewss collection
+     * Clears out the collUserReviews collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addUserReviewss()
+     * @see        addUserReviews()
      */
-    public function clearUserReviewss()
+    public function clearUserReviews()
     {
-        $this->collUserReviewss = null; // important to set this to NULL since that means it is uninitialized
+        $this->collUserReviews = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collUserReviewss collection loaded partially.
+     * Reset is the collUserReviews collection loaded partially.
      */
-    public function resetPartialUserReviewss($v = true)
+    public function resetPartialUserReviews($v = true)
     {
-        $this->collUserReviewssPartial = $v;
+        $this->collUserReviewsPartial = $v;
     }
 
     /**
-     * Initializes the collUserReviewss collection.
+     * Initializes the collUserReviews collection.
      *
-     * By default this just sets the collUserReviewss collection to an empty array (like clearcollUserReviewss());
+     * By default this just sets the collUserReviews collection to an empty array (like clearcollUserReviews());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -2716,17 +2794,17 @@ abstract class User implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initUserReviewss($overrideExisting = true)
+    public function initUserReviews($overrideExisting = true)
     {
-        if (null !== $this->collUserReviewss && !$overrideExisting) {
+        if (null !== $this->collUserReviews && !$overrideExisting) {
             return;
         }
-        $this->collUserReviewss = new ObjectCollection();
-        $this->collUserReviewss->setModel('\UserReviews');
+        $this->collUserReviews = new ObjectCollection();
+        $this->collUserReviews->setModel('\UserReview');
     }
 
     /**
-     * Gets an array of ChildUserReviews objects which contain a foreign key that references this object.
+     * Gets an array of ChildUserReview objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -2736,108 +2814,108 @@ abstract class User implements ActiveRecordInterface
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     * @return ObjectCollection|ChildUserReview[] List of ChildUserReview objects
      * @throws PropelException
      */
-    public function getUserReviewss(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getUserReviews(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collUserReviewssPartial && !$this->isNew();
-        if (null === $this->collUserReviewss || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collUserReviewss) {
+        $partial = $this->collUserReviewsPartial && !$this->isNew();
+        if (null === $this->collUserReviews || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collUserReviews) {
                 // return empty collection
-                $this->initUserReviewss();
+                $this->initUserReviews();
             } else {
-                $collUserReviewss = ChildUserReviewsQuery::create(null, $criteria)
+                $collUserReviews = ChildUserReviewQuery::create(null, $criteria)
                     ->filterByUser($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collUserReviewssPartial && count($collUserReviewss)) {
-                        $this->initUserReviewss(false);
+                    if (false !== $this->collUserReviewsPartial && count($collUserReviews)) {
+                        $this->initUserReviews(false);
 
-                        foreach ($collUserReviewss as $obj) {
-                            if (false == $this->collUserReviewss->contains($obj)) {
-                                $this->collUserReviewss->append($obj);
+                        foreach ($collUserReviews as $obj) {
+                            if (false == $this->collUserReviews->contains($obj)) {
+                                $this->collUserReviews->append($obj);
                             }
                         }
 
-                        $this->collUserReviewssPartial = true;
+                        $this->collUserReviewsPartial = true;
                     }
 
-                    return $collUserReviewss;
+                    return $collUserReviews;
                 }
 
-                if ($partial && $this->collUserReviewss) {
-                    foreach ($this->collUserReviewss as $obj) {
+                if ($partial && $this->collUserReviews) {
+                    foreach ($this->collUserReviews as $obj) {
                         if ($obj->isNew()) {
-                            $collUserReviewss[] = $obj;
+                            $collUserReviews[] = $obj;
                         }
                     }
                 }
 
-                $this->collUserReviewss = $collUserReviewss;
-                $this->collUserReviewssPartial = false;
+                $this->collUserReviews = $collUserReviews;
+                $this->collUserReviewsPartial = false;
             }
         }
 
-        return $this->collUserReviewss;
+        return $this->collUserReviews;
     }
 
     /**
-     * Sets a collection of ChildUserReviews objects related by a one-to-many relationship
+     * Sets a collection of ChildUserReview objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $userReviewss A Propel collection.
+     * @param      Collection $userReviews A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildUser The current object (for fluent API support)
      */
-    public function setUserReviewss(Collection $userReviewss, ConnectionInterface $con = null)
+    public function setUserReviews(Collection $userReviews, ConnectionInterface $con = null)
     {
-        /** @var ChildUserReviews[] $userReviewssToDelete */
-        $userReviewssToDelete = $this->getUserReviewss(new Criteria(), $con)->diff($userReviewss);
+        /** @var ChildUserReview[] $userReviewsToDelete */
+        $userReviewsToDelete = $this->getUserReviews(new Criteria(), $con)->diff($userReviews);
 
         
-        $this->userReviewssScheduledForDeletion = $userReviewssToDelete;
+        $this->userReviewsScheduledForDeletion = $userReviewsToDelete;
 
-        foreach ($userReviewssToDelete as $userReviewsRemoved) {
-            $userReviewsRemoved->setUser(null);
+        foreach ($userReviewsToDelete as $userReviewRemoved) {
+            $userReviewRemoved->setUser(null);
         }
 
-        $this->collUserReviewss = null;
-        foreach ($userReviewss as $userReviews) {
-            $this->addUserReviews($userReviews);
+        $this->collUserReviews = null;
+        foreach ($userReviews as $userReview) {
+            $this->addUserReview($userReview);
         }
 
-        $this->collUserReviewss = $userReviewss;
-        $this->collUserReviewssPartial = false;
+        $this->collUserReviews = $userReviews;
+        $this->collUserReviewsPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related UserReviews objects.
+     * Returns the number of related UserReview objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related UserReviews objects.
+     * @return int             Count of related UserReview objects.
      * @throws PropelException
      */
-    public function countUserReviewss(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countUserReviews(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collUserReviewssPartial && !$this->isNew();
-        if (null === $this->collUserReviewss || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collUserReviewss) {
+        $partial = $this->collUserReviewsPartial && !$this->isNew();
+        if (null === $this->collUserReviews || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collUserReviews) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getUserReviewss());
+                return count($this->getUserReviews());
             }
 
-            $query = ChildUserReviewsQuery::create(null, $criteria);
+            $query = ChildUserReviewQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -2847,54 +2925,54 @@ abstract class User implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collUserReviewss);
+        return count($this->collUserReviews);
     }
 
     /**
-     * Method called to associate a ChildUserReviews object to this object
-     * through the ChildUserReviews foreign key attribute.
+     * Method called to associate a ChildUserReview object to this object
+     * through the ChildUserReview foreign key attribute.
      *
-     * @param  ChildUserReviews $l ChildUserReviews
+     * @param  ChildUserReview $l ChildUserReview
      * @return $this|\User The current object (for fluent API support)
      */
-    public function addUserReviews(ChildUserReviews $l)
+    public function addUserReview(ChildUserReview $l)
     {
-        if ($this->collUserReviewss === null) {
-            $this->initUserReviewss();
-            $this->collUserReviewssPartial = true;
+        if ($this->collUserReviews === null) {
+            $this->initUserReviews();
+            $this->collUserReviewsPartial = true;
         }
 
-        if (!$this->collUserReviewss->contains($l)) {
-            $this->doAddUserReviews($l);
+        if (!$this->collUserReviews->contains($l)) {
+            $this->doAddUserReview($l);
         }
 
         return $this;
     }
 
     /**
-     * @param ChildUserReviews $userReviews The ChildUserReviews object to add.
+     * @param ChildUserReview $userReview The ChildUserReview object to add.
      */
-    protected function doAddUserReviews(ChildUserReviews $userReviews)
+    protected function doAddUserReview(ChildUserReview $userReview)
     {
-        $this->collUserReviewss[]= $userReviews;
-        $userReviews->setUser($this);
+        $this->collUserReviews[]= $userReview;
+        $userReview->setUser($this);
     }
 
     /**
-     * @param  ChildUserReviews $userReviews The ChildUserReviews object to remove.
+     * @param  ChildUserReview $userReview The ChildUserReview object to remove.
      * @return $this|ChildUser The current object (for fluent API support)
      */
-    public function removeUserReviews(ChildUserReviews $userReviews)
+    public function removeUserReview(ChildUserReview $userReview)
     {
-        if ($this->getUserReviewss()->contains($userReviews)) {
-            $pos = $this->collUserReviewss->search($userReviews);
-            $this->collUserReviewss->remove($pos);
-            if (null === $this->userReviewssScheduledForDeletion) {
-                $this->userReviewssScheduledForDeletion = clone $this->collUserReviewss;
-                $this->userReviewssScheduledForDeletion->clear();
+        if ($this->getUserReviews()->contains($userReview)) {
+            $pos = $this->collUserReviews->search($userReview);
+            $this->collUserReviews->remove($pos);
+            if (null === $this->userReviewsScheduledForDeletion) {
+                $this->userReviewsScheduledForDeletion = clone $this->collUserReviews;
+                $this->userReviewsScheduledForDeletion->clear();
             }
-            $this->userReviewssScheduledForDeletion[]= clone $userReviews;
-            $userReviews->setUser(null);
+            $this->userReviewsScheduledForDeletion[]= clone $userReview;
+            $userReview->setUser(null);
         }
 
         return $this;
@@ -2906,7 +2984,7 @@ abstract class User implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this User is new, it will return
      * an empty collection; or if this User has previously
-     * been saved, it will retrieve related UserReviewss from storage.
+     * been saved, it will retrieve related UserReviews from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -2915,14 +2993,14 @@ abstract class User implements ActiveRecordInterface
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     * @return ObjectCollection|ChildUserReview[] List of ChildUserReview objects
      */
-    public function getUserReviewssJoinGames(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getUserReviewsJoinGames(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildUserReviewsQuery::create(null, $criteria);
+        $query = ChildUserReviewQuery::create(null, $criteria);
         $query->joinWith('Games', $joinBehavior);
 
-        return $this->getUserReviewss($query, $con);
+        return $this->getUserReviews($query, $con);
     }
 
 
@@ -2931,7 +3009,7 @@ abstract class User implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this User is new, it will return
      * an empty collection; or if this User has previously
-     * been saved, it will retrieve related UserReviewss from storage.
+     * been saved, it will retrieve related UserReviews from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -2940,14 +3018,14 @@ abstract class User implements ActiveRecordInterface
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     * @return ObjectCollection|ChildUserReview[] List of ChildUserReview objects
      */
-    public function getUserReviewssJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getUserReviewsJoinPlatforms(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildUserReviewsQuery::create(null, $criteria);
+        $query = ChildUserReviewQuery::create(null, $criteria);
         $query->joinWith('Platforms', $joinBehavior);
 
-        return $this->getUserReviewss($query, $con);
+        return $this->getUserReviews($query, $con);
     }
 
 
@@ -2956,7 +3034,7 @@ abstract class User implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this User is new, it will return
      * an empty collection; or if this User has previously
-     * been saved, it will retrieve related UserReviewss from storage.
+     * been saved, it will retrieve related UserReviews from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -2965,232 +3043,14 @@ abstract class User implements ActiveRecordInterface
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildUserReviews[] List of ChildUserReviews objects
+     * @return ObjectCollection|ChildUserReview[] List of ChildUserReview objects
      */
-    public function getUserReviewssJoinRatings(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getUserReviewsJoinRating(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildUserReviewsQuery::create(null, $criteria);
-        $query->joinWith('Ratings', $joinBehavior);
+        $query = ChildUserReviewQuery::create(null, $criteria);
+        $query->joinWith('Rating', $joinBehavior);
 
-        return $this->getUserReviewss($query, $con);
-    }
-
-    /**
-     * Clears out the collUserWeightss collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addUserWeightss()
-     */
-    public function clearUserWeightss()
-    {
-        $this->collUserWeightss = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Reset is the collUserWeightss collection loaded partially.
-     */
-    public function resetPartialUserWeightss($v = true)
-    {
-        $this->collUserWeightssPartial = $v;
-    }
-
-    /**
-     * Initializes the collUserWeightss collection.
-     *
-     * By default this just sets the collUserWeightss collection to an empty array (like clearcollUserWeightss());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initUserWeightss($overrideExisting = true)
-    {
-        if (null !== $this->collUserWeightss && !$overrideExisting) {
-            return;
-        }
-        $this->collUserWeightss = new ObjectCollection();
-        $this->collUserWeightss->setModel('\UserWeights');
-    }
-
-    /**
-     * Gets an array of ChildUserWeights objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildUser is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildUserWeights[] List of ChildUserWeights objects
-     * @throws PropelException
-     */
-    public function getUserWeightss(Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        $partial = $this->collUserWeightssPartial && !$this->isNew();
-        if (null === $this->collUserWeightss || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collUserWeightss) {
-                // return empty collection
-                $this->initUserWeightss();
-            } else {
-                $collUserWeightss = ChildUserWeightsQuery::create(null, $criteria)
-                    ->filterByUser($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collUserWeightssPartial && count($collUserWeightss)) {
-                        $this->initUserWeightss(false);
-
-                        foreach ($collUserWeightss as $obj) {
-                            if (false == $this->collUserWeightss->contains($obj)) {
-                                $this->collUserWeightss->append($obj);
-                            }
-                        }
-
-                        $this->collUserWeightssPartial = true;
-                    }
-
-                    return $collUserWeightss;
-                }
-
-                if ($partial && $this->collUserWeightss) {
-                    foreach ($this->collUserWeightss as $obj) {
-                        if ($obj->isNew()) {
-                            $collUserWeightss[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collUserWeightss = $collUserWeightss;
-                $this->collUserWeightssPartial = false;
-            }
-        }
-
-        return $this->collUserWeightss;
-    }
-
-    /**
-     * Sets a collection of ChildUserWeights objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      Collection $userWeightss A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildUser The current object (for fluent API support)
-     */
-    public function setUserWeightss(Collection $userWeightss, ConnectionInterface $con = null)
-    {
-        /** @var ChildUserWeights[] $userWeightssToDelete */
-        $userWeightssToDelete = $this->getUserWeightss(new Criteria(), $con)->diff($userWeightss);
-
-        
-        $this->userWeightssScheduledForDeletion = $userWeightssToDelete;
-
-        foreach ($userWeightssToDelete as $userWeightsRemoved) {
-            $userWeightsRemoved->setUser(null);
-        }
-
-        $this->collUserWeightss = null;
-        foreach ($userWeightss as $userWeights) {
-            $this->addUserWeights($userWeights);
-        }
-
-        $this->collUserWeightss = $userWeightss;
-        $this->collUserWeightssPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related UserWeights objects.
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
-     * @return int             Count of related UserWeights objects.
-     * @throws PropelException
-     */
-    public function countUserWeightss(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
-    {
-        $partial = $this->collUserWeightssPartial && !$this->isNew();
-        if (null === $this->collUserWeightss || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collUserWeightss) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getUserWeightss());
-            }
-
-            $query = ChildUserWeightsQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByUser($this)
-                ->count($con);
-        }
-
-        return count($this->collUserWeightss);
-    }
-
-    /**
-     * Method called to associate a ChildUserWeights object to this object
-     * through the ChildUserWeights foreign key attribute.
-     *
-     * @param  ChildUserWeights $l ChildUserWeights
-     * @return $this|\User The current object (for fluent API support)
-     */
-    public function addUserWeights(ChildUserWeights $l)
-    {
-        if ($this->collUserWeightss === null) {
-            $this->initUserWeightss();
-            $this->collUserWeightssPartial = true;
-        }
-
-        if (!$this->collUserWeightss->contains($l)) {
-            $this->doAddUserWeights($l);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param ChildUserWeights $userWeights The ChildUserWeights object to add.
-     */
-    protected function doAddUserWeights(ChildUserWeights $userWeights)
-    {
-        $this->collUserWeightss[]= $userWeights;
-        $userWeights->setUser($this);
-    }
-
-    /**
-     * @param  ChildUserWeights $userWeights The ChildUserWeights object to remove.
-     * @return $this|ChildUser The current object (for fluent API support)
-     */
-    public function removeUserWeights(ChildUserWeights $userWeights)
-    {
-        if ($this->getUserWeightss()->contains($userWeights)) {
-            $pos = $this->collUserWeightss->search($userWeights);
-            $this->collUserWeightss->remove($pos);
-            if (null === $this->userWeightssScheduledForDeletion) {
-                $this->userWeightssScheduledForDeletion = clone $this->collUserWeightss;
-                $this->userWeightssScheduledForDeletion->clear();
-            }
-            $this->userWeightssScheduledForDeletion[]= clone $userWeights;
-            $userWeights->setUser(null);
-        }
-
-        return $this;
+        return $this->getUserReviews($query, $con);
     }
 
 
@@ -3199,7 +3059,7 @@ abstract class User implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this User is new, it will return
      * an empty collection; or if this User has previously
-     * been saved, it will retrieve related UserWeightss from storage.
+     * been saved, it will retrieve related UserReviews from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -3208,14 +3068,14 @@ abstract class User implements ActiveRecordInterface
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildUserWeights[] List of ChildUserWeights objects
+     * @return ObjectCollection|ChildUserReview[] List of ChildUserReview objects
      */
-    public function getUserWeightssJoinRatingCategories(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getUserReviewsJoinRig(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildUserWeightsQuery::create(null, $criteria);
-        $query->joinWith('RatingCategories', $joinBehavior);
+        $query = ChildUserReviewQuery::create(null, $criteria);
+        $query->joinWith('Rig', $joinBehavior);
 
-        return $this->getUserWeightss($query, $con);
+        return $this->getUserReviews($query, $con);
     }
 
     /**
@@ -3231,6 +3091,8 @@ abstract class User implements ActiveRecordInterface
         $this->reddit_id = null;
         $this->trusted = null;
         $this->admin = null;
+        $this->mod = null;
+        $this->probation = null;
         $this->banned = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
@@ -3256,39 +3118,33 @@ abstract class User implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collRatingHeaderss) {
-                foreach ($this->collRatingHeaderss as $o) {
+            if ($this->collRatingHeaders) {
+                foreach ($this->collRatingHeaders as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collRigss) {
-                foreach ($this->collRigss as $o) {
+            if ($this->collRigs) {
+                foreach ($this->collRigs as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collUserAttributeValuess) {
-                foreach ($this->collUserAttributeValuess as $o) {
+            if ($this->collUserAttributeValues) {
+                foreach ($this->collUserAttributeValues as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collUserReviewss) {
-                foreach ($this->collUserReviewss as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
-            if ($this->collUserWeightss) {
-                foreach ($this->collUserWeightss as $o) {
+            if ($this->collUserReviews) {
+                foreach ($this->collUserReviews as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
         } // if ($deep)
 
         $this->collNews = null;
-        $this->collRatingHeaderss = null;
-        $this->collRigss = null;
-        $this->collUserAttributeValuess = null;
-        $this->collUserReviewss = null;
-        $this->collUserWeightss = null;
+        $this->collRatingHeaders = null;
+        $this->collRigs = null;
+        $this->collUserAttributeValues = null;
+        $this->collUserReviews = null;
     }
 
     /**
