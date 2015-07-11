@@ -14,6 +14,8 @@ use Base\Rating as BaseRating;
  */
 class Rating extends BaseRating
 {
+    public static $NOT_APPLICABLE_SCORE = -2147483648;
+
     public static function getAllRatings() {
         $query = new RatingQuery();
         $query->orderByThreshold();

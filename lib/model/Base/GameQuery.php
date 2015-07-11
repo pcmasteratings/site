@@ -30,6 +30,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGameQuery orderByGbUrl($order = Criteria::ASC) Order by the gb_url column
  * @method     ChildGameQuery orderByGbImage($order = Criteria::ASC) Order by the gb_image column
  * @method     ChildGameQuery orderByGbThumb($order = Criteria::ASC) Order by the gb_thumb column
+ * @method     ChildGameQuery orderByAdminLock($order = Criteria::ASC) Order by the admin_lock column
  *
  * @method     ChildGameQuery groupById() Group by the id column
  * @method     ChildGameQuery groupByName() Group by the name column
@@ -41,6 +42,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGameQuery groupByGbUrl() Group by the gb_url column
  * @method     ChildGameQuery groupByGbImage() Group by the gb_image column
  * @method     ChildGameQuery groupByGbThumb() Group by the gb_thumb column
+ * @method     ChildGameQuery groupByAdminLock() Group by the admin_lock column
  *
  * @method     ChildGameQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildGameQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -84,7 +86,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGame findOneByGbId(string $gb_id) Return the first ChildGame filtered by the gb_id column
  * @method     ChildGame findOneByGbUrl(string $gb_url) Return the first ChildGame filtered by the gb_url column
  * @method     ChildGame findOneByGbImage(string $gb_image) Return the first ChildGame filtered by the gb_image column
- * @method     ChildGame findOneByGbThumb(string $gb_thumb) Return the first ChildGame filtered by the gb_thumb column *
+ * @method     ChildGame findOneByGbThumb(string $gb_thumb) Return the first ChildGame filtered by the gb_thumb column
+ * @method     ChildGame findOneByAdminLock(boolean $admin_lock) Return the first ChildGame filtered by the admin_lock column *
 
  * @method     ChildGame requirePk($key, ConnectionInterface $con = null) Return the ChildGame by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGame requireOne(ConnectionInterface $con = null) Return the first ChildGame matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -99,6 +102,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGame requireOneByGbUrl(string $gb_url) Return the first ChildGame filtered by the gb_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGame requireOneByGbImage(string $gb_image) Return the first ChildGame filtered by the gb_image column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGame requireOneByGbThumb(string $gb_thumb) Return the first ChildGame filtered by the gb_thumb column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requireOneByAdminLock(boolean $admin_lock) Return the first ChildGame filtered by the admin_lock column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildGame[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildGame objects based on current ModelCriteria
  * @method     ChildGame[]|ObjectCollection findById(string $id) Return ChildGame objects filtered by the id column
@@ -111,6 +115,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGame[]|ObjectCollection findByGbUrl(string $gb_url) Return ChildGame objects filtered by the gb_url column
  * @method     ChildGame[]|ObjectCollection findByGbImage(string $gb_image) Return ChildGame objects filtered by the gb_image column
  * @method     ChildGame[]|ObjectCollection findByGbThumb(string $gb_thumb) Return ChildGame objects filtered by the gb_thumb column
+ * @method     ChildGame[]|ObjectCollection findByAdminLock(boolean $admin_lock) Return ChildGame objects filtered by the admin_lock column
  * @method     ChildGame[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -203,7 +208,7 @@ abstract class GameQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, name, title, description, publisher_id, developer_id, gb_id, gb_url, gb_image, gb_thumb FROM game WHERE id = :p0';
+        $sql = 'SELECT id, name, title, description, publisher_id, developer_id, gb_id, gb_url, gb_image, gb_thumb, admin_lock FROM game WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -633,6 +638,33 @@ abstract class GameQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(GameTableMap::COL_GB_THUMB, $gbThumb, $comparison);
+    }
+
+    /**
+     * Filter the query on the admin_lock column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByAdminLock(true); // WHERE admin_lock = true
+     * $query->filterByAdminLock('yes'); // WHERE admin_lock = true
+     * </code>
+     *
+     * @param     boolean|string $adminLock The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildGameQuery The current query, for fluid interface
+     */
+    public function filterByAdminLock($adminLock = null, $comparison = null)
+    {
+        if (is_string($adminLock)) {
+            $adminLock = in_array(strtolower($adminLock), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(GameTableMap::COL_ADMIN_LOCK, $adminLock, $comparison);
     }
 
     /**

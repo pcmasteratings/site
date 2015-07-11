@@ -95,14 +95,14 @@ abstract class RatingValue implements ActiveRecordInterface
     protected $comments;
 
     /**
-     * @var        ChildRatingHeader
-     */
-    protected $aRatingHeader;
-
-    /**
      * @var        ChildCategoryOption
      */
     protected $aCategoryOption;
+
+    /**
+     * @var        ChildRatingHeader
+     */
+    protected $aRatingHeader;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -443,7 +443,7 @@ abstract class RatingValue implements ActiveRecordInterface
             $this->modifiedColumns[RatingValueTableMap::COL_CATEGORY_OPTION_ID] = true;
         }
 
-        if ($this->aCategoryOption !== null && $this->aCategoryOption->getCategoryId() !== $v) {
+        if ($this->aCategoryOption !== null && $this->aCategoryOption->getId() !== $v) {
             $this->aCategoryOption = null;
         }
 
@@ -605,7 +605,7 @@ abstract class RatingValue implements ActiveRecordInterface
         if ($this->aRatingHeader !== null && $this->rating_header_id !== $this->aRatingHeader->getId()) {
             $this->aRatingHeader = null;
         }
-        if ($this->aCategoryOption !== null && $this->category_option_id !== $this->aCategoryOption->getCategoryId()) {
+        if ($this->aCategoryOption !== null && $this->category_option_id !== $this->aCategoryOption->getId()) {
             $this->aCategoryOption = null;
         }
     } // ensureConsistency
@@ -647,8 +647,8 @@ abstract class RatingValue implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aRatingHeader = null;
             $this->aCategoryOption = null;
+            $this->aRatingHeader = null;
         } // if (deep)
     }
 
@@ -753,18 +753,18 @@ abstract class RatingValue implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aRatingHeader !== null) {
-                if ($this->aRatingHeader->isModified() || $this->aRatingHeader->isNew()) {
-                    $affectedRows += $this->aRatingHeader->save($con);
-                }
-                $this->setRatingHeader($this->aRatingHeader);
-            }
-
             if ($this->aCategoryOption !== null) {
                 if ($this->aCategoryOption->isModified() || $this->aCategoryOption->isNew()) {
                     $affectedRows += $this->aCategoryOption->save($con);
                 }
                 $this->setCategoryOption($this->aCategoryOption);
+            }
+
+            if ($this->aRatingHeader !== null) {
+                if ($this->aRatingHeader->isModified() || $this->aRatingHeader->isNew()) {
+                    $affectedRows += $this->aRatingHeader->save($con);
+                }
+                $this->setRatingHeader($this->aRatingHeader);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -953,21 +953,6 @@ abstract class RatingValue implements ActiveRecordInterface
         }
         
         if ($includeForeignObjects) {
-            if (null !== $this->aRatingHeader) {
-                
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'ratingHeader';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'rating_header';
-                        break;
-                    default:
-                        $key = 'RatingHeader';
-                }
-        
-                $result[$key] = $this->aRatingHeader->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
             if (null !== $this->aCategoryOption) {
                 
                 switch ($keyType) {
@@ -982,6 +967,21 @@ abstract class RatingValue implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->aCategoryOption->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aRatingHeader) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'ratingHeader';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'rating_header';
+                        break;
+                    default:
+                        $key = 'RatingHeader';
+                }
+        
+                $result[$key] = $this->aRatingHeader->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1166,15 +1166,15 @@ abstract class RatingValue implements ActiveRecordInterface
         $validPrimaryKeyFKs = 2;
         $primaryKeyFKs = [];
 
-        //relation rating_value_ibfk_1 to table rating_header
-        if ($this->aRatingHeader && $hash = spl_object_hash($this->aRatingHeader)) {
+        //relation rating_value_ibfk_3 to table category_option
+        if ($this->aCategoryOption && $hash = spl_object_hash($this->aCategoryOption)) {
             $primaryKeyFKs[] = $hash;
         } else {
             $validPrimaryKeyFKs = false;
         }
 
-        //relation rating_value_ibfk_3 to table category_option
-        if ($this->aCategoryOption && $hash = spl_object_hash($this->aCategoryOption)) {
+        //relation rating_value_ibfk_1 to table rating_header
+        if ($this->aRatingHeader && $hash = spl_object_hash($this->aRatingHeader)) {
             $primaryKeyFKs[] = $hash;
         } else {
             $validPrimaryKeyFKs = false;
@@ -1270,6 +1270,57 @@ abstract class RatingValue implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildCategoryOption object.
+     *
+     * @param  ChildCategoryOption $v
+     * @return $this|\RatingValue The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setCategoryOption(ChildCategoryOption $v = null)
+    {
+        if ($v === null) {
+            $this->setCategoryOptionId(NULL);
+        } else {
+            $this->setCategoryOptionId($v->getId());
+        }
+
+        $this->aCategoryOption = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildCategoryOption object, it will not be re-added.
+        if ($v !== null) {
+            $v->addRatingValue($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildCategoryOption object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildCategoryOption The associated ChildCategoryOption object.
+     * @throws PropelException
+     */
+    public function getCategoryOption(ConnectionInterface $con = null)
+    {
+        if ($this->aCategoryOption === null && (($this->category_option_id !== "" && $this->category_option_id !== null))) {
+            $this->aCategoryOption = ChildCategoryOptionQuery::create()->findPk($this->category_option_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aCategoryOption->addRatingValues($this);
+             */
+        }
+
+        return $this->aCategoryOption;
+    }
+
+    /**
      * Declares an association between this object and a ChildRatingHeader object.
      *
      * @param  ChildRatingHeader $v
@@ -1321,70 +1372,17 @@ abstract class RatingValue implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildCategoryOption object.
-     *
-     * @param  ChildCategoryOption $v
-     * @return $this|\RatingValue The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setCategoryOption(ChildCategoryOption $v = null)
-    {
-        if ($v === null) {
-            $this->setCategoryOptionId(NULL);
-        } else {
-            $this->setCategoryOptionId($v->getCategoryId());
-        }
-
-        $this->aCategoryOption = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildCategoryOption object, it will not be re-added.
-        if ($v !== null) {
-            $v->addRatingValue($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildCategoryOption object
-     *
-     * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildCategoryOption The associated ChildCategoryOption object.
-     * @throws PropelException
-     */
-    public function getCategoryOption(ConnectionInterface $con = null)
-    {
-        if ($this->aCategoryOption === null && (($this->category_option_id !== "" && $this->category_option_id !== null))) {
-            $this->aCategoryOption = ChildCategoryOptionQuery::create()
-                ->filterByRatingValue($this) // here
-                ->findOne($con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aCategoryOption->addRatingValues($this);
-             */
-        }
-
-        return $this->aCategoryOption;
-    }
-
-    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
      */
     public function clear()
     {
-        if (null !== $this->aRatingHeader) {
-            $this->aRatingHeader->removeRatingValue($this);
-        }
         if (null !== $this->aCategoryOption) {
             $this->aCategoryOption->removeRatingValue($this);
+        }
+        if (null !== $this->aRatingHeader) {
+            $this->aRatingHeader->removeRatingValue($this);
         }
         $this->rating_header_id = null;
         $this->category_option_id = null;
@@ -1412,8 +1410,8 @@ abstract class RatingValue implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aRatingHeader = null;
         $this->aCategoryOption = null;
+        $this->aRatingHeader = null;
     }
 
     /**

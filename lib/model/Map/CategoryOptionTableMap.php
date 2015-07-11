@@ -195,7 +195,7 @@ class CategoryOptionTableMap extends TableMap
   0 =>
   array (
     0 => ':category_option_id',
-    1 => ':category_id',
+    1 => ':id',
   ),
 ), null, null, 'RatingValues', false);
     } // buildRelations()

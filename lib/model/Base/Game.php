@@ -132,6 +132,13 @@ abstract class Game implements ActiveRecordInterface
     protected $gb_thumb;
 
     /**
+     * The value for the admin_lock field.
+     * Note: this column has a database default value of: false
+     * @var        boolean
+     */
+    protected $admin_lock;
+
+    /**
      * @var        ChildCompany
      */
     protected $aCompanyRelatedByPublisherId;
@@ -198,10 +205,23 @@ abstract class Game implements ActiveRecordInterface
     protected $userReviewsScheduledForDeletion = null;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->admin_lock = false;
+    }
+
+    /**
      * Initializes internal state of Base\Game object.
+     * @see applyDefaults()
      */
     public function __construct()
     {
+        $this->applyDefaultValues();
     }
 
     /**
@@ -515,6 +535,26 @@ abstract class Game implements ActiveRecordInterface
     }
 
     /**
+     * Get the [admin_lock] column value.
+     * 
+     * @return boolean
+     */
+    public function getAdminLock()
+    {
+        return $this->admin_lock;
+    }
+
+    /**
+     * Get the [admin_lock] column value.
+     * 
+     * @return boolean
+     */
+    public function isAdminLock()
+    {
+        return $this->getAdminLock();
+    }
+
+    /**
      * Set the value of [id] column.
      * 
      * @param string $v new value
@@ -723,6 +763,34 @@ abstract class Game implements ActiveRecordInterface
     } // setGbThumb()
 
     /**
+     * Sets the value of the [admin_lock] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * 
+     * @param  boolean|integer|string $v The new value
+     * @return $this|\Game The current object (for fluent API support)
+     */
+    public function setAdminLock($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->admin_lock !== $v) {
+            $this->admin_lock = $v;
+            $this->modifiedColumns[GameTableMap::COL_ADMIN_LOCK] = true;
+        }
+
+        return $this;
+    } // setAdminLock()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -732,6 +800,10 @@ abstract class Game implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->admin_lock !== false) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -787,6 +859,9 @@ abstract class Game implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : GameTableMap::translateFieldName('GbThumb', TableMap::TYPE_PHPNAME, $indexType)];
             $this->gb_thumb = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : GameTableMap::translateFieldName('AdminLock', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->admin_lock = (null !== $col) ? (boolean) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -795,7 +870,7 @@ abstract class Game implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 10; // 10 = GameTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 11; // 11 = GameTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Game'), 0, $e);
@@ -1125,6 +1200,9 @@ abstract class Game implements ActiveRecordInterface
         if ($this->isColumnModified(GameTableMap::COL_GB_THUMB)) {
             $modifiedColumns[':p' . $index++]  = 'gb_thumb';
         }
+        if ($this->isColumnModified(GameTableMap::COL_ADMIN_LOCK)) {
+            $modifiedColumns[':p' . $index++]  = 'admin_lock';
+        }
 
         $sql = sprintf(
             'INSERT INTO game (%s) VALUES (%s)',
@@ -1165,6 +1243,9 @@ abstract class Game implements ActiveRecordInterface
                         break;
                     case 'gb_thumb':                        
                         $stmt->bindValue($identifier, $this->gb_thumb, PDO::PARAM_STR);
+                        break;
+                    case 'admin_lock':
+                        $stmt->bindValue($identifier, (int) $this->admin_lock, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1258,6 +1339,9 @@ abstract class Game implements ActiveRecordInterface
             case 9:
                 return $this->getGbThumb();
                 break;
+            case 10:
+                return $this->getAdminLock();
+                break;
             default:
                 return null;
                 break;
@@ -1298,6 +1382,7 @@ abstract class Game implements ActiveRecordInterface
             $keys[7] => $this->getGbUrl(),
             $keys[8] => $this->getGbImage(),
             $keys[9] => $this->getGbThumb(),
+            $keys[10] => $this->getAdminLock(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1459,6 +1544,9 @@ abstract class Game implements ActiveRecordInterface
             case 9:
                 $this->setGbThumb($value);
                 break;
+            case 10:
+                $this->setAdminLock($value);
+                break;
         } // switch()
 
         return $this;
@@ -1514,6 +1602,9 @@ abstract class Game implements ActiveRecordInterface
         }
         if (array_key_exists($keys[9], $arr)) {
             $this->setGbThumb($arr[$keys[9]]);
+        }
+        if (array_key_exists($keys[10], $arr)) {
+            $this->setAdminLock($arr[$keys[10]]);
         }
     }
 
@@ -1585,6 +1676,9 @@ abstract class Game implements ActiveRecordInterface
         }
         if ($this->isColumnModified(GameTableMap::COL_GB_THUMB)) {
             $criteria->add(GameTableMap::COL_GB_THUMB, $this->gb_thumb);
+        }
+        if ($this->isColumnModified(GameTableMap::COL_ADMIN_LOCK)) {
+            $criteria->add(GameTableMap::COL_ADMIN_LOCK, $this->admin_lock);
         }
 
         return $criteria;
@@ -1681,6 +1775,7 @@ abstract class Game implements ActiveRecordInterface
         $copyObj->setGbUrl($this->getGbUrl());
         $copyObj->setGbImage($this->getGbImage());
         $copyObj->setGbThumb($this->getGbThumb());
+        $copyObj->setAdminLock($this->getAdminLock());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2941,8 +3036,10 @@ abstract class Game implements ActiveRecordInterface
         $this->gb_url = null;
         $this->gb_image = null;
         $this->gb_thumb = null;
+        $this->admin_lock = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

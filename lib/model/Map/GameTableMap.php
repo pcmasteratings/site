@@ -59,7 +59,7 @@ class GameTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 10;
+    const NUM_COLUMNS = 11;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class GameTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 10;
+    const NUM_HYDRATE_COLUMNS = 11;
 
     /**
      * the column name for the id field
@@ -122,6 +122,11 @@ class GameTableMap extends TableMap
     const COL_GB_THUMB = 'game.gb_thumb';
 
     /**
+     * the column name for the admin_lock field
+     */
+    const COL_ADMIN_LOCK = 'game.admin_lock';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -133,11 +138,11 @@ class GameTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'Title', 'Description', 'PublisherId', 'DeveloperId', 'GbId', 'GbUrl', 'GbImage', 'GbThumb', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'title', 'description', 'publisherId', 'developerId', 'gbId', 'gbUrl', 'gbImage', 'gbThumb', ),
-        self::TYPE_COLNAME       => array(GameTableMap::COL_ID, GameTableMap::COL_NAME, GameTableMap::COL_TITLE, GameTableMap::COL_DESCRIPTION, GameTableMap::COL_PUBLISHER_ID, GameTableMap::COL_DEVELOPER_ID, GameTableMap::COL_GB_ID, GameTableMap::COL_GB_URL, GameTableMap::COL_GB_IMAGE, GameTableMap::COL_GB_THUMB, ),
-        self::TYPE_FIELDNAME     => array('id', 'name', 'title', 'description', 'publisher_id', 'developer_id', 'gb_id', 'gb_url', 'gb_image', 'gb_thumb', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        self::TYPE_PHPNAME       => array('Id', 'Name', 'Title', 'Description', 'PublisherId', 'DeveloperId', 'GbId', 'GbUrl', 'GbImage', 'GbThumb', 'AdminLock', ),
+        self::TYPE_CAMELNAME     => array('id', 'name', 'title', 'description', 'publisherId', 'developerId', 'gbId', 'gbUrl', 'gbImage', 'gbThumb', 'adminLock', ),
+        self::TYPE_COLNAME       => array(GameTableMap::COL_ID, GameTableMap::COL_NAME, GameTableMap::COL_TITLE, GameTableMap::COL_DESCRIPTION, GameTableMap::COL_PUBLISHER_ID, GameTableMap::COL_DEVELOPER_ID, GameTableMap::COL_GB_ID, GameTableMap::COL_GB_URL, GameTableMap::COL_GB_IMAGE, GameTableMap::COL_GB_THUMB, GameTableMap::COL_ADMIN_LOCK, ),
+        self::TYPE_FIELDNAME     => array('id', 'name', 'title', 'description', 'publisher_id', 'developer_id', 'gb_id', 'gb_url', 'gb_image', 'gb_thumb', 'admin_lock', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -147,11 +152,11 @@ class GameTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Title' => 2, 'Description' => 3, 'PublisherId' => 4, 'DeveloperId' => 5, 'GbId' => 6, 'GbUrl' => 7, 'GbImage' => 8, 'GbThumb' => 9, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, 'publisherId' => 4, 'developerId' => 5, 'gbId' => 6, 'gbUrl' => 7, 'gbImage' => 8, 'gbThumb' => 9, ),
-        self::TYPE_COLNAME       => array(GameTableMap::COL_ID => 0, GameTableMap::COL_NAME => 1, GameTableMap::COL_TITLE => 2, GameTableMap::COL_DESCRIPTION => 3, GameTableMap::COL_PUBLISHER_ID => 4, GameTableMap::COL_DEVELOPER_ID => 5, GameTableMap::COL_GB_ID => 6, GameTableMap::COL_GB_URL => 7, GameTableMap::COL_GB_IMAGE => 8, GameTableMap::COL_GB_THUMB => 9, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, 'publisher_id' => 4, 'developer_id' => 5, 'gb_id' => 6, 'gb_url' => 7, 'gb_image' => 8, 'gb_thumb' => 9, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Title' => 2, 'Description' => 3, 'PublisherId' => 4, 'DeveloperId' => 5, 'GbId' => 6, 'GbUrl' => 7, 'GbImage' => 8, 'GbThumb' => 9, 'AdminLock' => 10, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, 'publisherId' => 4, 'developerId' => 5, 'gbId' => 6, 'gbUrl' => 7, 'gbImage' => 8, 'gbThumb' => 9, 'adminLock' => 10, ),
+        self::TYPE_COLNAME       => array(GameTableMap::COL_ID => 0, GameTableMap::COL_NAME => 1, GameTableMap::COL_TITLE => 2, GameTableMap::COL_DESCRIPTION => 3, GameTableMap::COL_PUBLISHER_ID => 4, GameTableMap::COL_DEVELOPER_ID => 5, GameTableMap::COL_GB_ID => 6, GameTableMap::COL_GB_URL => 7, GameTableMap::COL_GB_IMAGE => 8, GameTableMap::COL_GB_THUMB => 9, GameTableMap::COL_ADMIN_LOCK => 10, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'title' => 2, 'description' => 3, 'publisher_id' => 4, 'developer_id' => 5, 'gb_id' => 6, 'gb_url' => 7, 'gb_image' => 8, 'gb_thumb' => 9, 'admin_lock' => 10, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -181,6 +186,7 @@ class GameTableMap extends TableMap
         $this->addColumn('gb_url', 'GbUrl', 'LONGVARCHAR', true, null, null);
         $this->addColumn('gb_image', 'GbImage', 'LONGVARCHAR', true, null, null);
         $this->addColumn('gb_thumb', 'GbThumb', 'LONGVARCHAR', true, null, null);
+        $this->addColumn('admin_lock', 'AdminLock', 'BOOLEAN', true, 1, false);
     } // initialize()
 
     /**
@@ -393,6 +399,7 @@ class GameTableMap extends TableMap
             $criteria->addSelectColumn(GameTableMap::COL_GB_URL);
             $criteria->addSelectColumn(GameTableMap::COL_GB_IMAGE);
             $criteria->addSelectColumn(GameTableMap::COL_GB_THUMB);
+            $criteria->addSelectColumn(GameTableMap::COL_ADMIN_LOCK);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.name');
@@ -404,6 +411,7 @@ class GameTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.gb_url');
             $criteria->addSelectColumn($alias . '.gb_image');
             $criteria->addSelectColumn($alias . '.gb_thumb');
+            $criteria->addSelectColumn($alias . '.admin_lock');
         }
     }
 

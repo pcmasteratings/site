@@ -110,15 +110,16 @@ class Game extends BaseGame
     public function getRatingForPlatform(Platform $platform) {
         $header = $this->getRatingHeaderForPlatform($platform);
         if($header==null) {
-            return Rating::getRatingForScore(-1);
+            return Rating::getRatingForScore(Rating::$NOT_APPLICABLE_SCORE);
         }
         return Rating::getRatingForScore($header->getScore());
 
     }
     public function getRatingForDefaultPlatform() {
         $platforms = $this->getPlatforms();
-        if(sizeof($platforms)==0)
-            return "n";
+        if(sizeof($platforms)==0) {
+            return Rating::getRatingForScore(Rating::$NOT_APPLICABLE_SCORE);
+        }
 
         $chosen_platform = $platforms[0];
         foreach($platforms as $platform) {

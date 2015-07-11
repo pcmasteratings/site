@@ -147,7 +147,7 @@ class RatingValueTableMap extends TableMap
         $this->setUseIdGenerator(false);
         // columns
         $this->addForeignPrimaryKey('rating_header_id', 'RatingHeaderId', 'BIGINT' , 'rating_header', 'id', true, null, null);
-        $this->addForeignPrimaryKey('category_option_id', 'CategoryOptionId', 'BIGINT' , 'category_option', 'category_id', true, null, null);
+        $this->addForeignPrimaryKey('category_option_id', 'CategoryOptionId', 'BIGINT' , 'category_option', 'id', true, null, null);
         $this->addColumn('original_value', 'OriginalValue', 'INTEGER', true, null, null);
         $this->addColumn('do_not_score', 'DoNotScore', 'BOOLEAN', true, 1, false);
         $this->addColumn('comments', 'Comments', 'LONGVARCHAR', true, null, null);
@@ -158,6 +158,13 @@ class RatingValueTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('CategoryOption', '\\CategoryOption', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':category_option_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
         $this->addRelation('RatingHeader', '\\RatingHeader', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
@@ -165,13 +172,6 @@ class RatingValueTableMap extends TableMap
     1 => ':id',
   ),
 ), 'CASCADE', 'CASCADE', null, false);
-        $this->addRelation('CategoryOption', '\\CategoryOption', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':category_option_id',
-    1 => ':category_id',
-  ),
-), null, null, null, false);
     } // buildRelations()
 
     /**

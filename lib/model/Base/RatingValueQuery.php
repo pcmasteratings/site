@@ -36,15 +36,15 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingValueQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     ChildRatingValueQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildRatingValueQuery leftJoinRatingHeader($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingHeader relation
- * @method     ChildRatingValueQuery rightJoinRatingHeader($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingHeader relation
- * @method     ChildRatingValueQuery innerJoinRatingHeader($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingHeader relation
- *
  * @method     ChildRatingValueQuery leftJoinCategoryOption($relationAlias = null) Adds a LEFT JOIN clause to the query using the CategoryOption relation
  * @method     ChildRatingValueQuery rightJoinCategoryOption($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CategoryOption relation
  * @method     ChildRatingValueQuery innerJoinCategoryOption($relationAlias = null) Adds a INNER JOIN clause to the query using the CategoryOption relation
  *
- * @method     \RatingHeaderQuery|\CategoryOptionQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildRatingValueQuery leftJoinRatingHeader($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingHeader relation
+ * @method     ChildRatingValueQuery rightJoinRatingHeader($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingHeader relation
+ * @method     ChildRatingValueQuery innerJoinRatingHeader($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingHeader relation
+ *
+ * @method     \CategoryOptionQuery|\RatingHeaderQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildRatingValue findOne(ConnectionInterface $con = null) Return the first ChildRatingValue matching the query
  * @method     ChildRatingValue findOneOrCreate(ConnectionInterface $con = null) Return the first ChildRatingValue matching the query, or a new ChildRatingValue object populated from the query conditions when no match is found
@@ -448,6 +448,83 @@ abstract class RatingValueQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related \CategoryOption object
+     *
+     * @param \CategoryOption|ObjectCollection $categoryOption The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildRatingValueQuery The current query, for fluid interface
+     */
+    public function filterByCategoryOption($categoryOption, $comparison = null)
+    {
+        if ($categoryOption instanceof \CategoryOption) {
+            return $this
+                ->addUsingAlias(RatingValueTableMap::COL_CATEGORY_OPTION_ID, $categoryOption->getId(), $comparison);
+        } elseif ($categoryOption instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(RatingValueTableMap::COL_CATEGORY_OPTION_ID, $categoryOption->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByCategoryOption() only accepts arguments of type \CategoryOption or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CategoryOption relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildRatingValueQuery The current query, for fluid interface
+     */
+    public function joinCategoryOption($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CategoryOption');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CategoryOption');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CategoryOption relation CategoryOption object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \CategoryOptionQuery A secondary query class using the current class as primary query
+     */
+    public function useCategoryOptionQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCategoryOption($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CategoryOption', '\CategoryOptionQuery');
+    }
+
+    /**
      * Filter the query by a related \RatingHeader object
      *
      * @param \RatingHeader|ObjectCollection $ratingHeader The related object(s) to use as filter
@@ -522,83 +599,6 @@ abstract class RatingValueQuery extends ModelCriteria
         return $this
             ->joinRatingHeader($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'RatingHeader', '\RatingHeaderQuery');
-    }
-
-    /**
-     * Filter the query by a related \CategoryOption object
-     *
-     * @param \CategoryOption|ObjectCollection $categoryOption The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return ChildRatingValueQuery The current query, for fluid interface
-     */
-    public function filterByCategoryOption($categoryOption, $comparison = null)
-    {
-        if ($categoryOption instanceof \CategoryOption) {
-            return $this
-                ->addUsingAlias(RatingValueTableMap::COL_CATEGORY_OPTION_ID, $categoryOption->getCategoryId(), $comparison);
-        } elseif ($categoryOption instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(RatingValueTableMap::COL_CATEGORY_OPTION_ID, $categoryOption->toKeyValue('PrimaryKey', 'CategoryId'), $comparison);
-        } else {
-            throw new PropelException('filterByCategoryOption() only accepts arguments of type \CategoryOption or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the CategoryOption relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildRatingValueQuery The current query, for fluid interface
-     */
-    public function joinCategoryOption($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('CategoryOption');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'CategoryOption');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the CategoryOption relation CategoryOption object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \CategoryOptionQuery A secondary query class using the current class as primary query
-     */
-    public function useCategoryOptionQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinCategoryOption($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'CategoryOption', '\CategoryOptionQuery');
     }
 
     /**

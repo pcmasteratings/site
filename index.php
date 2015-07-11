@@ -18,35 +18,38 @@ require("res/include.php");
     <div class="col-md-8">
         <h1>Most recent games</h1>
         <?php
-            $query = new GameQuery();
-            $query->limit(6);
-            $query->innerJoinRatingHeader();
-            $query->orderById("DESC");
-            $games = $query->find();
+        $query = new GameQuery();
+        $query->limit(6);
+        $query->innerJoinRatingHeader();
+        $query->orderById("DESC");
+        $games = $query->find();
 
-
-            $i = 1;
-            foreach($games as $game) {
-                if($i%3==0) {
-                    echo '<div class="row">';
-                }
-                
-                echo "<div class='col-sm-6 col-md-4'>
-                  <div class='thumbnail'>
-                    <a href='game.php?name={$game->getName()}'>
-                      <img src={$game->getGbThumb()} alt='thumbnail'>
-                        <img class='rating-badge' src='/img/badges/{$game->getRatingForDefaultPlatform()->getInitial()}_tiny.jpg'
-                                    alt='".strtoupper($game->getRatingForDefaultPlatform()->getTitle())."'>
-                          <div class='caption'><h3>{$game->getTitle()}</h3></div>
-                    </a>
-                  </div>
-                </div>";
-                if($i%3==0) {
-                    echo '</div>';
-                }
-                $i++;
-            }
+        $i = 1;
         ?>
+
+        <?php foreach ($games as $game): ?>
+            <?php if ($i % 3 == 0): ?>
+                <div class="row">
+            <?php endif; ?>
+            <?php $rating = $game->getRatingForDefaultPlatform(); ?>
+
+            <div class='col-sm-6 col-md-4'>
+                <div class='thumbnail'>
+                    <a href="game.php?name=<?= $game->getName(); ?>">
+                        <img src="<?= $game->getGbThumb(); ?>" alt='thumbnail'>
+                        <img class='rating-badge'
+                             src="/img/badges/<?= $rating->getInitial() ?>_tiny.jpg"
+                             alt="<?= strtoupper($rating->getTitle()) ?>">
+
+                        <div class='caption'><h3><?= $game->getTitle() ?></h3></div>
+                    </a>
+                </div>
+            </div>
+            <?php if ($i % 3 == 0): ?>
+                </div>
+            <?php endif; ?>
+            <?php $i++; ?>
+        <?php endforeach; ?>
     </div>
     <div class="col-md-4">
         <h1>Other stuff</h1>
@@ -54,7 +57,7 @@ require("res/include.php");
 
 </div>
 
-<?php include("res/footer.php");  ?>
+<?php include("res/footer.php"); ?>
 
 </body>
 </html>

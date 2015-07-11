@@ -80,6 +80,7 @@
     <column name="gb_url" phpName="GbUrl" type="LONGVARCHAR" required="true"/>
     <column name="gb_image" phpName="GbImage" type="LONGVARCHAR" required="true"/>
     <column name="gb_thumb" phpName="GbThumb" type="LONGVARCHAR" required="true"/>
+    <column name="admin_lock" phpName="AdminLock" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <foreign-key foreignTable="company" name="game_ibfk_1">
       <reference local="publisher_id" foreign="id"/>
     </foreign-key>
@@ -228,14 +229,17 @@
     <column name="original_value" phpName="OriginalValue" type="INTEGER" required="true"/>
     <column name="do_not_score" phpName="DoNotScore" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="comments" phpName="Comments" type="LONGVARCHAR" required="true"/>
+    <foreign-key foreignTable="category_option" name="rating_value_ibfk_3">
+      <reference local="category_option_id" foreign="id"/>
+    </foreign-key>
     <foreign-key foreignTable="rating_header" name="rating_value_ibfk_1" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="rating_header_id" foreign="id"/>
     </foreign-key>
-    <foreign-key foreignTable="category_option" name="rating_value_ibfk_3">
-      <reference local="category_option_id" foreign="category_id"/>
-    </foreign-key>
     <index name="category_option_id">
       <index-column name="category_option_id"/>
+    </index>
+    <index name="rating_header_id">
+      <index-column name="rating_header_id"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
