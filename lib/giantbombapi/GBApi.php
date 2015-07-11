@@ -93,44 +93,33 @@ abstract class GBApi
 
             $game->save();
 
+            //Fetch all of the title's platforms from the results we pulled from GB and push them into an array
             $gbplatforms = [];
             foreach($result->platforms as $gbplatform)
             {
                 array_push($gbplatforms, $gbplatform->id);
             }
 
-            //Remove invalid platforms
+            //Remove platforms no longer associated with the title
             $currentPlatforms = $game->getValidPlatforms();
             foreach ($currentPlatforms as $plat)
             {
                 if (!in_array($plat->getGbId(), $gbplatforms))
                 {
-                    $gamePlatform = GamePlatformsQuery::create()
-                        ->filterByGames($game)
-                        ->filterByPlatforms($plat)
-                        ->findOne();
-                    $game->removeGamePlatforms($gamePlatform);
-
+                    $game->removePlatform($plat);
                 }
             }
 
-            //add new platforms
+            //add new platforms associated with the title
             $allPlatforms = PlatformsQuery::create()->find();
             foreach ($allPlatforms as $plat)
             {
                 if (in_array($plat->getGbId(), $gbplatforms))
                 {
-                    $gamesPlatform = new GamePlatforms();
-                    $gamesPlatform->setGames($game);
-                    $gamesPlatform->setPlatforms($plat);
-                    $gamesPlatform->save();
+                    $game->addPlatform($plat);
                 }
             }
-
-            //$gamesPlatform = new GamePlatforms();
-            //$gamesPlatform->setGames($game);
-            //$gamesPlatform->setPlatforms($allPlatforms[1]);
-            //$gamesPlatform->save();
+            
             //append result to list.
             $game->save();
             array_push($games, $game);
