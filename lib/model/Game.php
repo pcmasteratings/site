@@ -50,8 +50,8 @@ class Game extends BaseGame
             '?' => 'ju', '?' => 'ja', '?' => 'ja');
 
     public static function generateUniqueName($title, $year) {
-        $name_base = str_replace(array_keys(Games::$TRANSLITERATABLE_CHARACTERS),
-            array_values(Games::$TRANSLITERATABLE_CHARACTERS), $title);
+        $name_base = str_replace(array_keys(self::$TRANSLITERATABLE_CHARACTERS),
+            array_values(self::$TRANSLITERATABLE_CHARACTERS), $title);
         $name_base = strtolower($name_base);
         $name_base = preg_replace("/[']/", '', $name_base);
         $name_base = preg_replace("/[^a-z0-9]/", '_', $name_base);
@@ -79,7 +79,7 @@ class Game extends BaseGame
             }
 
             $result = null;
-            $query = new GamesQuery();
+            $query = new GameQuery();
 
             $result = $query->findOneByName($name);
             if($result!=null) {
@@ -91,23 +91,23 @@ class Game extends BaseGame
 
     }
 
-    public function getValidPlatforms() {
+    public function getPlatforms() {
         $output = array();
-        $results = $this->getGamePlatformssJoinPlatforms();
+        $results = $this->getGamePlatformsJoinPlatform();
         foreach($results as $result) {
-            array_push($output,$result->getPlatforms());
+            array_push($output,$result->getPlatform());
         }
         return $output;
     }
 
-    public function getRatingHeaderForPlatform(Platforms $platform)
+    public function getRatingHeaderForPlatform(Platform $platform)
     {
         $query = new RatingHeaderQuery();
-        $query->filterByGames($this);
+        $query->filterByGame($this);
         return $query->findOneByPlatformId($platform->getId());
     }
 
-    public function getRatingForPlatform(Platforms $platform) {
+    public function getRatingForPlatform(Platform $platform) {
         $header = $this->getRatingHeaderForPlatform($platform);
         if($header==null) {
             return Rating::getRatingForScore(-1);
@@ -116,7 +116,7 @@ class Game extends BaseGame
 
     }
     public function getRatingForDefaultPlatform() {
-        $platforms = $this->getValidPlatforms();
+        $platforms = $this->getPlatforms();
         if(sizeof($platforms)==0)
             return "n";
 
@@ -128,10 +128,28 @@ class Game extends BaseGame
         }
 
         $query = new RatingHeaderQuery();
-        $query->filterByGames($this);
+        $query->filterByGame($this);
         $result = $query->findOneByPlatformId($chosen_platform->getId());
         return Rating::getRatingForScore($result->getScore());
     }
 
+    public function removePlatform($platform)
+    {
+        $gamePlatform = GamePlatformQuery::create()
+            ->filterByGame($this)
+            ->filterByPlatform($platform)
+            ->findOne();
+
+        if ($gamePlatform != null)
+            $this->removeGamePlatform($gamePlatform);
+    }
+
+    public function addPlatform($platform)
+    {
+        $gamesPlatform = new GamePlatform();
+        $gamesPlatform->setGame($this);
+        $gamesPlatform->setPlatform($platform);
+        $gamesPlatform->save();
+    }
 
 }

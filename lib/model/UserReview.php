@@ -14,15 +14,15 @@ use Base\UserReview as BaseUserReview;
  */
 class UserReview extends BaseUserReview
 {
-    public static function getUserReview(Games $game, Platforms $platform, User $user) {
+    public static function getUserReview(Game $game, Platform $platform, User $user) {
         $query = new UserReviewQuery();
-        $query->filterByGames($game);
-        $query->filterByPlatforms($platform);
+        $query->filterByGame($game);
+        $query->filterByPlatform($platform);
         $query->filterByUser($user);
         $result = $query->findOne();
         return $result;
     }
-    public static function checkIfUserReviewed(Games $game, Platforms $platform, User $user) {
+    public static function checkIfUserReviewed(Game $game, Platform $platform, User $user) {
         $result = self::getUserReview($game, $platform, $user);
         if($result==null) {
             return false;

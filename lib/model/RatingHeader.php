@@ -15,14 +15,14 @@ use Base\RatingHeader as BaseRatingHeader;
 class RatingHeader extends BaseRatingHeader
 {
     public function getRating() {
-        $query = new RatingsQuery();
+        $query = new RatingQuery();
         $query->orderByThreshold("DESC");
         $query->limit(1);
         $query->where("threshold <= " . $this->getScore());
         return $query->findOne();
     }
 
-    public function getRatingForCategory(RatingCategories $category) {
-        return RatingCategoryValuesQuery::create()->filterByRatingHeaders($this)->findOneByRatingCategoryId($category->getId());
+    public function getRatingForCategory(Category $category) {
+        return RatingValueQuery::create()->filterByRatingHeader($this)->findOneByCategoryId($category->getId());
     }
 }

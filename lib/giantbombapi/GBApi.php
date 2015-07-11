@@ -21,7 +21,7 @@ abstract class GBApi
     //Limits search to one game
     public static function searchForGame($query)
     {
-        return searchForGames($query, 1)[0]; //Will only return one game, so grab the first element in the array.
+        return self::searchForGames($query, 1)[0]; //Will only return one game, so grab the first element in the array.
     }
     public static function searchForGames($query, $limit = 10)
     {
@@ -67,14 +67,14 @@ abstract class GBApi
         {
             if (!isset($result->original_release_date) || $result->original_release_date == null)
                 continue; //skip if not out yet.
-            $game = GamesQuery::create()->findOneByGbId($result->id);
+            $game = GameQuery::create()->findOneByGbId($result->id);
             if (!isset($game))
             {
-                $game = new Games();
+                $game = new Game();
                 $game->setGbId($result->id);
+                $game->setName(Game::generateUniqueName($result->name, $result->original_release_date));
             }
 
-            $game->setName(Games::generateUniqueName($result->name, $result->original_release_date));
             $game->setGbUrl($result->api_detail_url);
             $game->setTitle($result->name);
             $game->setDescription($result->deck);
@@ -93,44 +93,44 @@ abstract class GBApi
 
             $game->save();
 
+            //Fetch all of the title's platforms from the results we pulled from GB and push them into an array
             $gbplatforms = [];
             foreach($result->platforms as $gbplatform)
             {
                 array_push($gbplatforms, $gbplatform->id);
             }
 
-            //Remove invalid platforms
-            $currentPlatforms = $game->getValidPlatforms();
+            //Remove platforms no longer associated with the title
+            $currentPlatforms = $game->getPlatforms();
             foreach ($currentPlatforms as $plat)
             {
                 if (!in_array($plat->getGbId(), $gbplatforms))
                 {
-                    $gamePlatform = GamePlatformsQuery::create()
-                        ->filterByGames($game)
-                        ->filterByPlatforms($plat)
-                        ->findOne();
-                    $game->removeGamePlatforms($gamePlatform);
-
+                    $game->removePlatform($plat);
                 }
             }
 
-            //add new platforms
-            $allPlatforms = PlatformsQuery::create()->find();
+            //add new platforms associated with the title
+            $allPlatforms = Platform::getAllPlatforms();
             foreach ($allPlatforms as $plat)
             {
                 if (in_array($plat->getGbId(), $gbplatforms))
                 {
-                    $gamesPlatform = new GamePlatforms();
-                    $gamesPlatform->setGames($game);
-                    $gamesPlatform->setPlatforms($plat);
-                    $gamesPlatform->save();
+                    $found = false;
+                    foreach ($currentPlatforms as $curPlat) {
+                        if ($curPlat->getId() == $plat->getId()) {
+                            $found = true;
+                            break;
+                        }
+                    }
+                    if($found) {
+                        continue;
+                    }
+
+                    $game->addPlatform($plat);
                 }
             }
 
-            //$gamesPlatform = new GamePlatforms();
-            //$gamesPlatform->setGames($game);
-            //$gamesPlatform->setPlatforms($allPlatforms[1]);
-            //$gamesPlatform->save();
             //append result to list.
             $game->save();
             array_push($games, $game);

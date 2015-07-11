@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \User;
-use \UserQuery;
+use \UserAccessType;
+use \UserAccessTypeQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'user' table.
+ * This class defines the structure of the 'user_access_type' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class UserTableMap extends TableMap
+class UserAccessTypeTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class UserTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = '.Map.UserTableMap';
+    const CLASS_NAME = '.Map.UserAccessTypeTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class UserTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'user';
+    const TABLE_NAME = 'user_access_type';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\User';
+    const OM_CLASS = '\\UserAccessType';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'User';
+    const CLASS_DEFAULT = 'UserAccessType';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 9;
+    const NUM_COLUMNS = 2;
 
     /**
      * The number of lazy-loaded columns
@@ -69,52 +69,17 @@ class UserTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 9;
+    const NUM_HYDRATE_COLUMNS = 2;
 
     /**
      * the column name for the id field
      */
-    const COL_ID = 'user.id';
+    const COL_ID = 'user_access_type.id';
 
     /**
-     * the column name for the username field
+     * the column name for the type field
      */
-    const COL_USERNAME = 'user.username';
-
-    /**
-     * the column name for the password field
-     */
-    const COL_PASSWORD = 'user.password';
-
-    /**
-     * the column name for the reddit_id field
-     */
-    const COL_REDDIT_ID = 'user.reddit_id';
-
-    /**
-     * the column name for the trusted field
-     */
-    const COL_TRUSTED = 'user.trusted';
-
-    /**
-     * the column name for the admin field
-     */
-    const COL_ADMIN = 'user.admin';
-
-    /**
-     * the column name for the moderator field
-     */
-    const COL_MODERATOR = 'user.moderator';
-
-    /**
-     * the column name for the probation field
-     */
-    const COL_PROBATION = 'user.probation';
-
-    /**
-     * the column name for the banned field
-     */
-    const COL_BANNED = 'user.banned';
+    const COL_TYPE = 'user_access_type.type';
 
     /**
      * The default string format for model objects of the related table
@@ -128,11 +93,11 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Username', 'Password', 'RedditId', 'Trusted', 'Admin', 'Moderator', 'Probation', 'Banned', ),
-        self::TYPE_CAMELNAME     => array('id', 'username', 'password', 'redditId', 'trusted', 'admin', 'moderator', 'probation', 'banned', ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_ID, UserTableMap::COL_USERNAME, UserTableMap::COL_PASSWORD, UserTableMap::COL_REDDIT_ID, UserTableMap::COL_TRUSTED, UserTableMap::COL_ADMIN, UserTableMap::COL_MODERATOR, UserTableMap::COL_PROBATION, UserTableMap::COL_BANNED, ),
-        self::TYPE_FIELDNAME     => array('id', 'username', 'password', 'reddit_id', 'trusted', 'admin', 'moderator', 'probation', 'banned', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('Id', 'Type', ),
+        self::TYPE_CAMELNAME     => array('id', 'type', ),
+        self::TYPE_COLNAME       => array(UserAccessTypeTableMap::COL_ID, UserAccessTypeTableMap::COL_TYPE, ),
+        self::TYPE_FIELDNAME     => array('id', 'type', ),
+        self::TYPE_NUM           => array(0, 1, )
     );
 
     /**
@@ -142,11 +107,11 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Username' => 1, 'Password' => 2, 'RedditId' => 3, 'Trusted' => 4, 'Admin' => 5, 'Moderator' => 6, 'Probation' => 7, 'Banned' => 8, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'username' => 1, 'password' => 2, 'redditId' => 3, 'trusted' => 4, 'admin' => 5, 'moderator' => 6, 'probation' => 7, 'banned' => 8, ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_ID => 0, UserTableMap::COL_USERNAME => 1, UserTableMap::COL_PASSWORD => 2, UserTableMap::COL_REDDIT_ID => 3, UserTableMap::COL_TRUSTED => 4, UserTableMap::COL_ADMIN => 5, UserTableMap::COL_MODERATOR => 6, UserTableMap::COL_PROBATION => 7, UserTableMap::COL_BANNED => 8, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'username' => 1, 'password' => 2, 'reddit_id' => 3, 'trusted' => 4, 'admin' => 5, 'moderator' => 6, 'probation' => 7, 'banned' => 8, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Type' => 1, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'type' => 1, ),
+        self::TYPE_COLNAME       => array(UserAccessTypeTableMap::COL_ID => 0, UserAccessTypeTableMap::COL_TYPE => 1, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'type' => 1, ),
+        self::TYPE_NUM           => array(0, 1, )
     );
 
     /**
@@ -159,22 +124,15 @@ class UserTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('user');
-        $this->setPhpName('User');
+        $this->setName('user_access_type');
+        $this->setPhpName('UserAccessType');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\User');
+        $this->setClassName('\\UserAccessType');
         $this->setPackage('');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
-        $this->addColumn('username', 'Username', 'LONGVARCHAR', true, null, null);
-        $this->addColumn('password', 'Password', 'LONGVARCHAR', true, null, null);
-        $this->addColumn('reddit_id', 'RedditId', 'VARCHAR', true, 32, null);
-        $this->addColumn('trusted', 'Trusted', 'BOOLEAN', true, 1, false);
-        $this->addColumn('admin', 'Admin', 'BOOLEAN', true, 1, false);
-        $this->addColumn('moderator', 'Moderator', 'BOOLEAN', true, 1, false);
-        $this->addColumn('probation', 'Probation', 'BOOLEAN', true, 1, null);
-        $this->addColumn('banned', 'Banned', 'BOOLEAN', true, 1, false);
+        $this->addColumn('type', 'Type', 'VARCHAR', true, 20, null);
     } // initialize()
 
     /**
@@ -182,51 +140,16 @@ class UserTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('News', '\\News', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':user_id',
-    1 => ':id',
-  ),
-), null, null, 'News', false);
-        $this->addRelation('RatingHeader', '\\RatingHeader', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':user_id',
-    1 => ':id',
-  ),
-), null, null, 'RatingHeaders', false);
-        $this->addRelation('Rig', '\\Rig', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':user_id',
-    1 => ':id',
-  ),
-), null, null, 'Rigs', false);
         $this->addRelation('UserAccess', '\\UserAccess', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':user_id',
+    0 => ':user_access_type_id',
     1 => ':id',
   ),
 ), 'CASCADE', 'CASCADE', 'UserAccesses', false);
-        $this->addRelation('UserAttributeValue', '\\UserAttributeValue', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':user_id',
-    1 => ':id',
-  ),
-), null, null, 'UserAttributeValues', false);
-        $this->addRelation('UserReview', '\\UserReview', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':user_id',
-    1 => ':id',
-  ),
-), null, null, 'UserReviews', false);
     } // buildRelations()
     /**
-     * Method to invalidate the instance pool of all tables related to user     * by a foreign key with ON DELETE CASCADE
+     * Method to invalidate the instance pool of all tables related to user_access_type     * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
     {
@@ -292,7 +215,7 @@ class UserTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? UserTableMap::CLASS_DEFAULT : UserTableMap::OM_CLASS;
+        return $withPrefix ? UserAccessTypeTableMap::CLASS_DEFAULT : UserAccessTypeTableMap::OM_CLASS;
     }
 
     /**
@@ -306,22 +229,22 @@ class UserTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (User object, last column rank)
+     * @return array           (UserAccessType object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = UserTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = UserTableMap::getInstanceFromPool($key))) {
+        $key = UserAccessTypeTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = UserAccessTypeTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + UserTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + UserAccessTypeTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = UserTableMap::OM_CLASS;
-            /** @var User $obj */
+            $cls = UserAccessTypeTableMap::OM_CLASS;
+            /** @var UserAccessType $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            UserTableMap::addInstanceToPool($obj, $key);
+            UserAccessTypeTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -344,18 +267,18 @@ class UserTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = UserTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = UserTableMap::getInstanceFromPool($key))) {
+            $key = UserAccessTypeTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = UserAccessTypeTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var User $obj */
+                /** @var UserAccessType $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                UserTableMap::addInstanceToPool($obj, $key);
+                UserAccessTypeTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -376,25 +299,11 @@ class UserTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(UserTableMap::COL_ID);
-            $criteria->addSelectColumn(UserTableMap::COL_USERNAME);
-            $criteria->addSelectColumn(UserTableMap::COL_PASSWORD);
-            $criteria->addSelectColumn(UserTableMap::COL_REDDIT_ID);
-            $criteria->addSelectColumn(UserTableMap::COL_TRUSTED);
-            $criteria->addSelectColumn(UserTableMap::COL_ADMIN);
-            $criteria->addSelectColumn(UserTableMap::COL_MODERATOR);
-            $criteria->addSelectColumn(UserTableMap::COL_PROBATION);
-            $criteria->addSelectColumn(UserTableMap::COL_BANNED);
+            $criteria->addSelectColumn(UserAccessTypeTableMap::COL_ID);
+            $criteria->addSelectColumn(UserAccessTypeTableMap::COL_TYPE);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.username');
-            $criteria->addSelectColumn($alias . '.password');
-            $criteria->addSelectColumn($alias . '.reddit_id');
-            $criteria->addSelectColumn($alias . '.trusted');
-            $criteria->addSelectColumn($alias . '.admin');
-            $criteria->addSelectColumn($alias . '.moderator');
-            $criteria->addSelectColumn($alias . '.probation');
-            $criteria->addSelectColumn($alias . '.banned');
+            $criteria->addSelectColumn($alias . '.type');
         }
     }
 
@@ -407,7 +316,7 @@ class UserTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(UserTableMap::DATABASE_NAME)->getTable(UserTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(UserAccessTypeTableMap::DATABASE_NAME)->getTable(UserAccessTypeTableMap::TABLE_NAME);
     }
 
     /**
@@ -415,16 +324,16 @@ class UserTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(UserTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(UserTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new UserTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(UserAccessTypeTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(UserAccessTypeTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new UserAccessTypeTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a User or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a UserAccessType or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or User object or primary key or array of primary keys
+     * @param mixed               $values Criteria or UserAccessType object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -435,27 +344,27 @@ class UserTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(UserAccessTypeTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \User) { // it's a model object
+        } elseif ($values instanceof \UserAccessType) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(UserTableMap::DATABASE_NAME);
-            $criteria->add(UserTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(UserAccessTypeTableMap::DATABASE_NAME);
+            $criteria->add(UserAccessTypeTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = UserQuery::create()->mergeWith($criteria);
+        $query = UserAccessTypeQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            UserTableMap::clearInstancePool();
+            UserAccessTypeTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                UserTableMap::removeInstanceFromPool($singleval);
+                UserAccessTypeTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -463,20 +372,20 @@ class UserTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the user table.
+     * Deletes all rows from the user_access_type table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return UserQuery::create()->doDeleteAll($con);
+        return UserAccessTypeQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a User or Criteria object.
+     * Performs an INSERT on the database, given a UserAccessType or Criteria object.
      *
-     * @param mixed               $criteria Criteria or User object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or UserAccessType object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -485,22 +394,22 @@ class UserTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(UserAccessTypeTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from User object
+            $criteria = $criteria->buildCriteria(); // build Criteria from UserAccessType object
         }
 
-        if ($criteria->containsKey(UserTableMap::COL_ID) && $criteria->keyContainsValue(UserTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.UserTableMap::COL_ID.')');
+        if ($criteria->containsKey(UserAccessTypeTableMap::COL_ID) && $criteria->keyContainsValue(UserAccessTypeTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.UserAccessTypeTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = UserQuery::create()->mergeWith($criteria);
+        $query = UserAccessTypeQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -509,7 +418,7 @@ class UserTableMap extends TableMap
         });
     }
 
-} // UserTableMap
+} // UserAccessTypeTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-UserTableMap::buildTableMap();
+UserAccessTypeTableMap::buildTableMap();

@@ -14,5 +14,7 @@ use Base\Platform as BasePlatform;
  */
 class Platform extends BasePlatform
 {
-
+    public static function getAllPlatforms() {
+        return PlatformQuery::create()->find();
+    }
 }

@@ -319,6 +319,35 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+  <table name="user_access" idMethod="native" phpName="UserAccess">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="user_id" phpName="UserId" type="BIGINT" required="true"/>
+    <column name="ipv4_address" phpName="Ipv4Address" type="VARCHAR" size="20" required="true"/>
+    <column name="user_access_type_id" phpName="UserAccessTypeId" type="BIGINT" required="true"/>
+    <column name="access" phpName="Access" type="TIMESTAMP" required="true"/>
+    <foreign-key foreignTable="user_access_type" name="user_access_ibfk_2" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="user_access_type_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="user" name="user_access_ibfk_1" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="user_id" foreign="id"/>
+    </foreign-key>
+    <index name="user_id">
+      <index-column name="user_id"/>
+    </index>
+    <index name="user_access_type_id">
+      <index-column name="user_access_type_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="user_access_type" idMethod="native" phpName="UserAccessType">
+    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="type" phpName="Type" type="VARCHAR" size="20" required="true"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
   <table name="user_attribute" idMethod="native" phpName="UserAttribute">
     <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="name" phpName="Name" type="LONGVARCHAR" required="true"/>
