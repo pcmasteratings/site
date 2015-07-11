@@ -189,13 +189,6 @@ class UserTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'News', false);
-        $this->addRelation('RatingHeader', '\\RatingHeader', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':user_id',
-    1 => ':id',
-  ),
-), null, null, 'RatingHeaders', false);
         $this->addRelation('Rig', '\\Rig', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

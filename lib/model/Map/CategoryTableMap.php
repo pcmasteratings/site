@@ -159,13 +159,6 @@ class CategoryTableMap extends TableMap
     1 => ':ID',
   ),
 ), 'CASCADE', 'CASCADE', 'CategoryOptions', false);
-        $this->addRelation('RatingValue', '\\RatingValue', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':category_id',
-    1 => ':ID',
-  ),
-), null, null, 'RatingValues', false);
     } // buildRelations()
     /**
      * Method to invalidate the instance pool of all tables related to category     * by a foreign key with ON DELETE CASCADE

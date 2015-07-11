@@ -5,7 +5,7 @@ if(!array_key_exists("name",$_GET)) {
     header("Location: /"); /* Redirect browser */
     exit();
 } else {
-    $query = new GamesQuery();
+    $query = new GameQuery();
     $game = $query->findOneByName($_GET["name"]);
     if($game==null) {
         header("Location: /"); /* Redirect browser */
@@ -18,7 +18,7 @@ if(!array_key_exists("platform",$_GET)) {
 } else {
     $platform = $_GET["platform"];
 }
-$query = new PlatformsQuery();
+$query = new PlatformQuery();
 $platform = $query->findOneByName($platform);
 if($platform==null) {
     throw new Exception("Invalid platform specified");
@@ -35,14 +35,14 @@ if(Auth::checkIfAuthenticated()&&array_key_exists("submit_game_review",$_POST)&&
     $new_review = $_POST["submit_game_review"];
     $new_rating = $_POST["submit_game_rating"];
 
-    $review =  UserReviews::getUserReview($game,$platform,$user);
+    $review =  UserReview::getUserReview($game,$platform,$user);
     if($review==null) {
-        $review = new UserReviews();
-        $review->setGames($game);
-        $review->setPlatforms($platform);
+        $review = new UserReview();
+        $review->setGame($game);
+        $review->setPlatform($platform);
         $review->setUser($user);
     }
-    $review->setRating($new_rating);
+    $review->setRatingId($new_rating);
     $review->setReview(strip_tags($new_review, '<br><br/>'));
     $review->save();
 }
@@ -69,7 +69,7 @@ if(Auth::checkIfAuthenticated()&&array_key_exists("submit_game_review",$_POST)&&
                         <td  colspan="2">
                             <table style="width:100%";><tr>
                             <?php
-                                $platforms = $game->getValidPlatforms();
+                                $platforms = $game->getPlatforms();
                                 if(sizeof($platforms)==0) {
                                     echo "<td><b>Game has no platforms</b></td>";
                                 }
@@ -92,12 +92,12 @@ if(Auth::checkIfAuthenticated()&&array_key_exists("submit_game_review",$_POST)&&
                         echo '<tr><td colspan="2" style="font-weight: bold;">Pending official rating</td></tr>';
                     } else {
                         echo "<th>Item</th><th>Score</th>";
-                        $query = new RatingCategoriesQuery();
+                        $query = new CategoryQuery();
                         $query->orderBySequence();
                         $result = $query->find();
                         foreach ($result as $cat) {
                             echo '<tr><td>' . $cat->getTitle() . '</td>';
-                            echo '<td>'. $header->getRatingForCategory($cat)->getRatingCategoryOptions()->getDescription() .'</td></tr>';
+                            echo '<td>'. $header->getRatingForCategory($cat)->getCategoryOption()->getDescription() .'</td></tr>';
                         }
 
                     }
@@ -114,14 +114,14 @@ if(Auth::checkIfAuthenticated()&&array_key_exists("submit_game_review",$_POST)&&
 			<table class="table">
 				<th style="width: 25px">*</th><th style="width:100%;">User reviews</th><th style="white-space:nowrap;">Review by</th>
                 <?php
-                    $query = new UserReviewsQuery();
-                    $query->filterByPlatforms($platform);
+                    $query = new UserReviewQuery();
+                    $query->filterByPlatform($platform);
                     $reviews = $query->findByGameId($game->getId());
                     if($reviews->count()==0) {
                         echo '<tr><td></td><td>No reviews submitted for this platform...</td><td></td></tr>';
                     }
                     foreach($reviews as $review) {
-                        $rating = $review->getRatings();
+                        $rating = $review->getRating();
                         if($rating==null) {
                             exit;
                         }
@@ -135,16 +135,16 @@ if(Auth::checkIfAuthenticated()&&array_key_exists("submit_game_review",$_POST)&&
 			</table>
                 <?php if(Auth::checkIfAuthenticated()) : ?>
                     <form action="" method="POST">
-                        <?php $review = UserReviews::getUserReview($game,$platform,$user); ?>
+                        <?php $review = UserReview::getUserReview($game,$platform,$user); ?>
                         <div class="form-group">
-                            Submit User Review
+                            <?php if($review==null) echo "Submit"; else echo "Update" ?> User Review
                             <select name="submit_game_rating" class="form-control">
                                 <?php
 
-                                    $ratings = Ratings::getAllRatings();
+                                    $ratings = Rating::getAllRatings();
                                     foreach($ratings as $rating) {
                                         echo '<option value="'.$rating->getId().'"';
-                                        if($review!=null&&$review->getRating()==$rating->getId()) {
+                                        if($review!=null&&$review->getRatingId()==$rating->getId()) {
                                             echo ' selected="selected" ';
                                         }
                                         echo '>'.$rating->getTitle()."</option>";
@@ -157,7 +157,15 @@ if(Auth::checkIfAuthenticated()&&array_key_exists("submit_game_review",$_POST)&&
                         </div>
                         <input type="submit" class="btn btn-primary" />
                     </form>
-                <?php endif; ?>
+                    <form action="" method="POST">
+                        <div class="form-group">
+                            Contest rating
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" name="submit_game_review"></textarea>
+                        </div>
+                        <input type="submit" class="btn btn-primary" />
+                    </form>                <?php endif; ?>
  			</div>
 		</div>
 		<?php include("res/footer.php"); ?>

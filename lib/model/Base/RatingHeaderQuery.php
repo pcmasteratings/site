@@ -22,23 +22,17 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRatingHeaderQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildRatingHeaderQuery orderByGameId($order = Criteria::ASC) Order by the game_id column
- * @method     ChildRatingHeaderQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
  * @method     ChildRatingHeaderQuery orderByPlatformId($order = Criteria::ASC) Order by the platform_id column
  * @method     ChildRatingHeaderQuery orderByCreated($order = Criteria::ASC) Order by the created column
  * @method     ChildRatingHeaderQuery orderByUpdated($order = Criteria::ASC) Order by the updated column
- * @method     ChildRatingHeaderQuery orderByUpvotes($order = Criteria::ASC) Order by the upvotes column
- * @method     ChildRatingHeaderQuery orderByDownvotes($order = Criteria::ASC) Order by the downvotes column
  * @method     ChildRatingHeaderQuery orderByComments($order = Criteria::ASC) Order by the comments column
  * @method     ChildRatingHeaderQuery orderByScore($order = Criteria::ASC) Order by the score column
  *
  * @method     ChildRatingHeaderQuery groupById() Group by the id column
  * @method     ChildRatingHeaderQuery groupByGameId() Group by the game_id column
- * @method     ChildRatingHeaderQuery groupByUserId() Group by the user_id column
  * @method     ChildRatingHeaderQuery groupByPlatformId() Group by the platform_id column
  * @method     ChildRatingHeaderQuery groupByCreated() Group by the created column
  * @method     ChildRatingHeaderQuery groupByUpdated() Group by the updated column
- * @method     ChildRatingHeaderQuery groupByUpvotes() Group by the upvotes column
- * @method     ChildRatingHeaderQuery groupByDownvotes() Group by the downvotes column
  * @method     ChildRatingHeaderQuery groupByComments() Group by the comments column
  * @method     ChildRatingHeaderQuery groupByScore() Group by the score column
  *
@@ -50,10 +44,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeaderQuery rightJoinGame($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Game relation
  * @method     ChildRatingHeaderQuery innerJoinGame($relationAlias = null) Adds a INNER JOIN clause to the query using the Game relation
  *
- * @method     ChildRatingHeaderQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
- * @method     ChildRatingHeaderQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
- * @method     ChildRatingHeaderQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
- *
  * @method     ChildRatingHeaderQuery leftJoinPlatform($relationAlias = null) Adds a LEFT JOIN clause to the query using the Platform relation
  * @method     ChildRatingHeaderQuery rightJoinPlatform($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Platform relation
  * @method     ChildRatingHeaderQuery innerJoinPlatform($relationAlias = null) Adds a INNER JOIN clause to the query using the Platform relation
@@ -62,19 +52,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRatingHeaderQuery rightJoinRatingValue($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingValue relation
  * @method     ChildRatingHeaderQuery innerJoinRatingValue($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingValue relation
  *
- * @method     \GameQuery|\UserQuery|\PlatformQuery|\RatingValueQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \GameQuery|\PlatformQuery|\RatingValueQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildRatingHeader findOne(ConnectionInterface $con = null) Return the first ChildRatingHeader matching the query
  * @method     ChildRatingHeader findOneOrCreate(ConnectionInterface $con = null) Return the first ChildRatingHeader matching the query, or a new ChildRatingHeader object populated from the query conditions when no match is found
  *
  * @method     ChildRatingHeader findOneById(string $id) Return the first ChildRatingHeader filtered by the id column
  * @method     ChildRatingHeader findOneByGameId(string $game_id) Return the first ChildRatingHeader filtered by the game_id column
- * @method     ChildRatingHeader findOneByUserId(string $user_id) Return the first ChildRatingHeader filtered by the user_id column
  * @method     ChildRatingHeader findOneByPlatformId(string $platform_id) Return the first ChildRatingHeader filtered by the platform_id column
  * @method     ChildRatingHeader findOneByCreated(string $created) Return the first ChildRatingHeader filtered by the created column
  * @method     ChildRatingHeader findOneByUpdated(string $updated) Return the first ChildRatingHeader filtered by the updated column
- * @method     ChildRatingHeader findOneByUpvotes(string $upvotes) Return the first ChildRatingHeader filtered by the upvotes column
- * @method     ChildRatingHeader findOneByDownvotes(string $downvotes) Return the first ChildRatingHeader filtered by the downvotes column
  * @method     ChildRatingHeader findOneByComments(string $comments) Return the first ChildRatingHeader filtered by the comments column
  * @method     ChildRatingHeader findOneByScore(int $score) Return the first ChildRatingHeader filtered by the score column *
 
@@ -83,24 +70,18 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRatingHeader requireOneById(string $id) Return the first ChildRatingHeader filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeader requireOneByGameId(string $game_id) Return the first ChildRatingHeader filtered by the game_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRatingHeader requireOneByUserId(string $user_id) Return the first ChildRatingHeader filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeader requireOneByPlatformId(string $platform_id) Return the first ChildRatingHeader filtered by the platform_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeader requireOneByCreated(string $created) Return the first ChildRatingHeader filtered by the created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeader requireOneByUpdated(string $updated) Return the first ChildRatingHeader filtered by the updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRatingHeader requireOneByUpvotes(string $upvotes) Return the first ChildRatingHeader filtered by the upvotes column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRatingHeader requireOneByDownvotes(string $downvotes) Return the first ChildRatingHeader filtered by the downvotes column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeader requireOneByComments(string $comments) Return the first ChildRatingHeader filtered by the comments column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingHeader requireOneByScore(int $score) Return the first ChildRatingHeader filtered by the score column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRatingHeader[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildRatingHeader objects based on current ModelCriteria
  * @method     ChildRatingHeader[]|ObjectCollection findById(string $id) Return ChildRatingHeader objects filtered by the id column
  * @method     ChildRatingHeader[]|ObjectCollection findByGameId(string $game_id) Return ChildRatingHeader objects filtered by the game_id column
- * @method     ChildRatingHeader[]|ObjectCollection findByUserId(string $user_id) Return ChildRatingHeader objects filtered by the user_id column
  * @method     ChildRatingHeader[]|ObjectCollection findByPlatformId(string $platform_id) Return ChildRatingHeader objects filtered by the platform_id column
  * @method     ChildRatingHeader[]|ObjectCollection findByCreated(string $created) Return ChildRatingHeader objects filtered by the created column
  * @method     ChildRatingHeader[]|ObjectCollection findByUpdated(string $updated) Return ChildRatingHeader objects filtered by the updated column
- * @method     ChildRatingHeader[]|ObjectCollection findByUpvotes(string $upvotes) Return ChildRatingHeader objects filtered by the upvotes column
- * @method     ChildRatingHeader[]|ObjectCollection findByDownvotes(string $downvotes) Return ChildRatingHeader objects filtered by the downvotes column
  * @method     ChildRatingHeader[]|ObjectCollection findByComments(string $comments) Return ChildRatingHeader objects filtered by the comments column
  * @method     ChildRatingHeader[]|ObjectCollection findByScore(int $score) Return ChildRatingHeader objects filtered by the score column
  * @method     ChildRatingHeader[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -195,7 +176,7 @@ abstract class RatingHeaderQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, game_id, user_id, platform_id, created, updated, upvotes, downvotes, comments, score FROM rating_header WHERE id = :p0';
+        $sql = 'SELECT id, game_id, platform_id, created, updated, comments, score FROM rating_header WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -370,49 +351,6 @@ abstract class RatingHeaderQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the user_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByUserId(1234); // WHERE user_id = 1234
-     * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
-     * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
-     * </code>
-     *
-     * @see       filterByUser()
-     *
-     * @param     mixed $userId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildRatingHeaderQuery The current query, for fluid interface
-     */
-    public function filterByUserId($userId = null, $comparison = null)
-    {
-        if (is_array($userId)) {
-            $useMinMax = false;
-            if (isset($userId['min'])) {
-                $this->addUsingAlias(RatingHeaderTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($userId['max'])) {
-                $this->addUsingAlias(RatingHeaderTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(RatingHeaderTableMap::COL_USER_ID, $userId, $comparison);
-    }
-
-    /**
      * Filter the query on the platform_id column
      *
      * Example usage:
@@ -539,88 +477,6 @@ abstract class RatingHeaderQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RatingHeaderTableMap::COL_UPDATED, $updated, $comparison);
-    }
-
-    /**
-     * Filter the query on the upvotes column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByUpvotes(1234); // WHERE upvotes = 1234
-     * $query->filterByUpvotes(array(12, 34)); // WHERE upvotes IN (12, 34)
-     * $query->filterByUpvotes(array('min' => 12)); // WHERE upvotes > 12
-     * </code>
-     *
-     * @param     mixed $upvotes The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildRatingHeaderQuery The current query, for fluid interface
-     */
-    public function filterByUpvotes($upvotes = null, $comparison = null)
-    {
-        if (is_array($upvotes)) {
-            $useMinMax = false;
-            if (isset($upvotes['min'])) {
-                $this->addUsingAlias(RatingHeaderTableMap::COL_UPVOTES, $upvotes['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($upvotes['max'])) {
-                $this->addUsingAlias(RatingHeaderTableMap::COL_UPVOTES, $upvotes['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(RatingHeaderTableMap::COL_UPVOTES, $upvotes, $comparison);
-    }
-
-    /**
-     * Filter the query on the downvotes column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDownvotes(1234); // WHERE downvotes = 1234
-     * $query->filterByDownvotes(array(12, 34)); // WHERE downvotes IN (12, 34)
-     * $query->filterByDownvotes(array('min' => 12)); // WHERE downvotes > 12
-     * </code>
-     *
-     * @param     mixed $downvotes The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildRatingHeaderQuery The current query, for fluid interface
-     */
-    public function filterByDownvotes($downvotes = null, $comparison = null)
-    {
-        if (is_array($downvotes)) {
-            $useMinMax = false;
-            if (isset($downvotes['min'])) {
-                $this->addUsingAlias(RatingHeaderTableMap::COL_DOWNVOTES, $downvotes['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($downvotes['max'])) {
-                $this->addUsingAlias(RatingHeaderTableMap::COL_DOWNVOTES, $downvotes['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(RatingHeaderTableMap::COL_DOWNVOTES, $downvotes, $comparison);
     }
 
     /**
@@ -768,83 +624,6 @@ abstract class RatingHeaderQuery extends ModelCriteria
         return $this
             ->joinGame($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Game', '\GameQuery');
-    }
-
-    /**
-     * Filter the query by a related \User object
-     *
-     * @param \User|ObjectCollection $user The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return ChildRatingHeaderQuery The current query, for fluid interface
-     */
-    public function filterByUser($user, $comparison = null)
-    {
-        if ($user instanceof \User) {
-            return $this
-                ->addUsingAlias(RatingHeaderTableMap::COL_USER_ID, $user->getId(), $comparison);
-        } elseif ($user instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(RatingHeaderTableMap::COL_USER_ID, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
-        } else {
-            throw new PropelException('filterByUser() only accepts arguments of type \User or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the User relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildRatingHeaderQuery The current query, for fluid interface
-     */
-    public function joinUser($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('User');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'User');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the User relation User object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \UserQuery A secondary query class using the current class as primary query
-     */
-    public function useUserQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinUser($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'User', '\UserQuery');
     }
 
     /**

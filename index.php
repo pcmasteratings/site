@@ -18,9 +18,9 @@ require("res/include.php");
     <div class="col-md-8">
         <h1>Most recent games</h1>
         <?php
-            $query = new GamesQuery();
+            $query = new GameQuery();
             $query->limit(6);
-            $query->innerJoinRatingHeaders();
+            $query->innerJoinRatingHeader();
             $query->orderById("DESC");
             $games = $query->find();
 

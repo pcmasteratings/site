@@ -2592,31 +2592,6 @@ abstract class Game implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildRatingHeader[] List of ChildRatingHeader objects
      */
-    public function getRatingHeadersJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildRatingHeaderQuery::create(null, $criteria);
-        $query->joinWith('User', $joinBehavior);
-
-        return $this->getRatingHeaders($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Game is new, it will return
-     * an empty collection; or if this Game has previously
-     * been saved, it will retrieve related RatingHeaders from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Game.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildRatingHeader[] List of ChildRatingHeader objects
-     */
     public function getRatingHeadersJoinPlatform(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildRatingHeaderQuery::create(null, $criteria);

@@ -20,64 +20,55 @@ use Propel\Runtime\Exception\PropelException;
  *
  * 
  *
- * @method     ChildRatingValueQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildRatingValueQuery orderByRatingHeaderId($order = Criteria::ASC) Order by the rating_header_id column
- * @method     ChildRatingValueQuery orderByCategoryId($order = Criteria::ASC) Order by the category_id column
  * @method     ChildRatingValueQuery orderByCategoryOptionId($order = Criteria::ASC) Order by the category_option_id column
  * @method     ChildRatingValueQuery orderByOriginalValue($order = Criteria::ASC) Order by the original_value column
+ * @method     ChildRatingValueQuery orderByDoNotScore($order = Criteria::ASC) Order by the do_not_score column
  * @method     ChildRatingValueQuery orderByComments($order = Criteria::ASC) Order by the comments column
  *
- * @method     ChildRatingValueQuery groupById() Group by the id column
  * @method     ChildRatingValueQuery groupByRatingHeaderId() Group by the rating_header_id column
- * @method     ChildRatingValueQuery groupByCategoryId() Group by the category_id column
  * @method     ChildRatingValueQuery groupByCategoryOptionId() Group by the category_option_id column
  * @method     ChildRatingValueQuery groupByOriginalValue() Group by the original_value column
+ * @method     ChildRatingValueQuery groupByDoNotScore() Group by the do_not_score column
  * @method     ChildRatingValueQuery groupByComments() Group by the comments column
  *
  * @method     ChildRatingValueQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildRatingValueQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     ChildRatingValueQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildRatingValueQuery leftJoinCategoryOption($relationAlias = null) Adds a LEFT JOIN clause to the query using the CategoryOption relation
- * @method     ChildRatingValueQuery rightJoinCategoryOption($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CategoryOption relation
- * @method     ChildRatingValueQuery innerJoinCategoryOption($relationAlias = null) Adds a INNER JOIN clause to the query using the CategoryOption relation
- *
  * @method     ChildRatingValueQuery leftJoinRatingHeader($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingHeader relation
  * @method     ChildRatingValueQuery rightJoinRatingHeader($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingHeader relation
  * @method     ChildRatingValueQuery innerJoinRatingHeader($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingHeader relation
  *
- * @method     ChildRatingValueQuery leftJoinCategory($relationAlias = null) Adds a LEFT JOIN clause to the query using the Category relation
- * @method     ChildRatingValueQuery rightJoinCategory($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Category relation
- * @method     ChildRatingValueQuery innerJoinCategory($relationAlias = null) Adds a INNER JOIN clause to the query using the Category relation
+ * @method     ChildRatingValueQuery leftJoinCategoryOption($relationAlias = null) Adds a LEFT JOIN clause to the query using the CategoryOption relation
+ * @method     ChildRatingValueQuery rightJoinCategoryOption($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CategoryOption relation
+ * @method     ChildRatingValueQuery innerJoinCategoryOption($relationAlias = null) Adds a INNER JOIN clause to the query using the CategoryOption relation
  *
- * @method     \CategoryOptionQuery|\RatingHeaderQuery|\CategoryQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \RatingHeaderQuery|\CategoryOptionQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildRatingValue findOne(ConnectionInterface $con = null) Return the first ChildRatingValue matching the query
  * @method     ChildRatingValue findOneOrCreate(ConnectionInterface $con = null) Return the first ChildRatingValue matching the query, or a new ChildRatingValue object populated from the query conditions when no match is found
  *
- * @method     ChildRatingValue findOneById(string $id) Return the first ChildRatingValue filtered by the id column
  * @method     ChildRatingValue findOneByRatingHeaderId(string $rating_header_id) Return the first ChildRatingValue filtered by the rating_header_id column
- * @method     ChildRatingValue findOneByCategoryId(string $category_id) Return the first ChildRatingValue filtered by the category_id column
  * @method     ChildRatingValue findOneByCategoryOptionId(string $category_option_id) Return the first ChildRatingValue filtered by the category_option_id column
  * @method     ChildRatingValue findOneByOriginalValue(int $original_value) Return the first ChildRatingValue filtered by the original_value column
+ * @method     ChildRatingValue findOneByDoNotScore(boolean $do_not_score) Return the first ChildRatingValue filtered by the do_not_score column
  * @method     ChildRatingValue findOneByComments(string $comments) Return the first ChildRatingValue filtered by the comments column *
 
  * @method     ChildRatingValue requirePk($key, ConnectionInterface $con = null) Return the ChildRatingValue by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingValue requireOne(ConnectionInterface $con = null) Return the first ChildRatingValue matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildRatingValue requireOneById(string $id) Return the first ChildRatingValue filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingValue requireOneByRatingHeaderId(string $rating_header_id) Return the first ChildRatingValue filtered by the rating_header_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRatingValue requireOneByCategoryId(string $category_id) Return the first ChildRatingValue filtered by the category_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingValue requireOneByCategoryOptionId(string $category_option_id) Return the first ChildRatingValue filtered by the category_option_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingValue requireOneByOriginalValue(int $original_value) Return the first ChildRatingValue filtered by the original_value column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRatingValue requireOneByDoNotScore(boolean $do_not_score) Return the first ChildRatingValue filtered by the do_not_score column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRatingValue requireOneByComments(string $comments) Return the first ChildRatingValue filtered by the comments column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRatingValue[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildRatingValue objects based on current ModelCriteria
- * @method     ChildRatingValue[]|ObjectCollection findById(string $id) Return ChildRatingValue objects filtered by the id column
  * @method     ChildRatingValue[]|ObjectCollection findByRatingHeaderId(string $rating_header_id) Return ChildRatingValue objects filtered by the rating_header_id column
- * @method     ChildRatingValue[]|ObjectCollection findByCategoryId(string $category_id) Return ChildRatingValue objects filtered by the category_id column
  * @method     ChildRatingValue[]|ObjectCollection findByCategoryOptionId(string $category_option_id) Return ChildRatingValue objects filtered by the category_option_id column
  * @method     ChildRatingValue[]|ObjectCollection findByOriginalValue(int $original_value) Return ChildRatingValue objects filtered by the original_value column
+ * @method     ChildRatingValue[]|ObjectCollection findByDoNotScore(boolean $do_not_score) Return ChildRatingValue objects filtered by the do_not_score column
  * @method     ChildRatingValue[]|ObjectCollection findByComments(string $comments) Return ChildRatingValue objects filtered by the comments column
  * @method     ChildRatingValue[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -128,10 +119,10 @@ abstract class RatingValueQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj  = $c->findPk(12, $con);
+     * $obj = $c->findPk(array(12, 34), $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param array[$rating_header_id, $category_option_id] $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildRatingValue|array|mixed the result, formatted by the current formatter
@@ -141,7 +132,7 @@ abstract class RatingValueQuery extends ModelCriteria
         if ($key === null) {
             return null;
         }
-        if ((null !== ($obj = RatingValueTableMap::getInstanceFromPool((string) $key))) && !$this->formatter) {
+        if ((null !== ($obj = RatingValueTableMap::getInstanceFromPool(serialize(array((string) $key[0], (string) $key[1]))))) && !$this->formatter) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -171,10 +162,11 @@ abstract class RatingValueQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, rating_header_id, category_id, category_option_id, original_value, comments FROM rating_value WHERE id = :p0';
+        $sql = 'SELECT rating_header_id, category_option_id, original_value, do_not_score, comments FROM rating_value WHERE rating_header_id = :p0 AND category_option_id = :p1';
         try {
             $stmt = $con->prepare($sql);            
-            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);            
+            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -185,7 +177,7 @@ abstract class RatingValueQuery extends ModelCriteria
             /** @var ChildRatingValue $obj */
             $obj = new ChildRatingValue();
             $obj->hydrate($row);
-            RatingValueTableMap::addInstanceToPool($obj, (string) $key);
+            RatingValueTableMap::addInstanceToPool($obj, serialize(array((string) $key[0], (string) $key[1])));
         }
         $stmt->closeCursor();
 
@@ -214,7 +206,7 @@ abstract class RatingValueQuery extends ModelCriteria
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(12, 56, 832), $con);
+     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     ConnectionInterface $con an optional connection object
@@ -244,8 +236,10 @@ abstract class RatingValueQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
+        $this->addUsingAlias(RatingValueTableMap::COL_RATING_HEADER_ID, $key[0], Criteria::EQUAL);
+        $this->addUsingAlias(RatingValueTableMap::COL_CATEGORY_OPTION_ID, $key[1], Criteria::EQUAL);
 
-        return $this->addUsingAlias(RatingValueTableMap::COL_ID, $key, Criteria::EQUAL);
+        return $this;
     }
 
     /**
@@ -257,49 +251,17 @@ abstract class RatingValueQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-
-        return $this->addUsingAlias(RatingValueTableMap::COL_ID, $keys, Criteria::IN);
-    }
-
-    /**
-     * Filter the query on the id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterById(1234); // WHERE id = 1234
-     * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
-     * $query->filterById(array('min' => 12)); // WHERE id > 12
-     * </code>
-     *
-     * @param     mixed $id The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildRatingValueQuery The current query, for fluid interface
-     */
-    public function filterById($id = null, $comparison = null)
-    {
-        if (is_array($id)) {
-            $useMinMax = false;
-            if (isset($id['min'])) {
-                $this->addUsingAlias(RatingValueTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($id['max'])) {
-                $this->addUsingAlias(RatingValueTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
+        if (empty($keys)) {
+            return $this->add(null, '1<>1', Criteria::CUSTOM);
+        }
+        foreach ($keys as $key) {
+            $cton0 = $this->getNewCriterion(RatingValueTableMap::COL_RATING_HEADER_ID, $key[0], Criteria::EQUAL);
+            $cton1 = $this->getNewCriterion(RatingValueTableMap::COL_CATEGORY_OPTION_ID, $key[1], Criteria::EQUAL);
+            $cton0->addAnd($cton1);
+            $this->addOr($cton0);
         }
 
-        return $this->addUsingAlias(RatingValueTableMap::COL_ID, $id, $comparison);
+        return $this;
     }
 
     /**
@@ -343,49 +305,6 @@ abstract class RatingValueQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RatingValueTableMap::COL_RATING_HEADER_ID, $ratingHeaderId, $comparison);
-    }
-
-    /**
-     * Filter the query on the category_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByCategoryId(1234); // WHERE category_id = 1234
-     * $query->filterByCategoryId(array(12, 34)); // WHERE category_id IN (12, 34)
-     * $query->filterByCategoryId(array('min' => 12)); // WHERE category_id > 12
-     * </code>
-     *
-     * @see       filterByCategory()
-     *
-     * @param     mixed $categoryId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildRatingValueQuery The current query, for fluid interface
-     */
-    public function filterByCategoryId($categoryId = null, $comparison = null)
-    {
-        if (is_array($categoryId)) {
-            $useMinMax = false;
-            if (isset($categoryId['min'])) {
-                $this->addUsingAlias(RatingValueTableMap::COL_CATEGORY_ID, $categoryId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($categoryId['max'])) {
-                $this->addUsingAlias(RatingValueTableMap::COL_CATEGORY_ID, $categoryId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(RatingValueTableMap::COL_CATEGORY_ID, $categoryId, $comparison);
     }
 
     /**
@@ -473,6 +392,33 @@ abstract class RatingValueQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the do_not_score column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDoNotScore(true); // WHERE do_not_score = true
+     * $query->filterByDoNotScore('yes'); // WHERE do_not_score = true
+     * </code>
+     *
+     * @param     boolean|string $doNotScore The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildRatingValueQuery The current query, for fluid interface
+     */
+    public function filterByDoNotScore($doNotScore = null, $comparison = null)
+    {
+        if (is_string($doNotScore)) {
+            $doNotScore = in_array(strtolower($doNotScore), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(RatingValueTableMap::COL_DO_NOT_SCORE, $doNotScore, $comparison);
+    }
+
+    /**
      * Filter the query on the comments column
      *
      * Example usage:
@@ -499,83 +445,6 @@ abstract class RatingValueQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RatingValueTableMap::COL_COMMENTS, $comments, $comparison);
-    }
-
-    /**
-     * Filter the query by a related \CategoryOption object
-     *
-     * @param \CategoryOption|ObjectCollection $categoryOption The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return ChildRatingValueQuery The current query, for fluid interface
-     */
-    public function filterByCategoryOption($categoryOption, $comparison = null)
-    {
-        if ($categoryOption instanceof \CategoryOption) {
-            return $this
-                ->addUsingAlias(RatingValueTableMap::COL_CATEGORY_OPTION_ID, $categoryOption->getCategoryId(), $comparison);
-        } elseif ($categoryOption instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(RatingValueTableMap::COL_CATEGORY_OPTION_ID, $categoryOption->toKeyValue('PrimaryKey', 'CategoryId'), $comparison);
-        } else {
-            throw new PropelException('filterByCategoryOption() only accepts arguments of type \CategoryOption or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the CategoryOption relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildRatingValueQuery The current query, for fluid interface
-     */
-    public function joinCategoryOption($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('CategoryOption');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'CategoryOption');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the CategoryOption relation CategoryOption object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \CategoryOptionQuery A secondary query class using the current class as primary query
-     */
-    public function useCategoryOptionQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinCategoryOption($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'CategoryOption', '\CategoryOptionQuery');
     }
 
     /**
@@ -656,44 +525,44 @@ abstract class RatingValueQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \Category object
+     * Filter the query by a related \CategoryOption object
      *
-     * @param \Category|ObjectCollection $category The related object(s) to use as filter
+     * @param \CategoryOption|ObjectCollection $categoryOption The related object(s) to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
      * @return ChildRatingValueQuery The current query, for fluid interface
      */
-    public function filterByCategory($category, $comparison = null)
+    public function filterByCategoryOption($categoryOption, $comparison = null)
     {
-        if ($category instanceof \Category) {
+        if ($categoryOption instanceof \CategoryOption) {
             return $this
-                ->addUsingAlias(RatingValueTableMap::COL_CATEGORY_ID, $category->getId(), $comparison);
-        } elseif ($category instanceof ObjectCollection) {
+                ->addUsingAlias(RatingValueTableMap::COL_CATEGORY_OPTION_ID, $categoryOption->getCategoryId(), $comparison);
+        } elseif ($categoryOption instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(RatingValueTableMap::COL_CATEGORY_ID, $category->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(RatingValueTableMap::COL_CATEGORY_OPTION_ID, $categoryOption->toKeyValue('PrimaryKey', 'CategoryId'), $comparison);
         } else {
-            throw new PropelException('filterByCategory() only accepts arguments of type \Category or Collection');
+            throw new PropelException('filterByCategoryOption() only accepts arguments of type \CategoryOption or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the Category relation
+     * Adds a JOIN clause to the query using the CategoryOption relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildRatingValueQuery The current query, for fluid interface
      */
-    public function joinCategory($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinCategoryOption($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Category');
+        $relationMap = $tableMap->getRelation('CategoryOption');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -708,14 +577,14 @@ abstract class RatingValueQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'Category');
+            $this->addJoinObject($join, 'CategoryOption');
         }
 
         return $this;
     }
 
     /**
-     * Use the Category relation Category object
+     * Use the CategoryOption relation CategoryOption object
      *
      * @see useQuery()
      *
@@ -723,13 +592,13 @@ abstract class RatingValueQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \CategoryQuery A secondary query class using the current class as primary query
+     * @return \CategoryOptionQuery A secondary query class using the current class as primary query
      */
-    public function useCategoryQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useCategoryOptionQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinCategory($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Category', '\CategoryQuery');
+            ->joinCategoryOption($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CategoryOption', '\CategoryOptionQuery');
     }
 
     /**
@@ -742,7 +611,9 @@ abstract class RatingValueQuery extends ModelCriteria
     public function prune($ratingValue = null)
     {
         if ($ratingValue) {
-            $this->addUsingAlias(RatingValueTableMap::COL_ID, $ratingValue->getId(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond0', $this->getAliasedColName(RatingValueTableMap::COL_RATING_HEADER_ID), $ratingValue->getRatingHeaderId(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond1', $this->getAliasedColName(RatingValueTableMap::COL_CATEGORY_OPTION_ID), $ratingValue->getCategoryOptionId(), Criteria::NOT_EQUAL);
+            $this->combine(array('pruneCond0', 'pruneCond1'), Criteria::LOGICAL_OR);
         }
 
         return $this;

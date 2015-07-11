@@ -48,10 +48,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinNews($relationAlias = null) Adds a RIGHT JOIN clause to the query using the News relation
  * @method     ChildUserQuery innerJoinNews($relationAlias = null) Adds a INNER JOIN clause to the query using the News relation
  *
- * @method     ChildUserQuery leftJoinRatingHeader($relationAlias = null) Adds a LEFT JOIN clause to the query using the RatingHeader relation
- * @method     ChildUserQuery rightJoinRatingHeader($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingHeader relation
- * @method     ChildUserQuery innerJoinRatingHeader($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingHeader relation
- *
  * @method     ChildUserQuery leftJoinRig($relationAlias = null) Adds a LEFT JOIN clause to the query using the Rig relation
  * @method     ChildUserQuery rightJoinRig($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Rig relation
  * @method     ChildUserQuery innerJoinRig($relationAlias = null) Adds a INNER JOIN clause to the query using the Rig relation
@@ -68,7 +64,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinUserReview($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserReview relation
  * @method     ChildUserQuery innerJoinUserReview($relationAlias = null) Adds a INNER JOIN clause to the query using the UserReview relation
  *
- * @method     \NewsQuery|\RatingHeaderQuery|\RigQuery|\UserAccessQuery|\UserAttributeValueQuery|\UserReviewQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \NewsQuery|\RigQuery|\UserAccessQuery|\UserAttributeValueQuery|\UserReviewQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildUser findOne(ConnectionInterface $con = null) Return the first ChildUser matching the query
  * @method     ChildUser findOneOrCreate(ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
@@ -622,79 +618,6 @@ abstract class UserQuery extends ModelCriteria
         return $this
             ->joinNews($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'News', '\NewsQuery');
-    }
-
-    /**
-     * Filter the query by a related \RatingHeader object
-     *
-     * @param \RatingHeader|ObjectCollection $ratingHeader the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildUserQuery The current query, for fluid interface
-     */
-    public function filterByRatingHeader($ratingHeader, $comparison = null)
-    {
-        if ($ratingHeader instanceof \RatingHeader) {
-            return $this
-                ->addUsingAlias(UserTableMap::COL_ID, $ratingHeader->getUserId(), $comparison);
-        } elseif ($ratingHeader instanceof ObjectCollection) {
-            return $this
-                ->useRatingHeaderQuery()
-                ->filterByPrimaryKeys($ratingHeader->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByRatingHeader() only accepts arguments of type \RatingHeader or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the RatingHeader relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildUserQuery The current query, for fluid interface
-     */
-    public function joinRatingHeader($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('RatingHeader');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'RatingHeader');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the RatingHeader relation RatingHeader object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \RatingHeaderQuery A secondary query class using the current class as primary query
-     */
-    public function useRatingHeaderQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinRatingHeader($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'RatingHeader', '\RatingHeaderQuery');
     }
 
     /**

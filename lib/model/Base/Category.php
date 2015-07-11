@@ -6,8 +6,6 @@ use \Category as ChildCategory;
 use \CategoryOption as ChildCategoryOption;
 use \CategoryOptionQuery as ChildCategoryOptionQuery;
 use \CategoryQuery as ChildCategoryQuery;
-use \RatingValue as ChildRatingValue;
-use \RatingValueQuery as ChildRatingValueQuery;
 use \Exception;
 use \PDO;
 use Map\CategoryTableMap;
@@ -96,12 +94,6 @@ abstract class Category implements ActiveRecordInterface
     protected $collCategoryOptionsPartial;
 
     /**
-     * @var        ObjectCollection|ChildRatingValue[] Collection to store aggregation of ChildRatingValue objects.
-     */
-    protected $collRatingValues;
-    protected $collRatingValuesPartial;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -114,12 +106,6 @@ abstract class Category implements ActiveRecordInterface
      * @var ObjectCollection|ChildCategoryOption[]
      */
     protected $categoryOptionsScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildRatingValue[]
-     */
-    protected $ratingValuesScheduledForDeletion = null;
 
     /**
      * Initializes internal state of Base\Category object.
@@ -576,8 +562,6 @@ abstract class Category implements ActiveRecordInterface
 
             $this->collCategoryOptions = null;
 
-            $this->collRatingValues = null;
-
         } // if (deep)
     }
 
@@ -699,23 +683,6 @@ abstract class Category implements ActiveRecordInterface
 
             if ($this->collCategoryOptions !== null) {
                 foreach ($this->collCategoryOptions as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
-            if ($this->ratingValuesScheduledForDeletion !== null) {
-                if (!$this->ratingValuesScheduledForDeletion->isEmpty()) {
-                    \RatingValueQuery::create()
-                        ->filterByPrimaryKeys($this->ratingValuesScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->ratingValuesScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collRatingValues !== null) {
-                foreach ($this->collRatingValues as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -912,21 +879,6 @@ abstract class Category implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->collCategoryOptions->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
-            if (null !== $this->collRatingValues) {
-                
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'ratingValues';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'rating_values';
-                        break;
-                    default:
-                        $key = 'RatingValues';
-                }
-        
-                $result[$key] = $this->collRatingValues->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1166,12 +1118,6 @@ abstract class Category implements ActiveRecordInterface
                 }
             }
 
-            foreach ($this->getRatingValues() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addRatingValue($relObj->copy($deepCopy));
-                }
-            }
-
         } // if ($deepCopy)
 
         if ($makeNew) {
@@ -1215,9 +1161,6 @@ abstract class Category implements ActiveRecordInterface
     {
         if ('CategoryOption' == $relationName) {
             return $this->initCategoryOptions();
-        }
-        if ('RatingValue' == $relationName) {
-            return $this->initRatingValues();
         }
     }
 
@@ -1465,274 +1408,6 @@ abstract class Category implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collRatingValues collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addRatingValues()
-     */
-    public function clearRatingValues()
-    {
-        $this->collRatingValues = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Reset is the collRatingValues collection loaded partially.
-     */
-    public function resetPartialRatingValues($v = true)
-    {
-        $this->collRatingValuesPartial = $v;
-    }
-
-    /**
-     * Initializes the collRatingValues collection.
-     *
-     * By default this just sets the collRatingValues collection to an empty array (like clearcollRatingValues());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initRatingValues($overrideExisting = true)
-    {
-        if (null !== $this->collRatingValues && !$overrideExisting) {
-            return;
-        }
-        $this->collRatingValues = new ObjectCollection();
-        $this->collRatingValues->setModel('\RatingValue');
-    }
-
-    /**
-     * Gets an array of ChildRatingValue objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildCategory is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildRatingValue[] List of ChildRatingValue objects
-     * @throws PropelException
-     */
-    public function getRatingValues(Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        $partial = $this->collRatingValuesPartial && !$this->isNew();
-        if (null === $this->collRatingValues || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collRatingValues) {
-                // return empty collection
-                $this->initRatingValues();
-            } else {
-                $collRatingValues = ChildRatingValueQuery::create(null, $criteria)
-                    ->filterByCategory($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collRatingValuesPartial && count($collRatingValues)) {
-                        $this->initRatingValues(false);
-
-                        foreach ($collRatingValues as $obj) {
-                            if (false == $this->collRatingValues->contains($obj)) {
-                                $this->collRatingValues->append($obj);
-                            }
-                        }
-
-                        $this->collRatingValuesPartial = true;
-                    }
-
-                    return $collRatingValues;
-                }
-
-                if ($partial && $this->collRatingValues) {
-                    foreach ($this->collRatingValues as $obj) {
-                        if ($obj->isNew()) {
-                            $collRatingValues[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collRatingValues = $collRatingValues;
-                $this->collRatingValuesPartial = false;
-            }
-        }
-
-        return $this->collRatingValues;
-    }
-
-    /**
-     * Sets a collection of ChildRatingValue objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      Collection $ratingValues A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildCategory The current object (for fluent API support)
-     */
-    public function setRatingValues(Collection $ratingValues, ConnectionInterface $con = null)
-    {
-        /** @var ChildRatingValue[] $ratingValuesToDelete */
-        $ratingValuesToDelete = $this->getRatingValues(new Criteria(), $con)->diff($ratingValues);
-
-        
-        $this->ratingValuesScheduledForDeletion = $ratingValuesToDelete;
-
-        foreach ($ratingValuesToDelete as $ratingValueRemoved) {
-            $ratingValueRemoved->setCategory(null);
-        }
-
-        $this->collRatingValues = null;
-        foreach ($ratingValues as $ratingValue) {
-            $this->addRatingValue($ratingValue);
-        }
-
-        $this->collRatingValues = $ratingValues;
-        $this->collRatingValuesPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related RatingValue objects.
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
-     * @return int             Count of related RatingValue objects.
-     * @throws PropelException
-     */
-    public function countRatingValues(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
-    {
-        $partial = $this->collRatingValuesPartial && !$this->isNew();
-        if (null === $this->collRatingValues || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collRatingValues) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getRatingValues());
-            }
-
-            $query = ChildRatingValueQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByCategory($this)
-                ->count($con);
-        }
-
-        return count($this->collRatingValues);
-    }
-
-    /**
-     * Method called to associate a ChildRatingValue object to this object
-     * through the ChildRatingValue foreign key attribute.
-     *
-     * @param  ChildRatingValue $l ChildRatingValue
-     * @return $this|\Category The current object (for fluent API support)
-     */
-    public function addRatingValue(ChildRatingValue $l)
-    {
-        if ($this->collRatingValues === null) {
-            $this->initRatingValues();
-            $this->collRatingValuesPartial = true;
-        }
-
-        if (!$this->collRatingValues->contains($l)) {
-            $this->doAddRatingValue($l);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param ChildRatingValue $ratingValue The ChildRatingValue object to add.
-     */
-    protected function doAddRatingValue(ChildRatingValue $ratingValue)
-    {
-        $this->collRatingValues[]= $ratingValue;
-        $ratingValue->setCategory($this);
-    }
-
-    /**
-     * @param  ChildRatingValue $ratingValue The ChildRatingValue object to remove.
-     * @return $this|ChildCategory The current object (for fluent API support)
-     */
-    public function removeRatingValue(ChildRatingValue $ratingValue)
-    {
-        if ($this->getRatingValues()->contains($ratingValue)) {
-            $pos = $this->collRatingValues->search($ratingValue);
-            $this->collRatingValues->remove($pos);
-            if (null === $this->ratingValuesScheduledForDeletion) {
-                $this->ratingValuesScheduledForDeletion = clone $this->collRatingValues;
-                $this->ratingValuesScheduledForDeletion->clear();
-            }
-            $this->ratingValuesScheduledForDeletion[]= clone $ratingValue;
-            $ratingValue->setCategory(null);
-        }
-
-        return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Category is new, it will return
-     * an empty collection; or if this Category has previously
-     * been saved, it will retrieve related RatingValues from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Category.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildRatingValue[] List of ChildRatingValue objects
-     */
-    public function getRatingValuesJoinCategoryOption(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildRatingValueQuery::create(null, $criteria);
-        $query->joinWith('CategoryOption', $joinBehavior);
-
-        return $this->getRatingValues($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Category is new, it will return
-     * an empty collection; or if this Category has previously
-     * been saved, it will retrieve related RatingValues from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Category.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildRatingValue[] List of ChildRatingValue objects
-     */
-    public function getRatingValuesJoinRatingHeader(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildRatingValueQuery::create(null, $criteria);
-        $query->joinWith('RatingHeader', $joinBehavior);
-
-        return $this->getRatingValues($query, $con);
-    }
-
-    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -1766,15 +1441,9 @@ abstract class Category implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collRatingValues) {
-                foreach ($this->collRatingValues as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
         } // if ($deep)
 
         $this->collCategoryOptions = null;
-        $this->collRatingValues = null;
     }
 
     /**

@@ -4,8 +4,6 @@ namespace Base;
 
 use \News as ChildNews;
 use \NewsQuery as ChildNewsQuery;
-use \RatingHeader as ChildRatingHeader;
-use \RatingHeaderQuery as ChildRatingHeaderQuery;
 use \Rig as ChildRig;
 use \RigQuery as ChildRigQuery;
 use \User as ChildUser;
@@ -138,12 +136,6 @@ abstract class User implements ActiveRecordInterface
     protected $collNewsPartial;
 
     /**
-     * @var        ObjectCollection|ChildRatingHeader[] Collection to store aggregation of ChildRatingHeader objects.
-     */
-    protected $collRatingHeaders;
-    protected $collRatingHeadersPartial;
-
-    /**
      * @var        ObjectCollection|ChildRig[] Collection to store aggregation of ChildRig objects.
      */
     protected $collRigs;
@@ -180,12 +172,6 @@ abstract class User implements ActiveRecordInterface
      * @var ObjectCollection|ChildNews[]
      */
     protected $newsScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildRatingHeader[]
-     */
-    protected $ratingHeadersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -953,8 +939,6 @@ abstract class User implements ActiveRecordInterface
 
             $this->collNews = null;
 
-            $this->collRatingHeaders = null;
-
             $this->collRigs = null;
 
             $this->collUserAccesses = null;
@@ -1084,23 +1068,6 @@ abstract class User implements ActiveRecordInterface
 
             if ($this->collNews !== null) {
                 foreach ($this->collNews as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
-            if ($this->ratingHeadersScheduledForDeletion !== null) {
-                if (!$this->ratingHeadersScheduledForDeletion->isEmpty()) {
-                    \RatingHeaderQuery::create()
-                        ->filterByPrimaryKeys($this->ratingHeadersScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->ratingHeadersScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collRatingHeaders !== null) {
-                foreach ($this->collRatingHeaders as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1415,21 +1382,6 @@ abstract class User implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->collNews->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
-            if (null !== $this->collRatingHeaders) {
-                
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'ratingHeaders';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'rating_headers';
-                        break;
-                    default:
-                        $key = 'RatingHeaders';
-                }
-        
-                $result[$key] = $this->collRatingHeaders->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collRigs) {
                 
@@ -1779,12 +1731,6 @@ abstract class User implements ActiveRecordInterface
                 }
             }
 
-            foreach ($this->getRatingHeaders() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addRatingHeader($relObj->copy($deepCopy));
-                }
-            }
-
             foreach ($this->getRigs() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addRig($relObj->copy($deepCopy));
@@ -1852,9 +1798,6 @@ abstract class User implements ActiveRecordInterface
     {
         if ('News' == $relationName) {
             return $this->initNews();
-        }
-        if ('RatingHeader' == $relationName) {
-            return $this->initRatingHeaders();
         }
         if ('Rig' == $relationName) {
             return $this->initRigs();
@@ -2086,274 +2029,6 @@ abstract class User implements ActiveRecordInterface
         }
 
         return $this;
-    }
-
-    /**
-     * Clears out the collRatingHeaders collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addRatingHeaders()
-     */
-    public function clearRatingHeaders()
-    {
-        $this->collRatingHeaders = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Reset is the collRatingHeaders collection loaded partially.
-     */
-    public function resetPartialRatingHeaders($v = true)
-    {
-        $this->collRatingHeadersPartial = $v;
-    }
-
-    /**
-     * Initializes the collRatingHeaders collection.
-     *
-     * By default this just sets the collRatingHeaders collection to an empty array (like clearcollRatingHeaders());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initRatingHeaders($overrideExisting = true)
-    {
-        if (null !== $this->collRatingHeaders && !$overrideExisting) {
-            return;
-        }
-        $this->collRatingHeaders = new ObjectCollection();
-        $this->collRatingHeaders->setModel('\RatingHeader');
-    }
-
-    /**
-     * Gets an array of ChildRatingHeader objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildUser is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildRatingHeader[] List of ChildRatingHeader objects
-     * @throws PropelException
-     */
-    public function getRatingHeaders(Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        $partial = $this->collRatingHeadersPartial && !$this->isNew();
-        if (null === $this->collRatingHeaders || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collRatingHeaders) {
-                // return empty collection
-                $this->initRatingHeaders();
-            } else {
-                $collRatingHeaders = ChildRatingHeaderQuery::create(null, $criteria)
-                    ->filterByUser($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collRatingHeadersPartial && count($collRatingHeaders)) {
-                        $this->initRatingHeaders(false);
-
-                        foreach ($collRatingHeaders as $obj) {
-                            if (false == $this->collRatingHeaders->contains($obj)) {
-                                $this->collRatingHeaders->append($obj);
-                            }
-                        }
-
-                        $this->collRatingHeadersPartial = true;
-                    }
-
-                    return $collRatingHeaders;
-                }
-
-                if ($partial && $this->collRatingHeaders) {
-                    foreach ($this->collRatingHeaders as $obj) {
-                        if ($obj->isNew()) {
-                            $collRatingHeaders[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collRatingHeaders = $collRatingHeaders;
-                $this->collRatingHeadersPartial = false;
-            }
-        }
-
-        return $this->collRatingHeaders;
-    }
-
-    /**
-     * Sets a collection of ChildRatingHeader objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      Collection $ratingHeaders A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildUser The current object (for fluent API support)
-     */
-    public function setRatingHeaders(Collection $ratingHeaders, ConnectionInterface $con = null)
-    {
-        /** @var ChildRatingHeader[] $ratingHeadersToDelete */
-        $ratingHeadersToDelete = $this->getRatingHeaders(new Criteria(), $con)->diff($ratingHeaders);
-
-        
-        $this->ratingHeadersScheduledForDeletion = $ratingHeadersToDelete;
-
-        foreach ($ratingHeadersToDelete as $ratingHeaderRemoved) {
-            $ratingHeaderRemoved->setUser(null);
-        }
-
-        $this->collRatingHeaders = null;
-        foreach ($ratingHeaders as $ratingHeader) {
-            $this->addRatingHeader($ratingHeader);
-        }
-
-        $this->collRatingHeaders = $ratingHeaders;
-        $this->collRatingHeadersPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related RatingHeader objects.
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
-     * @return int             Count of related RatingHeader objects.
-     * @throws PropelException
-     */
-    public function countRatingHeaders(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
-    {
-        $partial = $this->collRatingHeadersPartial && !$this->isNew();
-        if (null === $this->collRatingHeaders || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collRatingHeaders) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getRatingHeaders());
-            }
-
-            $query = ChildRatingHeaderQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByUser($this)
-                ->count($con);
-        }
-
-        return count($this->collRatingHeaders);
-    }
-
-    /**
-     * Method called to associate a ChildRatingHeader object to this object
-     * through the ChildRatingHeader foreign key attribute.
-     *
-     * @param  ChildRatingHeader $l ChildRatingHeader
-     * @return $this|\User The current object (for fluent API support)
-     */
-    public function addRatingHeader(ChildRatingHeader $l)
-    {
-        if ($this->collRatingHeaders === null) {
-            $this->initRatingHeaders();
-            $this->collRatingHeadersPartial = true;
-        }
-
-        if (!$this->collRatingHeaders->contains($l)) {
-            $this->doAddRatingHeader($l);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param ChildRatingHeader $ratingHeader The ChildRatingHeader object to add.
-     */
-    protected function doAddRatingHeader(ChildRatingHeader $ratingHeader)
-    {
-        $this->collRatingHeaders[]= $ratingHeader;
-        $ratingHeader->setUser($this);
-    }
-
-    /**
-     * @param  ChildRatingHeader $ratingHeader The ChildRatingHeader object to remove.
-     * @return $this|ChildUser The current object (for fluent API support)
-     */
-    public function removeRatingHeader(ChildRatingHeader $ratingHeader)
-    {
-        if ($this->getRatingHeaders()->contains($ratingHeader)) {
-            $pos = $this->collRatingHeaders->search($ratingHeader);
-            $this->collRatingHeaders->remove($pos);
-            if (null === $this->ratingHeadersScheduledForDeletion) {
-                $this->ratingHeadersScheduledForDeletion = clone $this->collRatingHeaders;
-                $this->ratingHeadersScheduledForDeletion->clear();
-            }
-            $this->ratingHeadersScheduledForDeletion[]= clone $ratingHeader;
-            $ratingHeader->setUser(null);
-        }
-
-        return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this User is new, it will return
-     * an empty collection; or if this User has previously
-     * been saved, it will retrieve related RatingHeaders from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in User.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildRatingHeader[] List of ChildRatingHeader objects
-     */
-    public function getRatingHeadersJoinGame(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildRatingHeaderQuery::create(null, $criteria);
-        $query->joinWith('Game', $joinBehavior);
-
-        return $this->getRatingHeaders($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this User is new, it will return
-     * an empty collection; or if this User has previously
-     * been saved, it will retrieve related RatingHeaders from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in User.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildRatingHeader[] List of ChildRatingHeader objects
-     */
-    public function getRatingHeadersJoinPlatform(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildRatingHeaderQuery::create(null, $criteria);
-        $query->joinWith('Platform', $joinBehavior);
-
-        return $this->getRatingHeaders($query, $con);
     }
 
     /**
@@ -3418,11 +3093,6 @@ abstract class User implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collRatingHeaders) {
-                foreach ($this->collRatingHeaders as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
             if ($this->collRigs) {
                 foreach ($this->collRigs as $o) {
                     $o->clearAllReferences($deep);
@@ -3446,7 +3116,6 @@ abstract class User implements ActiveRecordInterface
         } // if ($deep)
 
         $this->collNews = null;
-        $this->collRatingHeaders = null;
         $this->collRigs = null;
         $this->collUserAccesses = null;
         $this->collUserAttributeValues = null;

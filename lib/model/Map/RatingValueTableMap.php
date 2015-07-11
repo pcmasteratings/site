@@ -59,7 +59,7 @@ class RatingValueTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 5;
 
     /**
      * The number of lazy-loaded columns
@@ -69,22 +69,12 @@ class RatingValueTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 6;
-
-    /**
-     * the column name for the id field
-     */
-    const COL_ID = 'rating_value.id';
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /**
      * the column name for the rating_header_id field
      */
     const COL_RATING_HEADER_ID = 'rating_value.rating_header_id';
-
-    /**
-     * the column name for the category_id field
-     */
-    const COL_CATEGORY_ID = 'rating_value.category_id';
 
     /**
      * the column name for the category_option_id field
@@ -95,6 +85,11 @@ class RatingValueTableMap extends TableMap
      * the column name for the original_value field
      */
     const COL_ORIGINAL_VALUE = 'rating_value.original_value';
+
+    /**
+     * the column name for the do_not_score field
+     */
+    const COL_DO_NOT_SCORE = 'rating_value.do_not_score';
 
     /**
      * the column name for the comments field
@@ -113,11 +108,11 @@ class RatingValueTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'RatingHeaderId', 'CategoryId', 'CategoryOptionId', 'OriginalValue', 'Comments', ),
-        self::TYPE_CAMELNAME     => array('id', 'ratingHeaderId', 'categoryId', 'categoryOptionId', 'originalValue', 'comments', ),
-        self::TYPE_COLNAME       => array(RatingValueTableMap::COL_ID, RatingValueTableMap::COL_RATING_HEADER_ID, RatingValueTableMap::COL_CATEGORY_ID, RatingValueTableMap::COL_CATEGORY_OPTION_ID, RatingValueTableMap::COL_ORIGINAL_VALUE, RatingValueTableMap::COL_COMMENTS, ),
-        self::TYPE_FIELDNAME     => array('id', 'rating_header_id', 'category_id', 'category_option_id', 'original_value', 'comments', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('RatingHeaderId', 'CategoryOptionId', 'OriginalValue', 'DoNotScore', 'Comments', ),
+        self::TYPE_CAMELNAME     => array('ratingHeaderId', 'categoryOptionId', 'originalValue', 'doNotScore', 'comments', ),
+        self::TYPE_COLNAME       => array(RatingValueTableMap::COL_RATING_HEADER_ID, RatingValueTableMap::COL_CATEGORY_OPTION_ID, RatingValueTableMap::COL_ORIGINAL_VALUE, RatingValueTableMap::COL_DO_NOT_SCORE, RatingValueTableMap::COL_COMMENTS, ),
+        self::TYPE_FIELDNAME     => array('rating_header_id', 'category_option_id', 'original_value', 'do_not_score', 'comments', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -127,11 +122,11 @@ class RatingValueTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'RatingHeaderId' => 1, 'CategoryId' => 2, 'CategoryOptionId' => 3, 'OriginalValue' => 4, 'Comments' => 5, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'ratingHeaderId' => 1, 'categoryId' => 2, 'categoryOptionId' => 3, 'originalValue' => 4, 'comments' => 5, ),
-        self::TYPE_COLNAME       => array(RatingValueTableMap::COL_ID => 0, RatingValueTableMap::COL_RATING_HEADER_ID => 1, RatingValueTableMap::COL_CATEGORY_ID => 2, RatingValueTableMap::COL_CATEGORY_OPTION_ID => 3, RatingValueTableMap::COL_ORIGINAL_VALUE => 4, RatingValueTableMap::COL_COMMENTS => 5, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'rating_header_id' => 1, 'category_id' => 2, 'category_option_id' => 3, 'original_value' => 4, 'comments' => 5, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('RatingHeaderId' => 0, 'CategoryOptionId' => 1, 'OriginalValue' => 2, 'DoNotScore' => 3, 'Comments' => 4, ),
+        self::TYPE_CAMELNAME     => array('ratingHeaderId' => 0, 'categoryOptionId' => 1, 'originalValue' => 2, 'doNotScore' => 3, 'comments' => 4, ),
+        self::TYPE_COLNAME       => array(RatingValueTableMap::COL_RATING_HEADER_ID => 0, RatingValueTableMap::COL_CATEGORY_OPTION_ID => 1, RatingValueTableMap::COL_ORIGINAL_VALUE => 2, RatingValueTableMap::COL_DO_NOT_SCORE => 3, RatingValueTableMap::COL_COMMENTS => 4, ),
+        self::TYPE_FIELDNAME     => array('rating_header_id' => 0, 'category_option_id' => 1, 'original_value' => 2, 'do_not_score' => 3, 'comments' => 4, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -149,13 +144,12 @@ class RatingValueTableMap extends TableMap
         $this->setIdentifierQuoting(false);
         $this->setClassName('\\RatingValue');
         $this->setPackage('');
-        $this->setUseIdGenerator(true);
+        $this->setUseIdGenerator(false);
         // columns
-        $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
-        $this->addForeignKey('rating_header_id', 'RatingHeaderId', 'BIGINT', 'rating_header', 'id', true, null, null);
-        $this->addForeignKey('category_id', 'CategoryId', 'BIGINT', 'category', 'ID', true, null, null);
-        $this->addForeignKey('category_option_id', 'CategoryOptionId', 'BIGINT', 'category_option', 'category_id', true, null, null);
+        $this->addForeignPrimaryKey('rating_header_id', 'RatingHeaderId', 'BIGINT' , 'rating_header', 'id', true, null, null);
+        $this->addForeignPrimaryKey('category_option_id', 'CategoryOptionId', 'BIGINT' , 'category_option', 'category_id', true, null, null);
         $this->addColumn('original_value', 'OriginalValue', 'INTEGER', true, null, null);
+        $this->addColumn('do_not_score', 'DoNotScore', 'BOOLEAN', true, 1, false);
         $this->addColumn('comments', 'Comments', 'LONGVARCHAR', true, null, null);
     } // initialize()
 
@@ -164,13 +158,6 @@ class RatingValueTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('CategoryOption', '\\CategoryOption', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':category_option_id',
-    1 => ':category_id',
-  ),
-), null, null, null, false);
         $this->addRelation('RatingHeader', '\\RatingHeader', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
@@ -178,14 +165,67 @@ class RatingValueTableMap extends TableMap
     1 => ':id',
   ),
 ), 'CASCADE', 'CASCADE', null, false);
-        $this->addRelation('Category', '\\Category', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('CategoryOption', '\\CategoryOption', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':category_id',
-    1 => ':ID',
+    0 => ':category_option_id',
+    1 => ':category_id',
   ),
 ), null, null, null, false);
     } // buildRelations()
+
+    /**
+     * Adds an object to the instance pool.
+     *
+     * Propel keeps cached copies of objects in an instance pool when they are retrieved
+     * from the database. In some cases you may need to explicitly add objects
+     * to the cache in order to ensure that the same objects are always returned by find*()
+     * and findPk*() calls.
+     *
+     * @param \RatingValue $obj A \RatingValue object.
+     * @param string $key             (optional) key to use for instance map (for performance boost if key was already calculated externally).
+     */
+    public static function addInstanceToPool($obj, $key = null)
+    {
+        if (Propel::isInstancePoolingEnabled()) {
+            if (null === $key) {
+                $key = serialize(array((string) $obj->getRatingHeaderId(), (string) $obj->getCategoryOptionId()));
+            } // if key === null
+            self::$instances[$key] = $obj;
+        }
+    }
+
+    /**
+     * Removes an object from the instance pool.
+     *
+     * Propel keeps cached copies of objects in an instance pool when they are retrieved
+     * from the database.  In some cases -- especially when you override doDelete
+     * methods in your stub classes -- you may need to explicitly remove objects
+     * from the cache in order to prevent returning objects that no longer exist.
+     *
+     * @param mixed $value A \RatingValue object or a primary key value.
+     */
+    public static function removeInstanceFromPool($value)
+    {
+        if (Propel::isInstancePoolingEnabled() && null !== $value) {
+            if (is_object($value) && $value instanceof \RatingValue) {
+                $key = serialize(array((string) $value->getRatingHeaderId(), (string) $value->getCategoryOptionId()));
+
+            } elseif (is_array($value) && count($value) === 2) {
+                // assume we've been passed a primary key";
+                $key = serialize(array((string) $value[0], (string) $value[1]));
+            } elseif ($value instanceof Criteria) {
+                self::$instances = [];
+
+                return;
+            } else {
+                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or \RatingValue object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value, true)));
+                throw $e;
+            }
+
+            unset(self::$instances[$key]);
+        }
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -203,11 +243,11 @@ class RatingValueTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('RatingHeaderId', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('CategoryOptionId', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+        return serialize(array((string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('RatingHeaderId', TableMap::TYPE_PHPNAME, $indexType)], (string) $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('CategoryOptionId', TableMap::TYPE_PHPNAME, $indexType)]));
     }
 
     /**
@@ -224,11 +264,20 @@ class RatingValueTableMap extends TableMap
      */
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        return (string) $row[
+            $pks = [];
+            
+        $pks[] = (string) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 0 + $offset
-                : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
+                : self::translateFieldName('RatingHeaderId', TableMap::TYPE_PHPNAME, $indexType)
         ];
+        $pks[] = (string) $row[
+            $indexType == TableMap::TYPE_NUM
+                ? 1 + $offset
+                : self::translateFieldName('CategoryOptionId', TableMap::TYPE_PHPNAME, $indexType)
+        ];
+
+        return $pks;
     }
     
     /**
@@ -328,18 +377,16 @@ class RatingValueTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(RatingValueTableMap::COL_ID);
             $criteria->addSelectColumn(RatingValueTableMap::COL_RATING_HEADER_ID);
-            $criteria->addSelectColumn(RatingValueTableMap::COL_CATEGORY_ID);
             $criteria->addSelectColumn(RatingValueTableMap::COL_CATEGORY_OPTION_ID);
             $criteria->addSelectColumn(RatingValueTableMap::COL_ORIGINAL_VALUE);
+            $criteria->addSelectColumn(RatingValueTableMap::COL_DO_NOT_SCORE);
             $criteria->addSelectColumn(RatingValueTableMap::COL_COMMENTS);
         } else {
-            $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.rating_header_id');
-            $criteria->addSelectColumn($alias . '.category_id');
             $criteria->addSelectColumn($alias . '.category_option_id');
             $criteria->addSelectColumn($alias . '.original_value');
+            $criteria->addSelectColumn($alias . '.do_not_score');
             $criteria->addSelectColumn($alias . '.comments');
         }
     }
@@ -392,7 +439,17 @@ class RatingValueTableMap extends TableMap
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(RatingValueTableMap::DATABASE_NAME);
-            $criteria->add(RatingValueTableMap::COL_ID, (array) $values, Criteria::IN);
+            // primary key is composite; we therefore, expect
+            // the primary key passed to be an array of pkey values
+            if (count($values) == count($values, COUNT_RECURSIVE)) {
+                // array is not multi-dimensional
+                $values = array($values);
+            }
+            foreach ($values as $value) {
+                $criterion = $criteria->getNewCriterion(RatingValueTableMap::COL_RATING_HEADER_ID, $value[0]);
+                $criterion->addAnd($criteria->getNewCriterion(RatingValueTableMap::COL_CATEGORY_OPTION_ID, $value[1]));
+                $criteria->addOr($criterion);
+            }
         }
 
         $query = RatingValueQuery::create()->mergeWith($criteria);
@@ -438,10 +495,6 @@ class RatingValueTableMap extends TableMap
             $criteria = clone $criteria; // rename for clarity
         } else {
             $criteria = $criteria->buildCriteria(); // build Criteria from RatingValue object
-        }
-
-        if ($criteria->containsKey(RatingValueTableMap::COL_ID) && $criteria->keyContainsValue(RatingValueTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.RatingValueTableMap::COL_ID.')');
         }
 
 

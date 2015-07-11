@@ -1935,7 +1935,10 @@ abstract class CategoryOption implements ActiveRecordInterface
         $ratingValuesToDelete = $this->getRatingValues(new Criteria(), $con)->diff($ratingValues);
 
         
-        $this->ratingValuesScheduledForDeletion = $ratingValuesToDelete;
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->ratingValuesScheduledForDeletion = clone $ratingValuesToDelete;
 
         foreach ($ratingValuesToDelete as $ratingValueRemoved) {
             $ratingValueRemoved->setCategoryOption(null);
@@ -2057,31 +2060,6 @@ abstract class CategoryOption implements ActiveRecordInterface
     {
         $query = ChildRatingValueQuery::create(null, $criteria);
         $query->joinWith('RatingHeader', $joinBehavior);
-
-        return $this->getRatingValues($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this CategoryOption is new, it will return
-     * an empty collection; or if this CategoryOption has previously
-     * been saved, it will retrieve related RatingValues from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in CategoryOption.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildRatingValue[] List of ChildRatingValue objects
-     */
-    public function getRatingValuesJoinCategory(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildRatingValueQuery::create(null, $criteria);
-        $query->joinWith('Category', $joinBehavior);
 
         return $this->getRatingValues($query, $con);
     }

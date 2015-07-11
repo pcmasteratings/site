@@ -10,8 +10,6 @@ use \RatingHeader as ChildRatingHeader;
 use \RatingHeaderQuery as ChildRatingHeaderQuery;
 use \RatingValue as ChildRatingValue;
 use \RatingValueQuery as ChildRatingValueQuery;
-use \User as ChildUser;
-use \UserQuery as ChildUserQuery;
 use \DateTime;
 use \Exception;
 use \PDO;
@@ -84,12 +82,6 @@ abstract class RatingHeader implements ActiveRecordInterface
     protected $game_id;
 
     /**
-     * The value for the user_id field.
-     * @var        string
-     */
-    protected $user_id;
-
-    /**
      * The value for the platform_id field.
      * @var        string
      */
@@ -108,20 +100,6 @@ abstract class RatingHeader implements ActiveRecordInterface
     protected $updated;
 
     /**
-     * The value for the upvotes field.
-     * Note: this column has a database default value of: '0'
-     * @var        string
-     */
-    protected $upvotes;
-
-    /**
-     * The value for the downvotes field.
-     * Note: this column has a database default value of: '0'
-     * @var        string
-     */
-    protected $downvotes;
-
-    /**
      * The value for the comments field.
      * @var        string
      */
@@ -137,11 +115,6 @@ abstract class RatingHeader implements ActiveRecordInterface
      * @var        ChildGame
      */
     protected $aGame;
-
-    /**
-     * @var        ChildUser
-     */
-    protected $aUser;
 
     /**
      * @var        ChildPlatform
@@ -169,24 +142,10 @@ abstract class RatingHeader implements ActiveRecordInterface
     protected $ratingValuesScheduledForDeletion = null;
 
     /**
-     * Applies default values to this object.
-     * This method should be called from the object's constructor (or
-     * equivalent initialization method).
-     * @see __construct()
-     */
-    public function applyDefaultValues()
-    {
-        $this->upvotes = '0';
-        $this->downvotes = '0';
-    }
-
-    /**
      * Initializes internal state of Base\RatingHeader object.
-     * @see applyDefaults()
      */
     public function __construct()
     {
-        $this->applyDefaultValues();
     }
 
     /**
@@ -420,16 +379,6 @@ abstract class RatingHeader implements ActiveRecordInterface
     }
 
     /**
-     * Get the [user_id] column value.
-     * 
-     * @return string
-     */
-    public function getUserId()
-    {
-        return $this->user_id;
-    }
-
-    /**
      * Get the [platform_id] column value.
      * 
      * @return string
@@ -477,26 +426,6 @@ abstract class RatingHeader implements ActiveRecordInterface
         } else {
             return $this->updated instanceof \DateTime ? $this->updated->format($format) : null;
         }
-    }
-
-    /**
-     * Get the [upvotes] column value.
-     * 
-     * @return string
-     */
-    public function getUpvotes()
-    {
-        return $this->upvotes;
-    }
-
-    /**
-     * Get the [downvotes] column value.
-     * 
-     * @return string
-     */
-    public function getDownvotes()
-    {
-        return $this->downvotes;
     }
 
     /**
@@ -564,30 +493,6 @@ abstract class RatingHeader implements ActiveRecordInterface
     } // setGameId()
 
     /**
-     * Set the value of [user_id] column.
-     * 
-     * @param string $v new value
-     * @return $this|\RatingHeader The current object (for fluent API support)
-     */
-    public function setUserId($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->user_id !== $v) {
-            $this->user_id = $v;
-            $this->modifiedColumns[RatingHeaderTableMap::COL_USER_ID] = true;
-        }
-
-        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
-            $this->aUser = null;
-        }
-
-        return $this;
-    } // setUserId()
-
-    /**
      * Set the value of [platform_id] column.
      * 
      * @param string $v new value
@@ -652,46 +557,6 @@ abstract class RatingHeader implements ActiveRecordInterface
     } // setUpdated()
 
     /**
-     * Set the value of [upvotes] column.
-     * 
-     * @param string $v new value
-     * @return $this|\RatingHeader The current object (for fluent API support)
-     */
-    public function setUpvotes($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->upvotes !== $v) {
-            $this->upvotes = $v;
-            $this->modifiedColumns[RatingHeaderTableMap::COL_UPVOTES] = true;
-        }
-
-        return $this;
-    } // setUpvotes()
-
-    /**
-     * Set the value of [downvotes] column.
-     * 
-     * @param string $v new value
-     * @return $this|\RatingHeader The current object (for fluent API support)
-     */
-    public function setDownvotes($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->downvotes !== $v) {
-            $this->downvotes = $v;
-            $this->modifiedColumns[RatingHeaderTableMap::COL_DOWNVOTES] = true;
-        }
-
-        return $this;
-    } // setDownvotes()
-
-    /**
      * Set the value of [comments] column.
      * 
      * @param string $v new value
@@ -741,14 +606,6 @@ abstract class RatingHeader implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->upvotes !== '0') {
-                return false;
-            }
-
-            if ($this->downvotes !== '0') {
-                return false;
-            }
-
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -781,34 +638,25 @@ abstract class RatingHeader implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : RatingHeaderTableMap::translateFieldName('GameId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->game_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RatingHeaderTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_id = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : RatingHeaderTableMap::translateFieldName('PlatformId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RatingHeaderTableMap::translateFieldName('PlatformId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->platform_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : RatingHeaderTableMap::translateFieldName('Created', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : RatingHeaderTableMap::translateFieldName('Created', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : RatingHeaderTableMap::translateFieldName('Updated', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : RatingHeaderTableMap::translateFieldName('Updated', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : RatingHeaderTableMap::translateFieldName('Upvotes', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->upvotes = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : RatingHeaderTableMap::translateFieldName('Downvotes', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->downvotes = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : RatingHeaderTableMap::translateFieldName('Comments', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : RatingHeaderTableMap::translateFieldName('Comments', TableMap::TYPE_PHPNAME, $indexType)];
             $this->comments = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : RatingHeaderTableMap::translateFieldName('Score', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : RatingHeaderTableMap::translateFieldName('Score', TableMap::TYPE_PHPNAME, $indexType)];
             $this->score = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
@@ -818,7 +666,7 @@ abstract class RatingHeader implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 10; // 10 = RatingHeaderTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = RatingHeaderTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\RatingHeader'), 0, $e);
@@ -842,9 +690,6 @@ abstract class RatingHeader implements ActiveRecordInterface
     {
         if ($this->aGame !== null && $this->game_id !== $this->aGame->getId()) {
             $this->aGame = null;
-        }
-        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
-            $this->aUser = null;
         }
         if ($this->aPlatform !== null && $this->platform_id !== $this->aPlatform->getId()) {
             $this->aPlatform = null;
@@ -889,7 +734,6 @@ abstract class RatingHeader implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aGame = null;
-            $this->aUser = null;
             $this->aPlatform = null;
             $this->collRatingValues = null;
 
@@ -1004,13 +848,6 @@ abstract class RatingHeader implements ActiveRecordInterface
                 $this->setGame($this->aGame);
             }
 
-            if ($this->aUser !== null) {
-                if ($this->aUser->isModified() || $this->aUser->isNew()) {
-                    $affectedRows += $this->aUser->save($con);
-                }
-                $this->setUser($this->aUser);
-            }
-
             if ($this->aPlatform !== null) {
                 if ($this->aPlatform->isModified() || $this->aPlatform->isNew()) {
                     $affectedRows += $this->aPlatform->save($con);
@@ -1078,9 +915,6 @@ abstract class RatingHeader implements ActiveRecordInterface
         if ($this->isColumnModified(RatingHeaderTableMap::COL_GAME_ID)) {
             $modifiedColumns[':p' . $index++]  = 'game_id';
         }
-        if ($this->isColumnModified(RatingHeaderTableMap::COL_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'user_id';
-        }
         if ($this->isColumnModified(RatingHeaderTableMap::COL_PLATFORM_ID)) {
             $modifiedColumns[':p' . $index++]  = 'platform_id';
         }
@@ -1089,12 +923,6 @@ abstract class RatingHeader implements ActiveRecordInterface
         }
         if ($this->isColumnModified(RatingHeaderTableMap::COL_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'updated';
-        }
-        if ($this->isColumnModified(RatingHeaderTableMap::COL_UPVOTES)) {
-            $modifiedColumns[':p' . $index++]  = 'upvotes';
-        }
-        if ($this->isColumnModified(RatingHeaderTableMap::COL_DOWNVOTES)) {
-            $modifiedColumns[':p' . $index++]  = 'downvotes';
         }
         if ($this->isColumnModified(RatingHeaderTableMap::COL_COMMENTS)) {
             $modifiedColumns[':p' . $index++]  = 'comments';
@@ -1119,9 +947,6 @@ abstract class RatingHeader implements ActiveRecordInterface
                     case 'game_id':                        
                         $stmt->bindValue($identifier, $this->game_id, PDO::PARAM_INT);
                         break;
-                    case 'user_id':                        
-                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
-                        break;
                     case 'platform_id':                        
                         $stmt->bindValue($identifier, $this->platform_id, PDO::PARAM_INT);
                         break;
@@ -1130,12 +955,6 @@ abstract class RatingHeader implements ActiveRecordInterface
                         break;
                     case 'updated':                        
                         $stmt->bindValue($identifier, $this->updated ? $this->updated->format("Y-m-d H:i:s") : null, PDO::PARAM_STR);
-                        break;
-                    case 'upvotes':                        
-                        $stmt->bindValue($identifier, $this->upvotes, PDO::PARAM_INT);
-                        break;
-                    case 'downvotes':                        
-                        $stmt->bindValue($identifier, $this->downvotes, PDO::PARAM_INT);
                         break;
                     case 'comments':                        
                         $stmt->bindValue($identifier, $this->comments, PDO::PARAM_STR);
@@ -1212,27 +1031,18 @@ abstract class RatingHeader implements ActiveRecordInterface
                 return $this->getGameId();
                 break;
             case 2:
-                return $this->getUserId();
-                break;
-            case 3:
                 return $this->getPlatformId();
                 break;
-            case 4:
+            case 3:
                 return $this->getCreated();
                 break;
-            case 5:
+            case 4:
                 return $this->getUpdated();
                 break;
-            case 6:
-                return $this->getUpvotes();
-                break;
-            case 7:
-                return $this->getDownvotes();
-                break;
-            case 8:
+            case 5:
                 return $this->getComments();
                 break;
-            case 9:
+            case 6:
                 return $this->getScore();
                 break;
             default:
@@ -1267,27 +1077,24 @@ abstract class RatingHeader implements ActiveRecordInterface
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getGameId(),
-            $keys[2] => $this->getUserId(),
-            $keys[3] => $this->getPlatformId(),
-            $keys[4] => $this->getCreated(),
-            $keys[5] => $this->getUpdated(),
-            $keys[6] => $this->getUpvotes(),
-            $keys[7] => $this->getDownvotes(),
-            $keys[8] => $this->getComments(),
-            $keys[9] => $this->getScore(),
+            $keys[2] => $this->getPlatformId(),
+            $keys[3] => $this->getCreated(),
+            $keys[4] => $this->getUpdated(),
+            $keys[5] => $this->getComments(),
+            $keys[6] => $this->getScore(),
         );
 
         $utc = new \DateTimeZone('utc');
+        if ($result[$keys[3]] instanceof \DateTime) {
+            // When changing timezone we don't want to change existing instances
+            $dateTime = clone $result[$keys[3]];
+            $result[$keys[3]] = $dateTime->setTimezone($utc)->format('Y-m-d\TH:i:s\Z');
+        }
+        
         if ($result[$keys[4]] instanceof \DateTime) {
             // When changing timezone we don't want to change existing instances
             $dateTime = clone $result[$keys[4]];
             $result[$keys[4]] = $dateTime->setTimezone($utc)->format('Y-m-d\TH:i:s\Z');
-        }
-        
-        if ($result[$keys[5]] instanceof \DateTime) {
-            // When changing timezone we don't want to change existing instances
-            $dateTime = clone $result[$keys[5]];
-            $result[$keys[5]] = $dateTime->setTimezone($utc)->format('Y-m-d\TH:i:s\Z');
         }
         
         $virtualColumns = $this->virtualColumns;
@@ -1310,21 +1117,6 @@ abstract class RatingHeader implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->aGame->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->aUser) {
-                
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'user';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'user';
-                        break;
-                    default:
-                        $key = 'User';
-                }
-        
-                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aPlatform) {
                 
@@ -1397,27 +1189,18 @@ abstract class RatingHeader implements ActiveRecordInterface
                 $this->setGameId($value);
                 break;
             case 2:
-                $this->setUserId($value);
-                break;
-            case 3:
                 $this->setPlatformId($value);
                 break;
-            case 4:
+            case 3:
                 $this->setCreated($value);
                 break;
-            case 5:
+            case 4:
                 $this->setUpdated($value);
                 break;
-            case 6:
-                $this->setUpvotes($value);
-                break;
-            case 7:
-                $this->setDownvotes($value);
-                break;
-            case 8:
+            case 5:
                 $this->setComments($value);
                 break;
-            case 9:
+            case 6:
                 $this->setScore($value);
                 break;
         } // switch()
@@ -1453,28 +1236,19 @@ abstract class RatingHeader implements ActiveRecordInterface
             $this->setGameId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setUserId($arr[$keys[2]]);
+            $this->setPlatformId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setPlatformId($arr[$keys[3]]);
+            $this->setCreated($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setCreated($arr[$keys[4]]);
+            $this->setUpdated($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setUpdated($arr[$keys[5]]);
+            $this->setComments($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setUpvotes($arr[$keys[6]]);
-        }
-        if (array_key_exists($keys[7], $arr)) {
-            $this->setDownvotes($arr[$keys[7]]);
-        }
-        if (array_key_exists($keys[8], $arr)) {
-            $this->setComments($arr[$keys[8]]);
-        }
-        if (array_key_exists($keys[9], $arr)) {
-            $this->setScore($arr[$keys[9]]);
+            $this->setScore($arr[$keys[6]]);
         }
     }
 
@@ -1523,9 +1297,6 @@ abstract class RatingHeader implements ActiveRecordInterface
         if ($this->isColumnModified(RatingHeaderTableMap::COL_GAME_ID)) {
             $criteria->add(RatingHeaderTableMap::COL_GAME_ID, $this->game_id);
         }
-        if ($this->isColumnModified(RatingHeaderTableMap::COL_USER_ID)) {
-            $criteria->add(RatingHeaderTableMap::COL_USER_ID, $this->user_id);
-        }
         if ($this->isColumnModified(RatingHeaderTableMap::COL_PLATFORM_ID)) {
             $criteria->add(RatingHeaderTableMap::COL_PLATFORM_ID, $this->platform_id);
         }
@@ -1534,12 +1305,6 @@ abstract class RatingHeader implements ActiveRecordInterface
         }
         if ($this->isColumnModified(RatingHeaderTableMap::COL_UPDATED)) {
             $criteria->add(RatingHeaderTableMap::COL_UPDATED, $this->updated);
-        }
-        if ($this->isColumnModified(RatingHeaderTableMap::COL_UPVOTES)) {
-            $criteria->add(RatingHeaderTableMap::COL_UPVOTES, $this->upvotes);
-        }
-        if ($this->isColumnModified(RatingHeaderTableMap::COL_DOWNVOTES)) {
-            $criteria->add(RatingHeaderTableMap::COL_DOWNVOTES, $this->downvotes);
         }
         if ($this->isColumnModified(RatingHeaderTableMap::COL_COMMENTS)) {
             $criteria->add(RatingHeaderTableMap::COL_COMMENTS, $this->comments);
@@ -1634,12 +1399,9 @@ abstract class RatingHeader implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setGameId($this->getGameId());
-        $copyObj->setUserId($this->getUserId());
         $copyObj->setPlatformId($this->getPlatformId());
         $copyObj->setCreated($this->getCreated());
         $copyObj->setUpdated($this->getUpdated());
-        $copyObj->setUpvotes($this->getUpvotes());
-        $copyObj->setDownvotes($this->getDownvotes());
         $copyObj->setComments($this->getComments());
         $copyObj->setScore($this->getScore());
 
@@ -1733,57 +1495,6 @@ abstract class RatingHeader implements ActiveRecordInterface
         }
 
         return $this->aGame;
-    }
-
-    /**
-     * Declares an association between this object and a ChildUser object.
-     *
-     * @param  ChildUser $v
-     * @return $this|\RatingHeader The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setUser(ChildUser $v = null)
-    {
-        if ($v === null) {
-            $this->setUserId(NULL);
-        } else {
-            $this->setUserId($v->getId());
-        }
-
-        $this->aUser = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildUser object, it will not be re-added.
-        if ($v !== null) {
-            $v->addRatingHeader($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildUser object
-     *
-     * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildUser The associated ChildUser object.
-     * @throws PropelException
-     */
-    public function getUser(ConnectionInterface $con = null)
-    {
-        if ($this->aUser === null && (($this->user_id !== "" && $this->user_id !== null))) {
-            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aUser->addRatingHeaders($this);
-             */
-        }
-
-        return $this->aUser;
     }
 
     /**
@@ -1970,7 +1681,10 @@ abstract class RatingHeader implements ActiveRecordInterface
         $ratingValuesToDelete = $this->getRatingValues(new Criteria(), $con)->diff($ratingValues);
 
         
-        $this->ratingValuesScheduledForDeletion = $ratingValuesToDelete;
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->ratingValuesScheduledForDeletion = clone $ratingValuesToDelete;
 
         foreach ($ratingValuesToDelete as $ratingValueRemoved) {
             $ratingValueRemoved->setRatingHeader(null);
@@ -2096,31 +1810,6 @@ abstract class RatingHeader implements ActiveRecordInterface
         return $this->getRatingValues($query, $con);
     }
 
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this RatingHeader is new, it will return
-     * an empty collection; or if this RatingHeader has previously
-     * been saved, it will retrieve related RatingValues from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in RatingHeader.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildRatingValue[] List of ChildRatingValue objects
-     */
-    public function getRatingValuesJoinCategory(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildRatingValueQuery::create(null, $criteria);
-        $query->joinWith('Category', $joinBehavior);
-
-        return $this->getRatingValues($query, $con);
-    }
-
     /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
@@ -2131,25 +1820,18 @@ abstract class RatingHeader implements ActiveRecordInterface
         if (null !== $this->aGame) {
             $this->aGame->removeRatingHeader($this);
         }
-        if (null !== $this->aUser) {
-            $this->aUser->removeRatingHeader($this);
-        }
         if (null !== $this->aPlatform) {
             $this->aPlatform->removeRatingHeader($this);
         }
         $this->id = null;
         $this->game_id = null;
-        $this->user_id = null;
         $this->platform_id = null;
         $this->created = null;
         $this->updated = null;
-        $this->upvotes = null;
-        $this->downvotes = null;
         $this->comments = null;
         $this->score = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
-        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
@@ -2175,7 +1857,6 @@ abstract class RatingHeader implements ActiveRecordInterface
 
         $this->collRatingValues = null;
         $this->aGame = null;
-        $this->aUser = null;
         $this->aPlatform = null;
     }
 
