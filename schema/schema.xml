@@ -197,28 +197,19 @@
   <table name="rating_header" idMethod="native" phpName="RatingHeader">
     <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="game_id" phpName="GameId" type="BIGINT" required="true"/>
-    <column name="user_id" phpName="UserId" type="BIGINT" required="true"/>
     <column name="platform_id" phpName="PlatformId" type="BIGINT" required="true"/>
     <column name="created" phpName="Created" type="TIMESTAMP" required="true"/>
     <column name="updated" phpName="Updated" type="TIMESTAMP" required="true"/>
-    <column name="upvotes" phpName="Upvotes" type="BIGINT" required="true" defaultValue="0"/>
-    <column name="downvotes" phpName="Downvotes" type="BIGINT" required="true" defaultValue="0"/>
     <column name="comments" phpName="Comments" type="CLOB" required="true"/>
     <column name="score" phpName="Score" type="INTEGER"/>
     <foreign-key foreignTable="game" name="rating_header_ibfk_1">
       <reference local="game_id" foreign="id"/>
-    </foreign-key>
-    <foreign-key foreignTable="user" name="rating_header_ibfk_2">
-      <reference local="user_id" foreign="id"/>
     </foreign-key>
     <foreign-key foreignTable="platform" name="rating_header_ibfk_3">
       <reference local="platform_id" foreign="id"/>
     </foreign-key>
     <index name="game_id">
       <index-column name="game_id"/>
-    </index>
-    <index name="user_id">
-      <index-column name="user_id"/>
     </index>
     <index name="platform_id">
       <index-column name="platform_id"/>
@@ -232,30 +223,20 @@
     </vendor>
   </table>
   <table name="rating_value" idMethod="native" phpName="RatingValue">
-    <column name="id" phpName="Id" type="BIGINT" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="rating_header_id" phpName="RatingHeaderId" type="BIGINT" required="true"/>
-    <column name="category_id" phpName="CategoryId" type="BIGINT" required="true"/>
-    <column name="category_option_id" phpName="CategoryOptionId" type="BIGINT" required="true"/>
+    <column name="rating_header_id" phpName="RatingHeaderId" type="BIGINT" primaryKey="true" required="true"/>
+    <column name="category_option_id" phpName="CategoryOptionId" type="BIGINT" primaryKey="true" required="true"/>
     <column name="original_value" phpName="OriginalValue" type="INTEGER" required="true"/>
+    <column name="do_not_score" phpName="DoNotScore" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="comments" phpName="Comments" type="LONGVARCHAR" required="true"/>
-    <foreign-key foreignTable="category_option" name="rating_value_ibfk_3">
-      <reference local="category_option_id" foreign="category_id"/>
-    </foreign-key>
     <foreign-key foreignTable="rating_header" name="rating_value_ibfk_1" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="rating_header_id" foreign="id"/>
     </foreign-key>
-    <foreign-key foreignTable="category" name="rating_value_ibfk_2">
-      <reference local="category_id" foreign="ID"/>
+    <foreign-key foreignTable="category_option" name="rating_value_ibfk_3">
+      <reference local="category_option_id" foreign="category_id"/>
     </foreign-key>
-    <index name="category_id">
-      <index-column name="category_id"/>
-    </index>
     <index name="category_option_id">
       <index-column name="category_option_id"/>
     </index>
-    <unique name="rating_header_id_2">
-      <unique-column name="rating_header_id"/>
-    </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
