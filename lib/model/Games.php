@@ -133,7 +133,24 @@ class Games extends BaseGames
         return Ratings::getRatingForScore($result->getScore());
     }
 
+    public function removePlatform($platform)
+    {
+        $gamePlatform = GamePlatformsQuery::create()
+            ->filterByGames($this)
+            ->filterByPlatforms($platform)
+            ->findOne();
 
+        if ($gamePlatform != null)
+            $this->removeGamePlatforms($gamePlatform);
+    }
+
+    public function addPlatform($platform)
+    {
+        $gamesPlatform = new GamePlatforms();
+        $gamesPlatform->setGames($this);
+        $gamesPlatform->setPlatforms($platform);
+        $gamesPlatform->save();
+    }
 
 
 
