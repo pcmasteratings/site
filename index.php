@@ -60,9 +60,9 @@ require("res/include.php");
         <?php foreach($newses as $news): ?>
         <li class="media">
             <div class="media-body">
-                <div class="media-heading">
+                <h4 class="media-heading">
                     <?= $news->getTitle() ?>
-                </div>
+                </h4>
                 <p>
                     <?= $news->getContent()?>
                 </p>
