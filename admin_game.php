@@ -62,10 +62,10 @@ if (array_key_exists("rating_submit", $_POST)) {
                 }
 
 
-                if(array_key_exists('comments_'.$option->getId(),$_POST)) {
-                    $value->setComments($_POST['comments_'.$option->getId()]);
+                if(array_key_exists('comment_'.$option->getId(),$_POST)) {
+                    $value->setComments($_POST['comment_'.$option->getId()]);
                 } else {
-                    $value->setComments("none");
+                    $value->setComments("");
                 }
                 $value->save($con);
 
@@ -83,8 +83,9 @@ if (array_key_exists("rating_submit", $_POST)) {
                     $sub_value->save($con);
                     $score += ($sub_option->getValue());
                 }
-
-                $score += ($option->getValue());
+                if(!$value->getDoNotScore()) {
+                    $score += ($option->getValue());
+                }
             }
         }
         $header->setUpdated(new DateTime());
@@ -209,11 +210,7 @@ if ($header != null) {
                             <?php endif; ?>
                             </td>
                             <td>
-                                <textarea name="comment_<?= $option->getId() ?>">
-                                    <?php if($current_value!=null): ?>
-                                        <?= $current_value->getComments() ?>
-                                    <?php endif; ?>
-                                </textarea>
+                                <textarea name="comment_<?= $option->getId() ?>"><?php if($current_value!=null): ?><?= $current_value->getComments() ?><?php endif; ?></textarea>
                             </td>
                             </tr>
                             <tr>

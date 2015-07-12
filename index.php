@@ -52,7 +52,18 @@ require("res/include.php");
         <?php endforeach; ?>
     </div>
     <div class="col-md-4">
-        <h1>Other stuff</h1>
+        <h1>Anouncements</h1>
+        <?php
+            $newses = NewsQuery::create()->orderByDatetime("DESC")->limit(4)->find();
+        ?>
+        <?php foreach($newses as $news): ?>
+        <div class="row">
+            <?= $news->getTitle() ?>
+            <?= $news->getContent()?>
+            <?= $news->getUser()->getUsername() ?>
+            <?= $news->getDatetime()->format('Y-m-d H:i:s') ?>
+        </div>
+        <?php endforeach ?>
     </div>
 
 </div>
