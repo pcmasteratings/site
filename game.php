@@ -64,13 +64,13 @@ if (Auth::checkIfAuthenticated() && array_key_exists("submit_game_review", $_POS
     <div class="col-md-4">
         <table class="table">
             <tr>
-                <td colspan="3" style="text-align:center; border-top: none;">
+                <td colspan="2" style="text-align:center; border-top: none;">
                     <img src="images/ratings/<?= $rating->getInitial(); ?>.jpg" height="150"
                          alt="<?= $rating->getTitle(); ?>"/>
                 </td>
             </tr>
             <tr>
-                <td colspan="3">
+                <td colspan="2">
                     <table style="width:100%" ;>
                         <tr>
                             <?php
@@ -94,9 +94,15 @@ if (Auth::checkIfAuthenticated() && array_key_exists("submit_game_review", $_POS
                 </td>
             </tr>
 
+            <?php if ($header != null && Auth::checkIfModerator()): ?>
+                <tr>
+                    <th>Score</th>
+                    <td colspan="1"><?= $header->getScore() ?></td>
+                </tr>
+            <?php endif; ?>
             <?php if ($header == null): ?>
                 <tr>
-                    <td colspan="3" style="font-weight: bold;">Pending official rating</td>
+                    <td colspan="2" style="font-weight: bold;">Pending official rating</td>
                 </tr>
             <?php else: ?>
                 <?php
@@ -104,7 +110,7 @@ if (Auth::checkIfAuthenticated() && array_key_exists("submit_game_review", $_POS
                 $values = $header->getRatingValuesJoinCategoryOption();
                 ?>
                 <th>Category</th>
-                <th colspan="2">Marks</th>
+                <th colspan="1">Marks</th>
                 <?php foreach ($categories as $category): ?>
                     <?php
                     $first = true;
@@ -119,20 +125,23 @@ if (Auth::checkIfAuthenticated() && array_key_exists("submit_game_review", $_POS
                                 <?php endif; ?>
                                 <?php $first = false; ?>
                                 <td>
-                                    <div
-                                        style="white-space: nowrap;"><?= $value->getCategoryOption()->getDescription() ?>
+                                    <?php if ($value->getComments() != ""): ?>
+                                    <a href="#" data-toggle="popover" title="Comments"
+                                       data-content="<?= $value->getComments() ?>" data-trigger="hover"
+                                       data-placement="bottom" style="text-decoration: none;">
+                                        <?php endif; ?>
+
+
+                                        <?= $value->getCategoryOption()->getDescription() ?>
                                         <?php foreach ($values as $sub_value): ?>
                                             <?php if ($sub_value->getCategoryOption()->getParentId() == $value->getCategoryOption()->getId()): ?>
-                                                - <?= $sub_value->getCategoryOption()->getDescription() ?>
+                                                <br/><?= $sub_value->getCategoryOption()->getDescription() ?>
                                             <?php endif; ?>
                                         <?php endforeach; ?>
-                                    </div>
-                                </td>
-                                <td>
 
-                                    <?php if ($value->getComments() != ""): ?>
-                                        <a href="#" data-toggle="popover" title="Comments" data-content="<?= $value->getComments() ?>" data-trigger="hover"  data-placement="bottom"><img src="info.png" /></a>
-                                    <?php endif; ?>
+                                        <?php if ($value->getComments() != ""): ?>
+                                    </a>
+                                <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endif; ?>
@@ -143,17 +152,22 @@ if (Auth::checkIfAuthenticated() && array_key_exists("submit_game_review", $_POS
 
             <tr>
                 <td colspan="3">
-                    <?php if (Auth::checkIfAdmin()): ?>
-                        <a href="admin_game.php?game=<?= $game->getName() ?>&platform=<?= $platform->getName() ?>">Edit Ratings...</a>
+                    <?php if (Auth::checkIfModerator()): ?>
+                        <a href="admin_game.php?game=<?= $game->getName() ?>&platform=<?= $platform->getName() ?>">Edit
+                            Ratings...</a>
                     <?php endif; ?>
                 </td>
             </tr>
         </table>
     </div>
     <div class="col-md-8">
-        <?php echo '<img src="' . $game->getGbImage() . '" style="height:200px;" />'; ?>
-        <p><?php echo $game->getDescription(); ?></p>
-        <br/>
+        <table class="table">
+            <tr>
+                <td><img src="<?= $game->getGbImage()?>" style="height:150px;" /></td>
+                <td><?= $game->getDescription(); ?></td>
+            </tr>
+        </table>
+
         <table class="table">
             <th style="width: 25px">*</th>
             <th style="width:100%;">User reviews</th>

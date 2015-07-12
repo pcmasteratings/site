@@ -190,8 +190,16 @@ if ($header != null) {
                                     <?php else: ?>
                                         <option value="na">N/A</option>
                                     <?php endif; ?>
-                                    <option value="a">Applicable</option>
-                                    <option value="adns">Applicable (DNS)</option>
+                                    <?php if ($current_value != null&& !$current_value->getDoNotScore()): ?>
+                                        <option value="a" selected="selected">Applicable</option>
+                                    <?php else: ?>
+                                        <option value="a">Applicable</option>
+                                    <?php endif; ?>
+                                    <?php if ($current_value != null&& $current_value->getDoNotScore()): ?>
+                                        <option value="adns" selected="selected">Applicable (DNS)</option>
+                                    <?php else: ?>
+                                        <option value="adns">Applicable (DNS)</option>
+                                    <?php endif; ?>
                                 </select>
                             </td>
                             <td>
@@ -202,7 +210,11 @@ if ($header != null) {
                                 <select name="sub_option_<?= $option->getId() ?>">
                                     <?php $first_sub_option = false; ?>
                                     <?php endif; ?>
-                                    <option value="<?= $sub_option->getId() ?>"><?= $sub_option->getDescription() ?></option>
+                                    <option value="<?= $sub_option->getId() ?>"
+                                        <?php if(array_key_exists($sub_option->getId(),$current_option_array)): ?>
+                                            selected="selected"
+                                        <?php endif; ?>
+                                    ><?= $sub_option->getDescription() ?></option>
                                     <?php endif; ?>
                                     <?php endforeach; ?>
                                     <?php if (!$first_sub_option): ?>

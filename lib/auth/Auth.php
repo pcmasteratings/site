@@ -44,5 +44,11 @@ class Auth {
         return self::getCurrentUser()->getAdmin();
     }
 
+    public static function checkIfModerator() {
+        if(!self::checkIfAuthenticated()) {
+            return false;
+        }
+        return self::getCurrentUser()->getAdmin() || self::getCurrentUser()->getModerator();
+    }
 
 }

@@ -26,7 +26,7 @@
           if(Auth::checkIfAuthenticated()) {
               $user = Auth::getCurrentUser();
               if($user->getAdmin()) {
-                  echo '<li><a href="admin.php"><b>Admin</b></a></li>';
+//                  echo '<li><a href="admin.php"><b>Admin</b></a></li>';
               }
               ?>
               <li class="dropdown">
