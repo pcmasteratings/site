@@ -53,17 +53,27 @@ require("res/include.php");
     </div>
     <div class="col-md-4">
         <h1>Anouncements</h1>
+        <ul class="media-lists">
         <?php
             $newses = NewsQuery::create()->orderByDatetime("DESC")->limit(4)->find();
         ?>
         <?php foreach($newses as $news): ?>
-        <div class="row">
-            <?= $news->getTitle() ?>
-            <?= $news->getContent()?>
-            <?= $news->getUser()->getUsername() ?>
-            <?= $news->getDatetime()->format('Y-m-d H:i:s') ?>
-        </div>
+        <li class="media">
+            <div class="media-body">
+                <div class="media-heading">
+                    <?= $news->getTitle() ?>
+                </div>
+                <p>
+                    <?= $news->getContent()?>
+                </p>
+                <footer>
+                    <?= $news->getUser()->getUsername() ?>
+                    <?= $news->getDatetime()->format('Y-m-d H:i:s') ?>
+                </footer>
+            </div>
+        </li>
         <?php endforeach ?>
+        </ul>
     </div>
 
 </div>
