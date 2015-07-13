@@ -236,7 +236,5 @@ if (Auth::checkIfAuthenticated() && array_key_exists("submit_game_review", $_POS
     </div>
 </div>
 <?php include("res/footer.php"); ?>
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="/js/bootstrap.js"></script>
 </body>
 </html>
