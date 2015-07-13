@@ -54,6 +54,7 @@ if (Auth::checkIfAuthenticated() && array_key_exists("submit_game_review", $_POS
     <?php include("res/head.php"); ?>
     <link href="/css/bootstrap.min.css" rel="stylesheet"/>
     <meta charset="UTF-8"/>
+    <title>PC Master Ratings - <?= $game->getTitle() ?></title>
 </head>
 <body>
 <?php include("res/nav.php"); ?>
@@ -65,7 +66,7 @@ if (Auth::checkIfAuthenticated() && array_key_exists("submit_game_review", $_POS
         <table class="table">
             <tr>
                 <td colspan="2" style="text-align:center; border-top: none;">
-                    <img src="images/ratings/<?= $rating->getInitial(); ?>.jpg" height="150"
+                    <img src="img/ratings/<?= $rating->getInitial(); ?>.jpg" height="150"
                          alt="<?= $rating->getTitle(); ?>"/>
                 </td>
             </tr>
@@ -187,7 +188,7 @@ if (Auth::checkIfAuthenticated() && array_key_exists("submit_game_review", $_POS
                 $review_user = $review->getUser();
                 echo '<tr><td>';
                 echo '<img src="img/badges/' . $rating->getInitial() . '_tiny.jpg" alt="' . $rating->getTitle() . '" height="20"></td>';
-                echo '<td >' . $review->getReview() . '</td>';
+                echo '<td >' . htmlspecialchars ($review->getReview()) . '</td>';
                 echo '<td><a href="https://www.reddit.com/user/' . $review_user->getUsername() . '/">/u/' . $review_user->getUsername() . '</a></td></tr>';
             }
             ?>
@@ -218,14 +219,14 @@ if (Auth::checkIfAuthenticated() && array_key_exists("submit_game_review", $_POS
                 </div>
                 <div class="form-group">
                     <textarea class="form-control" name="submit_game_review"><?php if ($review != null) {
-                            echo $review->getReview();
+                            echo htmlspecialchars($review->getReview());
                         } ?></textarea>
                 </div>
                 <input type="submit" class="btn btn-primary"/>
             </form>
             <form action="" method="POST">
                 <div class="form-group">
-                    Contest rating
+                    Contest/Propose rating
                 </div>
                 <div class="form-group">
                     <textarea class="form-control" name="submit_game_review"></textarea>

@@ -9,6 +9,7 @@ class RedditAuth extends AAuth
     private static $clientId;
     private static $clientSecret;
     private static $redirectUrl;
+    private static $exception_list = [""];
 
     public static function setClientId($id)
     {
@@ -62,6 +63,10 @@ class RedditAuth extends AAuth
                     $this->client->setAccessTokenType(OAuth2\Client::ACCESS_TOKEN_BEARER);
 
                     $response = $this->client->fetch("https://oauth.reddit.com/api/v1/me.json");
+
+                    if(intval($response['result']['comment_karma'])<100) {
+                        throw new Exception("Insufficient karma to login");
+                    }
 
                     $username = $response['result']['name'];
                     $reddit_id = $response['result']['id'];
