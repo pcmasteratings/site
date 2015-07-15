@@ -66,7 +66,7 @@ if (Auth::checkIfAuthenticated() && array_key_exists("submit_game_review", $_POS
         <table class="table">
             <tr>
                 <td colspan="2" style="text-align:center; border-top: none;">
-                    <img src="img/ratings/<?= $rating->getInitial(); ?>.jpg" height="150"
+                    <img src="img/badges/<?= $rating->getInitial(); ?>.jpg" height="150"
                          alt="<?= $rating->getTitle(); ?>"/>
                 </td>
             </tr>

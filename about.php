@@ -39,7 +39,7 @@ require("res/include.php");
             </tr>
             <?php foreach ($ratings as $rating): ?>
                 <tr>
-                    <td><img src="img/ratings/<?= $rating->getInitial() ?>.jpg" style="height: 50px;"/></td>
+                    <td><img src="img/badges/<?= $rating->getInitial() ?>.jpg" style="height: 50px;"/></td>
                     <td><?= $rating->getTitle() ?></td>
                     <?php if ($rating->getInitial() == "rp"): ?>
                         <td style="text-align: right;">N/A</td>
@@ -64,7 +64,7 @@ require("res/include.php");
             is in this categorized by the inherently subjective phrases "Major", or "Moderate". Where we can we will be adding
             exact, objective options to be used as alternatives to these, but there will always be fringe issues that defy classification.
             As such, these options are available but are intended to be used sparingly and with definitive proof. We encourage users
-            to contest and propose more specific options whenever they end up being used. Our current plan is to err on the side of caution and prefer to not contestable options, we’d rather not jump the gun and add negative marks hastily when they’re not deserved.</p>
+            to contest and propose more specific options whenever they end up being used. Our current plan is to err on the side of caution and prefer to not contestable options, we'd rather not jump the gun and add negative marks hastily when they're not deserved.</p>
         <p>Justifications for options will be provided when available, and can be read by hovering the mouse over the option on a game's page.</p>
         <table border="1">
             <tr>

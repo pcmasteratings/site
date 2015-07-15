@@ -39,7 +39,7 @@ require("res/include.php");
                         <img src="<?= $game->getGbThumb(); ?>" alt='thumbnail'>
                         <img class='rating-badge'
                              src="/img/badges/<?= $rating->getInitial() ?>_tiny.jpg"
-                             alt="<?= strtoupper($rating->getTitle()) ?>">
+                             alt="<?= strtoupper($rating->getTitle()) ?>" style="height:20px;">
 
                         <div class='caption'><h3><?= $game->getTitle() ?></h3></div>
                     </a>
