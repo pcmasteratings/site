@@ -38,12 +38,12 @@ if (array_key_exists("rating_submit", $_POST)) {
             $header->setCreated(new DateTime());
             $header->save($con);
         } else {
-            RatingValueQuery::create()->filterByRatingHeader($header)->deleteAll($con);
+            RatingValueQuery::create()->filterByRatingHeader($header)->delete($con);
         }
 
         $score = 0;
 
-        RatingValueQuery::create()->filterByRatingHeader($header)->deleteAll($con);
+        RatingValueQuery::create()->filterByRatingHeader($header)->delete($con);
 
         foreach ($options as $option) {
             if(array_key_exists('option_'.$option->getId(), $_POST)) {

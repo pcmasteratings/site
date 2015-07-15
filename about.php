@@ -8,7 +8,7 @@ require("res/include.php");
 <head>
     <link rel="stylesheet" href="/css/index.css">
     <?php include("res/head.php"); ?>
-    <title>PC Masterratings</title>
+    <title>PC Master Ratings - About</title>
 
 </head>
 <body>
@@ -39,10 +39,12 @@ require("res/include.php");
             </tr>
             <?php foreach ($ratings as $rating): ?>
                 <tr>
-                    <td><img src="images/ratings/<?= $rating->getInitial() ?>.jpg" style="height: 50px;"/></td>
+                    <td><img src="img/badges/<?= $rating->getInitial() ?>.jpg" style="height: 50px;"/></td>
                     <td><?= $rating->getTitle() ?></td>
                     <?php if ($rating->getInitial() == "rp"): ?>
                         <td style="text-align: right;">N/A</td>
+                    <?php elseif ($rating->getInitial() == "p"): ?>
+                        <td style="text-align: right;">< -50</td>
                     <?php else: ?>
                         <td style="text-align: right;"><?= $rating->getThreshold() ?></td>
                     <?php endif; ?>
@@ -58,7 +60,13 @@ require("res/include.php");
             specific options for the ratings. The letter rating of a game may fluctuate based on the overall attitude of
             the community toward specific options, but the chosen options themselves should continue to provide
             objective information about the game.</p>
-        <table>
+        <p>Unfortunately even within this, some options are prone to subjectivity. The "stability" of a game, or its servers,
+            is in this categorized by the inherently subjective phrases "Major", or "Moderate". Where we can we will be adding
+            exact, objective options to be used as alternatives to these, but there will always be fringe issues that defy classification.
+            As such, these options are available but are intended to be used sparingly and with definitive proof. We encourage users
+            to contest and propose more specific options whenever they end up being used. Our current plan is to err on the side of caution and prefer to not contestable options, we'd rather not jump the gun and add negative marks hastily when they're not deserved.</p>
+        <p>Justifications for options will be provided when available, and can be read by hovering the mouse over the option on a game's page.</p>
+        <table border="1">
             <tr>
                 <th>Category</th>
                 <th>Option</th>
@@ -71,31 +79,44 @@ require("res/include.php");
             <?php
             $categories = CategoryQuery::create()->orderBySequence()->find();
             $options = CategoryOptionQuery::create()->orderBySequence()->find();
+
             ?>
             <tr>
                 <th>
                     <?php foreach ($categories as $category): ?>
                     <?= $category->getTitle() ?>
                     <?php foreach ($options as $option): ?>
-                    <?php $sub_option_present = false; ?>
+                    <?php $sub_option_count = 0; ?>
                     <?php if ($category->getId() == $option->getCategoryId() && $option->getParentId() == null): ?>
                 </th>
 
                 <td><?= $option->getDescription() ?></td>
+                <?php
+                foreach ($options as $sub_option) {
+                    if ($sub_option->getParentId() == $option->getId()) {
+                        $sub_option_count++;
+                    }
+                }
+                $first_sub_option = true;
+                ?>
                 <?php foreach ($options as $sub_option): ?>
                 <?php if ($sub_option->getParentId() == $option->getId()): ?>
-                <?php $sub_option_present = true; ?>
                 <td><?= $sub_option->getDescription() ?></td>
                 <td style="text-align: right;"><?= $sub_option->getValue() ?></td>
+                <?php if($first_sub_option): ?>
+                <td rowspan="<?= $sub_option_count ?>"><?= $option->getComment() ?></td>
+                <?php $first_sub_option =false; ?>
+                <?php endif; ?>
             </tr>
             <tr>
                 <td></td>
                 <td></td>
                 <?php endif; ?>
                 <?php endforeach; ?>
-                <?php if (!$sub_option_present): ?>
+                <?php if ($sub_option_count==0): ?>
                     <td></td>
                     <td style="text-align: right;"><?= $option->getValue() ?></td>
+                    <td><?= $option->getComment() ?></td>
                 <?php endif; ?>
             </tr>
             <tr>
@@ -119,8 +140,10 @@ require("res/include.php");
             moderator (with public feedback) to determine if a game deserves the negative marks. The game page will
             clearly indicate when a negative does not contribute to the score</p>
 
-        <h2>Re-evaluating games</h2>
-        <p>Each game has a form for submitting information to contest the game's current rating.</p>
+        <h2>Proposing/Contesting game ratings</h2>
+
+        <p>Each game has a form for submitting information to create or contest the game's current rating. If a game
+            isn't rated yet, just search for it and fill out the form on its page.</p>
     </div>
     <div class="col-md-4">
         <h1>Contributors</h1>
