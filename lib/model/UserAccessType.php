@@ -14,5 +14,7 @@ use Base\UserAccessType as BaseUserAccessType;
  */
 class UserAccessType extends BaseUserAccessType
 {
-
+    const login = 'login';
+    const addreview = 'addreview';
+    const editreview = 'editreview';
 }
