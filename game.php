@@ -41,6 +41,12 @@ if (Auth::checkIfAuthenticated() && array_key_exists("submit_game_review", $_POS
         $review->setGame($game);
         $review->setPlatform($platform);
         $review->setUser($user);
+        UserAccess::addUserEvent($user, $_SERVER['REMOTE_ADDR'], UserAccessType::addreview);
+    }
+    else
+    {
+        //we're editing an old review
+        UserAccess::addUserEvent($user, $_SERVER['REMOTE_ADDR'], UserAccessType::editreview);
     }
     $review->setRatingId($new_rating);
     $review->setReview(strip_tags($new_review, '<br><br/>'));

@@ -60,6 +60,8 @@ abstract class AAuth {
             return null;
         } else {
             $_SESSION[Auth::$SESSION_USER_ID] = $user->getId();
+            //Record login
+            UserAccess::addUserEvent($user, $_SERVER['REMOTE_ADDR'], UserAccessType::login);
             return $user;
         }
 

@@ -14,5 +14,30 @@ use Base\UserAccess as BaseUserAccess;
  */
 class UserAccess extends BaseUserAccess
 {
+    public static function addUserEvent(User $user, $ip, $eventType)
+    {
+        switch($eventType)
+        {
+            case UserAccessType::login:
+            case UserAccessType::addreview:
+            case UserAccessType::editreview:
+                break;
+            default:
+                throw new Exception('invalid event type.');
+        }
 
+
+        $event = new UserAccess();
+
+        $event->setUser($user);
+        $event->setIpv4Address($ip);
+        $event->setUserAccessType(
+            UserAccessTypeQuery::create()->findOneByType($eventType)
+        );
+        $datetime = new DateTime();
+        $datetime->getTimestamp();
+        $event->setAccess($datetime);
+        $event->save();
+
+    }
 }
