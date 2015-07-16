@@ -90,6 +90,12 @@ abstract class CategoryOption implements ActiveRecordInterface
     protected $comment;
 
     /**
+     * The value for the mod_comment field.
+     * @var        string
+     */
+    protected $mod_comment;
+
+    /**
      * The value for the value field.
      * @var        int
      */
@@ -108,14 +114,14 @@ abstract class CategoryOption implements ActiveRecordInterface
     protected $parent_id;
 
     /**
-     * @var        ChildCategoryOption
-     */
-    protected $aCategoryOptionRelatedByParentId;
-
-    /**
      * @var        ChildCategory
      */
     protected $aCategory;
+
+    /**
+     * @var        ChildCategoryOption
+     */
+    protected $aCategoryOptionRelatedByParentId;
 
     /**
      * @var        ObjectCollection|ChildCategoryOption[] Collection to store aggregation of ChildCategoryOption objects.
@@ -407,6 +413,16 @@ abstract class CategoryOption implements ActiveRecordInterface
     }
 
     /**
+     * Get the [mod_comment] column value.
+     * 
+     * @return string
+     */
+    public function getModComment()
+    {
+        return $this->mod_comment;
+    }
+
+    /**
      * Get the [value] column value.
      * 
      * @return int
@@ -521,6 +537,26 @@ abstract class CategoryOption implements ActiveRecordInterface
     } // setComment()
 
     /**
+     * Set the value of [mod_comment] column.
+     * 
+     * @param string $v new value
+     * @return $this|\CategoryOption The current object (for fluent API support)
+     */
+    public function setModComment($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->mod_comment !== $v) {
+            $this->mod_comment = $v;
+            $this->modifiedColumns[CategoryOptionTableMap::COL_MOD_COMMENT] = true;
+        }
+
+        return $this;
+    } // setModComment()
+
+    /**
      * Set the value of [value] column.
      * 
      * @param int $v new value
@@ -632,13 +668,16 @@ abstract class CategoryOption implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : CategoryOptionTableMap::translateFieldName('Comment', TableMap::TYPE_PHPNAME, $indexType)];
             $this->comment = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : CategoryOptionTableMap::translateFieldName('Value', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : CategoryOptionTableMap::translateFieldName('ModComment', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->mod_comment = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : CategoryOptionTableMap::translateFieldName('Value', TableMap::TYPE_PHPNAME, $indexType)];
             $this->value = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : CategoryOptionTableMap::translateFieldName('Sequence', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : CategoryOptionTableMap::translateFieldName('Sequence', TableMap::TYPE_PHPNAME, $indexType)];
             $this->sequence = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : CategoryOptionTableMap::translateFieldName('ParentId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : CategoryOptionTableMap::translateFieldName('ParentId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->parent_id = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
@@ -648,7 +687,7 @@ abstract class CategoryOption implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = CategoryOptionTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = CategoryOptionTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\CategoryOption'), 0, $e);
@@ -715,8 +754,8 @@ abstract class CategoryOption implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aCategoryOptionRelatedByParentId = null;
             $this->aCategory = null;
+            $this->aCategoryOptionRelatedByParentId = null;
             $this->collCategoryOptionsRelatedById = null;
 
             $this->collRatingValues = null;
@@ -825,18 +864,18 @@ abstract class CategoryOption implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aCategoryOptionRelatedByParentId !== null) {
-                if ($this->aCategoryOptionRelatedByParentId->isModified() || $this->aCategoryOptionRelatedByParentId->isNew()) {
-                    $affectedRows += $this->aCategoryOptionRelatedByParentId->save($con);
-                }
-                $this->setCategoryOptionRelatedByParentId($this->aCategoryOptionRelatedByParentId);
-            }
-
             if ($this->aCategory !== null) {
                 if ($this->aCategory->isModified() || $this->aCategory->isNew()) {
                     $affectedRows += $this->aCategory->save($con);
                 }
                 $this->setCategory($this->aCategory);
+            }
+
+            if ($this->aCategoryOptionRelatedByParentId !== null) {
+                if ($this->aCategoryOptionRelatedByParentId->isModified() || $this->aCategoryOptionRelatedByParentId->isNew()) {
+                    $affectedRows += $this->aCategoryOptionRelatedByParentId->save($con);
+                }
+                $this->setCategoryOptionRelatedByParentId($this->aCategoryOptionRelatedByParentId);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -922,6 +961,9 @@ abstract class CategoryOption implements ActiveRecordInterface
         if ($this->isColumnModified(CategoryOptionTableMap::COL_COMMENT)) {
             $modifiedColumns[':p' . $index++]  = 'comment';
         }
+        if ($this->isColumnModified(CategoryOptionTableMap::COL_MOD_COMMENT)) {
+            $modifiedColumns[':p' . $index++]  = 'mod_comment';
+        }
         if ($this->isColumnModified(CategoryOptionTableMap::COL_VALUE)) {
             $modifiedColumns[':p' . $index++]  = 'value';
         }
@@ -953,6 +995,9 @@ abstract class CategoryOption implements ActiveRecordInterface
                         break;
                     case 'comment':                        
                         $stmt->bindValue($identifier, $this->comment, PDO::PARAM_STR);
+                        break;
+                    case 'mod_comment':                        
+                        $stmt->bindValue($identifier, $this->mod_comment, PDO::PARAM_STR);
                         break;
                     case 'value':                        
                         $stmt->bindValue($identifier, $this->value, PDO::PARAM_INT);
@@ -1038,12 +1083,15 @@ abstract class CategoryOption implements ActiveRecordInterface
                 return $this->getComment();
                 break;
             case 4:
-                return $this->getValue();
+                return $this->getModComment();
                 break;
             case 5:
-                return $this->getSequence();
+                return $this->getValue();
                 break;
             case 6:
+                return $this->getSequence();
+                break;
+            case 7:
                 return $this->getParentId();
                 break;
             default:
@@ -1080,9 +1128,10 @@ abstract class CategoryOption implements ActiveRecordInterface
             $keys[1] => $this->getCategoryId(),
             $keys[2] => $this->getDescription(),
             $keys[3] => $this->getComment(),
-            $keys[4] => $this->getValue(),
-            $keys[5] => $this->getSequence(),
-            $keys[6] => $this->getParentId(),
+            $keys[4] => $this->getModComment(),
+            $keys[5] => $this->getValue(),
+            $keys[6] => $this->getSequence(),
+            $keys[7] => $this->getParentId(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1090,21 +1139,6 @@ abstract class CategoryOption implements ActiveRecordInterface
         }
         
         if ($includeForeignObjects) {
-            if (null !== $this->aCategoryOptionRelatedByParentId) {
-                
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'categoryOption';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'category_option';
-                        break;
-                    default:
-                        $key = 'CategoryOption';
-                }
-        
-                $result[$key] = $this->aCategoryOptionRelatedByParentId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
             if (null !== $this->aCategory) {
                 
                 switch ($keyType) {
@@ -1119,6 +1153,21 @@ abstract class CategoryOption implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->aCategory->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aCategoryOptionRelatedByParentId) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'categoryOption';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'category_option';
+                        break;
+                    default:
+                        $key = 'CategoryOption';
+                }
+        
+                $result[$key] = $this->aCategoryOptionRelatedByParentId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collCategoryOptionsRelatedById) {
                 
@@ -1197,12 +1246,15 @@ abstract class CategoryOption implements ActiveRecordInterface
                 $this->setComment($value);
                 break;
             case 4:
-                $this->setValue($value);
+                $this->setModComment($value);
                 break;
             case 5:
-                $this->setSequence($value);
+                $this->setValue($value);
                 break;
             case 6:
+                $this->setSequence($value);
+                break;
+            case 7:
                 $this->setParentId($value);
                 break;
         } // switch()
@@ -1244,13 +1296,16 @@ abstract class CategoryOption implements ActiveRecordInterface
             $this->setComment($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setValue($arr[$keys[4]]);
+            $this->setModComment($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setSequence($arr[$keys[5]]);
+            $this->setValue($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setParentId($arr[$keys[6]]);
+            $this->setSequence($arr[$keys[6]]);
+        }
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setParentId($arr[$keys[7]]);
         }
     }
 
@@ -1304,6 +1359,9 @@ abstract class CategoryOption implements ActiveRecordInterface
         }
         if ($this->isColumnModified(CategoryOptionTableMap::COL_COMMENT)) {
             $criteria->add(CategoryOptionTableMap::COL_COMMENT, $this->comment);
+        }
+        if ($this->isColumnModified(CategoryOptionTableMap::COL_MOD_COMMENT)) {
+            $criteria->add(CategoryOptionTableMap::COL_MOD_COMMENT, $this->mod_comment);
         }
         if ($this->isColumnModified(CategoryOptionTableMap::COL_VALUE)) {
             $criteria->add(CategoryOptionTableMap::COL_VALUE, $this->value);
@@ -1403,6 +1461,7 @@ abstract class CategoryOption implements ActiveRecordInterface
         $copyObj->setCategoryId($this->getCategoryId());
         $copyObj->setDescription($this->getDescription());
         $copyObj->setComment($this->getComment());
+        $copyObj->setModComment($this->getModComment());
         $copyObj->setValue($this->getValue());
         $copyObj->setSequence($this->getSequence());
         $copyObj->setParentId($this->getParentId());
@@ -1455,57 +1514,6 @@ abstract class CategoryOption implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildCategoryOption object.
-     *
-     * @param  ChildCategoryOption $v
-     * @return $this|\CategoryOption The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setCategoryOptionRelatedByParentId(ChildCategoryOption $v = null)
-    {
-        if ($v === null) {
-            $this->setParentId(NULL);
-        } else {
-            $this->setParentId($v->getId());
-        }
-
-        $this->aCategoryOptionRelatedByParentId = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildCategoryOption object, it will not be re-added.
-        if ($v !== null) {
-            $v->addCategoryOptionRelatedById($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildCategoryOption object
-     *
-     * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildCategoryOption The associated ChildCategoryOption object.
-     * @throws PropelException
-     */
-    public function getCategoryOptionRelatedByParentId(ConnectionInterface $con = null)
-    {
-        if ($this->aCategoryOptionRelatedByParentId === null && (($this->parent_id !== "" && $this->parent_id !== null))) {
-            $this->aCategoryOptionRelatedByParentId = ChildCategoryOptionQuery::create()->findPk($this->parent_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aCategoryOptionRelatedByParentId->addCategoryOptionsRelatedById($this);
-             */
-        }
-
-        return $this->aCategoryOptionRelatedByParentId;
-    }
-
-    /**
      * Declares an association between this object and a ChildCategory object.
      *
      * @param  ChildCategory $v
@@ -1554,6 +1562,57 @@ abstract class CategoryOption implements ActiveRecordInterface
         }
 
         return $this->aCategory;
+    }
+
+    /**
+     * Declares an association between this object and a ChildCategoryOption object.
+     *
+     * @param  ChildCategoryOption $v
+     * @return $this|\CategoryOption The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setCategoryOptionRelatedByParentId(ChildCategoryOption $v = null)
+    {
+        if ($v === null) {
+            $this->setParentId(NULL);
+        } else {
+            $this->setParentId($v->getId());
+        }
+
+        $this->aCategoryOptionRelatedByParentId = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildCategoryOption object, it will not be re-added.
+        if ($v !== null) {
+            $v->addCategoryOptionRelatedById($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildCategoryOption object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildCategoryOption The associated ChildCategoryOption object.
+     * @throws PropelException
+     */
+    public function getCategoryOptionRelatedByParentId(ConnectionInterface $con = null)
+    {
+        if ($this->aCategoryOptionRelatedByParentId === null && (($this->parent_id !== "" && $this->parent_id !== null))) {
+            $this->aCategoryOptionRelatedByParentId = ChildCategoryOptionQuery::create()->findPk($this->parent_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aCategoryOptionRelatedByParentId->addCategoryOptionsRelatedById($this);
+             */
+        }
+
+        return $this->aCategoryOptionRelatedByParentId;
     }
 
 
@@ -2071,16 +2130,17 @@ abstract class CategoryOption implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aCategoryOptionRelatedByParentId) {
-            $this->aCategoryOptionRelatedByParentId->removeCategoryOptionRelatedById($this);
-        }
         if (null !== $this->aCategory) {
             $this->aCategory->removeCategoryOption($this);
+        }
+        if (null !== $this->aCategoryOptionRelatedByParentId) {
+            $this->aCategoryOptionRelatedByParentId->removeCategoryOptionRelatedById($this);
         }
         $this->id = null;
         $this->category_id = null;
         $this->description = null;
         $this->comment = null;
+        $this->mod_comment = null;
         $this->value = null;
         $this->sequence = null;
         $this->parent_id = null;
@@ -2116,8 +2176,8 @@ abstract class CategoryOption implements ActiveRecordInterface
 
         $this->collCategoryOptionsRelatedById = null;
         $this->collRatingValues = null;
-        $this->aCategoryOptionRelatedByParentId = null;
         $this->aCategory = null;
+        $this->aCategoryOptionRelatedByParentId = null;
     }
 
     /**

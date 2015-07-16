@@ -24,6 +24,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCategoryOptionQuery orderByCategoryId($order = Criteria::ASC) Order by the category_id column
  * @method     ChildCategoryOptionQuery orderByDescription($order = Criteria::ASC) Order by the description column
  * @method     ChildCategoryOptionQuery orderByComment($order = Criteria::ASC) Order by the comment column
+ * @method     ChildCategoryOptionQuery orderByModComment($order = Criteria::ASC) Order by the mod_comment column
  * @method     ChildCategoryOptionQuery orderByValue($order = Criteria::ASC) Order by the value column
  * @method     ChildCategoryOptionQuery orderBySequence($order = Criteria::ASC) Order by the sequence column
  * @method     ChildCategoryOptionQuery orderByParentId($order = Criteria::ASC) Order by the parent_id column
@@ -32,6 +33,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCategoryOptionQuery groupByCategoryId() Group by the category_id column
  * @method     ChildCategoryOptionQuery groupByDescription() Group by the description column
  * @method     ChildCategoryOptionQuery groupByComment() Group by the comment column
+ * @method     ChildCategoryOptionQuery groupByModComment() Group by the mod_comment column
  * @method     ChildCategoryOptionQuery groupByValue() Group by the value column
  * @method     ChildCategoryOptionQuery groupBySequence() Group by the sequence column
  * @method     ChildCategoryOptionQuery groupByParentId() Group by the parent_id column
@@ -40,13 +42,13 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCategoryOptionQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     ChildCategoryOptionQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildCategoryOptionQuery leftJoinCategoryOptionRelatedByParentId($relationAlias = null) Adds a LEFT JOIN clause to the query using the CategoryOptionRelatedByParentId relation
- * @method     ChildCategoryOptionQuery rightJoinCategoryOptionRelatedByParentId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CategoryOptionRelatedByParentId relation
- * @method     ChildCategoryOptionQuery innerJoinCategoryOptionRelatedByParentId($relationAlias = null) Adds a INNER JOIN clause to the query using the CategoryOptionRelatedByParentId relation
- *
  * @method     ChildCategoryOptionQuery leftJoinCategory($relationAlias = null) Adds a LEFT JOIN clause to the query using the Category relation
  * @method     ChildCategoryOptionQuery rightJoinCategory($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Category relation
  * @method     ChildCategoryOptionQuery innerJoinCategory($relationAlias = null) Adds a INNER JOIN clause to the query using the Category relation
+ *
+ * @method     ChildCategoryOptionQuery leftJoinCategoryOptionRelatedByParentId($relationAlias = null) Adds a LEFT JOIN clause to the query using the CategoryOptionRelatedByParentId relation
+ * @method     ChildCategoryOptionQuery rightJoinCategoryOptionRelatedByParentId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CategoryOptionRelatedByParentId relation
+ * @method     ChildCategoryOptionQuery innerJoinCategoryOptionRelatedByParentId($relationAlias = null) Adds a INNER JOIN clause to the query using the CategoryOptionRelatedByParentId relation
  *
  * @method     ChildCategoryOptionQuery leftJoinCategoryOptionRelatedById($relationAlias = null) Adds a LEFT JOIN clause to the query using the CategoryOptionRelatedById relation
  * @method     ChildCategoryOptionQuery rightJoinCategoryOptionRelatedById($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CategoryOptionRelatedById relation
@@ -56,7 +58,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCategoryOptionQuery rightJoinRatingValue($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RatingValue relation
  * @method     ChildCategoryOptionQuery innerJoinRatingValue($relationAlias = null) Adds a INNER JOIN clause to the query using the RatingValue relation
  *
- * @method     \CategoryOptionQuery|\CategoryQuery|\RatingValueQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \CategoryQuery|\CategoryOptionQuery|\RatingValueQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildCategoryOption findOne(ConnectionInterface $con = null) Return the first ChildCategoryOption matching the query
  * @method     ChildCategoryOption findOneOrCreate(ConnectionInterface $con = null) Return the first ChildCategoryOption matching the query, or a new ChildCategoryOption object populated from the query conditions when no match is found
@@ -65,6 +67,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCategoryOption findOneByCategoryId(string $category_id) Return the first ChildCategoryOption filtered by the category_id column
  * @method     ChildCategoryOption findOneByDescription(string $description) Return the first ChildCategoryOption filtered by the description column
  * @method     ChildCategoryOption findOneByComment(string $comment) Return the first ChildCategoryOption filtered by the comment column
+ * @method     ChildCategoryOption findOneByModComment(string $mod_comment) Return the first ChildCategoryOption filtered by the mod_comment column
  * @method     ChildCategoryOption findOneByValue(int $value) Return the first ChildCategoryOption filtered by the value column
  * @method     ChildCategoryOption findOneBySequence(int $sequence) Return the first ChildCategoryOption filtered by the sequence column
  * @method     ChildCategoryOption findOneByParentId(string $parent_id) Return the first ChildCategoryOption filtered by the parent_id column *
@@ -76,6 +79,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCategoryOption requireOneByCategoryId(string $category_id) Return the first ChildCategoryOption filtered by the category_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCategoryOption requireOneByDescription(string $description) Return the first ChildCategoryOption filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCategoryOption requireOneByComment(string $comment) Return the first ChildCategoryOption filtered by the comment column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCategoryOption requireOneByModComment(string $mod_comment) Return the first ChildCategoryOption filtered by the mod_comment column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCategoryOption requireOneByValue(int $value) Return the first ChildCategoryOption filtered by the value column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCategoryOption requireOneBySequence(int $sequence) Return the first ChildCategoryOption filtered by the sequence column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCategoryOption requireOneByParentId(string $parent_id) Return the first ChildCategoryOption filtered by the parent_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -85,6 +89,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCategoryOption[]|ObjectCollection findByCategoryId(string $category_id) Return ChildCategoryOption objects filtered by the category_id column
  * @method     ChildCategoryOption[]|ObjectCollection findByDescription(string $description) Return ChildCategoryOption objects filtered by the description column
  * @method     ChildCategoryOption[]|ObjectCollection findByComment(string $comment) Return ChildCategoryOption objects filtered by the comment column
+ * @method     ChildCategoryOption[]|ObjectCollection findByModComment(string $mod_comment) Return ChildCategoryOption objects filtered by the mod_comment column
  * @method     ChildCategoryOption[]|ObjectCollection findByValue(int $value) Return ChildCategoryOption objects filtered by the value column
  * @method     ChildCategoryOption[]|ObjectCollection findBySequence(int $sequence) Return ChildCategoryOption objects filtered by the sequence column
  * @method     ChildCategoryOption[]|ObjectCollection findByParentId(string $parent_id) Return ChildCategoryOption objects filtered by the parent_id column
@@ -180,7 +185,7 @@ abstract class CategoryOptionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, category_id, description, comment, value, sequence, parent_id FROM category_option WHERE id = :p0';
+        $sql = 'SELECT id, category_id, description, comment, mod_comment, value, sequence, parent_id FROM category_option WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -413,6 +418,35 @@ abstract class CategoryOptionQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the mod_comment column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByModComment('fooValue');   // WHERE mod_comment = 'fooValue'
+     * $query->filterByModComment('%fooValue%'); // WHERE mod_comment LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $modComment The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildCategoryOptionQuery The current query, for fluid interface
+     */
+    public function filterByModComment($modComment = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($modComment)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $modComment)) {
+                $modComment = str_replace('*', '%', $modComment);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(CategoryOptionTableMap::COL_MOD_COMMENT, $modComment, $comparison);
+    }
+
+    /**
      * Filter the query on the value column
      *
      * Example usage:
@@ -538,83 +572,6 @@ abstract class CategoryOptionQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \CategoryOption object
-     *
-     * @param \CategoryOption|ObjectCollection $categoryOption The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return ChildCategoryOptionQuery The current query, for fluid interface
-     */
-    public function filterByCategoryOptionRelatedByParentId($categoryOption, $comparison = null)
-    {
-        if ($categoryOption instanceof \CategoryOption) {
-            return $this
-                ->addUsingAlias(CategoryOptionTableMap::COL_PARENT_ID, $categoryOption->getId(), $comparison);
-        } elseif ($categoryOption instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(CategoryOptionTableMap::COL_PARENT_ID, $categoryOption->toKeyValue('PrimaryKey', 'Id'), $comparison);
-        } else {
-            throw new PropelException('filterByCategoryOptionRelatedByParentId() only accepts arguments of type \CategoryOption or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the CategoryOptionRelatedByParentId relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildCategoryOptionQuery The current query, for fluid interface
-     */
-    public function joinCategoryOptionRelatedByParentId($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('CategoryOptionRelatedByParentId');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'CategoryOptionRelatedByParentId');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the CategoryOptionRelatedByParentId relation CategoryOption object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \CategoryOptionQuery A secondary query class using the current class as primary query
-     */
-    public function useCategoryOptionRelatedByParentIdQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        return $this
-            ->joinCategoryOptionRelatedByParentId($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'CategoryOptionRelatedByParentId', '\CategoryOptionQuery');
-    }
-
-    /**
      * Filter the query by a related \Category object
      *
      * @param \Category|ObjectCollection $category The related object(s) to use as filter
@@ -689,6 +646,83 @@ abstract class CategoryOptionQuery extends ModelCriteria
         return $this
             ->joinCategory($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Category', '\CategoryQuery');
+    }
+
+    /**
+     * Filter the query by a related \CategoryOption object
+     *
+     * @param \CategoryOption|ObjectCollection $categoryOption The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildCategoryOptionQuery The current query, for fluid interface
+     */
+    public function filterByCategoryOptionRelatedByParentId($categoryOption, $comparison = null)
+    {
+        if ($categoryOption instanceof \CategoryOption) {
+            return $this
+                ->addUsingAlias(CategoryOptionTableMap::COL_PARENT_ID, $categoryOption->getId(), $comparison);
+        } elseif ($categoryOption instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(CategoryOptionTableMap::COL_PARENT_ID, $categoryOption->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByCategoryOptionRelatedByParentId() only accepts arguments of type \CategoryOption or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CategoryOptionRelatedByParentId relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildCategoryOptionQuery The current query, for fluid interface
+     */
+    public function joinCategoryOptionRelatedByParentId($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CategoryOptionRelatedByParentId');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CategoryOptionRelatedByParentId');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CategoryOptionRelatedByParentId relation CategoryOption object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \CategoryOptionQuery A secondary query class using the current class as primary query
+     */
+    public function useCategoryOptionRelatedByParentIdQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCategoryOptionRelatedByParentId($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CategoryOptionRelatedByParentId', '\CategoryOptionQuery');
     }
 
     /**

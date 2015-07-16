@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \ContestQueue;
-use \ContestQueueQuery;
+use \RatingRules;
+use \RatingRulesQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'contest_queue' table.
+ * This class defines the structure of the 'rating_rules' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class ContestQueueTableMap extends TableMap
+class RatingRulesTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class ContestQueueTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = '.Map.ContestQueueTableMap';
+    const CLASS_NAME = '.Map.RatingRulesTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class ContestQueueTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'contest_queue';
+    const TABLE_NAME = 'rating_rules';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\ContestQueue';
+    const OM_CLASS = '\\RatingRules';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'ContestQueue';
+    const CLASS_DEFAULT = 'RatingRules';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 4;
 
     /**
      * The number of lazy-loaded columns
@@ -69,42 +69,27 @@ class ContestQueueTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /**
      * the column name for the id field
      */
-    const COL_ID = 'contest_queue.id';
+    const COL_ID = 'rating_rules.id';
 
     /**
-     * the column name for the user_id field
+     * the column name for the rule field
      */
-    const COL_USER_ID = 'contest_queue.user_id';
+    const COL_RULE = 'rating_rules.rule';
 
     /**
-     * the column name for the game_id field
+     * the column name for the sequence field
      */
-    const COL_GAME_ID = 'contest_queue.game_id';
+    const COL_SEQUENCE = 'rating_rules.sequence';
 
     /**
-     * the column name for the platform_id field
+     * the column name for the updated field
      */
-    const COL_PLATFORM_ID = 'contest_queue.platform_id';
-
-    /**
-     * the column name for the message field
-     */
-    const COL_MESSAGE = 'contest_queue.message';
-
-    /**
-     * the column name for the assigned_user_id field
-     */
-    const COL_ASSIGNED_USER_ID = 'contest_queue.assigned_user_id';
-
-    /**
-     * the column name for the resolved field
-     */
-    const COL_RESOLVED = 'contest_queue.resolved';
+    const COL_UPDATED = 'rating_rules.updated';
 
     /**
      * The default string format for model objects of the related table
@@ -118,11 +103,11 @@ class ContestQueueTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'UserId', 'GameId', 'PlatformId', 'Message', 'AssignedUserId', 'Resolved', ),
-        self::TYPE_CAMELNAME     => array('id', 'userId', 'gameId', 'platformId', 'message', 'assignedUserId', 'resolved', ),
-        self::TYPE_COLNAME       => array(ContestQueueTableMap::COL_ID, ContestQueueTableMap::COL_USER_ID, ContestQueueTableMap::COL_GAME_ID, ContestQueueTableMap::COL_PLATFORM_ID, ContestQueueTableMap::COL_MESSAGE, ContestQueueTableMap::COL_ASSIGNED_USER_ID, ContestQueueTableMap::COL_RESOLVED, ),
-        self::TYPE_FIELDNAME     => array('id', 'user_id', 'game_id', 'platform_id', 'message', 'assigned_user_id', 'resolved', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id', 'Rule', 'Sequence', 'Updated', ),
+        self::TYPE_CAMELNAME     => array('id', 'rule', 'sequence', 'updated', ),
+        self::TYPE_COLNAME       => array(RatingRulesTableMap::COL_ID, RatingRulesTableMap::COL_RULE, RatingRulesTableMap::COL_SEQUENCE, RatingRulesTableMap::COL_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('id', 'rule', 'sequence', 'updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -132,11 +117,11 @@ class ContestQueueTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'GameId' => 2, 'PlatformId' => 3, 'Message' => 4, 'AssignedUserId' => 5, 'Resolved' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'gameId' => 2, 'platformId' => 3, 'message' => 4, 'assignedUserId' => 5, 'resolved' => 6, ),
-        self::TYPE_COLNAME       => array(ContestQueueTableMap::COL_ID => 0, ContestQueueTableMap::COL_USER_ID => 1, ContestQueueTableMap::COL_GAME_ID => 2, ContestQueueTableMap::COL_PLATFORM_ID => 3, ContestQueueTableMap::COL_MESSAGE => 4, ContestQueueTableMap::COL_ASSIGNED_USER_ID => 5, ContestQueueTableMap::COL_RESOLVED => 6, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'user_id' => 1, 'game_id' => 2, 'platform_id' => 3, 'message' => 4, 'assigned_user_id' => 5, 'resolved' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Rule' => 1, 'Sequence' => 2, 'Updated' => 3, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'rule' => 1, 'sequence' => 2, 'updated' => 3, ),
+        self::TYPE_COLNAME       => array(RatingRulesTableMap::COL_ID => 0, RatingRulesTableMap::COL_RULE => 1, RatingRulesTableMap::COL_SEQUENCE => 2, RatingRulesTableMap::COL_UPDATED => 3, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'rule' => 1, 'sequence' => 2, 'updated' => 3, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -149,20 +134,17 @@ class ContestQueueTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('contest_queue');
-        $this->setPhpName('ContestQueue');
+        $this->setName('rating_rules');
+        $this->setPhpName('RatingRules');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\ContestQueue');
+        $this->setClassName('\\RatingRules');
         $this->setPackage('');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
-        $this->addColumn('user_id', 'UserId', 'BIGINT', true, null, null);
-        $this->addColumn('game_id', 'GameId', 'BIGINT', true, null, null);
-        $this->addColumn('platform_id', 'PlatformId', 'BIGINT', true, null, null);
-        $this->addColumn('message', 'Message', 'CLOB', true, null, null);
-        $this->addForeignKey('assigned_user_id', 'AssignedUserId', 'BIGINT', 'user', 'id', true, null, null);
-        $this->addColumn('resolved', 'Resolved', 'BOOLEAN', true, 1, null);
+        $this->addColumn('rule', 'Rule', 'CLOB', true, null, null);
+        $this->addColumn('sequence', 'Sequence', 'INTEGER', true, null, null);
+        $this->addColumn('updated', 'Updated', 'TIMESTAMP', true, null, 'CURRENT_TIMESTAMP');
     } // initialize()
 
     /**
@@ -170,13 +152,6 @@ class ContestQueueTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('User', '\\User', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':assigned_user_id',
-    1 => ':id',
-  ),
-), null, null, null, false);
     } // buildRelations()
 
     /**
@@ -236,7 +211,7 @@ class ContestQueueTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? ContestQueueTableMap::CLASS_DEFAULT : ContestQueueTableMap::OM_CLASS;
+        return $withPrefix ? RatingRulesTableMap::CLASS_DEFAULT : RatingRulesTableMap::OM_CLASS;
     }
 
     /**
@@ -250,22 +225,22 @@ class ContestQueueTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (ContestQueue object, last column rank)
+     * @return array           (RatingRules object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = ContestQueueTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = ContestQueueTableMap::getInstanceFromPool($key))) {
+        $key = RatingRulesTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = RatingRulesTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + ContestQueueTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + RatingRulesTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = ContestQueueTableMap::OM_CLASS;
-            /** @var ContestQueue $obj */
+            $cls = RatingRulesTableMap::OM_CLASS;
+            /** @var RatingRules $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            ContestQueueTableMap::addInstanceToPool($obj, $key);
+            RatingRulesTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -288,18 +263,18 @@ class ContestQueueTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = ContestQueueTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = ContestQueueTableMap::getInstanceFromPool($key))) {
+            $key = RatingRulesTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = RatingRulesTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var ContestQueue $obj */
+                /** @var RatingRules $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                ContestQueueTableMap::addInstanceToPool($obj, $key);
+                RatingRulesTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -320,21 +295,15 @@ class ContestQueueTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(ContestQueueTableMap::COL_ID);
-            $criteria->addSelectColumn(ContestQueueTableMap::COL_USER_ID);
-            $criteria->addSelectColumn(ContestQueueTableMap::COL_GAME_ID);
-            $criteria->addSelectColumn(ContestQueueTableMap::COL_PLATFORM_ID);
-            $criteria->addSelectColumn(ContestQueueTableMap::COL_MESSAGE);
-            $criteria->addSelectColumn(ContestQueueTableMap::COL_ASSIGNED_USER_ID);
-            $criteria->addSelectColumn(ContestQueueTableMap::COL_RESOLVED);
+            $criteria->addSelectColumn(RatingRulesTableMap::COL_ID);
+            $criteria->addSelectColumn(RatingRulesTableMap::COL_RULE);
+            $criteria->addSelectColumn(RatingRulesTableMap::COL_SEQUENCE);
+            $criteria->addSelectColumn(RatingRulesTableMap::COL_UPDATED);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.user_id');
-            $criteria->addSelectColumn($alias . '.game_id');
-            $criteria->addSelectColumn($alias . '.platform_id');
-            $criteria->addSelectColumn($alias . '.message');
-            $criteria->addSelectColumn($alias . '.assigned_user_id');
-            $criteria->addSelectColumn($alias . '.resolved');
+            $criteria->addSelectColumn($alias . '.rule');
+            $criteria->addSelectColumn($alias . '.sequence');
+            $criteria->addSelectColumn($alias . '.updated');
         }
     }
 
@@ -347,7 +316,7 @@ class ContestQueueTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(ContestQueueTableMap::DATABASE_NAME)->getTable(ContestQueueTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(RatingRulesTableMap::DATABASE_NAME)->getTable(RatingRulesTableMap::TABLE_NAME);
     }
 
     /**
@@ -355,16 +324,16 @@ class ContestQueueTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(ContestQueueTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(ContestQueueTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new ContestQueueTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(RatingRulesTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(RatingRulesTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new RatingRulesTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a ContestQueue or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a RatingRules or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or ContestQueue object or primary key or array of primary keys
+     * @param mixed               $values Criteria or RatingRules object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -375,27 +344,27 @@ class ContestQueueTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(ContestQueueTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(RatingRulesTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \ContestQueue) { // it's a model object
+        } elseif ($values instanceof \RatingRules) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(ContestQueueTableMap::DATABASE_NAME);
-            $criteria->add(ContestQueueTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(RatingRulesTableMap::DATABASE_NAME);
+            $criteria->add(RatingRulesTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = ContestQueueQuery::create()->mergeWith($criteria);
+        $query = RatingRulesQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            ContestQueueTableMap::clearInstancePool();
+            RatingRulesTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                ContestQueueTableMap::removeInstanceFromPool($singleval);
+                RatingRulesTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -403,20 +372,20 @@ class ContestQueueTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the contest_queue table.
+     * Deletes all rows from the rating_rules table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return ContestQueueQuery::create()->doDeleteAll($con);
+        return RatingRulesQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a ContestQueue or Criteria object.
+     * Performs an INSERT on the database, given a RatingRules or Criteria object.
      *
-     * @param mixed               $criteria Criteria or ContestQueue object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or RatingRules object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -425,22 +394,22 @@ class ContestQueueTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(ContestQueueTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(RatingRulesTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from ContestQueue object
+            $criteria = $criteria->buildCriteria(); // build Criteria from RatingRules object
         }
 
-        if ($criteria->containsKey(ContestQueueTableMap::COL_ID) && $criteria->keyContainsValue(ContestQueueTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.ContestQueueTableMap::COL_ID.')');
+        if ($criteria->containsKey(RatingRulesTableMap::COL_ID) && $criteria->keyContainsValue(RatingRulesTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.RatingRulesTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = ContestQueueQuery::create()->mergeWith($criteria);
+        $query = RatingRulesQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -449,7 +418,7 @@ class ContestQueueTableMap extends TableMap
         });
     }
 
-} // ContestQueueTableMap
+} // RatingRulesTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-ContestQueueTableMap::buildTableMap();
+RatingRulesTableMap::buildTableMap();
