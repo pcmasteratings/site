@@ -59,7 +59,7 @@ class CategoryOptionTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class CategoryOptionTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the id field
@@ -90,6 +90,11 @@ class CategoryOptionTableMap extends TableMap
      * the column name for the comment field
      */
     const COL_COMMENT = 'category_option.comment';
+
+    /**
+     * the column name for the mod_comment field
+     */
+    const COL_MOD_COMMENT = 'category_option.mod_comment';
 
     /**
      * the column name for the value field
@@ -118,11 +123,11 @@ class CategoryOptionTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'CategoryId', 'Description', 'Comment', 'Value', 'Sequence', 'ParentId', ),
-        self::TYPE_CAMELNAME     => array('id', 'categoryId', 'description', 'comment', 'value', 'sequence', 'parentId', ),
-        self::TYPE_COLNAME       => array(CategoryOptionTableMap::COL_ID, CategoryOptionTableMap::COL_CATEGORY_ID, CategoryOptionTableMap::COL_DESCRIPTION, CategoryOptionTableMap::COL_COMMENT, CategoryOptionTableMap::COL_VALUE, CategoryOptionTableMap::COL_SEQUENCE, CategoryOptionTableMap::COL_PARENT_ID, ),
-        self::TYPE_FIELDNAME     => array('id', 'category_id', 'description', 'comment', 'value', 'sequence', 'parent_id', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id', 'CategoryId', 'Description', 'Comment', 'ModComment', 'Value', 'Sequence', 'ParentId', ),
+        self::TYPE_CAMELNAME     => array('id', 'categoryId', 'description', 'comment', 'modComment', 'value', 'sequence', 'parentId', ),
+        self::TYPE_COLNAME       => array(CategoryOptionTableMap::COL_ID, CategoryOptionTableMap::COL_CATEGORY_ID, CategoryOptionTableMap::COL_DESCRIPTION, CategoryOptionTableMap::COL_COMMENT, CategoryOptionTableMap::COL_MOD_COMMENT, CategoryOptionTableMap::COL_VALUE, CategoryOptionTableMap::COL_SEQUENCE, CategoryOptionTableMap::COL_PARENT_ID, ),
+        self::TYPE_FIELDNAME     => array('id', 'category_id', 'description', 'comment', 'mod_comment', 'value', 'sequence', 'parent_id', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -132,11 +137,11 @@ class CategoryOptionTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'CategoryId' => 1, 'Description' => 2, 'Comment' => 3, 'Value' => 4, 'Sequence' => 5, 'ParentId' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'categoryId' => 1, 'description' => 2, 'comment' => 3, 'value' => 4, 'sequence' => 5, 'parentId' => 6, ),
-        self::TYPE_COLNAME       => array(CategoryOptionTableMap::COL_ID => 0, CategoryOptionTableMap::COL_CATEGORY_ID => 1, CategoryOptionTableMap::COL_DESCRIPTION => 2, CategoryOptionTableMap::COL_COMMENT => 3, CategoryOptionTableMap::COL_VALUE => 4, CategoryOptionTableMap::COL_SEQUENCE => 5, CategoryOptionTableMap::COL_PARENT_ID => 6, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'category_id' => 1, 'description' => 2, 'comment' => 3, 'value' => 4, 'sequence' => 5, 'parent_id' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'CategoryId' => 1, 'Description' => 2, 'Comment' => 3, 'ModComment' => 4, 'Value' => 5, 'Sequence' => 6, 'ParentId' => 7, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'categoryId' => 1, 'description' => 2, 'comment' => 3, 'modComment' => 4, 'value' => 5, 'sequence' => 6, 'parentId' => 7, ),
+        self::TYPE_COLNAME       => array(CategoryOptionTableMap::COL_ID => 0, CategoryOptionTableMap::COL_CATEGORY_ID => 1, CategoryOptionTableMap::COL_DESCRIPTION => 2, CategoryOptionTableMap::COL_COMMENT => 3, CategoryOptionTableMap::COL_MOD_COMMENT => 4, CategoryOptionTableMap::COL_VALUE => 5, CategoryOptionTableMap::COL_SEQUENCE => 6, CategoryOptionTableMap::COL_PARENT_ID => 7, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'category_id' => 1, 'description' => 2, 'comment' => 3, 'mod_comment' => 4, 'value' => 5, 'sequence' => 6, 'parent_id' => 7, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -160,6 +165,7 @@ class CategoryOptionTableMap extends TableMap
         $this->addForeignKey('category_id', 'CategoryId', 'BIGINT', 'category', 'ID', true, null, null);
         $this->addColumn('description', 'Description', 'CLOB', true, null, null);
         $this->addColumn('comment', 'Comment', 'CLOB', true, null, null);
+        $this->addColumn('mod_comment', 'ModComment', 'LONGVARCHAR', true, null, null);
         $this->addColumn('value', 'Value', 'INTEGER', true, null, null);
         $this->addColumn('sequence', 'Sequence', 'INTEGER', true, null, null);
         $this->addForeignKey('parent_id', 'ParentId', 'BIGINT', 'category_option', 'id', false, null, null);
@@ -170,18 +176,18 @@ class CategoryOptionTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('CategoryOptionRelatedByParentId', '\\CategoryOption', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':parent_id',
-    1 => ':id',
-  ),
-), 'CASCADE', 'CASCADE', null, false);
         $this->addRelation('Category', '\\Category', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':category_id',
     1 => ':ID',
+  ),
+), 'CASCADE', 'CASCADE', null, false);
+        $this->addRelation('CategoryOptionRelatedByParentId', '\\CategoryOption', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':parent_id',
+    1 => ':id',
   ),
 ), 'CASCADE', 'CASCADE', null, false);
         $this->addRelation('CategoryOptionRelatedById', '\\CategoryOption', RelationMap::ONE_TO_MANY, array (
@@ -354,6 +360,7 @@ class CategoryOptionTableMap extends TableMap
             $criteria->addSelectColumn(CategoryOptionTableMap::COL_CATEGORY_ID);
             $criteria->addSelectColumn(CategoryOptionTableMap::COL_DESCRIPTION);
             $criteria->addSelectColumn(CategoryOptionTableMap::COL_COMMENT);
+            $criteria->addSelectColumn(CategoryOptionTableMap::COL_MOD_COMMENT);
             $criteria->addSelectColumn(CategoryOptionTableMap::COL_VALUE);
             $criteria->addSelectColumn(CategoryOptionTableMap::COL_SEQUENCE);
             $criteria->addSelectColumn(CategoryOptionTableMap::COL_PARENT_ID);
@@ -362,6 +369,7 @@ class CategoryOptionTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.category_id');
             $criteria->addSelectColumn($alias . '.description');
             $criteria->addSelectColumn($alias . '.comment');
+            $criteria->addSelectColumn($alias . '.mod_comment');
             $criteria->addSelectColumn($alias . '.value');
             $criteria->addSelectColumn($alias . '.sequence');
             $criteria->addSelectColumn($alias . '.parent_id');

@@ -147,7 +147,7 @@ class RatingTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'BIGINT', true, null, null);
-        $this->addColumn('initial', 'Initial', 'CHAR', true, null, null);
+        $this->addColumn('initial', 'Initial', 'CHAR', true, 2, null);
         $this->addColumn('title', 'Title', 'LONGVARCHAR', true, null, null);
         $this->addColumn('description', 'Description', 'CLOB', true, null, null);
         $this->addColumn('threshold', 'Threshold', 'INTEGER', true, null, null);

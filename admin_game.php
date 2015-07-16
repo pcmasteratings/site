@@ -136,6 +136,17 @@ if ($header != null) {
     <link rel="stylesheet" href="http://localhost/css/normalize.css">
     <link rel="stylesheet" href="http://localhost/css/skeleton.css">
     <link rel="stylesheet" href="http://localhost/css/main.css">
+    <style type="text/css">
+        table.rating_input tr {
+            border-bottom: solid 1px black;
+            padding-top: 5px;
+            padding-bottom:5px;
+        }
+        table.rating_input td, table.rating_input  th {
+            vertical-align: top;
+            padding:5px;
+        }
+    </style>
 </head>
 <body>
 
@@ -144,6 +155,7 @@ if ($header != null) {
     <h4>Game: <?php echo $game->getTitle(); ?></h4>
     <h4>Platform: <?php echo $platform->getTitle(); ?></h4>
 
+    <h3>Instructions</h3>
     <p>
         Use the drop-down next to each option to select whether a particular option applies to the selected
         game/platform.
@@ -152,20 +164,28 @@ if ($header != null) {
         <li>Applicable - Option is applicable.</li>
         <li>Applicable (DNS) - Option is applicable, but should not contribute to the score.</li>
     </ul>
-    </p>
+    <?php $rules = RatingRulesQuery::create()->orderBySequence()->find(); ?>
 
+    <h3>Rules (last updated <?= RatingRulesQuery::create()->orderByUpdated("DESC")->findOne()->getUpdated()->format('Y-m-d'); ?>)</h3>
+    <ol style="font-weight: bold; color:red;">
+        <?php foreach($rules as $rule): ?>
+            <li><?= $rule->getRule(); ?></li>
+        <?php endforeach; ?>
+    </ol>
+    </p>
 
     <div class="row">
         <form action="" method="POST">
             <input type="hidden" name="rating_submit" value="1" />
-            <table class="u-full-width">
+            <table class="u-full-width rating_input">
                 <thead>
                 <tr>
                     <th>Category</th>
                     <th>Option</th>
+                    <th>Option Comments</th>
                     <th>Applicability</th>
                     <th>Sub-option</th>
-                    <th>Comments</th>
+                    <th>Rating Comments</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -180,8 +200,16 @@ if ($header != null) {
                                 $current_value = $current_option_array[$option->getId()];
                             }
                             ?>
-                            <td>
+                            <th>
                                 <?= $option->getDescription() ?>
+                            </th>
+                            <td>
+                                <?php if($option->getComment()!=""): ?>
+                                    General: <?= $option->getComment() ?>
+                                <?php endif; ?>
+                                <?php if($option->getModComment()!=""): ?>
+                                    <b>Mod: <?= $option->getModComment() ?></b>
+                                <?php endif; ?>
                             </td>
                             <td>
                                 <select name="option_<?= $option->getId() ?>">

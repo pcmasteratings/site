@@ -2,6 +2,8 @@
 
 namespace Base;
 
+use \ContestQueue as ChildContestQueue;
+use \ContestQueueQuery as ChildContestQueueQuery;
 use \News as ChildNews;
 use \NewsQuery as ChildNewsQuery;
 use \Rig as ChildRig;
@@ -130,6 +132,12 @@ abstract class User implements ActiveRecordInterface
     protected $banned;
 
     /**
+     * @var        ObjectCollection|ChildContestQueue[] Collection to store aggregation of ChildContestQueue objects.
+     */
+    protected $collContestQueues;
+    protected $collContestQueuesPartial;
+
+    /**
      * @var        ObjectCollection|ChildNews[] Collection to store aggregation of ChildNews objects.
      */
     protected $collNews;
@@ -166,6 +174,12 @@ abstract class User implements ActiveRecordInterface
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildContestQueue[]
+     */
+    protected $contestQueuesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -937,6 +951,8 @@ abstract class User implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collContestQueues = null;
+
             $this->collNews = null;
 
             $this->collRigs = null;
@@ -1055,6 +1071,23 @@ abstract class User implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->contestQueuesScheduledForDeletion !== null) {
+                if (!$this->contestQueuesScheduledForDeletion->isEmpty()) {
+                    \ContestQueueQuery::create()
+                        ->filterByPrimaryKeys($this->contestQueuesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->contestQueuesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collContestQueues !== null) {
+                foreach ($this->collContestQueues as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->newsScheduledForDeletion !== null) {
@@ -1368,6 +1401,21 @@ abstract class User implements ActiveRecordInterface
         }
         
         if ($includeForeignObjects) {
+            if (null !== $this->collContestQueues) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'contestQueues';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'contest_queues';
+                        break;
+                    default:
+                        $key = 'ContestQueues';
+                }
+        
+                $result[$key] = $this->collContestQueues->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collNews) {
                 
                 switch ($keyType) {
@@ -1725,6 +1773,12 @@ abstract class User implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
+            foreach ($this->getContestQueues() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addContestQueue($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getNews() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addNews($relObj->copy($deepCopy));
@@ -1796,6 +1850,9 @@ abstract class User implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
+        if ('ContestQueue' == $relationName) {
+            return $this->initContestQueues();
+        }
         if ('News' == $relationName) {
             return $this->initNews();
         }
@@ -1811,6 +1868,224 @@ abstract class User implements ActiveRecordInterface
         if ('UserReview' == $relationName) {
             return $this->initUserReviews();
         }
+    }
+
+    /**
+     * Clears out the collContestQueues collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addContestQueues()
+     */
+    public function clearContestQueues()
+    {
+        $this->collContestQueues = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collContestQueues collection loaded partially.
+     */
+    public function resetPartialContestQueues($v = true)
+    {
+        $this->collContestQueuesPartial = $v;
+    }
+
+    /**
+     * Initializes the collContestQueues collection.
+     *
+     * By default this just sets the collContestQueues collection to an empty array (like clearcollContestQueues());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initContestQueues($overrideExisting = true)
+    {
+        if (null !== $this->collContestQueues && !$overrideExisting) {
+            return;
+        }
+        $this->collContestQueues = new ObjectCollection();
+        $this->collContestQueues->setModel('\ContestQueue');
+    }
+
+    /**
+     * Gets an array of ChildContestQueue objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildUser is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildContestQueue[] List of ChildContestQueue objects
+     * @throws PropelException
+     */
+    public function getContestQueues(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collContestQueuesPartial && !$this->isNew();
+        if (null === $this->collContestQueues || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collContestQueues) {
+                // return empty collection
+                $this->initContestQueues();
+            } else {
+                $collContestQueues = ChildContestQueueQuery::create(null, $criteria)
+                    ->filterByUser($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collContestQueuesPartial && count($collContestQueues)) {
+                        $this->initContestQueues(false);
+
+                        foreach ($collContestQueues as $obj) {
+                            if (false == $this->collContestQueues->contains($obj)) {
+                                $this->collContestQueues->append($obj);
+                            }
+                        }
+
+                        $this->collContestQueuesPartial = true;
+                    }
+
+                    return $collContestQueues;
+                }
+
+                if ($partial && $this->collContestQueues) {
+                    foreach ($this->collContestQueues as $obj) {
+                        if ($obj->isNew()) {
+                            $collContestQueues[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collContestQueues = $collContestQueues;
+                $this->collContestQueuesPartial = false;
+            }
+        }
+
+        return $this->collContestQueues;
+    }
+
+    /**
+     * Sets a collection of ChildContestQueue objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $contestQueues A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildUser The current object (for fluent API support)
+     */
+    public function setContestQueues(Collection $contestQueues, ConnectionInterface $con = null)
+    {
+        /** @var ChildContestQueue[] $contestQueuesToDelete */
+        $contestQueuesToDelete = $this->getContestQueues(new Criteria(), $con)->diff($contestQueues);
+
+        
+        $this->contestQueuesScheduledForDeletion = $contestQueuesToDelete;
+
+        foreach ($contestQueuesToDelete as $contestQueueRemoved) {
+            $contestQueueRemoved->setUser(null);
+        }
+
+        $this->collContestQueues = null;
+        foreach ($contestQueues as $contestQueue) {
+            $this->addContestQueue($contestQueue);
+        }
+
+        $this->collContestQueues = $contestQueues;
+        $this->collContestQueuesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related ContestQueue objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related ContestQueue objects.
+     * @throws PropelException
+     */
+    public function countContestQueues(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collContestQueuesPartial && !$this->isNew();
+        if (null === $this->collContestQueues || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collContestQueues) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getContestQueues());
+            }
+
+            $query = ChildContestQueueQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUser($this)
+                ->count($con);
+        }
+
+        return count($this->collContestQueues);
+    }
+
+    /**
+     * Method called to associate a ChildContestQueue object to this object
+     * through the ChildContestQueue foreign key attribute.
+     *
+     * @param  ChildContestQueue $l ChildContestQueue
+     * @return $this|\User The current object (for fluent API support)
+     */
+    public function addContestQueue(ChildContestQueue $l)
+    {
+        if ($this->collContestQueues === null) {
+            $this->initContestQueues();
+            $this->collContestQueuesPartial = true;
+        }
+
+        if (!$this->collContestQueues->contains($l)) {
+            $this->doAddContestQueue($l);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildContestQueue $contestQueue The ChildContestQueue object to add.
+     */
+    protected function doAddContestQueue(ChildContestQueue $contestQueue)
+    {
+        $this->collContestQueues[]= $contestQueue;
+        $contestQueue->setUser($this);
+    }
+
+    /**
+     * @param  ChildContestQueue $contestQueue The ChildContestQueue object to remove.
+     * @return $this|ChildUser The current object (for fluent API support)
+     */
+    public function removeContestQueue(ChildContestQueue $contestQueue)
+    {
+        if ($this->getContestQueues()->contains($contestQueue)) {
+            $pos = $this->collContestQueues->search($contestQueue);
+            $this->collContestQueues->remove($pos);
+            if (null === $this->contestQueuesScheduledForDeletion) {
+                $this->contestQueuesScheduledForDeletion = clone $this->collContestQueues;
+                $this->contestQueuesScheduledForDeletion->clear();
+            }
+            $this->contestQueuesScheduledForDeletion[]= clone $contestQueue;
+            $contestQueue->setUser(null);
+        }
+
+        return $this;
     }
 
     /**
@@ -3088,6 +3363,11 @@ abstract class User implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collContestQueues) {
+                foreach ($this->collContestQueues as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collNews) {
                 foreach ($this->collNews as $o) {
                     $o->clearAllReferences($deep);
@@ -3115,6 +3395,7 @@ abstract class User implements ActiveRecordInterface
             }
         } // if ($deep)
 
+        $this->collContestQueues = null;
         $this->collNews = null;
         $this->collRigs = null;
         $this->collUserAccesses = null;

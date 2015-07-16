@@ -44,6 +44,10 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     ChildUserQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
+ * @method     ChildUserQuery leftJoinContestQueue($relationAlias = null) Adds a LEFT JOIN clause to the query using the ContestQueue relation
+ * @method     ChildUserQuery rightJoinContestQueue($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ContestQueue relation
+ * @method     ChildUserQuery innerJoinContestQueue($relationAlias = null) Adds a INNER JOIN clause to the query using the ContestQueue relation
+ *
  * @method     ChildUserQuery leftJoinNews($relationAlias = null) Adds a LEFT JOIN clause to the query using the News relation
  * @method     ChildUserQuery rightJoinNews($relationAlias = null) Adds a RIGHT JOIN clause to the query using the News relation
  * @method     ChildUserQuery innerJoinNews($relationAlias = null) Adds a INNER JOIN clause to the query using the News relation
@@ -64,7 +68,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinUserReview($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserReview relation
  * @method     ChildUserQuery innerJoinUserReview($relationAlias = null) Adds a INNER JOIN clause to the query using the UserReview relation
  *
- * @method     \NewsQuery|\RigQuery|\UserAccessQuery|\UserAttributeValueQuery|\UserReviewQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \ContestQueueQuery|\NewsQuery|\RigQuery|\UserAccessQuery|\UserAttributeValueQuery|\UserReviewQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildUser findOne(ConnectionInterface $con = null) Return the first ChildUser matching the query
  * @method     ChildUser findOneOrCreate(ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
@@ -545,6 +549,79 @@ abstract class UserQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(UserTableMap::COL_BANNED, $banned, $comparison);
+    }
+
+    /**
+     * Filter the query by a related \ContestQueue object
+     *
+     * @param \ContestQueue|ObjectCollection $contestQueue the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildUserQuery The current query, for fluid interface
+     */
+    public function filterByContestQueue($contestQueue, $comparison = null)
+    {
+        if ($contestQueue instanceof \ContestQueue) {
+            return $this
+                ->addUsingAlias(UserTableMap::COL_ID, $contestQueue->getAssignedUserId(), $comparison);
+        } elseif ($contestQueue instanceof ObjectCollection) {
+            return $this
+                ->useContestQueueQuery()
+                ->filterByPrimaryKeys($contestQueue->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByContestQueue() only accepts arguments of type \ContestQueue or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ContestQueue relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildUserQuery The current query, for fluid interface
+     */
+    public function joinContestQueue($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ContestQueue');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ContestQueue');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ContestQueue relation ContestQueue object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \ContestQueueQuery A secondary query class using the current class as primary query
+     */
+    public function useContestQueueQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinContestQueue($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ContestQueue', '\ContestQueueQuery');
     }
 
     /**

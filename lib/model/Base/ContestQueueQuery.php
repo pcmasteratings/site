@@ -10,6 +10,7 @@ use Map\ContestQueueTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
+use Propel\Runtime\ActiveQuery\ModelJoin;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -24,6 +25,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildContestQueueQuery orderByGameId($order = Criteria::ASC) Order by the game_id column
  * @method     ChildContestQueueQuery orderByPlatformId($order = Criteria::ASC) Order by the platform_id column
  * @method     ChildContestQueueQuery orderByMessage($order = Criteria::ASC) Order by the message column
+ * @method     ChildContestQueueQuery orderByAssignedUserId($order = Criteria::ASC) Order by the assigned_user_id column
  * @method     ChildContestQueueQuery orderByResolved($order = Criteria::ASC) Order by the resolved column
  *
  * @method     ChildContestQueueQuery groupById() Group by the id column
@@ -31,11 +33,18 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildContestQueueQuery groupByGameId() Group by the game_id column
  * @method     ChildContestQueueQuery groupByPlatformId() Group by the platform_id column
  * @method     ChildContestQueueQuery groupByMessage() Group by the message column
+ * @method     ChildContestQueueQuery groupByAssignedUserId() Group by the assigned_user_id column
  * @method     ChildContestQueueQuery groupByResolved() Group by the resolved column
  *
  * @method     ChildContestQueueQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildContestQueueQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     ChildContestQueueQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ *
+ * @method     ChildContestQueueQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
+ * @method     ChildContestQueueQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
+ * @method     ChildContestQueueQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
+ *
+ * @method     \UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildContestQueue findOne(ConnectionInterface $con = null) Return the first ChildContestQueue matching the query
  * @method     ChildContestQueue findOneOrCreate(ConnectionInterface $con = null) Return the first ChildContestQueue matching the query, or a new ChildContestQueue object populated from the query conditions when no match is found
@@ -45,6 +54,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildContestQueue findOneByGameId(string $game_id) Return the first ChildContestQueue filtered by the game_id column
  * @method     ChildContestQueue findOneByPlatformId(string $platform_id) Return the first ChildContestQueue filtered by the platform_id column
  * @method     ChildContestQueue findOneByMessage(string $message) Return the first ChildContestQueue filtered by the message column
+ * @method     ChildContestQueue findOneByAssignedUserId(string $assigned_user_id) Return the first ChildContestQueue filtered by the assigned_user_id column
  * @method     ChildContestQueue findOneByResolved(boolean $resolved) Return the first ChildContestQueue filtered by the resolved column *
 
  * @method     ChildContestQueue requirePk($key, ConnectionInterface $con = null) Return the ChildContestQueue by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -55,6 +65,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildContestQueue requireOneByGameId(string $game_id) Return the first ChildContestQueue filtered by the game_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildContestQueue requireOneByPlatformId(string $platform_id) Return the first ChildContestQueue filtered by the platform_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildContestQueue requireOneByMessage(string $message) Return the first ChildContestQueue filtered by the message column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildContestQueue requireOneByAssignedUserId(string $assigned_user_id) Return the first ChildContestQueue filtered by the assigned_user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildContestQueue requireOneByResolved(boolean $resolved) Return the first ChildContestQueue filtered by the resolved column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildContestQueue[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildContestQueue objects based on current ModelCriteria
@@ -63,6 +74,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildContestQueue[]|ObjectCollection findByGameId(string $game_id) Return ChildContestQueue objects filtered by the game_id column
  * @method     ChildContestQueue[]|ObjectCollection findByPlatformId(string $platform_id) Return ChildContestQueue objects filtered by the platform_id column
  * @method     ChildContestQueue[]|ObjectCollection findByMessage(string $message) Return ChildContestQueue objects filtered by the message column
+ * @method     ChildContestQueue[]|ObjectCollection findByAssignedUserId(string $assigned_user_id) Return ChildContestQueue objects filtered by the assigned_user_id column
  * @method     ChildContestQueue[]|ObjectCollection findByResolved(boolean $resolved) Return ChildContestQueue objects filtered by the resolved column
  * @method     ChildContestQueue[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -156,7 +168,7 @@ abstract class ContestQueueQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, user_id, game_id, platform_id, message, resolved FROM contest_queue WHERE id = :p0';
+        $sql = 'SELECT id, user_id, game_id, platform_id, message, assigned_user_id, resolved FROM contest_queue WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -440,6 +452,49 @@ abstract class ContestQueueQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the assigned_user_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByAssignedUserId(1234); // WHERE assigned_user_id = 1234
+     * $query->filterByAssignedUserId(array(12, 34)); // WHERE assigned_user_id IN (12, 34)
+     * $query->filterByAssignedUserId(array('min' => 12)); // WHERE assigned_user_id > 12
+     * </code>
+     *
+     * @see       filterByUser()
+     *
+     * @param     mixed $assignedUserId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildContestQueueQuery The current query, for fluid interface
+     */
+    public function filterByAssignedUserId($assignedUserId = null, $comparison = null)
+    {
+        if (is_array($assignedUserId)) {
+            $useMinMax = false;
+            if (isset($assignedUserId['min'])) {
+                $this->addUsingAlias(ContestQueueTableMap::COL_ASSIGNED_USER_ID, $assignedUserId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($assignedUserId['max'])) {
+                $this->addUsingAlias(ContestQueueTableMap::COL_ASSIGNED_USER_ID, $assignedUserId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(ContestQueueTableMap::COL_ASSIGNED_USER_ID, $assignedUserId, $comparison);
+    }
+
+    /**
      * Filter the query on the resolved column
      *
      * Example usage:
@@ -464,6 +519,83 @@ abstract class ContestQueueQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ContestQueueTableMap::COL_RESOLVED, $resolved, $comparison);
+    }
+
+    /**
+     * Filter the query by a related \User object
+     *
+     * @param \User|ObjectCollection $user The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildContestQueueQuery The current query, for fluid interface
+     */
+    public function filterByUser($user, $comparison = null)
+    {
+        if ($user instanceof \User) {
+            return $this
+                ->addUsingAlias(ContestQueueTableMap::COL_ASSIGNED_USER_ID, $user->getId(), $comparison);
+        } elseif ($user instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(ContestQueueTableMap::COL_ASSIGNED_USER_ID, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByUser() only accepts arguments of type \User or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the User relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildContestQueueQuery The current query, for fluid interface
+     */
+    public function joinUser($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('User');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'User');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the User relation User object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \UserQuery A secondary query class using the current class as primary query
+     */
+    public function useUserQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinUser($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'User', '\UserQuery');
     }
 
     /**

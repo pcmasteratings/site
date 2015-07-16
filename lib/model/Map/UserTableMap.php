@@ -182,6 +182,13 @@ class UserTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('ContestQueue', '\\ContestQueue', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':assigned_user_id',
+    1 => ':id',
+  ),
+), null, null, 'ContestQueues', false);
         $this->addRelation('News', '\\News', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
