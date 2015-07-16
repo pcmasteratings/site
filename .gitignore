@@ -1,6 +1,5 @@
 *~
 sftp-config.json
 .idea
-vendor/
 composer.lock
 generated-*/
