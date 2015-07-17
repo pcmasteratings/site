@@ -156,7 +156,9 @@ if (Auth::checkIfAuthenticated() && array_key_exists("submit_game_review", $_POS
                 <?php endforeach; ?>
 
             <?php endif; ?>
-
+            <tr>
+                <td colspan="3"><a href="https://voat.co/v/PCMRatings/submit" target="_blank">Contest/Propose Rating...</a></td>
+            </tr>
             <tr>
                 <td colspan="3">
                     <?php if (Auth::checkIfModerator()): ?>
@@ -230,6 +232,8 @@ if (Auth::checkIfAuthenticated() && array_key_exists("submit_game_review", $_POS
                 </div>
                 <input type="submit" class="btn btn-primary"/>
             </form>
+
+            <!--
             <form action="" method="POST">
                 <div class="form-group">
                     Contest/Propose rating
@@ -238,7 +242,7 @@ if (Auth::checkIfAuthenticated() && array_key_exists("submit_game_review", $_POS
                     <textarea class="form-control" name="submit_game_review"></textarea>
                 </div>
                 <input type="submit" class="btn btn-primary"/>
-            </form>
+            </form>-->
         <?php endif; ?>
     </div>
 </div>
