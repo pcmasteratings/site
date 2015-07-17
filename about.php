@@ -142,8 +142,7 @@ require("res/include.php");
 
         <h2>Proposing/Contesting game ratings</h2>
 
-        <p>Each game has a form for submitting information to create or contest the game's current rating. If a game
-            isn't rated yet, just search for it and fill out the form on its page.</p>
+        <p>We're making use of Voat to enable people to propose and discuss game ratings at <a href="https://voat.co/v/PCMRatings/" target="_blank">https://voat.co/v/PCMRatings/</a> We will make sure to pay attention to posts there that are marked as submissions, but if it seems we've missed one just PM a mod.</p>
     </div>
     <div class="col-md-4">
         <h1>Contributors</h1>
